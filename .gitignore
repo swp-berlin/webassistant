@@ -1,0 +1,25 @@
+# IDE
+.idea
+*.iml
+
+# Python
+*.py[co]
+/env
+.venv
+__pycache__
+
+# Celery
+celerybeat-schedule
+
+#Redis
+dump.rdb
+
+# Application
+*.mo
+/static
+
+# Database
+*.psql
+
+# Mac
+.DS_Store
