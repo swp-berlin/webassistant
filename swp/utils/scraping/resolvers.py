@@ -1,0 +1,227 @@
+import asyncio
+import os
+import pathlib
+from enum import Enum
+from urllib.parse import urlparse
+
+import pikepdf
+from django.conf import settings
+from pyppeteer.element_handle import ElementHandle
+
+from .context import ScraperContext
+from .exceptions import DocumentDownloadError, SkippedError
+from .selectors import Selector
+
+
+class Resolver:
+
+    def __init__(self, context: ScraperContext, *, selector: Selector, **kwargs):
+        self.context = context
+        self.selector = selector
+
+
+class IntermediateResolver(Resolver):
+
+    def __init__(self, context: ScraperContext, *args, resolvers: [dict], **kwargs):
+        super().__init__(context, *args, **kwargs)
+        self.resolvers = [self.create_resolver(context, **config) for config in resolvers]
+
+    @staticmethod
+    def create_resolver(context, *, type, **config):
+        return type.create(context, **config)
+
+
+class ListResolver(IntermediateResolver):
+    """
+    Resolves every node selected by the given :selector by calling every resolver in the :resolvers list
+    """
+
+    def __init__(self, context, *args, paginator: dict = None, **kwargs):
+        super().__init__(context, *args, **kwargs)
+
+        if paginator:
+            self.paginator = self.create_paginator(context, **paginator)
+
+    @staticmethod
+    def create_paginator(context, *, type, **paginator):
+        return type.create(context, **paginator)
+
+    async def resolve(self) -> [dict]:
+        context = []
+
+        async for node in self.resolve_nodes():
+            try:
+                detail_context = await self.resolve_node(node)
+            except SkippedError:
+                continue
+            context.append(detail_context)
+
+        return context
+
+    async def resolve_nodes(self):
+        if self.paginator:
+            async for node in self.paginator.get_nodes():
+                yield node
+        else:
+            nodes = await self.context.page.querySelectorAll(self.selector)
+
+            for node in nodes:
+                yield node
+
+    async def resolve_node(self, node: ElementHandle):
+        context = {}
+
+        for resolver in self.resolvers:
+            await resolver.resolve(node, context)
+
+        print(context)
+
+        return context
+
+
+class LinkResolver(IntermediateResolver):
+
+    def __init__(self, *args, same_site: bool = False, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.same_site = same_site
+
+    async def get_href(self, node: ElementHandle) -> str:
+        elem = await node.querySelector(self.selector)
+
+        href_property = await elem.getProperty('href')
+        # noinspection PyTypeChecker
+        href: str = await href_property.jsonValue()
+
+        if self.same_site:
+            url = self.context.page.url
+
+            if urlparse(href).netloc != urlparse(url).netloc:
+                raise SkippedError
+
+        return href
+
+    async def resolve(self, node: ElementHandle, context: dict):
+        href = await self.get_href(node)
+
+        detail_page = await self.context.browser.newPage()
+        await detail_page.goto(href)
+
+        for resolver in self.resolvers:
+            await resolver.resolve(detail_page, context)
+
+        await detail_page.close()
+
+
+class DataResolver(Resolver):
+
+    def __init__(self, *args, key: str, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.key = key
+
+    async def resolve(self, node: ElementHandle, context: dict):
+        elem = await node.querySelector(self.selector)
+        text = await self.get_content(elem)
+
+        context[self.key] = text
+
+    async def get_content(self, elem):
+        text_content_property = await elem.getProperty('textContent')
+        text = await text_content_property.jsonValue()
+
+        return text
+
+
+class MetaResolver(DataResolver):
+
+    async def get_content(self, elem):
+        text_content_property = await elem.getProperty('content')
+        text = await text_content_property.jsonValue()
+
+        return text
+
+
+DOWNLOAD_TEMPLATE = """
+    () => {
+        const dl_link = document.createElement("a");
+        dl_link.href = '%s';
+        dl_link.download = '%s';
+        dl_link.click();
+    }
+"""
+
+
+class DocumentResolver(DataResolver):
+    async def get_content(self, elem):
+        if not elem:
+            return None
+
+        href_property = await elem.getProperty('href')
+        href = await href_property.jsonValue()
+
+        try:
+            file_path = await self.download(href)
+        except DocumentDownloadError:
+            return None
+
+        suffix = pathlib.Path(file_path).suffix
+
+        # TODO currently only supports pdf files
+        if suffix != '.pdf':
+            return None
+
+        content = self.get_meta(file_path)
+
+        return content
+
+    async def download(self, url: str) -> str:
+        download_path = settings.PYPPETEER_FILE_DOWNLOAD_FOLDER
+        file_name = os.path.basename(urlparse(url).path)
+
+        page = await self.context.browser.newPage()
+        cdp = await page.target.createCDPSession()
+
+        await cdp.send(
+            'Page.setDownloadBehavior',
+            {'behavior': 'allow', 'downloadPath': download_path},
+        )
+
+        download_promise = asyncio.ensure_future(page.waitForResponse(lambda res: res.url == url))
+        await page.evaluate(DOWNLOAD_TEMPLATE % (url, file_name))
+        await download_promise
+
+        await page.close()
+
+        file_path = os.path.join(download_path, file_name)
+
+        try:
+            await asyncio.wait_for(self.wait_for_file(file_path), timeout=10)
+        except asyncio.TimeoutError:
+            raise DocumentDownloadError
+
+        return file_path
+
+    @staticmethod
+    async def wait_for_file(path):
+        while not os.path.isfile(path):
+            await asyncio.sleep(1)
+
+        return path
+
+    @staticmethod
+    def get_meta(path):
+        pdf = pikepdf.open(path)
+        page_count = len(pdf.pages)
+        meta = pdf.open_metadata()
+
+        return page_count, meta
+
+
+class ResolverType(Enum):
+    List = ListResolver
+    Link = LinkResolver
+    Data = DataResolver
+    Meta = MetaResolver
+    Document = DocumentResolver
+
+    def create(self, context: dict, **config):
+        return self.value(context, **config)
