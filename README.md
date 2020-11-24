@@ -14,6 +14,9 @@ Below is a short description on how to set up the project to run it locally.
 * Python 3.7
   - with virtualenv
 
+* nodejs
+  * with npm
+
 * Postgres
 
 
@@ -38,6 +41,17 @@ source env/bin activate
 pip install -r requirements.txt
 ```
 
+Frontend code needs dependencies as well. Those are installed with npm:
+
+``` console
+npx npm install
+```
+
+Frontend assets are compiled with webpack. Use the watch task for development:
+
+``` console
+npm run watch
+```
 
 ### Database Setup
 
@@ -80,3 +94,20 @@ You can run a local development server to test things like this:
 ``` console
 DJANGO_SETTINGS_MODULE=swp.settings.develop python manage.py runserver
 ```
+
+
+## IDE Configuration
+
+### IntelliJ IDEA
+
+To have proper coding assistance regarding to import paths set the WebPack Config
+in Preferences > Languages & Frameworks > JavaScript > WebPack.
+
+To properly use our lint rules defined in .eslintrc.js for JavaScript and .stylelintrc.js
+you have to activate these tools in the preferences.
+
+To activate ESLint set the lint configuration in Preferences > Languages & Frameworks >
+JavaScript > Code Quality Tools > ESLint to automatic.
+
+To activate Stylelint go to Preferences > Languages & Frameworks > Style Sheets > Stylelint
+and set it enabled.

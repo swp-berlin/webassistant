@@ -1,0 +1,43 @@
+stages:
+  - test
+  - lint
+
+variables:
+  DOCKER_DRIVER: overlay2
+  GIT_SUBMODULE_STRATEGY: normal
+
+test:
+  stage: test
+  image: python:3.7
+  variables:
+    DJANGO_SETTINGS_MODULE: swp.settings.test
+    POSTGRES_DB: swp
+    POSTGRES_USER: swp
+    POSTGRES_PASSWORD: swp
+    DATABASE_HOST: postgres
+    SECRET_KEY: this-is-not-a-secret-key
+  tags:
+    - docker
+  services:
+    - name: postgres:11
+      alias: postgres
+  before_script:
+    - apt update && apt install -y gettext
+    - pip install -U pip coverage
+    - pip install -Ur requirements.txt
+  script:
+    - coverage run manage.py test --noinput
+    - coverage report
+
+lint:
+  stage: lint
+  image: node:10
+  tags:
+    - docker
+  dependencies:
+    - test
+  before_script:
+    - npm install
+  script:
+    - npm run eslint
+    - npm run stylelint

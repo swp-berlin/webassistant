@@ -1,0 +1,14 @@
+{% extends 'base.html' %} {% load static version %}
+
+{% block footer %}
+    <footer class="bp3-navbar footer fixed-bottom">
+        <div class="bp3-navbar-group bp3-align-right">
+            <span class="bp3-text-muted">{% version %}</span>
+        </div>
+    </footer>
+{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
+    <script src="{% static 'js/swp.js' %}"></script>
+{% endblock %}

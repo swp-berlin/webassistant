@@ -1,0 +1,11 @@
+/* Include the font face for the icon fonts with WebPack compatible path. */
+$icon-font-path: '~@blueprintjs/icons/resources/icons';
+
+@import '~@blueprintjs/icons/src/font-imports';
+
+/* We currently include all blueprint components but may
+   shrink that down to the used components sometime. */
+@import '~@blueprintjs/core/src/blueprint.scss';
+
+/* components */
+@import 'components/footer';

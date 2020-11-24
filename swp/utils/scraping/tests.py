@@ -1,4 +1,5 @@
 import asyncio
+from unittest import skip
 
 from django.test import SimpleTestCase
 
@@ -9,6 +10,7 @@ from swp.utils.scraping.scraper import Scraper
 
 class ScraperTestCase(SimpleTestCase):
 
+    @skip('Run this manually')
     def test_piie(self):
         resolver_config = {
             'type': ResolverType.List,
@@ -35,6 +37,7 @@ class ScraperTestCase(SimpleTestCase):
 
         self.assertEqual(len(scraped), 20)
 
+    @skip('Run this manually')
     def test_brookings(self):
         resolver_config = {
             'type': ResolverType.List,
@@ -62,6 +65,7 @@ class ScraperTestCase(SimpleTestCase):
 
         self.assertEqual(len(scraped), 30)
 
+    @skip('Run this manually')
     def test_giga_hamburg(self):
         resolver_config = {
             'type': ResolverType.List,
