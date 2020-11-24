@@ -68,13 +68,13 @@ createdb -O swp swp
 Initialize the database:
 
 ``` console
-DJANGO_SETTINGS_MODULE=swp.settings.develop python manage.py migrate
+DJANGO_SETTINGS_MODULE=swp.settings.dev python manage.py migrate
 ```
 
 To generate a superuser account use:
 
 ``` console
-DJANGO_SETTINGS_MODULE=swp.settings.develop python manage.py createsuperuser
+DJANGO_SETTINGS_MODULE=swp.settings.dev python manage.py createsuperuser
 ```
 
 
@@ -83,7 +83,7 @@ DJANGO_SETTINGS_MODULE=swp.settings.develop python manage.py createsuperuser
 Before the first start of the development server you have to run:
 
 ``` console
-DJANGO_SETTINGS_MODULE=swp.settings.develop python manage.py compile-translations
+DJANGO_SETTINGS_MODULE=swp.settings.dev python manage.py compile-translations
 ```
 
 
@@ -92,7 +92,7 @@ DJANGO_SETTINGS_MODULE=swp.settings.develop python manage.py compile-translation
 You can run a local development server to test things like this:
 
 ``` console
-DJANGO_SETTINGS_MODULE=swp.settings.develop python manage.py runserver
+DJANGO_SETTINGS_MODULE=swp.settings.dev python manage.py runserver
 ```
 
 
