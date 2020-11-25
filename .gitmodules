@@ -1,0 +1,3 @@
+[submodule "cosmogo"]
+	path = cosmogo
+	url = ../../cosmocode/cosmogo.git

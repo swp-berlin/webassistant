@@ -1,0 +1,27 @@
+[run]
+branch = on
+source = swp
+omit =
+    # ignore migrations, we should have squashed ones
+    */migrations/*
+
+    # ignore settings, we just
+    # use one for testing
+    */settings/*
+
+    # ignore the tests itself
+    */tests.py
+
+    # ignore wsgi & asgi
+    */?sgi.py
+
+[report]
+include =
+    swp/*
+omit =
+    # they are excluded in run, so
+    # doesn't need to be reported
+    */migrations/*
+    */settings/*
+    */tests.py
+    */?sgi.py

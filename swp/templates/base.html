@@ -1,0 +1,26 @@
+<!DOCTYPE html> {% load i18n static url %} {% get_current_language as lang %}
+<html lang="{{ lang }}">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% trans 'SWP Webmonitor' %}{% endblock %}</title>
+
+    {% block head %}{% endblock %}
+    {% block styles %}
+        <link rel="stylesheet" href="{% static 'css/swp.css' %}">
+    {% endblock %}
+    {% block sentry %}{% endblock %}
+</head>
+<body class="{% block body-class %}swp{% endblock %}">
+{% block body %}
+    <div id="app">
+        {% csrf_token %}
+    </div>
+{% endblock %}
+
+{% block footer %}{% endblock %}
+
+{% block scripts %}
+    <script src="{% js_catalog_url %}"></script>
+{% endblock %}
+</body>
+</html>

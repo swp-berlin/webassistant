@@ -23,3 +23,16 @@ dump.rdb
 
 # Mac
 .DS_Store
+
+# Environment
+.env
+
+# Assets
+node_modules
+/swp/static
+/swp/assets/i18n
+/swp/assets/assets.map.json
+
+# jupyter
+*.ipynb
+.ipynb_checkpoints/
