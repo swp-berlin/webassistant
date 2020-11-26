@@ -17,6 +17,7 @@ dump.rdb
 # Application
 *.mo
 /static
+/test-data
 
 # Database
 *.psql

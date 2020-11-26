@@ -10,5 +10,137 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgid "active"
+msgstr "aktiv"
+
+msgid "name"
+msgstr "Name"
+
+msgid "recipients"
+msgstr "Empfänger"
+
+msgid "interval"
+msgstr "Interval"
+
+msgid "last sent"
+msgstr "gesendet am"
+
+msgid "created"
+msgstr "erzeugt am"
+
+msgid "monitor"
+msgstr "Monitor"
+
+msgid "monitors"
+msgstr "Monitore"
+
+msgid "think tank"
+msgstr "Thinktank"
+
+msgid "scrapers"
+msgstr "Scrapers"
+
+msgid "reference type"
+msgstr "Referenztyp"
+
+msgid "title"
+msgstr "Titel"
+
+msgid "subtitle"
+msgstr "Untertitel"
+
+msgid "abstract"
+msgstr "Abstract"
+
+msgid "authors"
+msgstr "Autoren"
+
+msgid "publication date"
+msgstr "Veröffentlichungsdatum"
+
+msgid "last access"
+msgstr "letzer Zugriff"
+
+msgid "URL"
+msgstr "URL"
+
+msgid "PDF URL"
+msgstr "PDF URL"
+
+msgid "number of pages"
+msgstr "Seitenzahl"
+
+msgid "tags"
+msgstr "Tags"
+
+msgid "publication"
+msgstr "Publikation"
+
+msgid "publications"
+msgstr "Publikationen"
+
+msgid "type"
+msgstr "Typ"
+
+msgid "data"
+msgstr "Daten"
+
+msgid "start URL"
+msgstr "Start-URL"
+
+msgid "checksum"
+msgstr "Checksumme"
+
+msgid "last run"
+msgstr "letzter Durchlauf"
+
+msgid "scraper"
+msgstr "Scraper"
+
+msgid "error code"
+msgstr "Fehlercode"
+
+msgid "message"
+msgstr "Nachricht"
+
+msgid "timestamp"
+msgstr "Timestamp"
+
+msgid "scraping error"
+msgstr "Scraping-Fehler"
+
+msgid "scraping errors"
+msgstr "Scraping-Fehler"
+
+msgid "config"
+msgstr "Konfiguration"
+
+msgid "scraper type"
+msgstr "Scraper-Typ"
+
+msgid "scraper types"
+msgstr "Scraper-Typen"
+
+msgid "description"
+msgstr "Beschreibung"
+
+msgid "Link to homepage"
+msgstr "Link zur Homepage"
+
+msgid "unique field"
+msgstr "eindeutiges Feld"
+
+msgid "think tanks"
+msgstr "Thinktanks"
+
+msgid "query"
+msgstr "Query"
+
+msgid "think tank filter"
+msgstr "Thinktank-Filter"
+
+msgid "think tank filters"
+msgstr "Thinktank-Filter"
+
 msgid "SWP Webmonitor"
 msgstr ""
