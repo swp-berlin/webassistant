@@ -10,17 +10,41 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgid "Personal info"
+msgstr "Persönliche Informationen"
+
+msgid "Permissions"
+msgstr "Berechtigungen"
+
+msgid "Important dates"
+msgstr "Wichtige Daten"
+
 msgid "active"
 msgstr "aktiv"
+
+msgid "twice daily"
+msgstr "zweimal täglich"
+
+msgid "daily"
+msgstr "täglich"
+
+msgid "weekly"
+msgstr "wöchentlich"
+
+msgid "monthly"
+msgstr "monatlich"
+
+msgid "Interval in days"
+msgstr "Intervall in Tagen"
+
+msgid "interval"
+msgstr "Intervall"
 
 msgid "name"
 msgstr "Name"
 
 msgid "recipients"
 msgstr "Empfänger"
-
-msgid "interval"
-msgstr "Interval"
 
 msgid "last sent"
 msgstr "gesendet am"

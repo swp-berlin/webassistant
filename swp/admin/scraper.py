@@ -16,7 +16,7 @@ class ScraperAdmin(admin.ModelAdmin):
         'last_run',
         'created',
     ]
-    readonly_fields = ['created']
+    readonly_fields = ['created', 'last_run']
     list_display = [
         'thinktank',
         'type',
@@ -26,6 +26,7 @@ class ScraperAdmin(admin.ModelAdmin):
     ]
     list_filter = [
         'is_active',
+        'interval',
         'last_run',
     ]
     search_fields = [
