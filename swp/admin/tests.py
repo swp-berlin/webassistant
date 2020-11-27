@@ -25,7 +25,7 @@ class AdminTestCase(TestCase):
 
     @classmethod
     def setUpModels(cls, now):
-        monitor = Monitor.objects.create(name='Test-Monitor', recipients=[cls.user.email], interval=1)
+        monitor = Monitor.objects.create(name='Test-Monitor', recipients=[cls.user.email])
         thinktank = Thinktank.objects.create(name='Test-Thinktank', url='https://www.piie.com/', unique_field='T1-AB')
         ThinktankFilter.objects.create(thinktank=thinktank, monitor=monitor, query={'think': 'tank'})
 
@@ -36,7 +36,6 @@ class AdminTestCase(TestCase):
             data={'hue?': 'hue!'},
             start_url='https://www.piie.com/research/publications/policy-briefs',
             checksum='de9474fa85634623fd9ae9838f949a02c9365ede3499a26c9be52363a8b7f214',
-            interval=1,
         )
         ScraperError.objects.create(scraper=scraper, code='error', message="You're a test case, Harry!")
 

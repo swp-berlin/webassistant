@@ -10,5 +10,161 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgid "Personal info"
+msgstr ""
+
+msgid "Permissions"
+msgstr ""
+
+msgid "Important dates"
+msgstr ""
+
+msgid "active"
+msgstr ""
+
+msgid "twice daily"
+msgstr ""
+
+msgid "daily"
+msgstr ""
+
+msgid "weekly"
+msgstr ""
+
+msgid "monthly"
+msgstr ""
+
+msgid "Interval in days"
+msgstr ""
+
+msgid "interval"
+msgstr ""
+
+msgid "name"
+msgstr ""
+
+msgid "recipients"
+msgstr ""
+
+msgid "last sent"
+msgstr ""
+
+msgid "created"
+msgstr ""
+
+msgid "monitor"
+msgstr ""
+
+msgid "monitors"
+msgstr ""
+
+msgid "think tank"
+msgstr ""
+
+msgid "scrapers"
+msgstr ""
+
+msgid "reference type"
+msgstr ""
+
+msgid "title"
+msgstr ""
+
+msgid "subtitle"
+msgstr ""
+
+msgid "abstract"
+msgstr ""
+
+msgid "authors"
+msgstr ""
+
+msgid "publication date"
+msgstr ""
+
+msgid "last access"
+msgstr ""
+
+msgid "URL"
+msgstr ""
+
+msgid "PDF URL"
+msgstr ""
+
+msgid "number of pages"
+msgstr ""
+
+msgid "tags"
+msgstr ""
+
+msgid "publication"
+msgstr ""
+
+msgid "publications"
+msgstr ""
+
+msgid "type"
+msgstr ""
+
+msgid "data"
+msgstr ""
+
+msgid "start URL"
+msgstr ""
+
+msgid "checksum"
+msgstr ""
+
+msgid "last run"
+msgstr ""
+
+msgid "scraper"
+msgstr ""
+
+msgid "error code"
+msgstr ""
+
+msgid "message"
+msgstr ""
+
+msgid "timestamp"
+msgstr ""
+
+msgid "scraping error"
+msgstr ""
+
+msgid "scraping errors"
+msgstr ""
+
+msgid "config"
+msgstr ""
+
+msgid "scraper type"
+msgstr ""
+
+msgid "scraper types"
+msgstr ""
+
+msgid "description"
+msgstr ""
+
+msgid "Link to homepage"
+msgstr ""
+
+msgid "unique field"
+msgstr ""
+
+msgid "think tanks"
+msgstr ""
+
+msgid "query"
+msgstr ""
+
+msgid "think tank filter"
+msgstr ""
+
+msgid "think tank filters"
+msgstr ""
+
 msgid "SWP Webmonitor"
 msgstr ""

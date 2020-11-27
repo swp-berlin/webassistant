@@ -3,6 +3,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from .abstract import ActivatableModel
+from .choices import Interval
 
 
 class Scraper(ActivatableModel):
@@ -29,7 +30,7 @@ class Scraper(ActivatableModel):
     start_url = models.URLField(_('start URL'))
     checksum = models.CharField(_('checksum'), max_length=64, unique=True)
 
-    interval = models.IntegerField(_('interval'))
+    interval = models.PositiveIntegerField(_('interval'), choices=Interval.choices, default=Interval.DAILY)
     last_run = models.DateTimeField(_('last run'), blank=True, null=True)
     created = models.DateTimeField(_('created'), default=timezone.now, editable=False)
 

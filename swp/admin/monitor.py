@@ -21,6 +21,7 @@ class MonitorAdmin(admin.ModelAdmin):
     ]
     list_filter = [
         'is_active',
+        'interval',
         'last_sent',
         'created',
     ]

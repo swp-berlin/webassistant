@@ -4,6 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from django.contrib.postgres.fields import ArrayField
 
 from .abstract import ActivatableModel
+from .choices import Interval
 
 
 class Monitor(ActivatableModel):
@@ -13,7 +14,7 @@ class Monitor(ActivatableModel):
 
     name = models.CharField(_('name'), max_length=100)
     recipients = ArrayField(models.EmailField(), verbose_name=_('recipients'))
-    interval = models.IntegerField(_('interval'))
+    interval = models.PositiveIntegerField(_('interval'), choices=Interval.choices, default=Interval.DAILY)
     last_sent = models.DateTimeField(_('last sent'), blank=True, null=True)
     created = models.DateTimeField(_('created'), default=timezone.now, editable=False)
 
