@@ -29,7 +29,7 @@ class Publication(models.Model):
     subtitle = models.CharField(_('subtitle'), max_length=255, blank=True)  # [T2]
     abstract = models.TextField(_('abstract'), blank=True)  # [AB]
     authors = ArrayField(models.CharField(max_length=100), blank=True, null=True, verbose_name=_('authors'))  # [AU]
-    publication_date = models.DateField(_('publication date'), null=True)  # [PY]
+    publication_date = models.CharField(_('publication date'), max_length=255, blank=True, default='')  # [PY]
     last_access = models.DateTimeField(_('last access'), editable=False, null=True)  # [Y2]
     url = models.URLField(_('URL'))  # [UR]
     pdf_url = models.URLField(_('PDF URL'), blank=True)  # [L1]

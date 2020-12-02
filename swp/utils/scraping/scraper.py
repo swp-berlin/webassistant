@@ -56,4 +56,4 @@ class Scraper:
         return scraped
 
     def get_resolver(self, context, *, type: ResolverType, **config):
-        return type.create(context, **config)
+        return ResolverType[type].create(context, **config)

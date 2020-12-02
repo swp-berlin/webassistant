@@ -1,0 +1,281 @@
+[
+  {
+    "model": "swp.thinktank",
+    "pk": 1,
+    "fields": {
+      "name": "Peterson Institute for International Economics",
+      "description": "The Peterson Institute for International Economics (PIIE) is an independent nonprofit, nonpartisan research organization dedicated to strengthening prosperity and human welfare in the global economy through expert analysis and practical policy solutions.",
+      "url": "https://www.piie.com/",
+      "unique_field": "url",
+      "created": "2020-12-01T10:15:43.937Z"
+    }
+  },
+  {
+    "model": "swp.thinktank",
+    "pk": 2,
+    "fields": {
+      "name": "The Brookings Institution",
+      "description": "The Brookings Institution is a nonprofit public policy organization based in Washington, DC. Our mission is to conduct in-depth research that leads to new ideas for solving problems facing society at the local, national and global level.",
+      "url": "https://www.brookings.edu",
+      "unique_field": "url",
+      "created": "2020-12-02T08:57:26.561Z"
+    }
+  },
+  {
+    "model": "swp.thinktank",
+    "pk": 3,
+    "fields": {
+      "name": "German Institute for Global and Area Studies",
+      "description": "Das German Institute for Global and Area Studies (GIGA) ist ein unabhängiges, sozialwissenschaftliches Forschungsinstitut mit Sitz in Hamburg. Es forscht zu politischen, sozialen und wirtschaftlichen Entwicklungen in Afrika, Asien, Lateinamerika und Nahost sowie zu globalen Fragen. Als Mitglied der Leibniz-Gemeinschaft folgt das Institut dem Leibniz-Grundsatz \"theoria cum praxi\": Wissenschaft zum Wohl und Nutzen des Menschen. Das GIGA betreibt das größte außeruniversitäre Informationszentrum für Area Studies und Comparative Area Studies in Deutschland.",
+      "url": "https://www.giga-hamburg.de/",
+      "unique_field": "url",
+      "created": "2020-12-02T10:02:17.477Z"
+    }
+  },
+  {
+    "model": "swp.scrapertype",
+    "pk": 1,
+    "fields": {
+      "name": "List of detail pages with documents",
+      "config": {
+        "foo": "bar"
+      }
+    }
+  },
+  {
+    "model": "swp.scraper",
+    "pk": 1,
+    "fields": {
+      "is_active": true,
+      "thinktank": 1,
+      "type": 1,
+      "data": {
+        "type": "List",
+        "selector": ".node--publication",
+        "paginator": {
+          "type": "Page",
+          "max_pages": 1,
+          "list_selector": ".view-content",
+          "button_selector": ".pager .pager-next a"
+        },
+        "resolvers": [
+          {
+            "key": "url",
+            "type": "Attribute",
+            "selector": ".field--title a",
+            "attribute": "href"
+          },
+          {
+            "type": "Link",
+            "selector": ".field--title a",
+            "resolvers": [
+              {
+                "key": "title",
+                "type": "Data",
+                "selector": ".field--title"
+              },
+              {
+                "key": "abstract",
+                "type": "Data",
+                "selector": ".field--body"
+              },
+              {
+                "key": "author",
+                "type": "Data",
+                "selector": ".field--contributor"
+              },
+              {
+                "key": "publication_date",
+                "type": "Data",
+                "selector": ".field--date"
+              },
+              {
+                "key": "pdf_url",
+                "type": "Attribute",
+                "selector": ".field--view-full-document a",
+                "attribute": "href"
+              },
+              {
+                "key": "pdf",
+                "type": "Document",
+                "selector": ".field--view-full-document a"
+              }
+            ]
+          }
+        ]
+      },
+      "start_url": "https://www.piie.com/research/publications/policy-briefs",
+      "checksum": null,
+      "interval": 24,
+      "last_run": null,
+      "created": "2020-12-01T10:23:09.136Z"
+    }
+  },
+  {
+    "model": "swp.scraper",
+    "pk": 2,
+    "fields": {
+      "is_active": true,
+      "thinktank": 2,
+      "type": 1,
+      "data": {
+        "type": "List",
+        "selector": "article.report",
+        "paginator": {
+          "type": "Page",
+          "max_pages": 1,
+          "item_selector": "article.report",
+          "list_selector": ".list-content",
+          "button_selector": ".load-more-link a.load-more"
+        },
+        "resolvers": [
+          {
+            "key": "url",
+            "type": "Attribute",
+            "selector": ".article-info .title a",
+            "attribute": "href"
+          },
+          {
+            "type": "Link",
+            "selector": ".article-info .title a",
+            "resolvers": [
+              {
+                "key": "title",
+                "type": "Attribute",
+                "selector": "head > meta[property='og:title']",
+                "attribute": "content"
+              },
+              {
+                "key": "abstract",
+                "type": "Attribute",
+                "selector": "head > meta[property='og:description']",
+                "attribute": "content"
+              },
+              {
+                "key": "author",
+                "type": "Attribute",
+                "required": false,
+                "selector": "head > meta[name='author']",
+                "attribute": "content"
+              },
+              {
+                "key": "publication_date",
+                "type": "Attribute",
+                "selector": "head > meta[property='article:published_time']",
+                "attribute": "content"
+              },
+              {
+                "key": "pdf_url",
+                "type": "Attribute",
+                "required": false,
+                "selector": "div.download a",
+                "attribute": "href"
+              },
+              {
+                "key": "pdf",
+                "type": "Document",
+                "required": false,
+                "selector": "div.download a"
+              }
+            ],
+            "same_site": true
+          }
+        ]
+      },
+      "start_url": "https://www.brookings.edu/search/?s=&post_type=book&post_type=essay&post_type=research&topic=&pcp=&date_range=&start_date=&end_date=",
+      "checksum": null,
+      "interval": 24,
+      "last_run": null,
+      "created": "2020-12-02T09:27:35.501Z"
+    }
+  },
+  {
+    "model": "swp.scraper",
+    "pk": 3,
+    "fields": {
+      "is_active": true,
+      "thinktank": 3,
+      "type": 1,
+      "data": {
+        "type": "List",
+        "selector": ".l__content .list__item",
+        "paginator": {
+          "type": "Page",
+          "max_pages": 1,
+          "item_selector": ".list__item",
+          "list_selector": ".l__content",
+          "button_selector": ".pager .next a"
+        },
+        "resolvers": [
+          {
+            "key": "author",
+            "type": "Data",
+            "selector": ".listing-body .authors"
+          },
+          {
+            "key": "url",
+            "type": "Attribute",
+            "selector": ".list__title a",
+            "attribute": "href"
+          },
+          {
+            "type": "Link",
+            "selector": ".list__title a",
+            "resolvers": [
+              {
+                "key": "title",
+                "type": "Attribute",
+                "selector": "head > meta[name='citation_title']",
+                "attribute": "content"
+              },
+              {
+                "key": "publication_date",
+                "type": "Attribute",
+                "selector": "head > meta[name='citation_publication_date']",
+                "attribute": "content"
+              },
+              {
+                "key": "abstract",
+                "type": "Data",
+                "required": false,
+                "selector": ".field-type-text-long"
+              },
+              {
+                "key": "pdf_url",
+                "type": "Attribute",
+                "required": false,
+                "selector": "a.pdf-download",
+                "attribute": "href"
+              },
+              {
+                "key": "pdf_url",
+                "type": "Attribute",
+                "required": false,
+                "selector": "div.file-application-pdf a",
+                "attribute": "href"
+              },
+              {
+                "key": "pdf",
+                "type": "Document",
+                "required": false,
+                "selector": "a.pdf-download"
+              },
+              {
+                "key": "pdf",
+                "type": "Document",
+                "required": false,
+                "selector": "div.file-application-pdf a"
+              }
+            ],
+            "same_site": true
+          }
+        ]
+      },
+      "start_url": "https://www.giga-hamburg.de/de/publikationen/working-papers",
+      "checksum": null,
+      "interval": 24,
+      "last_run": null,
+      "created": "2020-12-02T10:02:46.214Z"
+    }
+  }
+]

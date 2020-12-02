@@ -52,8 +52,8 @@ class ScraperTestCase(SimpleTestCase):
             'resolvers': [
                 {'type': ResolverType.Data, 'key': 'type', 'selector': '.article-info .label'},
                 {'type': ResolverType.Link, 'selector': '.article-info .title a', 'same_site': True, 'resolvers': [
-                    {'type': ResolverType.Meta, 'key': 'title', 'selector': 'head > meta[property="og:title"]'},
-                    {'type': ResolverType.Meta, 'key': 'publication_date', 'selector': 'head > meta[property="article:published_time"]'},
+                    {'type': ResolverType.Attribute, 'key': 'title', 'selector': 'head > meta[property="og:title"]', 'attribute': 'content'},
+                    {'type': ResolverType.Attribute, 'key': 'publication_date', 'selector': 'head > meta[property="article:published_time"]', 'attribute': 'content'},
                     # {'type': ResolverType.Document, 'key': 'pdf', 'selector': 'div.download a'}
                 ]}
             ]
@@ -80,8 +80,8 @@ class ScraperTestCase(SimpleTestCase):
             'resolvers': [
                 {'type': ResolverType.Data, 'key': 'author', 'selector': '.listing-body .authors'},
                 {'type': ResolverType.Link, 'selector': '.list__title a', 'same_site': True, 'resolvers': [
-                    {'type': ResolverType.Meta, 'key': 'title', 'selector': 'head > meta[name="citation_title"]'},
-                    {'type': ResolverType.Meta, 'key': 'publication_date', 'selector': 'head > meta[name="citation_publication_date"]'},
+                    {'type': ResolverType.Attribute, 'key': 'title', 'selector': 'head > meta[name="citation_title"]', 'attribute': 'content'},
+                    {'type': ResolverType.Attribute, 'key': 'publication_date', 'selector': 'head > meta[name="citation_publication_date"]', 'attribute': 'content'},
                     # {'type': ResolverType.Document, 'key': 'pdf', 'selector': 'a.pdf-download'}
                 ]}
             ]

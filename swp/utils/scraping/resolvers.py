@@ -9,7 +9,8 @@ from django.conf import settings
 from pyppeteer.element_handle import ElementHandle
 
 from .context import ScraperContext
-from .exceptions import DocumentDownloadError, SkippedError
+from .exceptions import DocumentDownloadError, NodeNotFoundError, SkippedError
+from .paginators import PaginatorType
 from .selectors import Selector
 
 
@@ -28,7 +29,7 @@ class IntermediateResolver(Resolver):
 
     @staticmethod
     def create_resolver(context, *, type, **config):
-        return type.create(context, **config)
+        return ResolverType[type].create(context, **config)
 
 
 class ListResolver(IntermediateResolver):
@@ -44,7 +45,7 @@ class ListResolver(IntermediateResolver):
 
     @staticmethod
     def create_paginator(context, *, type, **paginator):
-        return type.create(context, **paginator)
+        return PaginatorType[type].create(context, **paginator)
 
     async def resolve(self) -> [dict]:
         context = []
@@ -114,12 +115,23 @@ class LinkResolver(IntermediateResolver):
 
 class DataResolver(Resolver):
 
-    def __init__(self, *args, key: str, **kwargs):
+    def __init__(self, *args, key: str, required: bool = True, **kwargs):
         super().__init__(*args, **kwargs)
+        self.required = required
         self.key = key
 
     async def resolve(self, node: ElementHandle, context: dict):
         elem = await node.querySelector(self.selector)
+
+        if not elem:
+            if self.required:
+                raise NodeNotFoundError
+            else:
+                return
+
+        await self.handle_element(elem, context)
+
+    async def handle_element(self, elem: ElementHandle, context: dict):
         text = await self.get_content(elem)
 
         context[self.key] = text
@@ -140,6 +152,19 @@ class MetaResolver(DataResolver):
         return text
 
 
+class AttributeResolver(DataResolver):
+
+    def __init__(self, *args, attribute, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.attribute = attribute
+
+    async def get_content(self, elem):
+        attribute = await elem.getProperty(self.attribute)
+        content = await attribute.jsonValue()
+
+        return content
+
+
 DOWNLOAD_TEMPLATE = """
     () => {
         const dl_link = document.createElement("a");
@@ -151,6 +176,16 @@ DOWNLOAD_TEMPLATE = """
 
 
 class DocumentResolver(DataResolver):
+
+    async def handle_element(self, elem: ElementHandle, context: dict):
+        content = await self.get_content(elem)
+
+        if content:
+            pdf_pages, meta = content
+
+            # TODO write meta information into context
+            context['pdf_pages'] = pdf_pages
+
     async def get_content(self, elem):
         if not elem:
             return None
@@ -170,6 +205,9 @@ class DocumentResolver(DataResolver):
             return None
 
         content = self.get_meta(file_path)
+
+        if os.path.exists(file_path):
+            os.remove(file_path)
 
         return content
 
@@ -194,6 +232,8 @@ class DocumentResolver(DataResolver):
         file_path = os.path.join(download_path, file_name)
 
         try:
+            # chrome does some post-processing with the downloaded file even when the download finished
+            # we wait for up to 10 seconds periodically checking if the file exists
             await asyncio.wait_for(self.wait_for_file(file_path), timeout=10)
         except asyncio.TimeoutError:
             raise DocumentDownloadError
@@ -211,7 +251,8 @@ class DocumentResolver(DataResolver):
     def get_meta(path):
         pdf = pikepdf.open(path)
         page_count = len(pdf.pages)
-        meta = pdf.open_metadata()
+        meta = pdf.docinfo.as_dict()
+        pdf.close()
 
         return page_count, meta
 
@@ -220,7 +261,7 @@ class ResolverType(Enum):
     List = ListResolver
     Link = LinkResolver
     Data = DataResolver
-    Meta = MetaResolver
+    Attribute = AttributeResolver
     Document = DocumentResolver
 
     def create(self, context: dict, **config):

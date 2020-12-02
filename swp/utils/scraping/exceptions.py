@@ -1,3 +1,7 @@
+class NodeNotFoundError(BaseException):
+    pass
+
+
 class SkippedError(BaseException):
     pass
 
