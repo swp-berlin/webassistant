@@ -212,7 +212,7 @@ class DocumentResolver(DataResolver):
         return content
 
     async def download(self, url: str) -> str:
-        download_path = settings.PYPPETEER_FILE_DOWNLOAD_FOLDER
+        download_path = self.context.download_path
         file_name = os.path.basename(urlparse(url).path)
 
         page = await self.context.browser.newPage()

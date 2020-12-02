@@ -1,4 +1,3 @@
-import asyncio
 from argparse import ArgumentParser
 
 from django.core.management import BaseCommand
@@ -14,4 +13,4 @@ class Command(BaseCommand):
     def handle(self, pk, **kwargs):
         scraper = Scraper.objects.get(pk=pk)
 
-        asyncio.run(scraper.scrape())
+        scraper.scrape()

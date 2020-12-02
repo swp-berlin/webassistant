@@ -1,8 +1,10 @@
+from contextlib import contextmanager
 from dataclasses import dataclass
 from datetime import datetime
 
 from pyppeteer import launch
 
+from cosmogo.utils.tempdir import maketempdir
 from .context import ScraperContext
 from .resolvers import ResolverType
 
@@ -38,22 +40,34 @@ class WatchTarget:
 
 class Scraper:
 
-    def __init__(self, url: URL):
+    def __init__(self, url: URL, *, download_path: str = None):
         self.url = url
+        self.download_path = download_path
 
     async def scrape(self, resolver_config: dict) -> [dict]:
         browser = await launch()
         page = await browser.newPage()
         await page.goto(self.url)
 
-        resolver = self.get_resolver(ScraperContext(browser, page), **resolver_config)
+        with self.get_download_path() as download_path:
+            context = ScraperContext(browser, page, download_path)
+            resolver = self.get_resolver(context, **resolver_config)
 
-        scraped = await resolver.resolve()
+            scraped = await resolver.resolve()
 
         await page.close()
         await browser.close()
 
         return scraped
+
+    @contextmanager
+    def get_download_path(self):
+        if self.download_path:
+            yield self.download_path
+            return
+
+        with maketempdir() as download_path:
+            yield f'{download_path}'
 
     def get_resolver(self, context, *, type: ResolverType, **config):
         return ResolverType[type].create(context, **config)

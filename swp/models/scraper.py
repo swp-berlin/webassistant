@@ -1,4 +1,5 @@
-from asgiref.sync import sync_to_async
+import asyncio
+
 from django.db import models, transaction
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -45,9 +46,11 @@ class Scraper(ActivatableModel):
     def __str__(self) -> str:
         return f'[{self.checksum}] {self.thinktank.name}'
 
-    async def scrape(self):
+    def scrape(self):
         scraper = _Scraper(self.start_url)
-        result = await scraper.scrape(self.data)
+
+        loop = asyncio.get_event_loop()
+        result = loop.run_until_complete(scraper.scrape(self.data))
 
         last_access = timezone.now()
 
@@ -66,9 +69,8 @@ class Scraper(ActivatableModel):
                 )
             )
 
-        await self.save_publications(publications)
+        self.save_publications(publications)
 
-    @sync_to_async
     @transaction.atomic
     def save_publications(self, publications):
         Publication.objects.bulk_create(publications)
