@@ -1,0 +1,126 @@
+[
+  {
+    "model": "auth.group",
+    "fields": {
+      "name": "swp-superuser",
+      "permissions": [
+        [
+          "add_user",
+          "swp",
+          "user"
+        ],
+        [
+          "change_user",
+          "swp",
+          "user"
+        ],
+        [
+          "delete_user",
+          "swp",
+          "user"
+        ],
+        [
+          "view_user",
+          "swp",
+          "user"
+        ]
+      ]
+    }
+  },
+  {
+    "model": "auth.group",
+    "fields": {
+      "name": "swp-manager",
+      "permissions": [
+        [
+          "activate_thinktank",
+          "swp",
+          "thinktank"
+        ],
+        [
+          "add_thinktank",
+          "swp",
+          "thinktank"
+        ],
+        [
+          "change_thinktank",
+          "swp",
+          "thinktank"
+        ],
+        [
+          "deactivate_thinktank",
+          "swp",
+          "thinktank"
+        ],
+        [
+          "delete_thinktank",
+          "swp",
+          "thinktank"
+        ],
+        [
+          "view_thinktank",
+          "swp",
+          "thinktank"
+        ],
+        [
+          "add_thinktankfilter",
+          "swp",
+          "thinktankfilter"
+        ],
+        [
+          "change_thinktankfilter",
+          "swp",
+          "thinktankfilter"
+        ],
+        [
+          "delete_thinktankfilter",
+          "swp",
+          "thinktankfilter"
+        ],
+        [
+          "view_thinktankfilter",
+          "swp",
+          "thinktankfilter"
+        ]
+      ]
+    }
+  },
+  {
+    "model": "auth.group",
+    "fields": {
+      "name": "swp-editor",
+      "permissions": [
+        [
+          "activate_monitor",
+          "swp",
+          "monitor"
+        ],
+        [
+          "add_monitor",
+          "swp",
+          "monitor"
+        ],
+        [
+          "change_monitor",
+          "swp",
+          "monitor"
+        ],
+        [
+          "deactivate_monitor",
+          "swp",
+          "monitor"
+        ],
+        [
+          "delete_monitor",
+          "swp",
+          "monitor"
+        ],
+        [
+          "view_monitor",
+          "swp",
+          "monitor"
+        ]
+      ]
+    }
+  }
+  ]

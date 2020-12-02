@@ -11,6 +11,7 @@ class MonitorAdmin(admin.ModelAdmin):
         'recipients',
         'interval',
         'last_sent',
+        'is_active',
         'created',
     ]
     readonly_fields = ['created']
@@ -18,6 +19,7 @@ class MonitorAdmin(admin.ModelAdmin):
         'name',
         'created',
         'last_sent',
+        'is_active',
     ]
     list_filter = [
         'is_active',

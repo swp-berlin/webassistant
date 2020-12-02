@@ -86,6 +86,12 @@ Before the first start of the development server you have to run:
 DJANGO_SETTINGS_MODULE=swp.settings.dev python manage.py compile-translations
 ```
 
+Next you will want to install basic fixtures:
+
+``` console
+DJANGO_SETTINGS_MODULE=swp.settings.dev python manage.py loaddata groups
+```
+
 
 ### Development Server
 

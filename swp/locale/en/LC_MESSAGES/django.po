@@ -19,7 +19,17 @@ msgstr ""
 msgid "Important dates"
 msgstr ""
 
+#, python-format
+msgid "Missing %s permission"
+msgstr ""
+
 msgid "active"
+msgstr ""
+
+msgid "Activation denied"
+msgstr ""
+
+msgid "Deactivation denied"
 msgstr ""
 
 msgid "twice daily"
@@ -34,16 +44,13 @@ msgstr ""
 msgid "monthly"
 msgstr ""
 
-msgid "Interval in days"
-msgstr ""
-
-msgid "interval"
-msgstr ""
-
 msgid "name"
 msgstr ""
 
 msgid "recipients"
+msgstr ""
+
+msgid "interval"
 msgstr ""
 
 msgid "last sent"

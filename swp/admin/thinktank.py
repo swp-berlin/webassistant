@@ -11,9 +11,17 @@ class ThinktankAdmin(admin.ModelAdmin):
         'description',
         'url',
         'unique_field',
+        'is_active',
+        'created',
     ]
+    readonly_fields = ['created']
     list_display = [
         'name',
         'url',
+        'created',
+        'is_active',
+    ]
+    list_filter = [
+        'is_active',
         'created',
     ]

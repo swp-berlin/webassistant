@@ -19,8 +19,18 @@ msgstr "Berechtigungen"
 msgid "Important dates"
 msgstr "Wichtige Daten"
 
+#, python-format
+msgid "Missing %s permission"
+msgstr "Fehlende Berechtigung %s"
+
 msgid "active"
 msgstr "aktiv"
+
+msgid "Activation denied"
+msgstr "Aktivierung nicht erlaubt"
+
+msgid "Deactivation denied"
+msgstr "Deaktivierung nicht erlaubt"
 
 msgid "twice daily"
 msgstr "zweimal täglich"
@@ -34,17 +44,14 @@ msgstr "wöchentlich"
 msgid "monthly"
 msgstr "monatlich"
 
-msgid "Interval in days"
-msgstr "Intervall in Tagen"
-
-msgid "interval"
-msgstr "Intervall"
-
 msgid "name"
 msgstr "Name"
 
 msgid "recipients"
 msgstr "Empfänger"
+
+msgid "interval"
+msgstr "Intervall"
 
 msgid "last sent"
 msgstr "gesendet am"
