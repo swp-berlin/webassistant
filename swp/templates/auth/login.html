@@ -1,0 +1,26 @@
+{% extends 'base.html' %}{% load i18n %}
+
+{% block title %}{{ block.super }} · {% trans 'Login' %}{% endblock %}
+
+{% block body-class %}{{ block.super }} bg-gray-50{% endblock %}
+
+{% block main-class %}min-h-screen flex items-center justify-center py-16 px-8{% endblock %}
+
+{% block content %}
+    <div class="bp3-card bp3-elevation-2 max-w-md w-full mx-auto space-y-8">
+        <h1 class="bp3-heading mt-6 text-3xl font-extrabold text-gray-800">
+            {% trans 'Login' %}
+        </h1>
+
+        <form class="login-form" method="post">
+            {% csrf_token %}
+
+            {% include 'forms/field.html' with field=form.username %}
+            {% include 'forms/field.html' with field=form.password %}
+
+            <button class="bp3-button bp3-intent-primary" type="submit">
+                {% trans 'Log in' %}
+            </button>
+        </form>
+    </div>
+{% endblock %}

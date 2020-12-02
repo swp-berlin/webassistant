@@ -1,0 +1,19 @@
+{% extends 'base.html' %}{% load i18n %}
+
+{% block title %}{{ block.super }} · {% trans 'Logged out' %}{% endblock %}
+
+{% block body-class %}{{ block.super }} bg-gray-50{% endblock %}
+
+{% block main-class %}min-h-screen flex items-center justify-center py-16 px-8{% endblock %}
+
+{% block content %}
+    <div class="bp3-card bp3-elevation-2 max-w-md w-full mx-auto space-y-8">
+        <h1 class="bp3-heading">{% trans 'Good bye' %}</h1>
+
+        <p class="mb-3">{% trans 'You have been logged out successfully.' %}</p>
+
+        <a class="bp3-button bp3-intent-primary" href="{% url 'login' %}">
+            {% trans 'Log in again' %}
+        </a>
+    </div>
+{% endblock %}

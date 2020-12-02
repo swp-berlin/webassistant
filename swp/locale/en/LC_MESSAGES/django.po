@@ -20,9 +20,7 @@ msgstr ""
 
 #, python-format
 msgid "Deactivated %(count)d %(name)s"
-msgid_plural "Deactivated %(count)d %(name)s"
-msgstr[0] ""
-msgstr[1] ""
+msgstr ""
 
 #, python-format
 msgid "Deactivate selected %(verbose_name_plural)s"
@@ -189,6 +187,21 @@ msgid "think tank filter"
 msgstr ""
 
 msgid "think tank filters"
+msgstr ""
+
+msgid "Login"
+msgstr ""
+
+msgid "Log in"
+msgstr ""
+
+msgid "Good bye"
+msgstr ""
+
+msgid "You have been logged out successfully."
+msgstr ""
+
+msgid "Log in again"
 msgstr ""
 
 msgid "SWP Webmonitor"

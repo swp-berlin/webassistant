@@ -5,6 +5,8 @@ from pathlib import Path
 from cosmogo.utils.gettext import trans
 from cosmogo.utils.settings import env, get_git_commit, password_validators, truthy
 
+from django.urls import reverse_lazy
+
 
 BASE_DIR = Path(__file__).parents[2]
 load_dotenv(BASE_DIR / '.env')
@@ -79,6 +81,10 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'swp.wsgi.application'
 
+########
+# AUTH #
+########
+
 AUTH_USER_MODEL = 'swp.User'
 
 AUTH_PASSWORD_VALIDATORS = password_validators(
@@ -87,6 +93,9 @@ AUTH_PASSWORD_VALIDATORS = password_validators(
     'CommonPasswordValidator',
     'NumericPasswordValidator',
 )
+
+LOGIN_URL = reverse_lazy('login')
+LOGOUT_URL = reverse_lazy('logout')
 
 USE_I18N = True
 USE_L10N = True
