@@ -45,7 +45,11 @@ class Scraper:
         self.download_path = download_path
 
     async def scrape(self, resolver_config: dict) -> [dict]:
-        browser = await launch()
+        browser = await launch(
+            handleSIGINT=False,
+            handleSIGTERM=False,
+            handleSIGHUP=False
+        )
         page = await browser.newPage()
         await page.goto(self.url)
 
@@ -53,12 +57,12 @@ class Scraper:
             context = ScraperContext(browser, page, download_path)
             resolver = self.get_resolver(context, **resolver_config)
 
-            scraped = await resolver.resolve()
+            async for resolved in resolver.resolve():
+                yield resolved
 
         await page.close()
         await browser.close()
 
-        return scraped
 
     @contextmanager
     def get_download_path(self):

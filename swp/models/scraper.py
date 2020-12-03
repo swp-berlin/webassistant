@@ -1,5 +1,6 @@
 import asyncio
 
+from asgiref.sync import async_to_sync, sync_to_async
 from django.db import models, transaction
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -49,26 +50,28 @@ class Scraper(ActivatableModel):
     def scrape(self):
         scraper = _Scraper(self.start_url)
 
-        result = asyncio.run(scraper.scrape(self.data))
+        self.async_scrape(scraper, self.data, self.thinktank)
 
-        last_access = timezone.now()
-
-        publications = []
-
-        for data in result:
+    @async_to_sync
+    async def async_scrape(self, scraper, config, thinktank):
+        async for data in scraper.scrape(config):
             authors = [data.pop('author', '')]
 
-            publications.append(
-                Publication(
-                    **data,
-                    thinktank=self.thinktank,
-                    last_access=last_access,
-                    ris_type='UNPB' if 'pdf_url' in data else 'ICOMM',
-                    authors=authors,
-                )
+            publication = Publication(
+                **data,
+                thinktank=thinktank,
+                last_access=timezone.now(),
+                ris_type='UNPB' if 'pdf_url' in data else 'ICOMM',
+                authors=authors,
             )
 
-        self.save_publications(publications)
+            await self.save_publication(publication)
+
+    @sync_to_async
+    def save_publication(self, publication):
+        if not self.scraped_publications.filter(url=publication.url).exists():
+            publication.save()
+            self.scraped_publications.add(publication)
 
     @transaction.atomic
     def save_publications(self, publications):
