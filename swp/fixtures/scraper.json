@@ -90,12 +90,6 @@
                 "selector": ".field--date"
               },
               {
-                "key": "pdf_url",
-                "type": "Attribute",
-                "selector": ".field--view-full-document a",
-                "attribute": "href"
-              },
-              {
                 "key": "pdf",
                 "type": "Document",
                 "selector": ".field--view-full-document a"
@@ -163,13 +157,6 @@
                 "type": "Attribute",
                 "selector": "head > meta[property='article:published_time']",
                 "attribute": "content"
-              },
-              {
-                "key": "pdf_url",
-                "type": "Attribute",
-                "required": false,
-                "selector": "div.download a",
-                "attribute": "href"
               },
               {
                 "key": "pdf",
@@ -241,30 +228,10 @@
                 "selector": ".field-type-text-long"
               },
               {
-                "key": "pdf_url",
-                "type": "Attribute",
-                "required": false,
-                "selector": "a.pdf-download",
-                "attribute": "href"
-              },
-              {
-                "key": "pdf_url",
-                "type": "Attribute",
-                "required": false,
-                "selector": "div.file-application-pdf a",
-                "attribute": "href"
-              },
-              {
                 "key": "pdf",
                 "type": "Document",
                 "required": false,
-                "selector": "a.pdf-download"
-              },
-              {
-                "key": "pdf",
-                "type": "Document",
-                "required": false,
-                "selector": "div.file-application-pdf a"
+                "selector": "a.pdf-download, div.file-application-pdf a"
               }
             ],
             "same_site": true
