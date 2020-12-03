@@ -49,8 +49,7 @@ class Scraper(ActivatableModel):
     def scrape(self):
         scraper = _Scraper(self.start_url)
 
-        loop = asyncio.get_event_loop()
-        result = loop.run_until_complete(scraper.scrape(self.data))
+        result = asyncio.run(scraper.scrape(self.data))
 
         last_access = timezone.now()
 
