@@ -181,15 +181,13 @@ class DocumentResolver(DataResolver):
         content = await self.get_content(elem)
 
         if content:
-            pdf_pages, meta = content
+            href, pdf_pages, meta = content
 
             # TODO write meta information into context
+            context['pdf_url'] = href
             context['pdf_pages'] = pdf_pages
 
     async def get_content(self, elem):
-        if not elem:
-            return None
-
         href_property = await elem.getProperty('href')
         href = await href_property.jsonValue()
 
@@ -204,12 +202,12 @@ class DocumentResolver(DataResolver):
         if suffix != '.pdf':
             return None
 
-        content = self.get_meta(file_path)
+        pdf_pages, meta = self.get_meta(file_path)
 
         if os.path.exists(file_path):
             os.remove(file_path)
 
-        return content
+        return href, pdf_pages, meta
 
     async def download(self, url: str) -> str:
         download_path = self.context.download_path
