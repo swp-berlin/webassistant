@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from django.contrib.auth import get_permission_codename
 from django.contrib.auth.models import AbstractUser as User
-from django.core.exceptions import ImproperlyConfigured
+from django.core.exceptions import ImproperlyConfigured, PermissionDenied
 from django.db import models
 from django.db.models.base import ModelBase
 from django.utils.translation import gettext_lazy as _
@@ -94,12 +94,14 @@ class ActivatableModel(models.Model, metaclass=ActivatableModelBase):
 
     def activate(self, user: User):
         """ Activate instance. """
-        assert self.can_activate(user), _('Activation denied')
+        if not self.can_activate(user):
+            raise PermissionDenied(_('Activation denied'))
 
         self.set_active(True)
 
     def deactivate(self, user: User):
         """ Deactivate instance. """
-        assert self.can_deactivate(user), _('Deactivation denied')
+        if not self.can_deactivate(user):
+            raise PermissionDenied(_('Deactivation denied'))
 
         self.set_active(False)

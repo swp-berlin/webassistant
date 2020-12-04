@@ -1,0 +1,78 @@
+[
+{
+  "model": "swp.user",
+  "fields": {
+    "password": "pbkdf2_sha256$216000$m2KtbS44nCPc$igR0FqBLUARR4Nq8uCZhiAKEUORk5/rP95jojyDXjDQ=",
+    "last_login": null,
+    "is_superuser": true,
+    "first_name": "",
+    "last_name": "",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2020-11-25T12:02:41.819Z",
+    "email": "admin@localhost",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "swp.user",
+  "fields": {
+    "password": "pbkdf2_sha256$216000$kIvvZhglUl5M$2QmKBQ4+Da8/wDX5lKLIPn/wnaDen7l34w9CX0h/K88=",
+    "last_login": "2020-12-03T17:24:33.234Z",
+    "is_superuser": false,
+    "first_name": "",
+    "last_name": "",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2020-12-03T17:22:44.028Z",
+    "email": "swp-superuser@localhost",
+    "groups": [
+      [
+        "swp-superuser"
+      ]
+    ],
+    "user_permissions": []
+  }
+},
+{
+  "model": "swp.user",
+  "fields": {
+    "password": "pbkdf2_sha256$216000$JWKZCWSpTZ64$ED/rInsGhkqORIP/793E7z/aYPp0HIe+SPsMVKeaQ5s=",
+    "last_login": "2020-12-04T12:21:20.426Z",
+    "is_superuser": false,
+    "first_name": "",
+    "last_name": "",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2020-12-03T17:23:15.157Z",
+    "email": "swp-manager@localhost",
+    "groups": [
+      [
+        "swp-manager"
+      ]
+    ],
+    "user_permissions": []
+  }
+},
+{
+  "model": "swp.user",
+  "fields": {
+    "password": "pbkdf2_sha256$216000$aIUs6zuUemEh$FAaguzgMTsgZg4w3zeMa6VRKD7ZU/D+ADVVIQE/C7AE=",
+    "last_login": "2020-12-03T17:26:25.242Z",
+    "is_superuser": false,
+    "first_name": "",
+    "last_name": "",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2020-12-03T17:23:34.799Z",
+    "email": "swp-editor@localhost",
+    "groups": [
+      [
+        "swp-editor"
+      ]
+    ],
+    "user_permissions": []
+  }
+}
+]
