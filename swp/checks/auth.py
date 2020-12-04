@@ -22,6 +22,7 @@ def check_groups(app_configs, **kwargs):
                     f'Missing group "{group_name}" in database',
                     hint='Install groups fixture via loaddata',
                     obj=Group,
+                    id='swp.W001',
                 )
             ]
 
