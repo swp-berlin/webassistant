@@ -33,6 +33,46 @@
       "name": "swp-manager",
       "permissions": [
         [
+          "activate_scraper",
+          "swp",
+          "scraper"
+        ],
+        [
+          "add_scraper",
+          "swp",
+          "scraper"
+        ],
+        [
+          "change_scraper",
+          "swp",
+          "scraper"
+        ],
+        [
+          "deactivate_scraper",
+          "swp",
+          "scraper"
+        ],
+        [
+          "delete_scraper",
+          "swp",
+          "scraper"
+        ],
+        [
+          "view_scraper",
+          "swp",
+          "scraper"
+        ],
+        [
+          "view_scrapererror",
+          "swp",
+          "scrapererror"
+        ],
+        [
+          "view_scrapertype",
+          "swp",
+          "scrapertype"
+        ],
+        [
           "activate_thinktank",
           "swp",
           "thinktank"

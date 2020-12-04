@@ -1,8 +1,17 @@
+from typing import Iterable
+
 from django import test
 from django.core.exceptions import PermissionDenied
 from django.utils import timezone
 
-from swp.models import Monitor, Scraper, ScraperType, Thinktank, User
+from swp.models import (
+    ActivatableModel,
+    Monitor,
+    Scraper,
+    ScraperType,
+    Thinktank,
+    User,
+)
 
 
 SUPERUSER_PERMS = [
@@ -71,6 +80,9 @@ class PermissionTestCase(test.TestCase):
     def test_manager_permissions(self):
         self.assertTrue(self.manager.has_perms(MANAGER_PERMS))
 
+        self.assertTrue(self.scraper.can_activate(user=self.manager))
+        self.assertTrue(self.scraper.can_deactivate(user=self.manager))
+
         self.assertTrue(self.thinktank.can_activate(user=self.manager))
         self.assertTrue(self.thinktank.can_deactivate(user=self.manager))
 
@@ -84,29 +96,31 @@ class PermissionTestCase(test.TestCase):
     # ACTIVATION #
     ##############
 
+    def assert_activation(self, obj: ActivatableModel, user: User, denied_users: Iterable[User] = ()):
+        """ Assert activation and deactivation operations behave according to spec. """
+        self.assertTrue(obj.is_active)
+
+        obj.deactivate(user=user)
+        self.assertFalse(obj.is_active)
+
+        obj.activate(user=user)
+        self.assertTrue(obj.is_active)
+
+        for denied_user in denied_users:
+            with self.assertRaises(PermissionDenied):
+                obj.deactivate(user=denied_user)
+            with self.assertRaises(PermissionDenied):
+                obj.activate(user=denied_user)
+
+        # Denied operations should not alter model state
+        self.assertTrue(obj.is_active)
+
     def test_monitor_activation(self):
-        self.assertTrue(self.monitor.is_active)
+        self.assert_activation(self.monitor, self.editor, [self.manager, self.superuser])
 
-        self.monitor.deactivate(user=self.editor)
-        self.assertFalse(self.monitor.is_active)
-        self.monitor.activate(user=self.editor)
-        self.assertTrue(self.monitor.is_active)
-
-        with self.assertRaises(PermissionDenied):
-            self.monitor.deactivate(user=self.manager)
-        with self.assertRaises(PermissionDenied):
-            self.monitor.deactivate(user=self.superuser)
+    def test_scraper_activation(self):
+        self.assert_activation(self.scraper, self.manager, [self.editor, self.superuser])
 
     def test_thinktank_activation(self):
-        self.assertTrue(self.thinktank.is_active)
-
-        self.thinktank.deactivate(user=self.manager)
-        self.assertFalse(self.thinktank.is_active)
-        self.thinktank.activate(user=self.manager)
-        self.assertTrue(self.thinktank.is_active)
-
-        with self.assertRaises(PermissionDenied):
-            self.thinktank.deactivate(user=self.editor)
-        with self.assertRaises(PermissionDenied):
-            self.thinktank.deactivate(user=self.superuser)
+        self.assert_activation(self.thinktank, self.manager, [self.editor, self.superuser])
 
