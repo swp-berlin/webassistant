@@ -86,11 +86,28 @@ Before the first start of the development server you have to run:
 DJANGO_SETTINGS_MODULE=swp.settings.dev python manage.py compile-translations
 ```
 
-Next you will want to install basic fixtures:
+#### Fixtures
+
+You will probably want to install the predefined groups:
 
 ``` console
-DJANGO_SETTINGS_MODULE=swp.settings.dev python manage.py loaddata groups
+python manage.py loaddata groups
 ```
+
+Afterwards, you may load generic test accounts for development purposes:
+
+| User | Password | Group | is_staff | is_superuser |
+| ---- | -------- | ----- | -------- | ------------ |
+| admin@localhost | admin | - | + | + |
+| swp-superuser@localhost | swp-superuser | swp-superuser | + | - |
+| swp-manager@localhost | swp-manager | swp-manager | + | - |
+| swp-editor@localhost | swp-editor | swp-editor | + | - |
+
+``` console
+python manage.py loaddata test-users
+```
+
+> **NOTE** These are totally optional and are mostly included for automated tests.
 
 
 ### Development Server
