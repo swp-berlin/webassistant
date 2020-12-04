@@ -8,3 +8,4 @@ from pyppeteer.page import Page
 class ScraperContext:
     browser: Browser
     page: Page
+    download_path: str
