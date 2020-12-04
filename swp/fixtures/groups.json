@@ -159,6 +159,21 @@
           "view_monitor",
           "swp",
           "monitor"
+        ],
+        [
+          "view_publication",
+          "swp",
+          "publication"
+        ],
+        [
+          "view_thinktank",
+          "swp",
+          "thinktank"
+        ],
+        [
+          "view_thinktankfilter",
+          "swp",
+          "thinktankfilter"
         ]
       ]
     }
