@@ -15,7 +15,7 @@ class MonitorAdmin(ActivatableModelAdmin):
         'is_active',
         'created',
     ]
-    readonly_fields = ['created']
+    readonly_fields = ['created', 'last_sent']
     list_display = [
         'name',
         'created',
