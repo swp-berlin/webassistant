@@ -22,6 +22,15 @@ SUPERUSER_PERMS = [
 ]
 
 MANAGER_PERMS = [
+    'swp.activate_scraper',
+    'swp.add_scraper',
+    'swp.change_scraper',
+    'swp.deactivate_scraper',
+    'swp.delete_scraper',
+    'swp.view_scraper',
+    'swp.view_scrapererror',
+    'swp.view_scrapertype',
+
     'swp.activate_thinktank',
     'swp.add_thinktank',
     'swp.change_thinktank',
