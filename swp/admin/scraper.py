@@ -1,10 +1,11 @@
 from django.contrib import admin
 
 from swp.models import Scraper
+from .abstract import ActivatableModelAdmin
 
 
 @admin.register(Scraper)
-class ScraperAdmin(admin.ModelAdmin):
+class ScraperAdmin(ActivatableModelAdmin):
     date_hierarchy = 'created'
     fields = [
         'thinktank',

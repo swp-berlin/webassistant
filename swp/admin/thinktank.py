@@ -1,10 +1,11 @@
 from django.contrib import admin
 
 from swp.models import Thinktank
+from .abstract import ActivatableModelAdmin
 
 
 @admin.register(Thinktank)
-class ThinktankAdmin(admin.ModelAdmin):
+class ThinktankAdmin(ActivatableModelAdmin):
     date_hierarchy = 'created'
     fields = [
         'name',

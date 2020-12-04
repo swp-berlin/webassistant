@@ -1,3 +1,4 @@
+from .abstract import ActivatableModelAdmin
 from .monitor import MonitorAdmin
 from .publication import PublicationAdmin
 from .scraper import ScraperAdmin
@@ -8,6 +9,7 @@ from .thinktankfilter import ThinktankFilterAdmin
 from .user import UserAdmin
 
 __all__ = [
+    'ActivatableModelAdmin',
     'MonitorAdmin',
     'PublicationAdmin',
     'ScraperAdmin',

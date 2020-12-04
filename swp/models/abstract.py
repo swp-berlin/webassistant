@@ -79,11 +79,13 @@ class ActivatableModel(models.Model, metaclass=ActivatableModelBase):
 
     def can_activate(self, user: User) -> bool:
         """ Check user for permission to activate. """
-        return user.has_perm(get_permission_codename('activate', self._meta))
+        codename = get_permission_codename('activate', self._meta)
+        return user.has_perm(f'{self._meta.app_label}.{codename}')
 
     def can_deactivate(self, user: User) -> bool:
         """ Check user for permission to deactivate. """
-        return user.has_perm(get_permission_codename('deactivate', self._meta))
+        codename = get_permission_codename('deactivate', self._meta)
+        return user.has_perm(f'{self._meta.app_label}.{codename}')
 
     def set_active(self, is_active: bool, *, commit: bool = True):
         self.is_active = is_active

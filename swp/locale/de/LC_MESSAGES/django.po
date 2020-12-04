@@ -10,6 +10,24 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+#, python-format
+msgid "Activated %(count)d %(name)s"
+msgstr "%(count)d %(name)s erfolgreich aktiviert"
+
+#, python-format
+msgid "Activate selected %(verbose_name_plural)s"
+msgstr "Ausgewählte %(verbose_name_plural)s aktivieren"
+
+#, python-format
+msgid "Deactivated %(count)d %(name)s"
+msgid_plural "Deactivated %(count)d %(name)s"
+msgstr[0] "%(count)d %(name)s erfolgreich deaktivieren"
+msgstr[1] "%(count)d %(name)s erfolgreich deaktiviert"
+
+#, python-format
+msgid "Deactivate selected %(verbose_name_plural)s"
+msgstr "Ausgewählte %(verbose_name_plural)s deaktivieren"
+
 msgid "Personal info"
 msgstr "Persönliche Informationen"
 

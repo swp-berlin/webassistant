@@ -1,10 +1,11 @@
 from django.contrib import admin
 
 from swp.models import Monitor
+from .abstract import ActivatableModelAdmin
 
 
 @admin.register(Monitor)
-class MonitorAdmin(admin.ModelAdmin):
+class MonitorAdmin(ActivatableModelAdmin):
     date_hierarchy = 'created'
     fields = [
         'name',
