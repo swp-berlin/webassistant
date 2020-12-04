@@ -107,7 +107,7 @@ Afterwards, you may load generic test accounts for development purposes:
 python manage.py loaddata test-users
 ```
 
-> **NOTE** These are totally optional and are mostly included for automated tests.
+> **NOTE** These are totally optional and included mainly for automated tests.
 
 
 ### Development Server
