@@ -105,7 +105,7 @@ class PermissionTestCase(test.TestCase):
     # ACTIVATION #
     ##############
 
-    def assert_activation(self, obj: ActivatableModel, user: User, denied_users: Iterable[User] = ()):
+    def assert_activation(self, obj: ActivatableModel, user: User, deny: Iterable[User] = ()):
         """ Assert activation and deactivation operations behave according to spec. """
         self.assertTrue(obj.is_active)
 
@@ -115,11 +115,11 @@ class PermissionTestCase(test.TestCase):
         obj.activate(user=user)
         self.assertTrue(obj.is_active)
 
-        for denied_user in denied_users:
+        for deny_user in deny:
             with self.assertRaises(PermissionDenied):
-                obj.deactivate(user=denied_user)
+                obj.deactivate(user=deny_user)
             with self.assertRaises(PermissionDenied):
-                obj.activate(user=denied_user)
+                obj.activate(user=deny_user)
 
         # Denied operations should not alter model state
         self.assertTrue(obj.is_active)
