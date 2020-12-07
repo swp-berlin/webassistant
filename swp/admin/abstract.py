@@ -18,12 +18,12 @@ class ActivatableModelAdmin(admin.ModelAdmin):
     """
 
     def can_activate(self, request) -> bool:
-        codename = get_permission_codename('activate', self.model._meta)
-        return request.user.has_perm(f'{self.model._meta.app_label}.{codename}')
+        codename = get_permission_codename('activate', self.opts)
+        return request.user.has_perm(f'{self.opts.app_label}.{codename}')
 
     def can_deactivate(self, request) -> bool:
-        codename = get_permission_codename('deactivate', self.model._meta)
-        return request.user.has_perm(f'{self.model._meta.app_label}.{codename}')
+        codename = get_permission_codename('deactivate', self.opts)
+        return request.user.has_perm(f'{self.opts.app_label}.{codename}')
 
     ###########
     # ACTIONS #
@@ -35,7 +35,7 @@ class ActivatableModelAdmin(admin.ModelAdmin):
         assert self.can_activate(request)
         count = queryset.activate()
 
-        format_kwargs = dict(count=count, name=get_pluralized_verbose_name(self.model, count))
+        format_kwargs = {'count': count, 'name': get_pluralized_verbose_name(self.model, count)}
         self.message_user(request, _('Activated %(count)d %(name)s') % format_kwargs)
 
     activate.short_description = _('Activate selected %(verbose_name_plural)s')
@@ -44,7 +44,7 @@ class ActivatableModelAdmin(admin.ModelAdmin):
         assert self.can_deactivate(request)
         count = queryset.deactivate()
 
-        format_kwargs = dict(count=count, name=get_pluralized_verbose_name(self.model, count))
+        format_kwargs = {'count': count, 'name': get_pluralized_verbose_name(self.model, count)}
         self.message_user(request, _('Deactivated %(count)d %(name)s') % format_kwargs)
 
     deactivate.short_description = _('Deactivate selected %(verbose_name_plural)s')
