@@ -25,9 +25,7 @@ class ActivatableModelAdmin(admin.ModelAdmin):
         codename = get_permission_codename('deactivate', self.opts)
         return request.user.has_perm(f'{self.opts.app_label}.{codename}')
 
-    ###########
-    # ACTIONS #
-    ###########
+    # <editor-fold desc="Actions">
 
     actions = ['activate', 'deactivate']
 
@@ -60,9 +58,7 @@ class ActivatableModelAdmin(admin.ModelAdmin):
 
         return actions
 
-    ##########
-    # FIELDS #
-    ##########
+    # </editor-fold>
 
     def get_readonly_fields(self, request, obj=None):
         readonly_fields = list(super().get_readonly_fields(request, obj=obj))
