@@ -5,7 +5,6 @@ from enum import Enum
 from urllib.parse import urlparse
 
 import pikepdf
-from django.conf import settings
 from pyppeteer.element_handle import ElementHandle
 
 from .context import ScraperContext
@@ -48,16 +47,13 @@ class ListResolver(IntermediateResolver):
         return PaginatorType[type].create(context, **paginator)
 
     async def resolve(self) -> [dict]:
-        context = []
-
         async for node in self.resolve_nodes():
             try:
                 detail_context = await self.resolve_node(node)
             except SkippedError:
                 continue
-            context.append(detail_context)
 
-        return context
+            yield detail_context
 
     async def resolve_nodes(self):
         if self.paginator:
