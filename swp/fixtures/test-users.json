@@ -18,7 +18,7 @@
 {
   "model": "swp.user",
   "fields": {
-    "password": "pbkdf2_sha256$216000$kIvvZhglUl5M$2QmKBQ4+Da8/wDX5lKLIPn/wnaDen7l34w9CX0h/K88=",
+    "password": "pbkdf2_sha256$216000$Q2D1Q2xnERh1$ny+zcQlbGTQYpJCgrzbJlZppMGq4S0CWDZk+Csr7TBs=",
     "last_login": "2020-12-03T17:24:33.234Z",
     "is_superuser": false,
     "first_name": "",
@@ -26,10 +26,10 @@
     "is_staff": true,
     "is_active": true,
     "date_joined": "2020-12-03T17:22:44.028Z",
-    "email": "swp-superuser@localhost",
+    "email": "swp-useradmin@localhost",
     "groups": [
       [
-        "swp-superuser"
+        "swp-useradmin"
       ]
     ],
     "user_permissions": []

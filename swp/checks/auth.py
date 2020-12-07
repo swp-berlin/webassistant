@@ -10,7 +10,7 @@ def check_groups(app_configs, **kwargs):
     errors = []
 
     for group_name in [
-        'swp-superuser',
+        'swp-useradmin',
         'swp-manager',
         'swp-editor',
     ]:

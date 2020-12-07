@@ -2,7 +2,7 @@
   {
     "model": "auth.group",
     "fields": {
-      "name": "swp-superuser",
+      "name": "swp-useradmin",
       "permissions": [
         [
           "add_user",

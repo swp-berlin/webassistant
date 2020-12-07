@@ -14,7 +14,7 @@ from swp.models import (
 )
 
 
-SUPERUSER_PERMS = [
+USERADMIN_PERMS = [
     'swp.add_user',
     'swp.change_user',
     'swp.delete_user',
@@ -56,7 +56,7 @@ class PermissionTestCase(test.TestCase):
     def setUpTestData(cls):
         cls.now = now = timezone.localtime()
         cls.user = User.objects.get_by_natural_key('admin@localhost')
-        cls.superuser = User.objects.get_by_natural_key('swp-superuser@localhost')
+        cls.useradmin = User.objects.get_by_natural_key('swp-useradmin@localhost')
         cls.manager = User.objects.get_by_natural_key('swp-manager@localhost')
         cls.editor = User.objects.get_by_natural_key('swp-editor@localhost')
 
@@ -83,8 +83,8 @@ class PermissionTestCase(test.TestCase):
             created=now,
         )
 
-    def test_superuser_permissions(self):
-        self.assertTrue(self.superuser.has_perms(SUPERUSER_PERMS))
+    def test_useradmin_permissions(self):
+        self.assertTrue(self.useradmin.has_perms(USERADMIN_PERMS))
 
     def test_manager_permissions(self):
         self.assertTrue(self.manager.has_perms(MANAGER_PERMS))
@@ -125,11 +125,11 @@ class PermissionTestCase(test.TestCase):
         self.assertTrue(obj.is_active)
 
     def test_monitor_activation(self):
-        self.assert_activation(self.monitor, self.editor, [self.manager, self.superuser])
+        self.assert_activation(self.monitor, self.editor, [self.manager, self.useradmin])
 
     def test_scraper_activation(self):
-        self.assert_activation(self.scraper, self.manager, [self.editor, self.superuser])
+        self.assert_activation(self.scraper, self.manager, [self.editor, self.useradmin])
 
     def test_thinktank_activation(self):
-        self.assert_activation(self.thinktank, self.manager, [self.editor, self.superuser])
+        self.assert_activation(self.thinktank, self.manager, [self.editor, self.useradmin])
 
