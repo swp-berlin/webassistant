@@ -69,7 +69,7 @@ class ActivatableModelAdmin(admin.ModelAdmin):
         can_activate = self.can_activate(request)
         can_deactivate = self.can_deactivate(request)
 
-        if not can_activate or not can_deactivate:
+        if not (can_activate and can_deactivate):
             is_active = getattr(obj, 'is_active', None)
             if is_active is False and not can_activate or is_active is True and not can_deactivate:
                 readonly_fields.append('is_active')
