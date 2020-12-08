@@ -4,3 +4,4 @@ polib==1.1.0
 psycopg2==2.8.6
 pyppeteer==0.2.2
 python-dotenv==0.15.0
+uwsgi==2.0.19.1
