@@ -1,6 +1,7 @@
 stages:
   - test
   - lint
+  - deploy
 
 variables:
   DOCKER_DRIVER: overlay2
