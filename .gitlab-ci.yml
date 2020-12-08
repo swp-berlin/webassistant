@@ -41,3 +41,26 @@ lint:
   script:
     - npm run eslint
     - npm run stylelint
+
+.deploy_template: &deploy_definition
+  stage: deploy
+  image: registry.cosmocode.de/cosmocode/fabfileng:latest
+  tags:
+    - docker
+  before_script:
+    - mkdir ~/.ssh; chmod 0700 ~/.ssh
+    - echo "$PRIVATE_DEPLOY_KEY" > ~/.ssh/id_rsa && chmod 0400 ~/.ssh/id_rsa
+    - cp /fabfile.py $PWD
+  script:
+    - fab deploy
+
+deploy_production:
+  <<: *deploy_definition
+  environment:
+    name: production
+    url: https://production.swp.cosmoco.de
+  tags:
+    - docker
+    - always_on
+  only:
+    - production
