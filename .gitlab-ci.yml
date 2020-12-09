@@ -65,3 +65,14 @@ deploy_production:
     - always_on
   only:
     - production
+
+deploy_staging:
+  <<: *deploy_definition
+  environment:
+    name: staging
+    url: https://staging.swp.cosmoco.de
+  tags:
+    - docker
+    - always_on
+  only:
+    - staging

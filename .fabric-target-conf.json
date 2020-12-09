@@ -26,5 +26,33 @@
         "sudo systemctl start swp@production.service",
         "sudo systemctl restart nginx.service"
       ]
+    },
+    "deploy_staging": {
+      "TARGET_HOST": "10.1.0.4",
+      "TARGET_PORT": "6589",
+      "TARGET_USER": "ci",
+      "TARGET_PATH": "/var/www/staging",
+      "GATEWAY_SERVER": {
+        "port": 6589,
+        "user": "ci",
+        "host": "proxmox.swp.cosmoco.de"
+      },
+      "PRE_CMDS": [
+        "sudo systemctl stop swp@staging.service"
+      ],
+      "POST_CMD_ENV": {
+        "DJANGO_SETTINGS_MODULE": "swp.settings.staging"
+      },
+      "POST_CMDS": [
+        "npx npm install",
+        "find . -name '*.pyc' -delete",
+        "env/bin/pip install -r requirements.txt -U",
+        "env/bin/python manage.py migrate",
+        "env/bin/python manage.py compile-translations",
+        "npm run build",
+        "env/bin/python manage.py collectstatic --no-input",
+        "sudo systemctl start swp@staging.service",
+        "sudo systemctl restart nginx.service"
+      ]
     }
 }
