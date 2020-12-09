@@ -98,10 +98,11 @@ DJANGO_SETTINGS_MODULE=swp.settings.dev python manage.py runserver
 
 ### Production Server
 
-Please copy .env.default and adjust the configuration parameters.
+Please copy .env.default, adjust the configuration parameters and install apt requirements.
 
 ``` console
 cp conf/.env.example .env
+while read apt ; do apt install "$apt" ; done < apt-requirements.txt
 ```
 
 
