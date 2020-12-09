@@ -96,6 +96,15 @@ DJANGO_SETTINGS_MODULE=swp.settings.dev python manage.py runserver
 ```
 
 
+### Production Server
+
+Please copy .env.default and adjust the configuration parameters.
+
+``` console
+cp conf/.env.example .env
+```
+
+
 ## IDE Configuration
 
 ### IntelliJ IDEA
