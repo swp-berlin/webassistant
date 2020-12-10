@@ -10,6 +10,24 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+#, python-format
+msgid "Activated %(count)d %(name)s"
+msgstr "%(count)d %(name)s erfolgreich aktiviert"
+
+#, python-format
+msgid "Activate selected %(verbose_name_plural)s"
+msgstr "Ausgewählte %(verbose_name_plural)s aktivieren"
+
+#, python-format
+msgid "Deactivated %(count)d %(name)s"
+msgid_plural "Deactivated %(count)d %(name)s"
+msgstr[0] "%(count)d %(name)s erfolgreich deaktivieren"
+msgstr[1] "%(count)d %(name)s erfolgreich deaktiviert"
+
+#, python-format
+msgid "Deactivate selected %(verbose_name_plural)s"
+msgstr "Ausgewählte %(verbose_name_plural)s deaktivieren"
+
 msgid "Personal info"
 msgstr "Persönliche Informationen"
 
@@ -19,8 +37,18 @@ msgstr "Berechtigungen"
 msgid "Important dates"
 msgstr "Wichtige Daten"
 
+#, python-format
+msgid "Missing %s permission"
+msgstr "Fehlende Berechtigung %s"
+
 msgid "active"
 msgstr "aktiv"
+
+msgid "Activation denied"
+msgstr "Aktivierung nicht erlaubt"
+
+msgid "Deactivation denied"
+msgstr "Deaktivierung nicht erlaubt"
 
 msgid "twice daily"
 msgstr "zweimal täglich"
@@ -34,17 +62,14 @@ msgstr "wöchentlich"
 msgid "monthly"
 msgstr "monatlich"
 
-msgid "Interval in days"
-msgstr "Intervall in Tagen"
-
-msgid "interval"
-msgstr "Intervall"
-
 msgid "name"
 msgstr "Name"
 
 msgid "recipients"
 msgstr "Empfänger"
+
+msgid "interval"
+msgstr "Intervall"
 
 msgid "last sent"
 msgstr "gesendet am"

@@ -40,7 +40,7 @@ class Scraper(ActivatableModel):
     last_run = models.DateTimeField(_('last run'), blank=True, null=True)
     created = models.DateTimeField(_('created'), default=timezone.now, editable=False)
 
-    class Meta:
+    class Meta(ActivatableModel.Meta):
         verbose_name = _('scraper')
         verbose_name_plural = _('scrapers')
 

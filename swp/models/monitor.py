@@ -18,7 +18,7 @@ class Monitor(ActivatableModel):
     last_sent = models.DateTimeField(_('last sent'), blank=True, null=True)
     created = models.DateTimeField(_('created'), default=timezone.now, editable=False)
 
-    class Meta:
+    class Meta(ActivatableModel.Meta):
         verbose_name = _('monitor')
         verbose_name_plural = _('monitors')
 

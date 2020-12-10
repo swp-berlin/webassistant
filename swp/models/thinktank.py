@@ -2,8 +2,10 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
+from .abstract import ActivatableModel
 
-class Thinktank(models.Model):
+
+class Thinktank(ActivatableModel):
     """
     Source of publications.
     """
@@ -14,7 +16,7 @@ class Thinktank(models.Model):
     unique_field = models.CharField(_('unique field'), max_length=50)
     created = models.DateTimeField(_('created'), default=timezone.now, editable=False)
 
-    class Meta:
+    class Meta(ActivatableModel.Meta):
         verbose_name = _('think tank')
         verbose_name_plural = _('think tanks')
 

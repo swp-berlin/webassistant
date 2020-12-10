@@ -32,3 +32,7 @@ LOGGING['loggers'] = {
     name: {**config, 'level': 'NOTSET'}
     for name, config in LOGGING.get('loggers').items()
 }
+
+SILENCED_SYSTEM_CHECKS = [
+    'swp.W001',
+]

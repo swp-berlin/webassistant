@@ -1,6 +1,10 @@
 from __future__ import annotations
 
+from django.contrib.auth import get_permission_codename
+from django.contrib.auth.models import AbstractUser as User
+from django.core.exceptions import ImproperlyConfigured, PermissionDenied
 from django.db import models
+from django.db.models.base import ModelBase
 from django.utils.translation import gettext_lazy as _
 
 
@@ -33,7 +37,28 @@ class ActivatableManager(models.Manager.from_queryset(ActivatableQuerySet, 'Base
     use_in_migrations = True
 
 
-class ActivatableModel(models.Model):
+class ActivatableModelBase(ModelBase):
+
+    actions = ('activate', 'deactivate')
+
+    def __new__(cls, name, bases, attrs, **kwargs):
+        new_class = super().__new__(cls, name, bases, attrs, **kwargs)
+
+        # Check if required permissions are set on model.
+        if not new_class._meta.abstract:
+            new_permissions = new_class._meta.permissions
+            new_codenames = tuple(codename for codename, label in new_permissions)
+            for action in cls.actions:
+                if action in new_class._meta.default_permissions:
+                    continue
+                codename = get_permission_codename(action, new_class._meta)
+                if codename not in new_codenames:
+                    raise ImproperlyConfigured(_('Missing %s permission') % codename)
+
+        return new_class
+
+
+class ActivatableModel(models.Model, metaclass=ActivatableModelBase):
     """
     Mixin for (de)activatable models.
     """
@@ -43,3 +68,40 @@ class ActivatableModel(models.Model):
 
     class Meta:
         abstract = True
+        default_permissions = (
+            'add',
+            'change',
+            'delete',
+            'view',
+            'activate',
+            'deactivate',
+        )
+
+    def can_activate(self, user: User) -> bool:
+        """ Check user for permission to activate. """
+        codename = get_permission_codename('activate', self._meta)
+        return user.has_perm(f'{self._meta.app_label}.{codename}')
+
+    def can_deactivate(self, user: User) -> bool:
+        """ Check user for permission to deactivate. """
+        codename = get_permission_codename('deactivate', self._meta)
+        return user.has_perm(f'{self._meta.app_label}.{codename}')
+
+    def set_active(self, is_active: bool, *, commit: bool = True):
+        self.is_active = is_active
+        if commit:
+            self.save(update_fields=['is_active'])
+
+    def activate(self, user: User):
+        """ Activate instance. """
+        if not self.can_activate(user):
+            raise PermissionDenied(_('Activation denied'))
+
+        self.set_active(True)
+
+    def deactivate(self, user: User):
+        """ Deactivate instance. """
+        if not self.can_deactivate(user):
+            raise PermissionDenied(_('Deactivation denied'))
+
+        self.set_active(False)

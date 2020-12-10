@@ -10,6 +10,24 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+#, python-format
+msgid "Activated %(count)d %(name)s"
+msgstr ""
+
+#, python-format
+msgid "Activate selected %(verbose_name_plural)s"
+msgstr ""
+
+#, python-format
+msgid "Deactivated %(count)d %(name)s"
+msgid_plural "Deactivated %(count)d %(name)s"
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-format
+msgid "Deactivate selected %(verbose_name_plural)s"
+msgstr ""
+
 msgid "Personal info"
 msgstr ""
 
@@ -19,7 +37,17 @@ msgstr ""
 msgid "Important dates"
 msgstr ""
 
+#, python-format
+msgid "Missing %s permission"
+msgstr ""
+
 msgid "active"
+msgstr ""
+
+msgid "Activation denied"
+msgstr ""
+
+msgid "Deactivation denied"
 msgstr ""
 
 msgid "twice daily"
@@ -34,16 +62,13 @@ msgstr ""
 msgid "monthly"
 msgstr ""
 
-msgid "Interval in days"
-msgstr ""
-
-msgid "interval"
-msgstr ""
-
 msgid "name"
 msgstr ""
 
 msgid "recipients"
+msgstr ""
+
+msgid "interval"
 msgstr ""
 
 msgid "last sent"
