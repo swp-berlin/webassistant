@@ -2,10 +2,10 @@
 
 import {resolve} from 'path';
 
-import * as AutoPrefixer from 'autoprefixer';
 import * as CopyPlugin from 'copy-webpack-plugin';
 import * as MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import * as StylelintPlugin from 'stylelint-webpack-plugin';
+const ESLintPlugin = require('eslint-webpack-plugin');
 
 // @ts-ignore
 import * as AssetsMapWriterPlugin from './cosmogo/assets/assets-map-writer-plugin';
@@ -28,6 +28,7 @@ const plugins = [
         ],
     }),
     new AssetsMapWriterPlugin('../assets/assets.map.json'),
+    new ESLintPlugin(),
 ];
 
 const uncommon = [
@@ -68,7 +69,7 @@ const config = {
             name: 'common',
         },
     },
-    devtool: 'source-map',
+    devtool: 'eval-source-map',
     module: {
         rules: [
             {
@@ -76,15 +77,9 @@ const config = {
                 use: [
                     {loader: MiniCssExtractPlugin.loader},
                     {loader: 'css-loader', options: {sourceMap: true, url: true}},
-                    {loader: 'postcss-loader', options: {postcssOptions: {plugins: [AutoPrefixer()]}, sourceMap: true}},
+                    'postcss-loader',
                     {loader: 'sass-loader', options: {sourceMap: true}},
                 ],
-            },
-            {
-                enforce: 'pre',
-                test: /\.js$/,
-                exclude: /node_modules/,
-                loader: 'eslint-loader',
             },
             {
                 test: /\.js$/,
