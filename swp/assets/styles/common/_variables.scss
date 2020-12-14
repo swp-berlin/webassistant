@@ -1,0 +1,16 @@
+@import "colors";
+
+/* <editor-fold desc="Color aliases"> */
+
+$pt-intent-primary: $swp-primary;
+$pt-intent-warning: $swp-secondary;
+
+/* #106ba3 -> #0057a8 */
+$pt-link-color: $swp-link-color;
+
+/* #F5F8FA -> #F4F4F4 */
+$light-gray5: $swp-light-gray;
+
+/* </editor-fold> */
+
+@import '~@blueprintjs/core/src/common/variables';

@@ -7,6 +7,8 @@ from swp.views import *
 
 urlpatterns = [
     path('', SWPView.as_view(), name='index'),
+    path('login/', LoginView.as_view(), name='login'),
+    path('logout/', LogoutView.as_view(), name='logout'),
     path('admin/', admin.site.urls),
 ]
 

@@ -12,8 +12,10 @@
 </head>
 <body class="{% block body-class %}swp{% endblock %}">
 {% block body %}
-    <div id="app">
-        {% csrf_token %}
+    <div id="app" class="{% block main-class %}container mx-auto{% endblock %}">
+        {% block content %}
+            {% csrf_token %}
+        {% endblock %}
     </div>
 {% endblock %}
 
