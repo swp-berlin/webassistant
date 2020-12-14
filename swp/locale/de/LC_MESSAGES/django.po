@@ -192,8 +192,14 @@ msgstr "Thinktank-Filter"
 msgid "Login"
 msgstr "Login"
 
+msgid "Forgot password?"
+msgstr "Passwort vergessen?"
+
 msgid "Log in"
 msgstr "Anmelden"
+
+msgid "Logged out"
+msgstr "Abgemeldet"
 
 msgid "Good bye"
 msgstr "Auf Wiedersehen"
@@ -204,5 +210,65 @@ msgstr "Sie wurden erfolgreich abgemeldet."
 msgid "Log in again"
 msgstr "Erneut anmelden"
 
+msgid "Back"
+msgstr "Zurück"
+
+msgid "Passwort reset"
+msgstr "Passwort zurücksetzen"
+
+msgid "Submit"
+msgstr "Absenden"
+
+msgid "Your password has been set. You may go ahead and log in now."
+msgstr "Ihr Passwort wurde gesetzt. Sie können sich jetzt damit anmelden."
+
+msgid "Reset failed"
+msgstr "Zurücksetzen fehlgeschlagen"
+
+msgid "The password reset link was invalid, possibly because it has already been used. Please request a new password reset."
+msgstr "Der Link zum Zurücksetzen des Passworts wurde bereits genutzt und ist damit ungültig. Bitte fordern Sie einen neuen an."
+
+msgid "Please enter your new password twice so we can verify you typed it in correctly."
+msgstr "Bitte geben Sie Ihr neues Passwort zweimal ein, damit wir überprüfen können, ob es richtig eingetippt wurde."
+
+msgid "Set new password"
+msgstr "Neues Passwort setzen"
+
+msgid "Sent"
+msgstr "Gesendet"
+
+msgid "Reset mail sent"
+msgstr "E-Mail wurde versandt"
+
+msgid "We’ve emailed you instructions for setting your password, if an account exists with the email you entered. You should receive them shortly."
+msgstr "Wir haben eine E-Mail zum Zurücksetzen des Passwortes an die angegebene E-Mail-Adresse gesendet, sofern ein entsprechendes Konto existiert. Sie sollte in Kürze ankommen."
+
+msgid "If you don’t receive an email, please make sure you’ve entered the address you registered with, and check your spam folder."
+msgstr "Falls die E-Mail nicht angekommen sein sollte, bitte die E-Mail-Adresse auf Richtigkeit und gegebenenfalls den Spam-Ordner überprüfen."
+
+msgid "Done"
+msgstr "Fertig"
+
+msgid "Forgotten your password? Enter your email address below, and we’ll email instructions for setting a new one."
+msgstr "Passwort vergessen? Einfach die E-Mail-Adresse unten eingeben und den Anweisungen zum Zurücksetzen des Passworts in der E-Mail folgen."
+
+msgid "Send instructions"
+msgstr "Anweisungen schicken"
+
 msgid "SWP Webmonitor"
 msgstr ""
+
+msgid "Reset password"
+msgstr "Passwort zurücksetzen"
+
+msgid "You're receiving this email because you requested a password reset for your SWP account."
+msgstr "Sie erhalten diese E-Mail weil Sie das Passwort ihres SWP-Kontos zurückgesetzt haben."
+
+msgid "Click here to choose a new password"
+msgstr "Klicken Sie hier, um ihr Passwort zurückzusetzen"
+
+msgid "The SWP team"
+msgstr "Ihr SWP Team"
+
+msgid "Please go to the following page and choose a new password:"
+msgstr "Bitte gehen Sie zur folgenden Seite um ein neues Passwort zu setzen:"
