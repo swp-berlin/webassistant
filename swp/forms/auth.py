@@ -9,3 +9,11 @@ class LoginForm(BlueprintFormMixin, auth_forms.AuthenticationForm):
         super().__init__(*args, **kwargs)
 
         self.fields['username'].widget.input_type = 'email'
+
+
+class PasswordResetForm(BlueprintFormMixin, auth_forms.PasswordResetForm):
+    pass
+
+
+class PasswordResetConfirmForm(BlueprintFormMixin, auth_forms.SetPasswordForm):
+    pass

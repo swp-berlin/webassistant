@@ -1,0 +1,16 @@
+{% extends 'auth/password-reset/base.html' %} {% load i18n %}
+
+{% block text %}
+    <p>
+        {% blocktrans trimmed %}
+            Forgotten your password? Enter your email address below,
+            and we’ll email instructions for setting a new one.
+        {% endblocktrans %}
+    </p>
+{% endblock %}
+
+{% block form %}{% include 'forms/field.html' with field=form.email %}{% endblock %}
+
+{% block submit-label %}
+    {% trans 'Send instructions' %}
+{% endblock %}

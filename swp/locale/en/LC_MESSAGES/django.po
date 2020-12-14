@@ -192,7 +192,13 @@ msgstr ""
 msgid "Login"
 msgstr ""
 
+msgid "Forgot password?"
+msgstr ""
+
 msgid "Log in"
+msgstr ""
+
+msgid "Logged out"
 msgstr ""
 
 msgid "Good bye"
@@ -204,5 +210,65 @@ msgstr ""
 msgid "Log in again"
 msgstr ""
 
+msgid "Back"
+msgstr ""
+
+msgid "Passwort reset"
+msgstr ""
+
+msgid "Submit"
+msgstr ""
+
+msgid "Your password has been set. You may go ahead and log in now."
+msgstr ""
+
+msgid "Reset failed"
+msgstr ""
+
+msgid "The password reset link was invalid, possibly because it has already been used. Please request a new password reset."
+msgstr ""
+
+msgid "Please enter your new password twice so we can verify you typed it in correctly."
+msgstr ""
+
+msgid "Set new password"
+msgstr ""
+
+msgid "Sent"
+msgstr ""
+
+msgid "Reset mail sent"
+msgstr ""
+
+msgid "We’ve emailed you instructions for setting your password, if an account exists with the email you entered. You should receive them shortly."
+msgstr ""
+
+msgid "If you don’t receive an email, please make sure you’ve entered the address you registered with, and check your spam folder."
+msgstr ""
+
+msgid "Done"
+msgstr ""
+
+msgid "Forgotten your password? Enter your email address below, and we’ll email instructions for setting a new one."
+msgstr ""
+
+msgid "Send instructions"
+msgstr ""
+
 msgid "SWP Webmonitor"
+msgstr ""
+
+msgid "Reset password"
+msgstr ""
+
+msgid "You're receiving this email because you requested a password reset for your SWP account."
+msgstr ""
+
+msgid "Click here to choose a new password"
+msgstr ""
+
+msgid "The SWP team"
+msgstr ""
+
+msgid "Please go to the following page and choose a new password:"
 msgstr ""

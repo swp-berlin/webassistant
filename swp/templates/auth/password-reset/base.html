@@ -1,0 +1,29 @@
+{% extends 'base.html' %} {% load i18n %}
+
+{% block title %}{{ block.super }} · {% trans 'Passwort reset' %}{% endblock %}
+{% block body-class %}{{ block.super }} bg-gray-50{% endblock %}
+
+{% block main-class %}min-h-screen flex items-center justify-center py-16 px-8{% endblock %}
+
+{% block content %}
+    <div class="{% block card-class %}bp3-card bp3-elevation-2 max-w-lg w-full mx-auto space-y-8{% endblock %}">
+        {% block card %}
+            <h1 class="bp3-heading mt-6 text-3xl font-extrabold text-gray-800">
+                {% block card-title %}{{ view.title }}{% endblock %}
+            </h1>
+            {% block text %}{% endblock %}
+
+            <form class="password-reset-form" method="post">
+                {% csrf_token %}
+                {% block form %}{{ form }}{% endblock %}
+
+                <div class="flex items-center justify-between">
+                    <a href="{% url 'login' %}" class="bp3-button">{% trans 'Back' %}</a>
+                    <button class="bp3-button bp3-intent-primary">
+                        {% block submit-label %}{% trans 'Submit' %}{% endblock %}
+                    </button>
+                </div>
+            </form>
+        {% endblock %}
+    </div>
+{% endblock %}
