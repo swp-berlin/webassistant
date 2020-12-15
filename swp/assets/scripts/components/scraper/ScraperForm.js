@@ -1,11 +1,12 @@
 import {useMutationForm} from 'components/Fetch';
 import {Select, TextArea, TextInput} from 'components/forms';
-import {Button} from '@blueprintjs/core';
+import {Button, Checkbox} from '@blueprintjs/core';
 
 import {getChoices} from 'utils/choices';
 import _ from 'utils/i18n';
 
 const StartURLLabel = _('Start-URL');
+const EnabledLabel = _('Enabled');
 const TypeLabel = _('Scraper Type');
 const IntervalLabel = _('Interval');
 const ConfigLabel = _('Config');
@@ -33,6 +34,12 @@ const ScraperForm = ({id, data}) => {
                 name="start_url"
                 label={StartURLLabel}
                 errors={errors}
+            />
+            <Checkbox
+                name="is_active"
+                inputRef={register}
+                inline
+                label={EnabledLabel}
             />
             <Select
                 control={control}
