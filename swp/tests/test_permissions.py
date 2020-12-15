@@ -8,7 +8,6 @@ from swp.models import (
     ActivatableModel,
     Monitor,
     Scraper,
-    ScraperType,
     Thinktank,
     User,
 )
