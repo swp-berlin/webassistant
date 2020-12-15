@@ -1,5 +1,3 @@
-import asyncio
-
 from asgiref.sync import async_to_sync, sync_to_async
 from django.db import models, transaction
 from django.utils import timezone
@@ -8,8 +6,9 @@ from django.utils.translation import gettext_lazy as _
 from swp.utils.scraping import Scraper as _Scraper
 
 from .abstract import ActivatableModel
-from .choices import Interval
+from .choices import Interval, ScraperType
 from .publication import Publication
+from .fields import ChoiceField
 
 
 class Scraper(ActivatableModel):
@@ -24,12 +23,7 @@ class Scraper(ActivatableModel):
         verbose_name=_('think tank'),
     )
 
-    type = models.ForeignKey(
-        'swp.ScraperType',
-        on_delete=models.CASCADE,
-        related_name='scrapers',
-        verbose_name=_('type'),
-    )
+    type = ChoiceField(_('type'), choices=ScraperType.choices)
 
     data = models.JSONField(_('data'))
 

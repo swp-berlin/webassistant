@@ -32,6 +32,7 @@ dump.rdb
 node_modules
 /swp/static
 /swp/assets/i18n
+/swp/assets/schemes
 /swp/assets/assets.map.json
 
 # jupyter

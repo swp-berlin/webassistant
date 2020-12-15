@@ -38,6 +38,7 @@ INSTALLED_APPS = [
 
     # Extensions
     'cosmogo',
+    'rest_framework',
 
     # Contrib
     'django.contrib.admin',

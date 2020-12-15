@@ -6,6 +6,8 @@ $icon-font-path: '~@blueprintjs/icons/resources/icons';
 /* We currently include all blueprint components but may
    shrink that down to the used components sometime. */
 @import '~@blueprintjs/core/src/blueprint.scss';
+@import '~@blueprintjs/select/src/blueprint-select.scss';
+@import '~@blueprintjs/datetime/src/blueprint-datetime.scss';
 
 @tailwind base;
 @tailwind components;

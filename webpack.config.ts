@@ -5,6 +5,7 @@ import {resolve} from 'path';
 import * as CopyPlugin from 'copy-webpack-plugin';
 import * as MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import * as StylelintPlugin from 'stylelint-webpack-plugin';
+import * as webpack from 'webpack';
 const ESLintPlugin = require('eslint-webpack-plugin');
 
 // @ts-ignore
@@ -28,6 +29,7 @@ const plugins = [
         ],
     }),
     new AssetsMapWriterPlugin('../assets/assets.map.json'),
+    new webpack.DefinePlugin({"process.env": "{}"}),
     new ESLintPlugin(),
 ];
 
@@ -46,6 +48,7 @@ const config = {
     resolve: {
         alias: {
             styles: resolve(__dirname, 'swp', 'assets', 'styles'),
+            schemes: resolve(__dirname, 'swp', 'assets', 'schemes'),
             swp: resolve(__dirname, 'swp', 'assets', 'scripts'),
             utils: resolve(__dirname, 'swp', 'assets', 'scripts', 'utils'),
             components: resolve(__dirname, 'swp', 'assets', 'scripts', 'components'),
