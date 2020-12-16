@@ -10,10 +10,10 @@ from swp.models import (
     Publication,
     Scraper,
     ScraperError,
-    ScraperType,
     Thinktank,
     ThinktankFilter,
 )
+from swp.models.choices import ScraperType
 from swp.utils.testing import create_superuser
 
 
@@ -29,10 +29,9 @@ class AdminTestCase(TestCase):
         thinktank = Thinktank.objects.create(name='Test-Thinktank', url='https://www.piie.com/', unique_field='T1-AB')
         ThinktankFilter.objects.create(thinktank=thinktank, monitor=monitor, query={'think': 'tank'})
 
-        scrapertype = ScraperType.objects.create(name='Test-Type', config={'how-to': 'scrape'})
         scraper = Scraper.objects.create(
             thinktank=thinktank,
-            type=scrapertype,
+            type=ScraperType.LIST_WITH_DOCS.value,
             data={'hue?': 'hue!'},
             start_url='https://www.piie.com/research/publications/policy-briefs',
             checksum='de9474fa85634623fd9ae9838f949a02c9365ede3499a26c9be52363a8b7f214',
@@ -96,7 +95,3 @@ class AdminTestCase(TestCase):
             return admin_url(obj, 'change', obj.pk)
 
         return self.helper_for_model(get_url)
-
-
-
-
