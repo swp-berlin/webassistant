@@ -1,0 +1,26 @@
+<div class="bp3-form-group{% if field.errors %} bp3-intent-danger{% endif %}">
+    <label class="bp3-label" for="{{ field.id_for_label }}">
+        {{ field.label }}
+        {% if field.help_text %}
+            <span class="bp3-text-muted">
+                {{ field.help_text }}
+            </span>
+        {% endif %}
+    </label>
+    <div class="bp3-form-content">
+        <div class="bp3-input-group{% if field.errors %} bp3-intent-danger{% endif %}">
+            {{ field }}
+
+            {% if field.name == 'username' %}
+                <button class="bp3-button bp3-minimal bp3-intent-warning bp3-icon-user"></button>
+            {% elif field.widget_type == 'password' %}
+                <button class="bp3-button bp3-minimal bp3-intent-warning bp3-icon-lock"></button>
+            {% endif %}
+        </div>
+    {% if field.errors %}
+        <div class="bp3-form-helper-text">
+            {{ field.errors }}
+        </div>
+    {% endif %}
+    </div>
+</div>

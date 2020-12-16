@@ -76,4 +76,4 @@ deploy_staging:
     - docker
     - always_on
   only:
-    - staging
+    - master
