@@ -1,11 +1,14 @@
 import {BrowserRouter as Router} from 'react-router-dom';
 
+import Navigation from 'components/Navigation';
 import RootURLConfig from 'components/RootURLConfig';
 
 export default () => (
-    <div className="container mx-auto my-8 py-4">
+    <div className="container mx-auto my-16 py-4">
         <Router>
-            <RootURLConfig />
+            <Navigation>
+                <RootURLConfig />
+            </Navigation>
         </Router>
     </div>
 );

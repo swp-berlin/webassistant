@@ -1,0 +1,113 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Language: en\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Client Error"
+msgstr ""
+
+msgid "We couldn't handle the data your client send us."
+msgstr ""
+
+msgid "Unauthorized"
+msgstr ""
+
+msgid "You have to be logged in to see this page."
+msgstr ""
+
+msgid "Login"
+msgstr ""
+
+msgid "Forbidden"
+msgstr ""
+
+msgid "You have no permission to request this page."
+msgstr ""
+
+msgid "Not found"
+msgstr ""
+
+msgid "These aren't the droids you're looking for."
+msgstr ""
+
+msgid "Your data has been saved successfully."
+msgstr ""
+
+msgid "We are currently doing maintenance work. Please try again in a few seconds."
+msgstr ""
+
+msgid "Please correct the errors below."
+msgstr ""
+
+msgid "You have to be logged in to make this request."
+msgstr ""
+
+msgid "You are not allowed to make this request."
+msgstr ""
+
+msgid "The data you wanted to change does not exist anymore."
+msgstr ""
+
+msgid "Loading…"
+msgstr ""
+
+msgid "Please wait, we are loading your content."
+msgstr ""
+
+msgid "Network Error"
+msgstr ""
+
+msgid "A network error occurred. Please try again."
+msgstr ""
+
+msgid "Reload"
+msgstr ""
+
+msgid "Server Error"
+msgstr ""
+
+msgid "Something went wrong on our side…"
+msgstr ""
+
+msgid "Maintenance"
+msgstr ""
+
+msgid "We are currently doing maintenance work. Please reload the page in a few seconds."
+msgstr ""
+
+msgid "Log out"
+msgstr ""
+
+msgid "Home"
+msgstr ""
+
+msgid "Please enter a valid date in the format %(format)s"
+msgstr ""
+
+msgid "No Results"
+msgstr ""
+
+msgid "Start-URL"
+msgstr ""
+
+msgid "Enabled"
+msgstr ""
+
+msgid "Scraper Type"
+msgstr ""
+
+msgid "Interval"
+msgstr ""
+
+msgid "Config"
+msgstr ""
+
+msgid "Save"
+msgstr ""

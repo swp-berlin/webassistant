@@ -159,15 +159,6 @@ msgstr "Scraping-Fehler"
 msgid "scraping errors"
 msgstr "Scraping-Fehler"
 
-msgid "config"
-msgstr "Konfiguration"
-
-msgid "scraper type"
-msgstr "Scraper-Typ"
-
-msgid "scraper types"
-msgstr "Scraper-Typen"
-
 msgid "description"
 msgstr "Beschreibung"
 
@@ -188,6 +179,12 @@ msgstr "Thinktank-Filter"
 
 msgid "think tank filters"
 msgstr "Thinktank-Filter"
+
+msgid "List with Documents"
+msgstr "Liste mit Dokumenten"
+
+msgid "(paginated) Article-List with links to individual Articles which contain a single Document"
+msgstr "(paginierte) Artikelliste mit Links zu einzelnen Artikeln, die ein Dokument enthalten"
 
 msgid "Login"
 msgstr "Login"
@@ -210,11 +207,11 @@ msgstr "Sie wurden erfolgreich abgemeldet."
 msgid "Log in again"
 msgstr "Erneut anmelden"
 
-msgid "Back"
-msgstr "Zurück"
-
 msgid "Passwort reset"
 msgstr "Passwort zurücksetzen"
+
+msgid "Back"
+msgstr "Zurück"
 
 msgid "Submit"
 msgstr "Absenden"
