@@ -30,6 +30,10 @@ test:
     - python manage.py generate-choices-scheme
     - coverage run manage.py test --noinput
     - coverage report
+  artifacts:
+    paths:
+      - swp/assets/schemes
+    expire_in: 30 minutes
 
 lint:
   stage: lint
