@@ -8,12 +8,6 @@ class Command(GenerateSchemeCommand):
     PROPERTIES = [
         ('ScraperType', ScraperType.choices),
         ('interval', Interval.choices),
-        # ('country', countries),
-        # ('language', settings.LANGUAGES),
-        # ('salutation', Patient.Salutations.choices),
-        # ('score', BaseAssessment.Score.choices),
-        # ('ingestions', TimeChoices.choices),
-        # ('PatientFilter', PatientFilter.FILTER_CHOICES.choices),
     ]
 
     filename = 'choices.json'
