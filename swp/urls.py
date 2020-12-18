@@ -27,6 +27,7 @@ urlpatterns = [
 
     # app
     path('scraper/', include(([
+        path('', react, name='list'),
         path('<int:pk>/', react, name='detail'),
     ], 'scraper'))),
 ]

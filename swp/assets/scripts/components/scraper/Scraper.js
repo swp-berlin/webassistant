@@ -6,6 +6,8 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faClock} from '@fortawesome/free-solid-svg-icons';
 
 import {useQuery} from 'hooks/query';
+import {interpolate} from 'utils/i18n';
+import {useBreadcrumb} from 'components/Navigation';
 import PageHeading from 'components/PageHeading';
 import ScraperForm from 'components/scraper/ScraperForm';
 
@@ -20,6 +22,9 @@ const LastRun = ({lastRun}) => (
 
 const Scraper = ({id}) => {
     const {loading, result} = useQuery(`/scraper/${id}/`);
+
+    const label = interpolate('Scraper %s', [id], false);
+    useBreadcrumb(`/scraper/${id}`, label);
 
     if (loading) return 'Loading';
 
