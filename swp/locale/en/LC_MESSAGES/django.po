@@ -159,15 +159,6 @@ msgstr ""
 msgid "scraping errors"
 msgstr ""
 
-msgid "config"
-msgstr ""
-
-msgid "scraper type"
-msgstr ""
-
-msgid "scraper types"
-msgstr ""
-
 msgid "description"
 msgstr ""
 
@@ -187,6 +178,12 @@ msgid "think tank filter"
 msgstr ""
 
 msgid "think tank filters"
+msgstr ""
+
+msgid "List with Documents"
+msgstr ""
+
+msgid "(paginated) Article-List with links to individual Articles which contain a single Document"
 msgstr ""
 
 msgid "Login"
@@ -210,10 +207,10 @@ msgstr ""
 msgid "Log in again"
 msgstr ""
 
-msgid "Back"
+msgid "Passwort reset"
 msgstr ""
 
-msgid "Passwort reset"
+msgid "Back"
 msgstr ""
 
 msgid "Submit"

@@ -68,11 +68,6 @@
           "scrapererror"
         ],
         [
-          "view_scrapertype",
-          "swp",
-          "scrapertype"
-        ],
-        [
           "activate_thinktank",
           "swp",
           "thinktank"

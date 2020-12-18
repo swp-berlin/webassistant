@@ -1,0 +1,113 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Language: de\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Client Error"
+msgstr "Browserfehler"
+
+msgid "We couldn't handle the data your client send us."
+msgstr "Wir konnten die Daten Ihres Browsers nicht verarbeiten"
+
+msgid "Unauthorized"
+msgstr "Nicht berechtigt"
+
+msgid "You have to be logged in to see this page."
+msgstr "Sie müssen angemeldet sein, um diese Seite anzuzeigen."
+
+msgid "Login"
+msgstr "Anmelden"
+
+msgid "Forbidden"
+msgstr "Nicht erlaubt"
+
+msgid "You have no permission to request this page."
+msgstr "Sie haben nicht die Berechtigung diese Seite anzuzeigen."
+
+msgid "Not found"
+msgstr "Nicht gefunden"
+
+msgid "These aren't the droids you're looking for."
+msgstr "Das sind nicht die Droiden, nach denen du suchst."
+
+msgid "Your data has been saved successfully."
+msgstr "Ihre Daten wurden erfolgreich gespeichert."
+
+msgid "We are currently doing maintenance work. Please try again in a few seconds."
+msgstr "Wartungsarbeiten. Bitte versuchen Sie es in ein paar Sekunden erneut."
+
+msgid "Please correct the errors below."
+msgstr "Bitte beheben Sie die nachfolgenden Fehler."
+
+msgid "You have to be logged in to make this request."
+msgstr "Sie müssen angemeldet sein, um diese Anfrage auszuführen."
+
+msgid "You are not allowed to make this request."
+msgstr "Sie sind nicht berechtigt diese Anfrage auszuführen."
+
+msgid "The data you wanted to change does not exist anymore."
+msgstr "Die Daten die Sie ändern wollten, existieren nicht mehr."
+
+msgid "Loading…"
+msgstr "Lade…"
+
+msgid "Please wait, we are loading your content."
+msgstr "Bitte warten, wir laden Ihre Daten…"
+
+msgid "Network Error"
+msgstr "Netzwerkfehler"
+
+msgid "A network error occurred. Please try again."
+msgstr "Ein Netzwerkfehler ist aufgetreten. Bitte versuchen Sie es erneut."
+
+msgid "Reload"
+msgstr "Neu Laden"
+
+msgid "Server Error"
+msgstr "Serverfehler"
+
+msgid "Something went wrong on our side…"
+msgstr "Etwas ist auf unserer Seite schief gelaufen…"
+
+msgid "Maintenance"
+msgstr "Wartungsarbeiten"
+
+msgid "We are currently doing maintenance work. Please reload the page in a few seconds."
+msgstr "Wartungsarbeiten. Bitte laden Sie die Seite in ein paar Sekunden erneut."
+
+msgid "Log out"
+msgstr "Abmelden"
+
+msgid "Home"
+msgstr "Start"
+
+msgid "Please enter a valid date in the format %(format)s"
+msgstr "Bitte geben Sie ein gültigtges Datum im Format %(format)s ein"
+
+msgid "No Results"
+msgstr "Keine Ergebnisse"
+
+msgid "Start-URL"
+msgstr ""
+
+msgid "Enabled"
+msgstr "Aktiviert"
+
+msgid "Scraper Type"
+msgstr "Scraper-Typ"
+
+msgid "Interval"
+msgstr "Intervall"
+
+msgid "Config"
+msgstr "Konfiguration"
+
+msgid "Save"
+msgstr "Speichern"

@@ -8,10 +8,10 @@ from swp.models import (
     ActivatableModel,
     Monitor,
     Scraper,
-    ScraperType,
     Thinktank,
     User,
 )
+from swp.models.choices import ScraperType
 
 
 USERADMIN_PERMS = [
@@ -29,7 +29,6 @@ MANAGER_PERMS = [
     'swp.delete_scraper',
     'swp.view_scraper',
     'swp.view_scrapererror',
-    'swp.view_scrapertype',
 
     'swp.activate_thinktank',
     'swp.add_thinktank',
@@ -67,9 +66,8 @@ class PermissionTestCase(test.TestCase):
             created=now,
         )
 
-        cls.scraper_type = ScraperType.objects.create(name='Test Type', config={'how-to': 'scrape'})
         cls.scraper = Scraper.objects.create(
-            type=cls.scraper_type,
+            type=ScraperType.LIST_WITH_DOCS.value,
             thinktank=cls.thinktank,
             data={'scraped': True},
             start_url='https://www.piie.com/research/publications/policy-briefs',

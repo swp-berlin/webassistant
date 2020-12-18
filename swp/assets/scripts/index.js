@@ -3,10 +3,9 @@ import 'styles/index.scss';
 import {render} from 'react-dom';
 
 import App from 'components/App';
+import {CSRFMiddlewareToken} from 'utils/csrf';
 
 const AppNode = document.getElementById('app');
-const CSRFMiddlewareTokenNode = AppNode.getElementsByTagName('input')[0];
-export const CSRFMiddlewareToken = CSRFMiddlewareTokenNode.value;
 
 render(
     <App CSRFMiddlewareToken={CSRFMiddlewareToken} />,
