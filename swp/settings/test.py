@@ -9,7 +9,7 @@ TEST_DATA_DIR = BASE_DIR / 'test-data'
 TEMPLATES[0]['DIRS'] = [
     # Add our test templates directory.
     TEST_DATA_DIR / 'templates',
-    ]
+]
 
 TEMPLATES[0]['OPTIONS'].update(
     # Always activate template debugging, even in tests,

@@ -7,10 +7,9 @@ from cosmogo.utils.settings import env, get_git_commit, password_validators, tru
 
 from django.urls import reverse_lazy
 
-
 BASE_DIR = Path(__file__).parents[2]
-load_dotenv(BASE_DIR / '.env')
 
+load_dotenv(BASE_DIR / '.env')
 
 ENVIRONMENT = env('ENVIRONMENT', 'default')
 
