@@ -27,7 +27,7 @@ test:
     - pip install -U pip coverage
     - pip install -Ur requirements.txt
   script:
-    - python manage.py generate-choices-scheme
+    - python manage.py generate-schemes
     - coverage run manage.py test --noinput
     - coverage report
   artifacts:
