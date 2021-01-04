@@ -21,7 +21,7 @@
         "env/bin/pip install -r requirements.txt -U",
         "env/bin/python manage.py migrate",
         "env/bin/python manage.py compile-translations",
-        "env/bin/python manage.py generate-choices-scheme",
+        "env/bin/python manage.py generate-schemes",
         "npm run build",
         "env/bin/python manage.py collectstatic --no-input",
         "sudo systemctl start swp@production.service",
