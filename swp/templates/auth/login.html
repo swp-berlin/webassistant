@@ -12,6 +12,14 @@
             {% trans 'Login' %}
         </h1>
 
+        {% if form.non_field_errors %}
+            <p class="bp3-callout bp3-intent-danger">
+                {% for error in form.non_field_errors %}
+                    {{ error }}
+                {% endfor %}
+            </p>
+        {% endif %}
+
         <form class="login-form" method="post">
             {% csrf_token %}
 
