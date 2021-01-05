@@ -3,6 +3,7 @@ import {Switch} from 'react-router-dom';
 import Scraper from 'components/scraper/Scraper';
 import SimpleRoute from 'components/SimpleRoute';
 
+
 const RootURLConfig = () => (
     <Switch>
         <SimpleRoute path="/" exact>

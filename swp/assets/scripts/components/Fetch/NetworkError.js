@@ -1,4 +1,4 @@
-import {faWifi} from '@fortawesome/free-solid-svg-icons';
+import {faWifi} from '@fortawesome/free-solid-svg-icons/faWifi';
 
 import _ from 'utils/i18n';
 

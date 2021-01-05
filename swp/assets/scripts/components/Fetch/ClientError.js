@@ -1,5 +1,7 @@
 import {Link} from 'react-router-dom';
-import {faHandPaper, faSadTear, faSearch} from '@fortawesome/free-solid-svg-icons';
+import {faHandPaper} from '@fortawesome/free-solid-svg-icons/faHandPaper';
+import {faSadTear} from '@fortawesome/free-solid-svg-icons/faSadTear';
+import {faSearch} from '@fortawesome/free-solid-svg-icons/faSearch';
 
 import _ from 'utils/i18n';
 

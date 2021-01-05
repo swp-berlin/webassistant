@@ -29,7 +29,12 @@ const plugins = [
         ],
     }),
     new AssetsMapWriterPlugin('../assets/assets.map.json'),
+
+    // FIXME
+    // temporary fix for an issue with blueprintjs and webpack 5 (https://github.com/palantir/blueprint/issues/4393)
+    // should be removed when this is fixed in blueprintjs
     new webpack.DefinePlugin({"process.env": "{}"}),
+
     new ESLintPlugin(),
 ];
 
@@ -72,7 +77,7 @@ const config = {
             name: 'common',
         },
     },
-    devtool: 'eval-source-map',
+    devtool: 'source-map',
     module: {
         rules: [
             {
@@ -91,7 +96,6 @@ const config = {
                     loader: 'babel-loader',
                     options: {
                         presets: [
-                            ['@babel/preset-react', {'runtime': 'automatic'}],
                             ['@babel/preset-env', {
                                 modules: false,
                                 useBuiltIns: 'usage',
@@ -102,6 +106,7 @@ const config = {
                                     safari: 7,
                                 },
                             }],
+                            ['@babel/preset-react', {runtime: 'automatic'}],
                         ],
                         plugins: [
                             '@babel/proposal-object-rest-spread',

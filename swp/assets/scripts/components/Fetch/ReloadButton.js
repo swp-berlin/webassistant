@@ -1,6 +1,6 @@
 import {useCallback} from 'react';
 import {Button} from '@blueprintjs/core';
-import {faRedo} from '@fortawesome/free-solid-svg-icons';
+import {faRedo} from '@fortawesome/free-solid-svg-icons/faRedo';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 
 import _ from 'utils/i18n';

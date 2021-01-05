@@ -9,7 +9,7 @@
     "url": "git@gitlab.cosmocode.de:swp/swp.git"
   },
   "scripts": {
-    "build": "webpack --mode=production",
+    "build": "NODE_ENV=production webpack --mode=production",
     "watch": "webpack --mode=development --progress --watch",
     "eslint": "eslint swp/assets/scripts",
     "stylelint": "stylelint swp/assets/styles"
