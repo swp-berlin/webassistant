@@ -41,8 +41,10 @@ INSTALLED_APPS = [
     'cosmogo',
     'rest_framework',
 
+    # Admin
+    'swp.apps.AdminConfig',
+
     # Contrib
-    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
