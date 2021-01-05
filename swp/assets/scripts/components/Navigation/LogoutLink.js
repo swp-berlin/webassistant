@@ -1,13 +1,12 @@
 import _ from 'utils/i18n';
-import BaseLink from './BaseLink';
-
+import {AnchorButton} from '@blueprintjs/core';
 
 const Label = _('Log out');
 
 const LogoutLink = () => (
-    <BaseLink to="/logout/" icon="log-out">
+    <AnchorButton href="/logout/" icon="log-out" minimal>
         {Label}
-    </BaseLink>
+    </AnchorButton>
 );
 
 export default LogoutLink;

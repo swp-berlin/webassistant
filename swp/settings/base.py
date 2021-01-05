@@ -97,7 +97,9 @@ AUTH_PASSWORD_VALIDATORS = password_validators(
 )
 
 LOGIN_URL = reverse_lazy('login')
+LOGIN_REDIRECT_URL = reverse_lazy('index')
 LOGOUT_URL = reverse_lazy('logout')
+
 
 USE_I18N = True
 USE_L10N = True

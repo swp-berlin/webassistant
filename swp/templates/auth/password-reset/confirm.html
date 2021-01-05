@@ -19,7 +19,6 @@
 
 {% block form %}
     {% include 'forms/field.html' with field=form.new_password1 %}
-    {{ form.new_password1.help_text|safe }}
     {% include 'forms/field.html' with field=form.new_password2 %}
 {% endblock %}
 
