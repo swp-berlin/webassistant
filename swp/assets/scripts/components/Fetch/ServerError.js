@@ -1,4 +1,5 @@
-import {faHeartbeat, faSadTear} from '@fortawesome/free-solid-svg-icons';
+import {faHeartbeat} from '@fortawesome/free-solid-svg-icons/faHeartbeat';
+import {faSadTear} from '@fortawesome/free-solid-svg-icons/faSadTear';
 
 import _ from 'utils/i18n';
 

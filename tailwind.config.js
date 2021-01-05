@@ -1,11 +1,9 @@
 module.exports = {
-    purge: [],
+    purge: [
+        './swp/assets/scripts/**/*.js',
+    ],
     darkMode: false, // or 'media' or 'class'
-    theme: {
-        extend: {},
-    },
-    variants: {
-        extend: {},
-    },
+    theme: {},
+    variants: {},
     plugins: [],
 };

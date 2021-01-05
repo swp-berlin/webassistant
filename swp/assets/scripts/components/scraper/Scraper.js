@@ -3,7 +3,7 @@ import parseISO from 'date-fns/parseISO';
 import format from 'date-fns/format';
 import {de} from 'date-fns/locale';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faClock} from '@fortawesome/free-solid-svg-icons';
+import {faClock} from '@fortawesome/free-solid-svg-icons/faClock';
 
 import {useQuery} from 'hooks/query';
 import {interpolate} from 'utils/i18n';
