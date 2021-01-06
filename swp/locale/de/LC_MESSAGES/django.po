@@ -186,6 +186,12 @@ msgstr "Liste mit Dokumenten"
 msgid "(paginated) Article-List with links to individual Articles which contain a single Document"
 msgstr "(paginierte) Artikelliste mit Links zu einzelnen Artikeln, die ein Dokument enthalten"
 
+msgid "SWP Administration"
+msgstr "SWP Administration"
+
+msgid "Overview"
+msgstr "Übersicht"
+
 msgid "Login"
 msgstr "Login"
 

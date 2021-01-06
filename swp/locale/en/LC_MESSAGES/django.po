@@ -186,6 +186,12 @@ msgstr ""
 msgid "(paginated) Article-List with links to individual Articles which contain a single Document"
 msgstr ""
 
+msgid "SWP Administration"
+msgstr ""
+
+msgid "Overview"
+msgstr ""
+
 msgid "Login"
 msgstr ""
 

@@ -1,14 +1,24 @@
+from __future__ import annotations
+
 from asgiref.sync import async_to_sync, sync_to_async
 from django.db import models, transaction
+from django.db.models.aggregates import Count
 from django.utils import timezone
+from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
 from swp.utils.scraping import Scraper as _Scraper
 
-from .abstract import ActivatableModel
+from .abstract import ActivatableModel, ActivatableQuerySet
 from .choices import Interval, ScraperType
 from .publication import Publication
 from .fields import ChoiceField
+
+
+class ScraperQuerySet(ActivatableQuerySet):
+
+    def annotate_error_count(self, to_attr='') -> ScraperQuerySet:
+        return self.annotate(**{to_attr or 'error_count': Count('errors')})
 
 
 class Scraper(ActivatableModel):
@@ -34,12 +44,20 @@ class Scraper(ActivatableModel):
     last_run = models.DateTimeField(_('last run'), blank=True, null=True)
     created = models.DateTimeField(_('created'), default=timezone.now, editable=False)
 
+    objects = ScraperQuerySet.as_manager()
+
     class Meta(ActivatableModel.Meta):
+        get_latest_by = 'last_run'
+        indexes = [models.Index(fields=['-last_run'])]
         verbose_name = _('scraper')
         verbose_name_plural = _('scrapers')
 
     def __str__(self) -> str:
         return f'[{self.checksum}] {self.thinktank.name}'
+
+    @cached_property
+    def error_count(self) -> int:
+        return self.errors.count()
 
     def scrape(self):
         scraper = _Scraper(self.start_url)
