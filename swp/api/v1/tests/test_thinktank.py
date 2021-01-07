@@ -1,5 +1,6 @@
-from typing import Any, List, Mapping, Optional
+from typing import List, Mapping, Optional
 from django import test
+from django.urls import reverse
 from django.utils import timezone
 
 from cosmogo.utils.testing import login, request
@@ -104,19 +105,31 @@ class ThinktankTestCase(test.TestCase):
         cls.publications[0].scrapers.set([cls.scrapers[1]])
         cls.publications[1].scrapers.set([cls.scrapers[1]])
 
+        cls.list_url = reverse('1:thinktank-list')
+
     def setUp(self):
         login(self)
 
     def get_result(self, data: List[Mapping], id: int = None) -> Thinktank:
         return data[find_by_id(data, id or self.thinktank.pk)]
 
-    def test_thinktank_list(self):
+    def test_list(self):
         response = request(self, '1:thinktank-list')
         self.assertEqual(len(response.data), 2)
 
         item: Mapping = self.get_result(response.data)
         for field in FIELDS:
             self.assertEqual(item[field], getattr(self.thinktank, field), f'Field {field} mismatch')
+
+    def test_active_list(self):
+        response = request(self, f'{self.list_url}?is_active=true')
+        self.assertEqual(len(response.data), 1)
+        self.assertEqual(response.data[0]['id'], self.thinktank.pk)
+
+    def test_inactive_list(self):
+        response = request(self, f'{self.list_url}?is_active=false')
+        self.assertEqual(len(response.data), 1)
+        self.assertEqual(response.data[0]['id'], self.deactivated_thinktank.pk)
 
     def test_publication_count(self):
         response = request(self, '1:thinktank-list')
