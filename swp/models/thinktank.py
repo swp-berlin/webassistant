@@ -19,10 +19,10 @@ class ThinktankQuerySet(ActivatableQuerySet):
         return self.annotate_publication_count().annotate_scraper_count()
 
     def annotate_publication_count(self, to_attr='') -> ThinktankQuerySet:
-        return self.annotate(**{to_attr or 'publication_count': Count('publications')})
+        return self.annotate(**{to_attr or 'publication_count': Count('publications', distinct=True)})
 
     def annotate_scraper_count(self, to_attr='') -> ThinktankQuerySet:
-        return self.annotate(**{to_attr or 'scraper_count': Count('scrapers')})
+        return self.annotate(**{to_attr or 'scraper_count': Count('scrapers', distinct=True)})
 
     def annotate_error_count(self, to_attr='') -> ThinktankQuerySet:
         return self.annotate(**{to_attr or 'error_count': Count('scrapers__errors')})
