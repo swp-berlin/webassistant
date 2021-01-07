@@ -2,13 +2,14 @@ import {useMutationForm} from 'components/Fetch';
 import {Select, TextInput} from 'components/forms';
 import {Button, Checkbox} from '@blueprintjs/core';
 
+
 import {getChoices} from 'utils/choices';
 import _ from 'utils/i18n';
+import Field from 'components/forms/Field';
 
 import ResolverForm from './ResolverForm/ResolverForm';
 import ResolverFormProvider from './ResolverForm/ResolverFormContext';
 import ListResolverForm from './ResolverForm/ListResolverForm';
-import Field from 'components/forms/Field';
 
 
 const StartURLLabel = _('Start-URL');

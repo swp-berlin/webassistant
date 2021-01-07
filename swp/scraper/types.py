@@ -33,5 +33,4 @@ ListType = ScraperType(
             }
         ]
     }
-
 )

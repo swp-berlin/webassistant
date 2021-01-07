@@ -11,7 +11,7 @@ const AddResolverWidget = ({onAdd}) => {
     const handleAdd = useCallback(() => onAdd(selected), [selected, onAdd]);
 
     return (
-        <div className="flex">
+        <div className="flex space-x-2">
             <Select
                 className="flex-grow"
                 choices={ResolverChoices}
