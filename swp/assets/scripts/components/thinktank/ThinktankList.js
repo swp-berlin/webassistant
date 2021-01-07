@@ -8,7 +8,11 @@ import ThinktankTable from './ThinktankTable';
 
 
 const ThinktanksLabel = _('Thinktanks');
-const NewLabel = _('New thinktank');
+const NewLabel = _('New Thinktank');
+
+const NewThinktankButton = (
+    <Button intent={Intent.PRIMARY} text={NewLabel} />
+);
 
 const ThinktankList = () => {
     useBreadcrumb('/thinktank/', ThinktanksLabel);
@@ -17,7 +21,7 @@ const ThinktankList = () => {
         <div>
             <PageHeading
                 title={ThinktanksLabel}
-                actions={[<Button intent={Intent.PRIMARY} text={NewLabel} />]}
+                actions={[NewThinktankButton]}
             />
             <ThinktankTable endpoint="thinktank" />
         </div>

@@ -115,6 +115,9 @@ msgstr "Speichern"
 msgid "No items"
 msgstr "Keine Einträge"
 
+msgid "New Thinktank"
+msgstr "Neuer Thinktank"
+
 msgid "Name"
 msgstr "Name"
 
@@ -132,9 +135,6 @@ msgstr "Absenden"
 
 msgid "Thinktanks"
 msgstr "Thinktanks"
-
-msgid "New thinktank"
-msgstr "Neuer Thinktank"
 
 msgid "disabled"
 msgstr "deaktiviert"

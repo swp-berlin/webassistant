@@ -115,6 +115,9 @@ msgstr ""
 msgid "No items"
 msgstr ""
 
+msgid "New Thinktank"
+msgstr ""
+
 msgid "Name"
 msgstr ""
 
@@ -131,9 +134,6 @@ msgid "Submit"
 msgstr ""
 
 msgid "Thinktanks"
-msgstr ""
-
-msgid "New thinktank"
 msgstr ""
 
 msgid "disabled"
