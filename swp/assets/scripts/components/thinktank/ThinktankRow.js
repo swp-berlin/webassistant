@@ -1,18 +1,10 @@
 import {Link} from 'react-router-dom';
 
-import dateformat from 'utils/dateformat';
+import DateTime from 'components/DateTime';
 import _ from 'utils/i18n';
 
 
 const DisabledLabel = _('disabled');
-
-const DateTime = ({value, pattern, empty}) => (
-    value ? <time dateTime={value}>{dateformat(value, pattern)}</time> : empty
-);
-
-DateTime.defaultProps = {
-    empty: '—',
-};
 
 const ThinktankRow = ({id, name, publicationCount, scraperCount, lastRun, errorCount, isActive}) => (
     <tr className={isActive || 'disabled'}>
