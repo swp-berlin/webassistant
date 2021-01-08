@@ -21,7 +21,7 @@ FIELDS = (
 
 
 def find_by_id(data: List[Mapping], value: int, *, key: str = 'id') -> Optional[int]:
-    return [i for i, item in enumerate(data) if item[key] == value][0]
+    return next((i for i, item in enumerate(data) if item[key] == value), None)
 
 
 class ThinktankTestCase(test.TestCase):
