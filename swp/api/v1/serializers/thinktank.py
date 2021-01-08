@@ -7,19 +7,6 @@ class ThinktankSerializer(ModelSerializer):
 
     class Meta:
         model = Thinktank
-        fields = [
-            'id',
-            'name',
-            'description',
-            'url',
-            'unique_field',
-            'is_active',
-            'last_run',
-            'created',
-            'publication_count',
-            'scraper_count',
-            'last_error_count',
-        ]
         read_only_fields = [
             'is_active',
             'last_run',
@@ -27,4 +14,12 @@ class ThinktankSerializer(ModelSerializer):
             'publication_count',
             'scraper_count',
             'last_error_count',
+        ]
+        fields = [
+            'id',
+            'name',
+            'description',
+            'url',
+            'unique_field',
+            *read_only_fields,
         ]
