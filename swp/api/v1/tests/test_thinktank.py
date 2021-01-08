@@ -1,4 +1,6 @@
+import datetime
 from typing import List, Mapping, Optional
+
 from django import test
 from django.urls import reverse
 from django.utils import timezone
@@ -198,3 +200,18 @@ class ThinktankTestCase(test.TestCase):
 
         result = Thinktank.objects.only('is_active').get(pk=self.thinktank.pk)
         self.assertEqual(result.is_active, False)
+
+    def test_detail(self):
+        response = request(self, '1:thinktank-detail', args=[self.thinktank.pk])
+
+        for field in FIELDS:
+            self.assertEqual(response.data[field], getattr(self.thinktank, field), f'Field {field} mismatch')
+
+        scrapers = response.data['scrapers']
+        self.assertEqual(len(scrapers), 1)
+
+        self.assertEqual(scrapers[0]['start_url'], self.scraper.start_url)
+        last_run = datetime.datetime.fromisoformat(scrapers[0]['last_run'])
+        self.assertEqual(last_run, self.scraper.last_run)
+        self.assertEqual(scrapers[0]['is_active'], True)
+        self.assertEqual(scrapers[0]['error_count'], 2)

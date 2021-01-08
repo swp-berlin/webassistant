@@ -8,12 +8,13 @@ const DateTime = ({value, pattern, empty}) => (
 );
 
 DateTime.defaultProps = {
+    value: null,
     empty: '—',
     pattern: 'P p',
 };
 
 DateTime.propTypes = {
-    value: PropTypes.instanceOf(Date).isRequired,
+    value: PropTypes.instanceOf(Date),
     pattern: PropTypes.string,
     empty: PropTypes.string,
 };
