@@ -12,7 +12,7 @@ const DateTime = ({value, pattern, empty}) => (
 
 DateTime.defaultProps = {
     empty: '—',
-}
+};
 
 const ThinktankRow = ({id, name, publicationCount, scraperCount, lastRun, errorCount, isActive}) => (
     <tr className={isActive || 'disabled'}>
