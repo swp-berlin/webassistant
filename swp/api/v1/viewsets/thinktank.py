@@ -11,8 +11,8 @@ class ThinktankViewSet(viewsets.ModelViewSet):
     queryset = Thinktank.objects.annotate_last_run().annotate_counts()
     serializer_class = ThinktankSerializer
 
-    def get_queryset(self):
-        queryset = super().get_queryset()
+    def filter_queryset(self, queryset):
+        queryset = super().filter_queryset(queryset)
 
         is_active = self.request.query_params.get('is_active')
         if is_active is not None:
