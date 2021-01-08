@@ -34,7 +34,7 @@ urlpatterns = [
     path('thinktank/', include(([
         path('', react, name='list'),
         path('<int:pk>/', react, name='detail'),
-    ]))),
+    ], 'thinktank'))),
 ]
 
 if settings.DEBUG_TOOLBAR:  # pragma: no cover
