@@ -88,7 +88,16 @@ msgstr ""
 msgid "Home"
 msgstr ""
 
+msgid "Back"
+msgstr ""
+
+msgid "Submit"
+msgstr ""
+
 msgid "Please enter a valid date in the format %(format)s"
+msgstr ""
+
+msgid "(required)"
 msgstr ""
 
 msgid "No Results"
@@ -118,6 +127,18 @@ msgstr ""
 msgid "New Thinktank"
 msgstr ""
 
+msgid "Successfully created thinktank"
+msgstr ""
+
+msgid "Edit Thinktank"
+msgstr ""
+
+msgid "Loading"
+msgstr ""
+
+msgid "Successfully changed thinktank"
+msgstr ""
+
 msgid "Name"
 msgstr ""
 
@@ -130,7 +151,7 @@ msgstr ""
 msgid "Unique Field"
 msgstr ""
 
-msgid "Submit"
+msgid "Create"
 msgstr ""
 
 msgid "Thinktanks"

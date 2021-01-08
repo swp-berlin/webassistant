@@ -159,3 +159,42 @@ class ThinktankTestCase(test.TestCase):
         item = self.get_result(response.data, self.thinktank.pk)
         self.assertEqual(item['last_error_count'], 2)
         self.assertEqual(self.thinktank.last_error_count, 2)
+
+    def test_create(self):
+        data = {
+            'name': 'CosmoCode Thinktank',
+            'url': 'https://cosmocode.de',
+            'unique_field': 'url',
+        }
+
+        response = self.client.post('/api/thinktank/', data, 'application/json')
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(Thinktank.objects.count(), len(self.thinktanks) + 1)
+
+    def test_edit(self):
+        data = {
+            'name': 'EDITED',
+            'url': self.thinktank.url,
+            'unique_field': self.thinktank.unique_field,
+        }
+
+        url = reverse('1:thinktank-detail', args=[self.thinktank.pk])
+        response = self.client.put(url, data, 'application/json', follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data['name'], 'EDITED')
+
+        result = Thinktank.objects.only('name').get(pk=self.thinktank.pk)
+        self.assertEqual(result.name, 'EDITED')
+
+    def test_patch(self):
+        data = {
+            'name': 'PATCHED'
+        }
+
+        url = reverse('1:thinktank-detail', args=[self.thinktank.pk])
+        response = self.client.patch(url, data, 'application/json', follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data['name'], 'PATCHED')
+
+        result = Thinktank.objects.only('name').get(pk=self.thinktank.pk)
+        self.assertEqual(result.name, 'PATCHED')

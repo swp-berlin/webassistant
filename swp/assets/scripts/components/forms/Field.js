@@ -1,20 +1,26 @@
 import {cloneElement} from 'react';
 import {FormGroup} from '@blueprintjs/core';
 
+import _ from 'utils/i18n';
 import {get} from 'utils/object';
 
 import Errors from 'components/forms/Errors';
 
 
-const Field = ({children, id, name, label, errors, hasError, ...props}) => {
+const RequiredLabel = _('(required)');
+
+
+const Field = ({children, id, name, label, labelInfo, errors, hasError, ...props}) => {
     const fieldErrors = errors && get(errors, name);
     const intent = (hasError || fieldErrors) ? 'danger' : 'none';
+    const {required} = props;
 
     return (
         <FormGroup
             className="block text-sm font-medium text-gray-700"
             label={label}
             labelFor={id || name}
+            labelInfo={labelInfo || (required && RequiredLabel)}
             intent={intent}
             helperText={fieldErrors && <Errors errors={fieldErrors} />}
         >

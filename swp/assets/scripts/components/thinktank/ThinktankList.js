@@ -1,4 +1,5 @@
 import {Button, Intent} from '@blueprintjs/core';
+import {Link} from 'react-router-dom';
 import {useBreadcrumb} from 'components/Navigation';
 import PageHeading from 'components/PageHeading';
 
@@ -11,7 +12,9 @@ const ThinktanksLabel = _('Thinktanks');
 const NewLabel = _('New Thinktank');
 
 const NewThinktankButton = (
-    <Button intent={Intent.PRIMARY} text={NewLabel} />
+    <Link to="/thinktank/new/">
+        <Button intent={Intent.PRIMARY} text={NewLabel} />
+    </Link>
 );
 
 const ThinktankList = () => {
