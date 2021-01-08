@@ -8,7 +8,7 @@ const DisabledLabel = _('disabled');
 
 const ThinktankRow = ({id, name, publicationCount, scraperCount, lastRun, errorCount, isActive}) => (
     <tr className={isActive || 'disabled'}>
-        <td><Link to={`thinktank/${id}/`}>{name}</Link></td>
+        <td><Link to={`/thinktank/${id}/`}>{name}</Link></td>
         <td>{publicationCount}</td>
         <td>{scraperCount}</td>
         <td>{isActive ? <DateTime value={lastRun} /> : DisabledLabel}</td>
