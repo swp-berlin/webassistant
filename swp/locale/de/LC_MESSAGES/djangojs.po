@@ -111,3 +111,42 @@ msgstr "Konfiguration"
 
 msgid "Save"
 msgstr "Speichern"
+
+msgid "No items"
+msgstr "Keine Einträge"
+
+msgid "New Thinktank"
+msgstr "Neuer Thinktank"
+
+msgid "Name"
+msgstr "Name"
+
+msgid "Description"
+msgstr "Beschreibung"
+
+msgid "URL"
+msgstr "URL"
+
+msgid "Unique Field"
+msgstr "Eindeutiges Feld"
+
+msgid "Submit"
+msgstr "Absenden"
+
+msgid "Thinktanks"
+msgstr "Thinktanks"
+
+msgid "disabled"
+msgstr "deaktiviert"
+
+msgid "Publications"
+msgstr "Publikationen"
+
+msgid "Scrapers"
+msgstr "Scraper"
+
+msgid "Last Run"
+msgstr "Letzter Durchlauf"
+
+msgid "Errors"
+msgstr "Fehler"
