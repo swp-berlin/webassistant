@@ -18,13 +18,13 @@ const ThinktankList = () => {
     useBreadcrumb('/thinktank/', ThinktanksLabel);
 
     return (
-        <div>
+        <main>
             <PageHeading
                 title={ThinktanksLabel}
                 actions={[NewThinktankButton]}
             />
             <ThinktankTable endpoint="thinktank" />
-        </div>
+        </main>
     );
 };
 
