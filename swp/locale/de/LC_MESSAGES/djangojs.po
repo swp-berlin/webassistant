@@ -91,9 +91,6 @@ msgstr "Start"
 msgid "Back"
 msgstr "Zurück"
 
-msgid "Submit"
-msgstr "Absenden"
-
 msgid "Please enter a valid date in the format %(format)s"
 msgstr "Bitte geben Sie ein gültigtges Datum im Format %(format)s ein"
 
@@ -138,6 +135,9 @@ msgstr "Lade…"
 
 msgid "Successfully changed thinktank"
 msgstr "Änderungen am Thinktank gespeichert"
+
+msgid "Active"
+msgstr "Aktiv"
 
 msgid "Name"
 msgstr "Name"

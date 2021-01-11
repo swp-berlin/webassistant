@@ -91,9 +91,6 @@ msgstr ""
 msgid "Back"
 msgstr ""
 
-msgid "Submit"
-msgstr ""
-
 msgid "Please enter a valid date in the format %(format)s"
 msgstr ""
 
@@ -137,6 +134,9 @@ msgid "Loading"
 msgstr ""
 
 msgid "Successfully changed thinktank"
+msgstr ""
+
+msgid "Active"
 msgstr ""
 
 msgid "Name"

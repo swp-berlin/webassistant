@@ -35,6 +35,9 @@ msgstr ""
 msgid "Important dates"
 msgstr ""
 
+msgid "Active"
+msgstr ""
+
 #, python-format
 msgid "Missing %s permission"
 msgstr ""
