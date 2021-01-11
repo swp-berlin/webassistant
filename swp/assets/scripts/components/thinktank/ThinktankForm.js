@@ -3,7 +3,7 @@ import {TextArea, TextInput} from 'components/forms';
 import {Button, Checkbox, Intent} from '@blueprintjs/core';
 
 import _ from 'utils/i18n';
-import {BackButton} from 'components/buttons';
+import {CancelButton} from 'components/buttons';
 
 
 const ActiveLabel = _('Active');
@@ -66,7 +66,7 @@ const ThinktankForm = ({endpoint, method, redirectURL, successMessage, data, sub
             />
 
             <div className="flex justify-between">
-                <BackButton to={redirectURL} />
+                <CancelButton to={redirectURL} />
 
                 <div>
                     <Checkbox

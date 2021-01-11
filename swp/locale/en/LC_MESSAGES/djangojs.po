@@ -91,6 +91,9 @@ msgstr ""
 msgid "Back"
 msgstr ""
 
+msgid "Cancel"
+msgstr ""
+
 msgid "Please enter a valid date in the format %(format)s"
 msgstr ""
 

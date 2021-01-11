@@ -11,15 +11,15 @@ export const useBackURL = to => {
     return (state && state.referrer) || to;
 };
 
-const BackButton = ({to, label, icon, ...props}) => (
+const BackButton = ({to, text, icon, ...props}) => (
     <Link className={classNames('bp3-button', icon && `bp3-icon-${icon}`)} to={useBackURL(to)} {...props}>
-        {label}
+        {text}
     </Link>
 );
 
 BackButton.defaultProps = {
     to: '..',
-    label: Label,
+    text: Label,
     icon: 'chevron-left',
 };
 
