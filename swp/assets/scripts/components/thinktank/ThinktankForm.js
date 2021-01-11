@@ -1,12 +1,11 @@
 import {useMutationForm} from 'components/Fetch';
 import {TextArea, TextInput} from 'components/forms';
-import {Button, Checkbox, Intent} from '@blueprintjs/core';
+import {Button, Intent} from '@blueprintjs/core';
 
 import _ from 'utils/i18n';
 import {CancelButton} from 'components/buttons';
 
 
-const ActiveLabel = _('Active');
 const NameLabel = _('Name');
 const DescriptionLabel = _('Description');
 const URLLabel = _('URL');
@@ -68,16 +67,7 @@ const ThinktankForm = ({endpoint, method, redirectURL, successMessage, data, sub
             <div className="flex justify-between">
                 <CancelButton to={redirectURL} />
 
-                <div>
-                    <Checkbox
-                        inputRef={register({required: false})}
-                        name="is_active"
-                        label={ActiveLabel}
-                        defaultChecked="true"
-                        inline
-                    />
-                    <Button type="submit" intent={Intent.PRIMARY} text={submitLabel || defaultSubmitLabel} />
-                </div>
+                <Button type="submit" intent={Intent.PRIMARY} text={submitLabel || defaultSubmitLabel} />
             </div>
         </form>
     );
