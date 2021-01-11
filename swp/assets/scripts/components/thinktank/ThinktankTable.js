@@ -52,6 +52,7 @@ const ThinktankRows = ({items}) => (
 
 const ThinktankTable = ({endpoint, ...props}) => {
     const handler = useHandler(5);
+    const params = {ordering: 'name'};
     return (
         <HTMLTable className="w-full table-fixed my-4" bordered {...props}>
             <thead>
@@ -64,7 +65,7 @@ const ThinktankTable = ({endpoint, ...props}) => {
                 </tr>
             </thead>
             <tbody>
-                <Query endpoint={endpoint || 'thinktank'} {...handler}>
+                <Query endpoint={endpoint || 'thinktank'} params={params} {...handler}>
                     {items => (
                         items.length ? <ThinktankRows items={items} /> : <EmptyRow colSpan={5} />
                     )}
