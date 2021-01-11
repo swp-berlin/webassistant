@@ -38,6 +38,7 @@ const useHandler = colSpan => useMemo(
 const ThinktankRows = ({items}) => (
     items.map(thinktank => (
         <ThinktankRow
+            key={thinktank.id}
             id={thinktank.id}
             name={thinktank.name}
             publicationCount={thinktank.publication_count}
