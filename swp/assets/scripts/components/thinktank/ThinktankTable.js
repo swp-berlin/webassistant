@@ -54,14 +54,14 @@ const ThinktankTable = ({endpoint, ...props}) => {
     const handler = useHandler(5);
     const params = {ordering: 'name'};
     return (
-        <HTMLTable className="w-full table-fixed my-4" bordered {...props}>
+        <HTMLTable className="thinktank-table w-full table-fixed my-4" bordered {...props}>
             <thead>
                 <tr className="bg-gray-300">
                     <th className="w-1/2">{NameLabel}</th>
-                    <th>{PublicationsLabel}</th>
-                    <th>{ScrapersLabel}</th>
-                    <th>{LastRunLabel}</th>
-                    <th>{ErrorsLabel}</th>
+                    <th className="text-right">{PublicationsLabel}</th>
+                    <th className="text-right">{ScrapersLabel}</th>
+                    <th className="text-right">{LastRunLabel}</th>
+                    <th className="text-right">{ErrorsLabel}</th>
                 </tr>
             </thead>
             <tbody>
