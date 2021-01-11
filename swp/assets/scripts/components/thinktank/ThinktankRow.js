@@ -6,8 +6,8 @@ import _ from 'utils/i18n';
 
 const DisabledLabel = _('disabled');
 
-const ThinktankLink = ({id, label}) => (
-    <Link to={`/thinktank/${id}/`}>{label}</Link>
+const ThinktankLink = ({id, label, ...props}) => (
+    <Link to={`/thinktank/${id}/`} {...props}>{label}</Link>
 );
 
 const ThinktankRow = ({id, name, publicationCount, scraperCount, lastRun, errorCount, isActive}) => (

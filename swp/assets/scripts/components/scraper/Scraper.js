@@ -32,14 +32,14 @@ const Scraper = ({id}) => {
     const {thinktank, last_run: lastRun, is_active: isActive} = scraper;
 
     return (
-        <div>
+        <main>
             <PageHeading
                 title={`${thinktank.name} Scraper`}
                 subtitle={lastRun && <LastRun lastRun={lastRun} />}
                 actions={[<Button intent="primary" text={isActive ? 'Disable' : 'Enable'} />]}
             />
             <ScraperForm id={id} data={scraper} />
-        </div>
+        </main>
     );
 };
 
