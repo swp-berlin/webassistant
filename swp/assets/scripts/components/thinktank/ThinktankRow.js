@@ -6,13 +6,17 @@ import _ from 'utils/i18n';
 
 const DisabledLabel = _('disabled');
 
+const ThinktankLink = ({id, label}) => (
+    <Link to={`/thinktank/${id}/`}>{label}</Link>
+);
+
 const ThinktankRow = ({id, name, publicationCount, scraperCount, lastRun, errorCount, isActive}) => (
     <tr className={isActive || 'disabled'}>
-        <td><Link to={`/thinktank/${id}/`}>{name}</Link></td>
-        <td>{publicationCount}</td>
-        <td>{scraperCount}</td>
+        <td><ThinktankLink id={id} label={name} /></td>
+        <td><ThinktankLink id={id} label={publicationCount} /></td>
+        <td><ThinktankLink id={id} label={scraperCount} /></td>
         <td>{isActive ? <DateTime value={lastRun} /> : DisabledLabel}</td>
-        <td>{errorCount}</td>
+        <td><ThinktankLink id={id} label={errorCount} /></td>
     </tr>
 );
 

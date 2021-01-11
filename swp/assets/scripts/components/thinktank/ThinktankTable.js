@@ -53,7 +53,7 @@ const ThinktankRows = ({items}) => (
 const ThinktankTable = ({endpoint, ...props}) => {
     const handler = useHandler(5);
     return (
-        <HTMLTable className="w-full table-fixed my-4" bordered interactive {...props}>
+        <HTMLTable className="w-full table-fixed my-4" bordered {...props}>
             <thead>
                 <tr className="bg-gray-300">
                     <th className="w-1/2">{NameLabel}</th>
