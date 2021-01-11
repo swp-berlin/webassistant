@@ -186,15 +186,15 @@ class ThinktankTestCase(test.TestCase):
         result = Thinktank.objects.only('name').get(pk=self.thinktank.pk)
         self.assertEqual(result.name, 'EDITED')
 
-    def test_patch(self):
+    def test_patch_deactivation(self):
         data = {
-            'name': 'PATCHED'
+            'is_active': False,
         }
 
         url = reverse('1:thinktank-detail', args=[self.thinktank.pk])
         response = self.client.patch(url, data, 'application/json', follow=True)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data['name'], 'PATCHED')
+        self.assertEqual(response.data['is_active'], False)
 
-        result = Thinktank.objects.only('name').get(pk=self.thinktank.pk)
-        self.assertEqual(result.name, 'PATCHED')
+        result = Thinktank.objects.only('is_active').get(pk=self.thinktank.pk)
+        self.assertEqual(result.is_active, False)
