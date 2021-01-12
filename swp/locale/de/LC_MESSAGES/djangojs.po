@@ -88,8 +88,17 @@ msgstr "Abmelden"
 msgid "Home"
 msgstr "Start"
 
+msgid "Back"
+msgstr "Zurück"
+
+msgid "Cancel"
+msgstr "Abbrechen"
+
 msgid "Please enter a valid date in the format %(format)s"
 msgstr "Bitte geben Sie ein gültigtges Datum im Format %(format)s ein"
+
+msgid "(required)"
+msgstr "(erfordert)"
 
 msgid "No Results"
 msgstr "Keine Ergebnisse"
@@ -118,6 +127,21 @@ msgstr "Keine Einträge"
 msgid "New Thinktank"
 msgstr "Neuer Thinktank"
 
+msgid "Successfully created thinktank"
+msgstr "Thinktank erfolgreich angelegt"
+
+msgid "Edit Thinktank"
+msgstr "Thinktank bearbeiten"
+
+msgid "Loading"
+msgstr "Lade…"
+
+msgid "Successfully changed thinktank"
+msgstr "Änderungen am Thinktank gespeichert"
+
+msgid "Active"
+msgstr "Aktiv"
+
 msgid "Name"
 msgstr "Name"
 
@@ -130,8 +154,8 @@ msgstr "URL"
 msgid "Unique Field"
 msgstr "Eindeutiges Feld"
 
-msgid "Submit"
-msgstr "Absenden"
+msgid "Create"
+msgstr "Anlegen"
 
 msgid "Thinktanks"
 msgstr "Thinktanks"

@@ -8,7 +8,7 @@ import {faClock} from '@fortawesome/free-solid-svg-icons/faClock';
 import {useQuery} from 'hooks/query';
 import {interpolate} from 'utils/i18n';
 import {useBreadcrumb} from 'components/Navigation';
-import PageHeading from 'components/PageHeading';
+import Page from 'components/Page';
 import ScraperForm from 'components/scraper/ScraperForm';
 
 
@@ -32,14 +32,13 @@ const Scraper = ({id}) => {
     const {thinktank, last_run: lastRun, is_active: isActive} = scraper;
 
     return (
-        <main>
-            <PageHeading
-                title={`${thinktank.name} Scraper`}
-                subtitle={lastRun && <LastRun lastRun={lastRun} />}
-                actions={<Button intent="primary" text={isActive ? 'Disable' : 'Enable'} />}
-            />
+        <Page
+            title={`${thinktank.name} Scraper`}
+            subtitle={lastRun && <LastRun lastRun={lastRun} />}
+            actions={[<Button intent="primary" text={isActive ? 'Disable' : 'Enable'} />]}
+        >
             <ScraperForm id={id} data={scraper} />
-        </main>
+        </Page>
     );
 };
 
