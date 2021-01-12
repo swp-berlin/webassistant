@@ -1,11 +1,8 @@
 import {Switch} from 'react-router-dom';
 
-import Scraper from 'components/scraper/Scraper';
-import ThinktankList from 'components/thinktank/ThinktankList';
-
 import SimpleRoute from 'components/SimpleRoute';
-import NewThinktank from 'components/thinktank/NewThinktank';
-import ThinktankEdit from 'components/thinktank/ThinktankEdit';
+import Scraper from 'components/scraper/Scraper';
+import {NewThinktank, ThinktankEdit, ThinktankList} from 'components/thinktank';
 
 
 const RootURLConfig = () => (
