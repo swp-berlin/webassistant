@@ -1,20 +1,21 @@
 import {useCallback, useState} from 'react';
 import {Button} from '@blueprintjs/core';
 
+import {getChoices} from 'utils/choices';
 import {Select} from 'components/forms';
 
-// FIXME
-const ResolverChoices = [{label: 'List', value: 'List'}];
+
+const ResolverTypeChoices = getChoices('ResolverType');
 
 const AddResolverWidget = ({onAdd}) => {
-    const [selected, setSelected] = useState(ResolverChoices[0].value);
+    const [selected, setSelected] = useState(ResolverTypeChoices[0].value);
     const handleAdd = useCallback(() => onAdd(selected), [selected, onAdd]);
 
     return (
-        <div className="flex space-x-2">
+        <div className="flex space-x-2 mt-8">
             <Select
                 className="flex-grow"
-                choices={ResolverChoices}
+                choices={ResolverTypeChoices}
                 value={selected}
                 onChange={item => setSelected(item)}
             />

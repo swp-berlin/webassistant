@@ -17,6 +17,7 @@ export const useBreadcrumb = (href, text, icon = null) => {
 
             return removeBreadcrumb;
         },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         [addBreadcrumb],
     );
 

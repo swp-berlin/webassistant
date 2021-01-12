@@ -8,16 +8,15 @@ import ResolverForm from './ResolverForm';
 const ResolverListForm = ({form, prefix, level, children}) => {
     const {control} = form;
     const name = `${prefix}.resolvers`;
-    const {fields, append, remove} = useFieldArray({control, name});
+    const {fields, prepend, remove} = useFieldArray({control, name});
 
-    const handleAdd = useCallback(type => append({type}), [append]);
+    const handleAdd = useCallback(type => prepend({type}), [prepend]);
     const handleDelete = useCallback(index => remove(index), [remove]);
 
     return (
         <div>
             {children}
-
-            <div style={{marginLeft: `${(level + 1) * 20}px`}}>
+            <div style={{marginLeft: `${(level + 1) * 2}rem`}}>
                 <AddResolverWidget onAdd={handleAdd} />
 
                 <ul className="flex flex-col space-y-4">
@@ -26,7 +25,7 @@ const ResolverListForm = ({form, prefix, level, children}) => {
                             key={field.id}
                             form={form}
                             prefix={`${name}[${index}]`}
-                            type={field.type}
+                            field={field}
                             onDelete={() => handleDelete(index)}
                         />
                     )))}

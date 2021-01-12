@@ -9,7 +9,13 @@ import Field from 'components/forms/Field';
 
 import ResolverForm from './ResolverForm/ResolverForm';
 import ResolverFormProvider from './ResolverForm/ResolverFormContext';
-import ListResolverForm from './ResolverForm/ListResolverForm';
+import {
+    AttributeResolverForm,
+    DataResolverForm,
+    DocumentResolverForm,
+    LinkResolverForm,
+    ListResolverForm,
+} from './ResolverForm/forms';
 
 
 const StartURLLabel = _('Start-URL');
@@ -24,6 +30,10 @@ const ScraperTypes = getChoices('ScraperType');
 
 const Forms = {
     List: ListResolverForm,
+    Data: DataResolverForm,
+    Link: LinkResolverForm,
+    Attribute: AttributeResolverForm,
+    Document: DocumentResolverForm,
 };
 
 const ScraperForm = ({id, data}) => {

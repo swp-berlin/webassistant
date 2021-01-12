@@ -1,7 +1,7 @@
 import _ from 'utils/i18n';
 import {TextInput, NumericInput} from 'components/forms';
 
-import ResolverListForm from './ResolverListForm';
+import ResolverListForm from '../ResolverListForm';
 
 
 const ListSelectorLabel = _('List Selector');
@@ -11,7 +11,7 @@ const MaxPagesLabel = _('Max Pages');
 
 
 const ListResolverForm = ({form, prefix, level}) => {
-    const {register, errors} = form;
+    const {control, register, errors} = form;
 
     return (
         <ResolverListForm form={form} prefix={prefix} level={level}>
@@ -34,11 +34,11 @@ const ListResolverForm = ({form, prefix, level}) => {
                 errors={errors}
             />
             <NumericInput
-                register={register()}
+                control={control}
                 name={`${prefix}.paginator.max_pages`}
                 label={MaxPagesLabel}
                 errors={errors}
-                defaultValue={1}
+                defaultValue="1"
                 min={1}
                 fill
             />

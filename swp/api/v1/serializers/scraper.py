@@ -1,6 +1,3 @@
-import json
-
-from rest_framework.fields import JSONField
 from rest_framework.serializers import ModelSerializer
 
 from swp.models import Scraper
