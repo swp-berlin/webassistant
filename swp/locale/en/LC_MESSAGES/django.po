@@ -63,6 +63,42 @@ msgstr ""
 msgid "monthly"
 msgstr ""
 
+msgid "List"
+msgstr ""
+
+msgid "Link"
+msgstr ""
+
+msgid "Data"
+msgstr ""
+
+msgid "Attribute"
+msgstr ""
+
+msgid "Document"
+msgstr ""
+
+msgid "Title"
+msgstr ""
+
+msgid "Subtitle"
+msgstr ""
+
+msgid "Abstract"
+msgstr ""
+
+msgid "Author"
+msgstr ""
+
+msgid "Publication Date"
+msgstr ""
+
+msgid "URL"
+msgstr ""
+
+msgid "PDF URL"
+msgstr ""
+
 msgid "name"
 msgstr ""
 
@@ -109,12 +145,6 @@ msgid "publication date"
 msgstr ""
 
 msgid "last access"
-msgstr ""
-
-msgid "URL"
-msgstr ""
-
-msgid "PDF URL"
 msgstr ""
 
 msgid "number of pages"

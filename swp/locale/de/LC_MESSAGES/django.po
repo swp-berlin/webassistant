@@ -63,6 +63,42 @@ msgstr "wöchentlich"
 msgid "monthly"
 msgstr "monatlich"
 
+msgid "List"
+msgstr ""
+
+msgid "Link"
+msgstr ""
+
+msgid "Data"
+msgstr ""
+
+msgid "Attribute"
+msgstr ""
+
+msgid "Document"
+msgstr ""
+
+msgid "Title"
+msgstr "Titel"
+
+msgid "Subtitle"
+msgstr "Untertitel"
+
+msgid "Abstract"
+msgstr "Abstract"
+
+msgid "Author"
+msgstr "Autoren"
+
+msgid "Publication Date"
+msgstr "Veröffentlichungsdatum"
+
+msgid "URL"
+msgstr "URL"
+
+msgid "PDF URL"
+msgstr "PDF URL"
+
 msgid "name"
 msgstr "Name"
 
@@ -110,12 +146,6 @@ msgstr "Veröffentlichungsdatum"
 
 msgid "last access"
 msgstr "letzer Zugriff"
-
-msgid "URL"
-msgstr "URL"
-
-msgid "PDF URL"
-msgstr "PDF URL"
 
 msgid "number of pages"
 msgstr "Seitenzahl"

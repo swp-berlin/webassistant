@@ -88,6 +88,12 @@ msgstr "Abmelden"
 msgid "Home"
 msgstr "Start"
 
+msgid "Activate"
+msgstr "Aktivieren"
+
+msgid "Deactivate"
+msgstr "Deaktivieren"
+
 msgid "Back"
 msgstr "Zurück"
 
@@ -102,6 +108,30 @@ msgstr "(erfordert)"
 
 msgid "No Results"
 msgstr "Keine Ergebnisse"
+
+msgid "Resolver Type %(type)s unsupported"
+msgstr "Resolvertyp %(type)s wird nicht unterstützt"
+
+msgid "Attribute"
+msgstr "Attribut"
+
+msgid "Field"
+msgstr "Feld"
+
+msgid "Selector"
+msgstr "Selektor"
+
+msgid "List Selector"
+msgstr "Listenselektor"
+
+msgid "Item Selector"
+msgstr "Einzelselektor"
+
+msgid "Pagination Button Selector"
+msgstr "Pagninierungsselektor"
+
+msgid "Max Pages"
+msgstr "Maximale Seitenzahl"
 
 msgid "Start-URL"
 msgstr ""
@@ -121,6 +151,21 @@ msgstr "Konfiguration"
 msgid "Save"
 msgstr "Speichern"
 
+msgid "disabled"
+msgstr "deaktiviert"
+
+msgid "URL"
+msgstr "URL"
+
+msgid "Type"
+msgstr "Typ"
+
+msgid "Last Run"
+msgstr "Letzter Durchlauf"
+
+msgid "Errors"
+msgstr "Fehler"
+
 msgid "No items"
 msgstr "Keine Einträge"
 
@@ -129,6 +174,12 @@ msgstr "Neuer Thinktank"
 
 msgid "Successfully created thinktank"
 msgstr "Thinktank erfolgreich angelegt"
+
+msgid "Create"
+msgstr "Anlegen"
+
+msgid "Unique on"
+msgstr "Eindeutig für"
 
 msgid "Edit Thinktank"
 msgstr "Thinktank bearbeiten"
@@ -139,38 +190,20 @@ msgstr "Lade…"
 msgid "Successfully changed thinktank"
 msgstr "Änderungen am Thinktank gespeichert"
 
-msgid "Active"
-msgstr "Aktiv"
-
 msgid "Name"
 msgstr "Name"
 
 msgid "Description"
 msgstr "Beschreibung"
 
-msgid "URL"
-msgstr "URL"
-
 msgid "Unique Field"
 msgstr "Eindeutiges Feld"
 
-msgid "Create"
-msgstr "Anlegen"
-
 msgid "Thinktanks"
 msgstr "Thinktanks"
-
-msgid "disabled"
-msgstr "deaktiviert"
 
 msgid "Publications"
 msgstr "Publikationen"
 
 msgid "Scrapers"
 msgstr "Scraper"
-
-msgid "Last Run"
-msgstr "Letzter Durchlauf"
-
-msgid "Errors"
-msgstr "Fehler"

@@ -14,24 +14,35 @@ const DeactivateLabel = _('Deactivate');
 const getLabel = isActive => (isActive ? DeactivateLabel : ActivateLabel);
 
 
-const ActivationButton = ({endpoint, isActive, ...props}) => {
+const ActivationButton = ({endpoint, isActive, onToggle, disabled, ...props}) => {
     const history = useHistory();
     const [mutate, result] = useMutation(endpoint);
 
     const handleSubmit = useCallback(
-        async (data, method = 'PATCH') => handleMutationResult(
-            await mutate(data, method),
-            {history},
-        ),
+        async (data, method = 'PATCH') => {
+            const response = await mutate(data, method);
+            handleMutationResult(response, {history});
+
+            if (response.success) {
+                onToggle(response.result.data.is_active);
+            }
+        },
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [mutate, history],
     );
 
     const onClick = () => handleSubmit({is_active: !isActive});
-    console.log(result); // FIXME: How do I result?
 
     const text = getLabel(isActive);
-    return <Button intent={Intent.PRIMARY} text={text} {...props} onClick={onClick} />;
+    return (
+        <Button
+            intent={Intent.PRIMARY}
+            text={text}
+            onClick={onClick}
+            disabled={disabled || result.loading}
+            {...props}
+        />
+    );
 };
 
 ActivationButton.propTypes = {
