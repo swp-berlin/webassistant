@@ -1,13 +1,15 @@
 from django.utils import translation
 
 from swp.management.scheme import GenerateSchemeCommand
-from swp.models.choices import Interval, ScraperType
+from swp.models.choices import DataResolverKey, Interval, ResolverType, ScraperType
 
 
 class Command(GenerateSchemeCommand):
     PROPERTIES = [
         ('ScraperType', ScraperType.choices),
         ('interval', Interval.choices),
+        ('ResolverType', ResolverType.choices),
+        ('DataResolverKey', DataResolverKey.choices)
     ]
 
     filename = 'choices.json'

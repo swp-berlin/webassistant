@@ -16,3 +16,21 @@ class Interval(models.IntegerChoices):
 
 class ScraperType(models.TextChoices):
     LIST_WITH_DOCS = 'list_with_docs', ListType.name
+
+
+class ResolverType(models.TextChoices):
+    LIST = 'List', _('List')
+    LINK = 'Link', _('Link')
+    DATA = 'Data', _('Data')
+    ATTRIBUTE = 'Attribute', _('Attribute')
+    DOCUMENT = 'Document', _('Document')
+
+
+class DataResolverKey(models.TextChoices):
+    TITLE = 'title', _('Title')
+    SUBTITLE = 'subtitle', _('Subtitle')
+    ABSTRACT = 'abstract', _('Abstract')
+    AUTHOR = 'author', _('Author')
+    PUBLICATION_DATE = 'publication_date', _('Publication Date')
+    URL = 'url', _('URL')
+    PDF_URL = 'pdf_url', _('PDF URL')
