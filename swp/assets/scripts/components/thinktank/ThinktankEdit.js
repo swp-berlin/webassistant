@@ -14,7 +14,7 @@ const ThinktankEdit = ({id, ...props}) => {
     const endpoint = `/thinktank/${id}/`;
     const {loading, result} = useQuery(endpoint);
 
-    const label = interpolate('Thinktank %s', [id], false);
+    const label = loading ? interpolate('Thinktank %s', [id], false) : result.data.name;
     useBreadcrumb(`${endpoint}/edit/`, label);
 
     if (loading) return Loading;
