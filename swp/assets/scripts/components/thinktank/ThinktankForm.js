@@ -13,18 +13,15 @@ const UniqueFieldLabel = _('Unique Field');
 const SaveLabel = _('Save');
 const CreateLabel = _('Create');
 
+const CreatedMessage = _('Successfully created thinktank');
+const ChangedMessage = _('Successfully changed thinktank');
+
 const ThinktankForm = ({endpoint, method, redirectURL, successMessage, data, submitLabel, ...props}) => {
-    const id = data ? data.id : undefined;
-
-    const defaultEndpoint = id ? '/thinktank/' : `/thinktank/${id}`;
-    const defaultMethod = id ? 'PUT' : 'POST';
-    const defaultSubmitLabel = id ? SaveLabel : CreateLabel;
-
     const [onSubmit, {register, errors}] = useMutationForm(
-        endpoint || defaultEndpoint,
+        endpoint,
         {defaultValues: data},
         {
-            method: method || defaultMethod,
+            method,
             successMessage,
             redirectURL,
         },
@@ -67,10 +64,30 @@ const ThinktankForm = ({endpoint, method, redirectURL, successMessage, data, sub
             <div className="flex justify-between">
                 <CancelButton to={redirectURL} />
 
-                <Button type="submit" intent={Intent.PRIMARY} text={submitLabel || defaultSubmitLabel} />
+                <Button type="submit" intent={Intent.PRIMARY} text={submitLabel} />
             </div>
         </form>
     );
+};
+
+export const ThinktankAddForm = ({endpoint, ...props}) => (
+    <ThinktankForm endpoint={endpoint || '/thinktank/'} {...props} />
+);
+
+ThinktankAddForm.defaultProps = {
+    method: 'POST',
+    submitLabel: CreateLabel,
+    successMessage: CreatedMessage,
+};
+
+export const ThinktankEditForm = ({endpoint, data, ...props}) => (
+    <ThinktankForm endpoint={endpoint || `/thinktank/${data.id}/`} data={data} {...props} />
+);
+
+ThinktankEditForm.defaultProps = {
+    method: 'PUT',
+    submitLabel: SaveLabel,
+    successMessage: ChangedMessage,
 };
 
 export default ThinktankForm;

@@ -4,12 +4,11 @@ import Page from 'components/Page';
 import {useQuery} from 'hooks/query';
 import _, {interpolate} from 'utils/i18n';
 
-import ThinktankForm from './ThinktankForm';
+import {ThinktankEditForm} from './ThinktankForm';
 
 
 const Title = _('Edit Thinktank');
 const Loading = _('Loading');
-const SuccessMessage = _('Successfully changed thinktank');
 
 const ThinktankEdit = ({id, ...props}) => {
     const endpoint = `/thinktank/${id}/`;
@@ -23,11 +22,10 @@ const ThinktankEdit = ({id, ...props}) => {
 
     return (
         <Page title={Title}>
-            <ThinktankForm
+            <ThinktankEditForm
                 endpoint={endpoint}
                 data={thinktank}
                 redirectURL={endpoint}
-                successMessage={SuccessMessage}
                 {...props}
             />
         </Page>
