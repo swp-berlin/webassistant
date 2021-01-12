@@ -36,7 +36,7 @@ const Scraper = ({id}) => {
             <PageHeading
                 title={`${thinktank.name} Scraper`}
                 subtitle={lastRun && <LastRun lastRun={lastRun} />}
-                actions={[<Button intent="primary" text={isActive ? 'Disable' : 'Enable'} />]}
+                actions={<Button intent="primary" text={isActive ? 'Disable' : 'Enable'} />}
             />
             <ScraperForm id={id} data={scraper} />
         </main>

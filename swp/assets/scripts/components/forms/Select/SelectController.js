@@ -1,4 +1,4 @@
-import {cloneElement, useCallback, useEffect, useMemo, useState} from 'react';
+import {forwardRef, cloneElement, useCallback, useEffect, useMemo, useState} from 'react';
 import {Controller} from 'react-hook-form';
 import {MenuItem} from '@blueprintjs/core';
 
@@ -17,7 +17,9 @@ const DefaultItemRenderer = (item, {handleClick, modifiers: {active, disabled}})
     />
 );
 
-const SelectController = ({children, choices, onChange, value, itemRenderer, itemsEqual, onItemSelect, ...props}) => {
+// eslint-disable-next-line no-unused-vars
+const SelectController = forwardRef((props, ref) => {
+    const {children, choices, onChange, value, itemRenderer, itemsEqual, onItemSelect, ...other} = props;
     const selected = useMemo(() => choices.find(choice => choice[itemsEqual] === value), [itemsEqual, choices, value]);
     const handleSelect = useCallback(item => {
         if (onChange) onChange(item[itemsEqual]);
@@ -41,12 +43,12 @@ const SelectController = ({children, choices, onChange, value, itemRenderer, ite
         noResults: <MenuItem disabled active={false} text={NoResultsLabel} />,
         itemsEqual,
         itemRenderer,
-        ...props,
+        ...other,
         onItemSelect: handleSelect,
     };
 
     return cloneElement(children, selectProps);
-};
+});
 
 SelectController.defaultProps = {
     itemRenderer: DefaultItemRenderer,
