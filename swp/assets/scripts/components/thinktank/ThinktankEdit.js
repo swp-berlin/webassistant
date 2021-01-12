@@ -1,5 +1,5 @@
 import {useBreadcrumb} from 'components/Navigation';
-import PageHeading from 'components/PageHeading';
+import Page from 'components/Page';
 
 import {useQuery} from 'hooks/query';
 import _, {interpolate} from 'utils/i18n';
@@ -22,8 +22,7 @@ const ThinktankEdit = ({id, ...props}) => {
     const {data: thinktank} = result;
 
     return (
-        <div>
-            <PageHeading title={Title} />
+        <Page title={Title}>
             <ThinktankForm
                 endpoint={endpoint}
                 data={thinktank}
@@ -31,7 +30,7 @@ const ThinktankEdit = ({id, ...props}) => {
                 successMessage={SuccessMessage}
                 {...props}
             />
-        </div>
+        </Page>
     );
 };
 

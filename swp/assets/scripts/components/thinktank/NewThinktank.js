@@ -1,5 +1,5 @@
 import {useBreadcrumb} from 'components/Navigation';
-import PageHeading from 'components/PageHeading';
+import Page from 'components/Page';
 
 import _ from 'utils/i18n';
 import ThinktankForm from './ThinktankForm';
@@ -11,15 +11,14 @@ const NewThinktank = ({...props}) => {
     useBreadcrumb('/thinktank/new/', Title);
 
     return (
-        <div>
-            <PageHeading title={Title} />
+        <Page title={Title}>
             <ThinktankForm
                 endpoint="/thinktank/"
                 redirectURL="/thinktank/"
                 successMessage={SuccessMessage}
                 {...props}
             />
-        </div>
+        </Page>
     );
 };
 

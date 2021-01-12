@@ -1,7 +1,7 @@
 import {Button, Intent} from '@blueprintjs/core';
 import {Link} from 'react-router-dom';
 import {useBreadcrumb} from 'components/Navigation';
-import PageHeading from 'components/PageHeading';
+import Page from 'components/Page';
 
 import _ from 'utils/i18n';
 
@@ -21,13 +21,9 @@ const ThinktankList = () => {
     useBreadcrumb('/thinktank/', ThinktanksLabel);
 
     return (
-        <div>
-            <PageHeading
-                title={ThinktanksLabel}
-                actions={[NewThinktankButton]}
-            />
+        <Page title={ThinktanksLabel} actions={[NewThinktankButton]}>
             <ThinktankTable endpoint="thinktank" />
-        </div>
+        </Page>
     );
 };
 
