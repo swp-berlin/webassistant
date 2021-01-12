@@ -17,5 +17,6 @@ $icon-font-path: '~@blueprintjs/icons/resources/icons';
 @tailwind utilities;
 
 /* components */
+@import 'components/main.scss';
 @import 'components/footer';
 @import 'components/table';
