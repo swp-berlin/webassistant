@@ -6,7 +6,7 @@ import {ThinktankAddForm} from './ThinktankForm';
 
 const Title = _('New Thinktank');
 
-const NewThinktank = ({...props}) => {
+const ThinktankAdd = ({...props}) => {
     useBreadcrumb('/thinktank/new/', Title);
 
     return (
@@ -20,4 +20,4 @@ const NewThinktank = ({...props}) => {
     );
 };
 
-export default NewThinktank;
+export default ThinktankAdd;

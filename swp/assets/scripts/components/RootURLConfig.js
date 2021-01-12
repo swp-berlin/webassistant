@@ -2,7 +2,7 @@ import {Switch} from 'react-router-dom';
 
 import SimpleRoute from 'components/SimpleRoute';
 import Scraper from 'components/scraper/Scraper';
-import {NewThinktank, ThinktankEdit, ThinktankList} from 'components/thinktank';
+import {ThinktankAdd, ThinktankEdit, ThinktankList} from 'components/thinktank';
 
 
 const RootURLConfig = () => (
@@ -17,7 +17,7 @@ const RootURLConfig = () => (
             <ThinktankList />
         </SimpleRoute>
         <SimpleRoute path="/thinktank/new/" exact>
-            <NewThinktank />
+            <ThinktankAdd />
         </SimpleRoute>
         <SimpleRoute path="/thinktank/:id/edit/" exact>
             {({params}) => <ThinktankEdit id={params.id} />}
