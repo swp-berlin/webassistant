@@ -33,7 +33,7 @@ urlpatterns = [
 
     path('thinktank/', include(([
         path('', react, name='list'),
-        path('new/', react, name='new'),
+        path('add/', react, name='add'),
         path('<int:pk>/', react, name='detail'),
         path('<int:pk>/edit/', react, name='edit'),
     ], 'thinktank'))),

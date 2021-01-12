@@ -7,7 +7,7 @@ import {ThinktankAddForm} from './ThinktankForm';
 const Title = _('New Thinktank');
 
 const ThinktankAdd = ({...props}) => {
-    useBreadcrumb('/thinktank/new/', Title);
+    useBreadcrumb('/thinktank/add/', Title);
 
     return (
         <Page title={Title}>

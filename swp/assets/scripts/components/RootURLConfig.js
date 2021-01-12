@@ -16,7 +16,7 @@ const RootURLConfig = () => (
         <SimpleRoute path="/thinktank/" exact>
             <ThinktankList />
         </SimpleRoute>
-        <SimpleRoute path="/thinktank/new/" exact>
+        <SimpleRoute path="/thinktank/add/" exact>
             <ThinktankAdd />
         </SimpleRoute>
         <SimpleRoute path="/thinktank/:id/edit/" exact>
