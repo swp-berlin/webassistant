@@ -1,6 +1,6 @@
+import {Button, Intent} from '@blueprintjs/core';
 import {useMutationForm} from 'components/Fetch';
 import {TextArea, TextInput} from 'components/forms';
-import {Button, Intent} from '@blueprintjs/core';
 
 import _ from 'utils/i18n';
 import {CancelButton} from 'components/buttons';
@@ -10,11 +10,7 @@ const NameLabel = _('Name');
 const DescriptionLabel = _('Description');
 const URLLabel = _('URL');
 const UniqueFieldLabel = _('Unique Field');
-const SaveLabel = _('Save');
-const CreateLabel = _('Create');
 
-const CreatedMessage = _('Successfully created thinktank');
-const ChangedMessage = _('Successfully changed thinktank');
 
 const ThinktankForm = ({endpoint, method, redirectURL, successMessage, data, submitLabel, ...props}) => {
     const [onSubmit, {register, errors}] = useMutationForm(
@@ -68,26 +64,6 @@ const ThinktankForm = ({endpoint, method, redirectURL, successMessage, data, sub
             </div>
         </form>
     );
-};
-
-export const ThinktankAddForm = ({endpoint, ...props}) => (
-    <ThinktankForm endpoint={endpoint || '/thinktank/'} {...props} />
-);
-
-ThinktankAddForm.defaultProps = {
-    method: 'POST',
-    submitLabel: CreateLabel,
-    successMessage: CreatedMessage,
-};
-
-export const ThinktankEditForm = ({endpoint, data, ...props}) => (
-    <ThinktankForm endpoint={endpoint || `/thinktank/${data.id}/`} data={data} {...props} />
-);
-
-ThinktankEditForm.defaultProps = {
-    method: 'PUT',
-    submitLabel: SaveLabel,
-    successMessage: ChangedMessage,
 };
 
 export default ThinktankForm;

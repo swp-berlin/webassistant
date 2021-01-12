@@ -4,7 +4,7 @@ import Page from 'components/Page';
 import {useQuery} from 'hooks/query';
 import _, {interpolate} from 'utils/i18n';
 
-import {ThinktankEditForm} from './ThinktankForm';
+import ThinktankEditForm from './ThinktankEditForm';
 
 
 const Title = _('Edit Thinktank');
