@@ -10,7 +10,7 @@ const ThinktankEditForm = ({endpoint, data, ...props}) => (
 );
 
 ThinktankEditForm.defaultProps = {
-    method: 'POST',
+    method: 'PUT',
     submitLabel: SubmitLabel,
     successMessage: SuccessMessage,
 };
