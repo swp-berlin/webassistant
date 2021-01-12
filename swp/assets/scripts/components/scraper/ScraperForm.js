@@ -15,6 +15,7 @@ import {
     DocumentResolverForm,
     LinkResolverForm,
     ListResolverForm,
+    StaticResolverForm,
 } from './ResolverForm/forms';
 
 
@@ -34,6 +35,7 @@ const Forms = {
     Link: LinkResolverForm,
     Attribute: AttributeResolverForm,
     Document: DocumentResolverForm,
+    Static: StaticResolverForm,
 };
 
 const ScraperForm = ({id, data}) => {

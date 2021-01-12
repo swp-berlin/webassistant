@@ -251,12 +251,23 @@ class DocumentResolver(DataResolver):
         return page_count, meta
 
 
+class StaticResolver:
+    def __init__(self, context: ScraperContext, *, key: str, value: str):
+        self.context = context
+        self.key = key
+        self.value = value
+
+    async def resolve(self, node: ElementHandle, context: dict):
+        context[self.key] = self.value
+
+
 class ResolverType(Enum):
     List = ListResolver
     Link = LinkResolver
     Data = DataResolver
     Attribute = AttributeResolver
     Document = DocumentResolver
+    Static = StaticResolver
 
     def create(self, context: dict, **config):
         return self.value(context, **config)
