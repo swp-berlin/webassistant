@@ -22,6 +22,7 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.32",
     "@fortawesome/free-solid-svg-icons": "^5.15.1",
     "@fortawesome/react-fontawesome": "^0.1.13",
+    "@sentry/react": "^5.29.2",
     "classnames": "^2.2.6",
     "core-js": "^3.7.0",
     "date-fns": "^2.16.1",
