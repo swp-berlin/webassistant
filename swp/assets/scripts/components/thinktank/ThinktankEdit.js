@@ -10,12 +10,19 @@ import {ThinktankEditForm} from './ThinktankForm';
 const Title = _('Edit Thinktank');
 const Loading = _('Loading');
 
+const getLabel = (id, loading, result) => {
+    if (loading || !result) {
+        return interpolate('Thinktank %s', [id], false);
+    }
+
+    return result.data.name;
+};
+
 const ThinktankEdit = ({id, ...props}) => {
     const endpoint = `/thinktank/${id}/`;
     const {loading, result} = useQuery(endpoint);
 
-    const label = loading ? interpolate('Thinktank %s', [id], false) : result.data.name;
-    useBreadcrumb(`${endpoint}/edit/`, label);
+    useBreadcrumb(`${endpoint}/edit/`, getLabel(id, loading, result));
 
     if (loading) return Loading;
     const {data: thinktank} = result;
