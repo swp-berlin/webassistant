@@ -15,9 +15,9 @@ export const useThinktanksBreadcrumb = (href = '/thinktank/', text = ThinktanksL
     useBreadcrumb(href, text)
 );
 
-const NewThinktankButton = (
+const ThinktankAddButton = ({...props}) => (
     <Link to="/thinktank/add/">
-        <Button intent={Intent.PRIMARY} text={NewLabel} />
+        <Button intent={Intent.PRIMARY} text={NewLabel} {...props} />
     </Link>
 );
 
@@ -25,7 +25,7 @@ const ThinktankList = () => {
     useBreadcrumb('/thinktank/', ThinktanksLabel);
 
     return (
-        <Page title={ThinktanksLabel} actions={[NewThinktankButton]}>
+        <Page title={ThinktanksLabel} actions={[<ThinktankAddButton key="add" />]}>
             <ThinktankTable endpoint="thinktank" />
         </Page>
     );
