@@ -1,11 +1,8 @@
-import {useMemo} from 'react';
 import {HTMLTable} from '@blueprintjs/core';
 
+import {useFetchHandler} from 'hooks/table';
 import _ from 'utils/i18n';
 import {Query} from 'components/Fetch';
-import {
-    handleLoading,
-} from 'components/Fetch/defaultHandler';
 
 import EmptyRow from 'components/tables/EmptyRow';
 import ScraperRow from './ScraperRow';
@@ -15,23 +12,6 @@ const URLLabel = _('URL');
 const TypeLabel = _('Type');
 const LastRunLabel = _('Last Run');
 const ErrorsLabel = _('Errors');
-
-const useHandler = colSpan => useMemo(
-    () => {
-        const wrap = handler => (...args) => (
-            <tr>
-                <td colSpan={colSpan}>
-                    {handler(...args)}
-                </td>
-            </tr>
-        );
-
-        return {
-            handleLoading: wrap(handleLoading),
-        };
-    },
-    [colSpan],
-);
 
 const ScraperRows = ({items}) => (
     items.length ? items.map(item => (
@@ -48,7 +28,7 @@ const ScraperRows = ({items}) => (
 );
 
 const ScraperTable = ({items, endpoint, ...props}) => {
-    const handler = useHandler(4);
+    const handler = useFetchHandler(4);
 
     const rows = items ? <ScraperRows items={items} /> : (
         <Query endpoint={endpoint} {...handler}>
