@@ -1,8 +1,8 @@
 import {useMutationForm} from 'components/Fetch';
-import {Select, TextInput} from 'components/forms';
-import {Button, Checkbox} from '@blueprintjs/core';
+import {Checkbox, Select, TextInput} from 'components/forms';
+import {Button} from '@blueprintjs/core';
 
-
+import ScraperTypes from 'schemes/scraperTypes.json';
 import {getChoices} from 'utils/choices';
 import _ from 'utils/i18n';
 import Field from 'components/forms/Field';
@@ -18,6 +18,8 @@ import {
     StaticResolverForm,
 } from './ResolverForm/forms';
 
+import ScraperTypeSelect from './ScraperTypeSelect';
+
 
 const StartURLLabel = _('Start-URL');
 const EnabledLabel = _('Enabled');
@@ -27,7 +29,6 @@ const ConfigLabel = _('Config');
 const SubmitButtonLabel = _('Save');
 
 const Intervals = getChoices('interval');
-const ScraperTypes = getChoices('ScraperType');
 
 const Forms = {
     List: ListResolverForm,
@@ -59,12 +60,12 @@ const ScraperForm = ({id, data}) => {
             />
             <Checkbox
                 name="is_active"
-                inputRef={register}
+                control={control}
                 inline
                 label={EnabledLabel}
             />
-            <Select
-                control={control}
+            <ScraperTypeSelect
+                form={form}
                 name="type"
                 label={TypeLabel}
                 errors={errors}
