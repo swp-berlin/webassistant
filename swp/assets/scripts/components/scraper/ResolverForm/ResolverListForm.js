@@ -1,11 +1,16 @@
 import {useCallback} from 'react';
 import {useFieldArray} from 'react-hook-form';
 
+import {getChoices} from 'utils/choices';
+
 import AddResolverWidget from './AddResolverWidget';
 import ResolverForm from './ResolverForm';
 
 
-const ResolverListForm = ({form, prefix, level, children}) => {
+const ResolverTypeChoices = getChoices('ResolverType');
+
+
+const ResolverListForm = ({form, prefix, level, choices = ResolverTypeChoices, children}) => {
     const {control} = form;
     const name = `${prefix}.resolvers`;
     const {fields, prepend, remove} = useFieldArray({control, name});
@@ -17,7 +22,7 @@ const ResolverListForm = ({form, prefix, level, children}) => {
         <div>
             {children}
             <div style={{marginLeft: `${(level + 1) * 2}rem`}}>
-                <AddResolverWidget onAdd={handleAdd} />
+                <AddResolverWidget choices={choices} onAdd={handleAdd} />
 
                 <ul className="flex flex-col space-y-4">
                     {(fields.map((field, index) => (
