@@ -31,7 +31,6 @@ const ThinktankDetail = ({id, ...props}) => {
     const {data: thinktank} = result;
     const {
         unique_field: uniqueField,
-        last_run: lastRun,
     } = thinktank;
 
     const onToggle = flag => setActive(flag);
