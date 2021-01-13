@@ -20,6 +20,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='thinktank',
             name='is_active',
-            field=models.BooleanField(default=True, verbose_name='active'),
+            field=models.BooleanField(default=False, verbose_name='active'),
         ),
     ]

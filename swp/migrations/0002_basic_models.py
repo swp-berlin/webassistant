@@ -19,7 +19,7 @@ class Migration(migrations.Migration):
             name='Monitor',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('is_active', models.BooleanField(default=True, verbose_name='active')),
+                ('is_active', models.BooleanField(default=False, verbose_name='active')),
                 ('name', models.CharField(max_length=100, verbose_name='name')),
                 ('recipients', django.contrib.postgres.fields.ArrayField(base_field=models.EmailField(max_length=254), size=None, verbose_name='recipients')),
                 ('interval', models.IntegerField(verbose_name='interval')),
@@ -38,7 +38,7 @@ class Migration(migrations.Migration):
             name='Scraper',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('is_active', models.BooleanField(default=True, verbose_name='active')),
+                ('is_active', models.BooleanField(default=False, verbose_name='active')),
                 ('data', models.JSONField(verbose_name='data')),
                 ('start_url', models.URLField(verbose_name='start URL')),
                 ('checksum', models.CharField(max_length=64, unique=True, verbose_name='checksum')),
