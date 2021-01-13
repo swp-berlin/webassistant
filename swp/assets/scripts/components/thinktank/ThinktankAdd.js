@@ -16,7 +16,7 @@ const ThinktankAdd = ({...props}) => {
         <Page title={Title}>
             <ThinktankAddForm
                 endpoint="/thinktank/"
-                redirectURL="/thinktank/"
+                backURL="/thinktank/"
                 {...props}
             />
         </Page>
