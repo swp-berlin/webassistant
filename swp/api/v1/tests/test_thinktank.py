@@ -62,6 +62,7 @@ class ThinktankTestCase(test.TestCase):
                 checksum='de9474fa85634623fd9ae9838f949a02c9365ede3499a26c9be52363a8b7f214',
                 created=now,
                 last_run=now,
+                is_active=True,
             ),
             Scraper(
                 type=ScraperType.LIST_WITH_DOCS.value,
