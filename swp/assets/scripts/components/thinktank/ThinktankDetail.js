@@ -33,6 +33,7 @@ const ThinktankDetail = ({id, ...props}) => {
     const {data: thinktank} = result;
     const {
         unique_field: uniqueField,
+        scrapers,
     } = thinktank;
 
     const onToggle = flag => setActive(flag);
@@ -55,7 +56,7 @@ const ThinktankDetail = ({id, ...props}) => {
                 <strong>{uniqueField}</strong>
             </div>
 
-            <ScraperTable endpoint={`/thinktank/${id}/scrapers/`} {...props} />
+            <ScraperTable items={scrapers} {...props} />
         </Page>
     );
 };

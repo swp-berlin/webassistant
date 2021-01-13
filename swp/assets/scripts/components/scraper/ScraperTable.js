@@ -34,7 +34,7 @@ const useHandler = colSpan => useMemo(
 );
 
 const ScraperRows = ({items}) => (
-    items.map(item => (
+    items.length ? items.map(item => (
         <ScraperRow
             key={item.id}
             id={item.id}
@@ -44,11 +44,18 @@ const ScraperRows = ({items}) => (
             errorCount={item.error_count}
             isActive={item.is_active}
         />
-    ))
+    )) : <EmptyRow colSpan={4} />
 );
 
-const ScraperTable = ({endpoint, ...props}) => {
+const ScraperTable = ({items, endpoint, ...props}) => {
     const handler = useHandler(4);
+
+    const rows = items ? <ScraperRows items={items} /> : (
+        <Query endpoint={endpoint} {...handler}>
+            {items => <ScraperRows items={items} />}
+        </Query>
+    );
+
     return (
         <HTMLTable className="w-full table-fixed my-4" bordered interactive {...props}>
             <thead>
@@ -60,9 +67,7 @@ const ScraperTable = ({endpoint, ...props}) => {
                 </tr>
             </thead>
             <tbody>
-                <Query endpoint={endpoint || 'scraper'} {...handler}>
-                    {items => (items.length ? <ScraperRows items={items} /> : <EmptyRow colSpan={4} />)}
-                </Query>
+                {rows}
             </tbody>
         </HTMLTable>
     );
