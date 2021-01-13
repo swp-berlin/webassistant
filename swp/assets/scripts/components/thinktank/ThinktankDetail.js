@@ -9,6 +9,7 @@ import _, {interpolate} from 'utils/i18n';
 import {useThinktanksBreadcrumb} from './ThinktankList';
 
 
+const Loading = _('Loading');
 const UniqueLabel = _('Unique on');
 const Nbsp = () => '\u00A0';
 
@@ -28,7 +29,7 @@ const ThinktankDetail = ({id, ...props}) => {
         }
     }, [loading]);
 
-    if (loading) return 'Loading';
+    if (loading) return Loading;
 
     const {data: thinktank} = result;
     const {
