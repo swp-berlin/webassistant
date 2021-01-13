@@ -63,7 +63,7 @@ const ScraperTable = ({items, endpoint, ...props}) => {
                     <th className="w-1/2">{URLLabel}</th>
                     <th>{TypeLabel}</th>
                     <th>{LastRunLabel}</th>
-                    <th>{ErrorsLabel}</th>
+                    <th className="text-right">{ErrorsLabel}</th>
                 </tr>
             </thead>
             <tbody>

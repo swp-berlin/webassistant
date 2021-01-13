@@ -9,7 +9,7 @@ const ScraperRow = ({id, url, type, lastRun, errorCount, isActive}) => (
         <td><a href={url}>{url}</a></td>
         <td>{type}</td>
         <td>{isActive ? <DateTime value={lastRun} /> : DisabledLabel}</td>
-        <td>{errorCount}</td>
+        <td className="text-right">{errorCount}</td>
     </tr>
 );
 
