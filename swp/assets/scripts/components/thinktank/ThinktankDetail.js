@@ -15,7 +15,7 @@ import {useThinktanksBreadcrumb} from './ThinktankList';
 const Loading = _('Loading');
 const NewScraperLabel = _('New scraper');
 const UniqueLabel = _('Unique on');
-const Nbsp = () => '\u00A0';
+const Nbsp = '\u00A0';
 
 
 const ScraperAddButton = ({...props}) => (
@@ -48,7 +48,6 @@ const ThinktankDetail = ({id, ...props}) => {
     } = thinktank;
 
     const onToggle = flag => setActive(flag);
-
     const actions = [
         <ActivationButton
             key="isActive"
@@ -59,14 +58,16 @@ const ThinktankDetail = ({id, ...props}) => {
         />,
     ];
 
-    return (
-        <Page title={label} actions={actions}>
-            <div>
-                {UniqueLabel}
-                <Nbsp />
-                <strong>{uniqueField}</strong>
-            </div>
+    const subtitle = (
+        <span>
+            {UniqueLabel}
+            {Nbsp}
+            <strong>{uniqueField}</strong>
+        </span>
+    );
 
+    return (
+        <Page title={label} subtitle={subtitle} actions={actions}>
             <TableActions>
                 <ScraperAddButton />
             </TableActions>
