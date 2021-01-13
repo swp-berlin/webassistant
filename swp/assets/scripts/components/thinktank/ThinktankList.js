@@ -11,6 +11,10 @@ import ThinktankTable from './ThinktankTable';
 const ThinktanksLabel = _('Thinktanks');
 const NewLabel = _('New Thinktank');
 
+export const useThinktanksBreadcrumb = (href = '/thinktank/', text = ThinktanksLabel) => (
+    useBreadcrumb(href, text)
+);
+
 const NewThinktankButton = (
     <Link to="/thinktank/new/">
         <Button intent={Intent.PRIMARY} text={NewLabel} />

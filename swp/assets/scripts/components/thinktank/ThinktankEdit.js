@@ -5,6 +5,7 @@ import {useQuery} from 'hooks/query';
 import _, {interpolate} from 'utils/i18n';
 
 import ThinktankEditForm from './ThinktankEditForm';
+import {useThinktanksBreadcrumb} from 'components/thinktank/ThinktankList';
 
 
 const Title = _('Edit Thinktank');
@@ -22,6 +23,7 @@ const ThinktankEdit = ({id, ...props}) => {
     const endpoint = `/thinktank/${id}/`;
     const {loading, result} = useQuery(endpoint);
 
+    useThinktanksBreadcrumb();
     useBreadcrumb(`${endpoint}/edit/`, getLabel(id, loading, result));
 
     if (loading) return Loading;
