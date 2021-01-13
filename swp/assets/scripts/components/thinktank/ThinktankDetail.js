@@ -1,11 +1,12 @@
 import {useEffect, useState} from 'react';
+import ActivationButton from 'components/buttons/ActivationButton';
 import {useBreadcrumb} from 'components/Navigation';
 import Page from 'components/Page';
 import ScraperTable from 'components/scraper/ScraperTable';
 
 import {useQuery} from 'hooks/query';
 import _, {interpolate} from 'utils/i18n';
-import ActivationButton from '../buttons/ActivationButton';
+import {useThinktanksBreadcrumb} from './ThinktankList';
 
 
 const UniqueLabel = _('Unique on');
@@ -17,6 +18,7 @@ const ThinktankDetail = ({id, ...props}) => {
     const {loading, result} = useQuery(endpoint);
     const [isActive, setActive] = useState(false);
 
+    useThinktanksBreadcrumb();
     const label = loading ? interpolate('Thinktank %s', [id], false) : result.data.name;
     useBreadcrumb(endpoint, label);
 
