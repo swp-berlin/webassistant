@@ -25,6 +25,7 @@ class ResolverType(models.TextChoices):
     ATTRIBUTE = 'Attribute', _('Attribute')
     DOCUMENT = 'Document', _('Document')
     STATIC = 'Static', _('Static')
+    TAGS = 'Tags', _('Tags')
 
 
 class DataResolverKey(models.TextChoices):
