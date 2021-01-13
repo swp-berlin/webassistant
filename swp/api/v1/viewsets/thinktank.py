@@ -1,12 +1,8 @@
 from django.db.models import Prefetch
-from rest_framework import filters, status, viewsets
-from rest_framework.decorators import action
-from rest_framework.response import Response
-
-from cosmogo.utils.settings import truthy
+from rest_framework import viewsets
 
 from swp.api.v1.router import router
-from swp.api.v1.serializers import ScraperListSerializer, ThinktankSerializer, ThinktankListSerializer
+from swp.api.v1.serializers import ThinktankSerializer, ThinktankListSerializer
 from swp.models import Scraper, Thinktank
 
 
@@ -28,27 +24,9 @@ class ThinktankViewSet(viewsets.ModelViewSet):
 
         return queryset
 
-    def filter_queryset(self, queryset):
-        queryset = super().filter_queryset(queryset)
-
-        is_active = self.request.query_params.get('is_active')
-        if is_active is not None:
-            queryset = queryset.filter(is_active=truthy(is_active))
-
-        return queryset
-
     def get_serializer_class(self):
         if self.action == 'list':
             return ThinktankListSerializer
 
         return super().get_serializer_class()
 
-    @action(detail=True)
-    def scrapers(self, request, pk=None):
-        # XXX Nested route exists for development purposes only
-        queryset = Scraper.objects.annotate_error_count().filter(
-            thinktank_id=pk
-        )
-
-        serializer = ScraperListSerializer(queryset, many=True)
-        return Response(serializer.data)
