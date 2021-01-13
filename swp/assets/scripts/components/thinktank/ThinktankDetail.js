@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import {useCallback, useEffect, useState} from 'react';
 import {Link} from 'react-router-dom';
 
 import ActivationButton from 'components/buttons/ActivationButton';
@@ -10,7 +10,6 @@ import TableActions from 'components/tables/TableActions';
 import {useQuery} from 'hooks/query';
 import _, {interpolate} from 'utils/i18n';
 import {useThinktanksBreadcrumb} from './ThinktankList';
-
 
 const Loading = _('Loading');
 const NewScraperLabel = _('New scraper');
@@ -33,6 +32,11 @@ const ThinktankDetail = ({id, ...props}) => {
     const label = loading ? interpolate('Thinktank %s', [id], false) : result.data.name;
     useBreadcrumb(endpoint, label);
 
+    const onToggle = useCallback(
+        flag => setActive(flag),
+        [setActive],
+    );
+
     useEffect(() => {
         if (!loading) {
             setActive(result.data.is_active);
@@ -47,7 +51,6 @@ const ThinktankDetail = ({id, ...props}) => {
         scrapers,
     } = thinktank;
 
-    const onToggle = flag => setActive(flag);
     const actions = [
         <ActivationButton
             key="isActive"
