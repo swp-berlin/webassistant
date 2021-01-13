@@ -27,8 +27,7 @@ const ActivationButton = ({endpoint, isActive, onToggle, disabled, ...props}) =>
                 onToggle(response.result.data.is_active);
             }
         },
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        [mutate, history],
+        [mutate, history, onToggle],
     );
 
     const onClick = () => handleSubmit({is_active: !isActive});
