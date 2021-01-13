@@ -5,6 +5,7 @@ import ActivationButton from 'components/buttons/ActivationButton';
 import {useBreadcrumb} from 'components/Navigation';
 import Page from 'components/Page';
 import ScraperTable from 'components/scraper/ScraperTable';
+import TableActions from 'components/tables/TableActions';
 
 import {useQuery} from 'hooks/query';
 import _, {interpolate} from 'utils/i18n';
@@ -49,7 +50,6 @@ const ThinktankDetail = ({id, ...props}) => {
     const onToggle = flag => setActive(flag);
 
     const actions = [
-        <ScraperAddButton key="scraper" />,
         <ActivationButton
             key="isActive"
             endpoint={endpoint}
@@ -66,6 +66,10 @@ const ThinktankDetail = ({id, ...props}) => {
                 <Nbsp />
                 <strong>{uniqueField}</strong>
             </div>
+
+            <TableActions>
+                <ScraperAddButton />
+            </TableActions>
 
             <ScraperTable items={scrapers} {...props} />
         </Page>
