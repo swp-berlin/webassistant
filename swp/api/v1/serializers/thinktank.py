@@ -39,7 +39,7 @@ class ThinktankSerializer(ModelSerializer):
         ]
 
     def get_scraper_count(self, obj: Thinktank) -> int:
-        return sum(1 for scraper in obj.scrapers.all())
+        return len(obj.scrapers.all())
 
     def get_last_scraper(self, obj: Thinktank):
         scrapers = [scraper for scraper in obj.scrapers.all() if scraper.last_run is not None]
