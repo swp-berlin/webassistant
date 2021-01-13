@@ -11,8 +11,7 @@ from swp.models import (
     Thinktank,
     User,
 )
-from swp.models.choices import ScraperType
-
+from swp.scraper.types import ScraperType
 
 USERADMIN_PERMS = [
     'swp.add_user',
@@ -67,7 +66,7 @@ class PermissionTestCase(test.TestCase):
         )
 
         cls.scraper = Scraper.objects.create(
-            type=ScraperType.LIST_WITH_DOCS.value,
+            type=ScraperType.LIST_WITH_LINK_AND_DOC.value,
             thinktank=cls.thinktank,
             data={'scraped': True},
             start_url='https://www.piie.com/research/publications/policy-briefs',
@@ -130,4 +129,3 @@ class PermissionTestCase(test.TestCase):
 
     def test_thinktank_activation(self):
         self.assert_activation(self.thinktank, self.manager, [self.editor, self.useradmin])
-

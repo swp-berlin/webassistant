@@ -5,8 +5,8 @@ from django.utils import timezone
 
 from cosmogo.utils.testing import login, request
 
-from swp.models import Publication, Scraper, ScraperType, Thinktank, User
-
+from swp.models import Publication, Scraper, Thinktank, User
+from swp.scraper.types import ScraperType
 
 FIELDS = (
     'id',
@@ -53,7 +53,7 @@ class ThinktankTestCase(test.TestCase):
 
         cls.scrapers = Scraper.objects.bulk_create([
             Scraper(
-                type=ScraperType.LIST_WITH_DOCS.value,
+                type=ScraperType.LIST_WITH_LINK_AND_DOC.value,
                 thinktank=cls.thinktank,
                 data={'scraped': True},
                 start_url='https://www.piie.com/research/publications/policy-briefs',
@@ -62,7 +62,7 @@ class ThinktankTestCase(test.TestCase):
                 last_run=now,
             ),
             Scraper(
-                type=ScraperType.LIST_WITH_DOCS.value,
+                type=ScraperType.LIST_WITH_LINK_AND_DOC.value,
                 thinktank=cls.deactivated_thinktank,
                 data={'reported': True},
                 start_url='https://en.cdi.org.cn/publications/annual-report',
@@ -70,7 +70,7 @@ class ThinktankTestCase(test.TestCase):
                 created=now,
             ),
             Scraper(
-                type=ScraperType.LIST_WITH_DOCS.value,
+                type=ScraperType.LIST_WITH_LINK_AND_DOC.value,
                 thinktank=cls.deactivated_thinktank,
                 data={'staffed': True},
                 start_url='https://en.cdi.org.cn/chief-of-staff',
