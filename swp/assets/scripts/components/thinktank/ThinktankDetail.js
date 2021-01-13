@@ -1,4 +1,6 @@
 import {useEffect, useState} from 'react';
+import {Link} from 'react-router-dom';
+
 import ActivationButton from 'components/buttons/ActivationButton';
 import {useBreadcrumb} from 'components/Navigation';
 import Page from 'components/Page';
@@ -10,9 +12,16 @@ import {useThinktanksBreadcrumb} from './ThinktankList';
 
 
 const Loading = _('Loading');
+const NewScraperLabel = _('New scraper');
 const UniqueLabel = _('Unique on');
 const Nbsp = () => '\u00A0';
 
+
+const ScraperAddButton = ({...props}) => (
+    <Link to="/scraper/add/" className="bp3-button bp3-icon-add" {...props}>
+        {NewScraperLabel}
+    </Link>
+);
 
 const ThinktankDetail = ({id, ...props}) => {
     const endpoint = `/thinktank/${id}/`;
@@ -40,6 +49,7 @@ const ThinktankDetail = ({id, ...props}) => {
     const onToggle = flag => setActive(flag);
 
     const actions = [
+        <ScraperAddButton key="scraper" />,
         <ActivationButton
             key="isActive"
             endpoint={endpoint}

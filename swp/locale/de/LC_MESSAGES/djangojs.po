@@ -133,6 +133,9 @@ msgstr "Pagninierungsselektor"
 msgid "Max Pages"
 msgstr "Maximale Seitenzahl"
 
+msgid "Value"
+msgstr "Wert"
+
 msgid "Start-URL"
 msgstr ""
 
@@ -178,14 +181,17 @@ msgstr "Thinktank erfolgreich angelegt"
 msgid "Create"
 msgstr "Anlegen"
 
+msgid "Loading"
+msgstr "Lade…"
+
+msgid "New scraper"
+msgstr "Neuer Scraper"
+
 msgid "Unique on"
 msgstr "Eindeutig für"
 
 msgid "Edit Thinktank"
 msgstr "Thinktank bearbeiten"
-
-msgid "Loading"
-msgstr "Lade…"
 
 msgid "Successfully changed thinktank"
 msgstr "Änderungen am Thinktank gespeichert"

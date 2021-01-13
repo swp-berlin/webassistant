@@ -133,6 +133,9 @@ msgstr ""
 msgid "Max Pages"
 msgstr ""
 
+msgid "Value"
+msgstr ""
+
 msgid "Start-URL"
 msgstr ""
 
@@ -178,13 +181,16 @@ msgstr ""
 msgid "Create"
 msgstr ""
 
+msgid "Loading"
+msgstr ""
+
+msgid "New scraper"
+msgstr ""
+
 msgid "Unique on"
 msgstr ""
 
 msgid "Edit Thinktank"
-msgstr ""
-
-msgid "Loading"
 msgstr ""
 
 msgid "Successfully changed thinktank"

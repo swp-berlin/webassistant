@@ -78,6 +78,12 @@ msgstr ""
 msgid "Document"
 msgstr ""
 
+msgid "Static"
+msgstr ""
+
+msgid "Tags"
+msgstr ""
+
 msgid "Title"
 msgstr ""
 

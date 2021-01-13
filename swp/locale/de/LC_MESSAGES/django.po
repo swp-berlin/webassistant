@@ -64,19 +64,25 @@ msgid "monthly"
 msgstr "monatlich"
 
 msgid "List"
-msgstr ""
+msgstr "Liste"
 
 msgid "Link"
-msgstr ""
+msgstr "Link"
 
 msgid "Data"
-msgstr ""
+msgstr "Daten"
 
 msgid "Attribute"
-msgstr ""
+msgstr "Attribut"
 
 msgid "Document"
-msgstr ""
+msgstr "Dokument"
+
+msgid "Static"
+msgstr "Statisch"
+
+msgid "Tags"
+msgstr "Tags"
 
 msgid "Title"
 msgstr "Titel"
