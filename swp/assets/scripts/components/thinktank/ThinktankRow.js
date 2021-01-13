@@ -13,7 +13,7 @@ const ThinktankLink = ({id, children, ...props}) => (
 );
 
 const ThinktankRow = ({id, name, publicationCount, scraperCount, lastRun, errorCount, isActive}) => (
-    <tr className={isActive || 'disabled'}>
+    <tr className={isActive ? '' : 'disabled'}>
         <td><ThinktankLink id={id}>{name}</ThinktankLink></td>
         <td className="text-right"><ThinktankLink id={id}>{publicationCount}</ThinktankLink></td>
         <td className="text-right"><ThinktankLink id={id}>{scraperCount}</ThinktankLink></td>

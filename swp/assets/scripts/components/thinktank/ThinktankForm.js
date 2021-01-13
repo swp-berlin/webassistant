@@ -12,14 +12,15 @@ const URLLabel = _('URL');
 const UniqueFieldLabel = _('Unique Field');
 
 
-const ThinktankForm = ({endpoint, method, redirectURL, successMessage, data, submitLabel, ...props}) => {
+const ThinktankForm = ({endpoint, method, backURL, successMessage, data, submitLabel, ...props}) => {
+    const getRedirectURL = ({id}) => `/thinktank/${id}/`;
     const [onSubmit, {register, errors}] = useMutationForm(
         endpoint,
         {defaultValues: data},
         {
             method,
             successMessage,
-            redirectURL,
+            redirectURL: getRedirectURL,
         },
     );
 
@@ -58,7 +59,7 @@ const ThinktankForm = ({endpoint, method, redirectURL, successMessage, data, sub
             />
 
             <div className="flex justify-between">
-                <CancelButton to={redirectURL} />
+                <CancelButton to={backURL} />
 
                 <Button type="submit" intent={Intent.PRIMARY} text={submitLabel} />
             </div>
