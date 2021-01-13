@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     # Extensions
     'cosmogo',
     'rest_framework',
+    'django_filters',
 
     # Admin
     'swp.apps.AdminConfig',
@@ -158,3 +159,15 @@ DEBUG_TOOLBAR = False
 SHELL_PLUS_PRINT_SQL = env('SHELL_PLUS_PRINT_SQL', default=False, parser=truthy)
 
 PYPPETEER_FILE_DOWNLOAD_FOLDER = env('PYPPETEER_FILE_DOWNLOAD_FOLDER', '/tmp')
+
+
+# <editor-fold desc="REST API">
+
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend',
+        'rest_framework.filters.OrderingFilter',
+    ],
+}
+
+# </editor-fold>
