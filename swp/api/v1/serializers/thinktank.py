@@ -8,7 +8,7 @@ from swp.models import Thinktank
 
 class ThinktankSerializer(ModelSerializer):
 
-    is_active = BooleanField(label=_('Active'), default=True, initial=True)
+    is_active = BooleanField(label=_('Active'), default=False, initial=False)
 
     class Meta:
         model = Thinktank
