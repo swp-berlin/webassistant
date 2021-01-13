@@ -59,7 +59,7 @@ const ScraperForm = ({id, data}) => {
     const {control, register, errors} = form;
 
     return (
-        <form className="my-4 w-full max-w-screen-md" onSubmit={onSubmit}>
+        <form className="scraper-form my-4 w-full max-w-screen-md" onSubmit={onSubmit}>
             <TextInput
                 register={register({required: true})}
                 name="start_url"
