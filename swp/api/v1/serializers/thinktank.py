@@ -16,7 +16,7 @@ class ThinktankSerializer(ModelSerializer):
     last_error_count = SerializerMethodField()
     scrapers = ScraperListSerializer(many=True, read_only=True)
 
-    is_active = BooleanField(label=_('Active'), default=True, initial=True)
+    is_active = BooleanField(label=_('Active'), required=False)
 
     class Meta:
         model = Thinktank

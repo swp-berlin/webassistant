@@ -14,7 +14,10 @@ DateTime.defaultProps = {
 };
 
 DateTime.propTypes = {
-    value: PropTypes.instanceOf(Date),
+    value: PropTypes.oneOfType([
+        PropTypes.instanceOf(Date),
+        PropTypes.string,
+    ]),
     pattern: PropTypes.string,
     empty: PropTypes.string,
 };

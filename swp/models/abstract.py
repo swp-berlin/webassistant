@@ -62,7 +62,7 @@ class ActivatableModel(models.Model, metaclass=ActivatableModelBase):
     """
     Mixin for (de)activatable models.
     """
-    is_active = models.BooleanField(_('active'), default=True)
+    is_active = models.BooleanField(_('active'), default=False)
 
     objects = ActivatableManager()
 

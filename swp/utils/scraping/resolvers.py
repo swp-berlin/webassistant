@@ -139,15 +139,6 @@ class DataResolver(Resolver):
         return text
 
 
-class MetaResolver(DataResolver):
-
-    async def get_content(self, elem):
-        text_content_property = await elem.getProperty('content')
-        text = await text_content_property.jsonValue()
-
-        return text
-
-
 class AttributeResolver(DataResolver):
 
     def __init__(self, *args, attribute, **kwargs):
@@ -251,12 +242,43 @@ class DocumentResolver(DataResolver):
         return page_count, meta
 
 
+class StaticResolver:
+    def __init__(self, context: ScraperContext, *, key: str, value: str):
+        self.context = context
+        self.key = key
+        self.value = value
+
+    async def resolve(self, node: ElementHandle, context: dict):
+        context[self.key] = self.value
+
+
+# FIXME
+#  temporary solution that passed empty values to unused required kwargs
+#  this should be better solved by splitting the selection and storage under a key into
+#  dedicated resolvers that can be composed to show the intended behavior
+
+class TagsResolver(IntermediateResolver):
+    def __init__(self, context: ScraperContext, *args, resolvers: [dict], **kwargs):
+        super().__init__(context, *args, selector='', **kwargs)
+        self.resolvers = [self.create_resolver(context, key=str(i), **config) for i, config in enumerate(resolvers)]
+
+    async def resolve(self, node: ElementHandle, context: dict):
+        tags = {}
+
+        for resolver in self.resolvers:
+            await resolver.resolve(node, tags)
+
+        context.setdefault('tags', []).extend(tags.values())
+
+
 class ResolverType(Enum):
     List = ListResolver
     Link = LinkResolver
     Data = DataResolver
     Attribute = AttributeResolver
     Document = DocumentResolver
+    Static = StaticResolver
+    Tags = TagsResolver
 
     def create(self, context: dict, **config):
         return self.value(context, **config)

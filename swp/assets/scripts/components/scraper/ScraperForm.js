@@ -15,6 +15,11 @@ import {
     DocumentResolverForm,
     LinkResolverForm,
     ListResolverForm,
+    StaticResolverForm,
+    TagsResolverForm,
+    TagsDataResolverForm,
+    TagsAttributeResolverForm,
+    TagsStaticResolverForm,
 } from './ResolverForm/forms';
 
 
@@ -34,6 +39,11 @@ const Forms = {
     Link: LinkResolverForm,
     Attribute: AttributeResolverForm,
     Document: DocumentResolverForm,
+    Static: StaticResolverForm,
+    Tags: TagsResolverForm,
+    TagsData: TagsDataResolverForm,
+    TagsAttribute: TagsAttributeResolverForm,
+    TagsStatic: TagsStaticResolverForm,
 };
 
 const ScraperForm = ({id, data}) => {

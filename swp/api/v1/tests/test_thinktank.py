@@ -40,13 +40,13 @@ class ThinktankTestCase(test.TestCase):
                 url='https://www.piie.com/',
                 unique_field='T1-AB',
                 created=now,
+                is_active=True,
             ),
             Thinktank(
                 name='China Development Institute',
                 url='http://en.cdi.org.cn/',
                 unique_field='url',
                 created=now,
-                is_active=False,
             ),
         ])
 

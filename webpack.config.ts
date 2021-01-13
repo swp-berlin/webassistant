@@ -48,7 +48,7 @@ const config = {
         swp: 'swp/index.js',
 
         /* uncommon */
-        // sentry: 'swp/sentry.js',
+        sentry: 'swp/sentry.js',
     },
     resolve: {
         alias: {
