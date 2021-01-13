@@ -1,5 +1,5 @@
 from .abstract import ActivatableModel
-from .choices import Interval, ScraperType
+from .choices import Interval
 from .monitor import Monitor
 from .publication import Publication
 from .scraper import Scraper
@@ -15,7 +15,6 @@ __all__ = [
     'Publication',
     'Scraper',
     'ScraperError',
-    'ScraperType',
     'Thinktank',
     'ThinktankFilter',
     'User',

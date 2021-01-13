@@ -6,6 +6,7 @@ from swp.management.scheme import GenerateSchemeCommand
 class Command(GenerateSchemeCommand):
     SCHEMES = (
         'choices',
+        'scraper-types'
     )
 
     def handle(self, *, schemes=SCHEMES, **options):

@@ -8,9 +8,10 @@ from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
 from swp.utils.scraping import Scraper as _Scraper
+from swp.scraper.types import ScraperType
 
 from .abstract import ActivatableModel, ActivatableQuerySet
-from .choices import Interval, ScraperType
+from .choices import Interval
 from .publication import Publication
 from .fields import ChoiceField
 

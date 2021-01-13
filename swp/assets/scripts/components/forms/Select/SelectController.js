@@ -35,6 +35,7 @@ const SelectController = forwardRef((props, ref) => {
     useEffect(() => setFilteredItems(choices), [choices]);
 
     const selectProps = {
+        activeItem: selected,
         value: selected,
         items: filteredItems,
         onQueryChange: handleQueryChange,

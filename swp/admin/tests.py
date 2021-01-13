@@ -13,7 +13,7 @@ from swp.models import (
     Thinktank,
     ThinktankFilter,
 )
-from swp.models.choices import ScraperType
+from swp.scraper.types import ScraperType
 from swp.utils.testing import create_superuser
 
 
@@ -31,7 +31,7 @@ class AdminTestCase(TestCase):
 
         scraper = Scraper.objects.create(
             thinktank=thinktank,
-            type=ScraperType.LIST_WITH_DOCS.value,
+            type=ScraperType.LIST_WITH_LINK_AND_DOC.value,
             data={'hue?': 'hue!'},
             start_url='https://www.piie.com/research/publications/policy-briefs',
             checksum='de9474fa85634623fd9ae9838f949a02c9365ede3499a26c9be52363a8b7f214',

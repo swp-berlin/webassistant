@@ -5,7 +5,7 @@
     "fields": {
       "is_active": true,
       "thinktank": 1,
-      "type": "list_with_docs",
+      "type": "list_with_link_and_doc",
       "data": {
         "type": "List",
         "selector": ".node--publication",
@@ -68,7 +68,7 @@
     "fields": {
       "is_active": true,
       "thinktank": 2,
-      "type": "list_with_docs",
+      "type": "list_with_link_and_doc",
       "data": {
         "type": "List",
         "selector": "article.report",
@@ -139,7 +139,7 @@
     "fields": {
       "is_active": true,
       "thinktank": 3,
-      "type": "list_with_docs",
+      "type": "list_with_link_and_doc",
       "data": {
         "type": "List",
         "selector": ".l__content .list__item",
