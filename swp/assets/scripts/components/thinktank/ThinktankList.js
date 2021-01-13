@@ -16,7 +16,7 @@ export const useThinktanksBreadcrumb = (href = '/thinktank/', text = ThinktanksL
 );
 
 const NewThinktankButton = (
-    <Link to="/thinktank/new/">
+    <Link to="/thinktank/add/">
         <Button intent={Intent.PRIMARY} text={NewLabel} />
     </Link>
 );
