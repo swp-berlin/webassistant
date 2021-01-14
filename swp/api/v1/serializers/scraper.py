@@ -119,7 +119,7 @@ class ScraperSerializer(ModelSerializer):
 
         keys = self.get_keys(attrs)
 
-        missing = set(self.REQUIRED_KEYS) - set(keys)
+        missing = {*self.REQUIRED_KEYS} - {*keys}
 
         if missing:
             raise ValidationError(
