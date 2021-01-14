@@ -4,6 +4,9 @@
     {{ user_data|json_script:'user-data' }}
 {% endblock %}
 
+{% block body-class %}{{ block.super }} h-screen{% endblock %}
+{% block main-class %}{{ block.super }} flex justify-center min-h-full{% endblock %}
+
 {% block footer %}
     <footer class="bp3-navbar footer fixed-bottom">
         <div class="bp3-navbar-group bp3-align-right">

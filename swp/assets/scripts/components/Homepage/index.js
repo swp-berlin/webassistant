@@ -10,7 +10,7 @@ const Homepage = () => {
     const viewMonitors = usePermission('swp.view_monitor');
 
     return (
-        <Page>
+        <Page className="flex min-h-full justify-center items-center">
             <div className="flex justify-center space-x-5">
                 {viewThinktanks && <ThinktankLink />}
                 {viewMonitors && <MonitorLink />}
