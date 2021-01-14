@@ -1,11 +1,8 @@
-import {useMemo} from 'react';
 import {HTMLTable} from '@blueprintjs/core';
 
+import {useFetchHandler} from 'hooks/table';
 import _ from 'utils/i18n';
 import {Query} from 'components/Fetch';
-import {
-    handleLoading,
-} from 'components/Fetch/defaultHandler';
 
 import EmptyRow from './EmptyRow';
 import ThinktankRow from './ThinktankRow';
@@ -17,23 +14,6 @@ const ScrapersLabel = _('Scrapers');
 const LastRunLabel = _('Last Run');
 const ErrorsLabel = _('Errors');
 
-
-const useHandler = colSpan => useMemo(
-    () => {
-        const wrap = handler => (...args) => (
-            <tr>
-                <td colSpan={colSpan}>
-                    {handler(...args)}
-                </td>
-            </tr>
-        );
-
-        return {
-            handleLoading: wrap(handleLoading),
-        };
-    },
-    [colSpan],
-);
 
 const ThinktankRows = ({items}) => (
     items.map(thinktank => (
@@ -51,7 +31,7 @@ const ThinktankRows = ({items}) => (
 );
 
 const ThinktankTable = ({endpoint, ...props}) => {
-    const handler = useHandler(5);
+    const handler = useFetchHandler(5);
     const params = {ordering: 'name'};
     return (
         <HTMLTable className="thinktank-table w-full table-fixed my-4" bordered {...props}>

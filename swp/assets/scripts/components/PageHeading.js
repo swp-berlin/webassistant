@@ -1,3 +1,5 @@
+import {ButtonGroup} from '@blueprintjs/core';
+
 const PageHeading = ({title, subtitle, actions}) => (
     <div className="lg:flex lg:items-center lg:justify-between">
         <div className="flex-1 min-w-0">
@@ -9,7 +11,7 @@ const PageHeading = ({title, subtitle, actions}) => (
             </div>
         </div>
         <div className="mt-5 flex lg:mt-0 lg:ml-4">
-            {actions}
+            {actions && <ButtonGroup>{actions}</ButtonGroup>}
         </div>
     </div>
 );

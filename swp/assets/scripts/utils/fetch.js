@@ -28,12 +28,12 @@ export const getJSONOptions = (data, CSRFMiddlewareToken, method = 'POST') => {
 
 export const DefaultResult = {
     success: null,
-    status: null,
+    status: null, // HTTP Status code
     result: {
-        data: null,
-        errors: null,
+        data: null, // Result if `status` ~ 200
+        errors: null, // .. or otherwise
     },
-    error: null,
+    error: null, // Network error
     response: null,
 };
 

@@ -1,4 +1,5 @@
+import ActivationButton from './ActivationButton';
 import BackButton from './BackButton';
 import CancelButton from './CancelButton';
 
-export {BackButton, CancelButton};
+export {ActivationButton, BackButton, CancelButton};
