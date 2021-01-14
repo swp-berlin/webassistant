@@ -6,8 +6,8 @@ import {getChoices} from 'utils/choices';
 import AddResolverWidget from './AddResolverWidget';
 import ResolverForm from './ResolverForm';
 
-
-const ResolverTypeChoices = getChoices('ResolverType');
+const TagChoices = ['TagsData', 'TagsAttribute', 'TagsStatic'];
+const ResolverTypeChoices = getChoices('ResolverType').filter(choice => !TagChoices.includes(choice.value));
 
 
 const ResolverListForm = ({form, prefix, level, choices = ResolverTypeChoices, children}) => {
