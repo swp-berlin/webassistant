@@ -219,10 +219,19 @@ msgstr ""
 msgid "think tank filters"
 msgstr ""
 
-msgid "List with Documents"
+msgid "List with Links"
 msgstr ""
 
 msgid "(paginated) Article-List with links to individual Articles which contain a single Document"
+msgstr ""
+
+msgid "List with Links and Documents"
+msgstr ""
+
+msgid "(paginated) Article-List"
+msgstr ""
+
+msgid "List with Documents"
 msgstr ""
 
 msgid "SWP Administration"

@@ -13,17 +13,15 @@ const ResolverTypeChoices = getChoices('ResolverType');
 const ResolverListForm = ({form, prefix, level, choices = ResolverTypeChoices, children}) => {
     const {control} = form;
     const name = `${prefix}.resolvers`;
-    const {fields, prepend, remove} = useFieldArray({control, name});
+    const {append, fields, remove} = useFieldArray({control, name});
 
-    const handleAdd = useCallback(type => prepend({type}), [prepend]);
+    const handleAdd = useCallback(type => append({type}), [append]);
     const handleDelete = useCallback(index => remove(index), [remove]);
 
     return (
         <div>
             {children}
             <div style={{marginLeft: `${(level + 1) * 2}rem`}}>
-                <AddResolverWidget choices={choices} onAdd={handleAdd} />
-
                 <ul className="flex flex-col space-y-4">
                     {(fields.map((field, index) => (
                         <ResolverForm
@@ -35,6 +33,7 @@ const ResolverListForm = ({form, prefix, level, choices = ResolverTypeChoices, c
                         />
                     )))}
                 </ul>
+                <AddResolverWidget choices={choices} onAdd={handleAdd} />
             </div>
         </div>
     );

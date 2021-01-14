@@ -2,7 +2,10 @@ import {useCallback, useState} from 'react';
 import {Button} from '@blueprintjs/core';
 
 import {Select} from 'components/forms';
+import _ from 'utils/i18n';
 
+
+const Label = _('Add');
 
 const AddResolverWidget = ({choices, onAdd}) => {
     const [selected, setSelected] = useState(choices[0].value);
@@ -16,7 +19,7 @@ const AddResolverWidget = ({choices, onAdd}) => {
                 value={selected}
                 onChange={item => setSelected(item)}
             />
-            <div><Button onClick={handleAdd} text="Add" minimal /></div>
+            <div><Button onClick={handleAdd} text={Label} minimal /></div>
         </div>
     );
 };

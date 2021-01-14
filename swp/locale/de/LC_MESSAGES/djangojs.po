@@ -109,8 +109,23 @@ msgstr "(erfordert)"
 msgid "No Results"
 msgstr "Keine Ergebnisse"
 
+msgid "Warning"
+msgstr "Warnung"
+
+msgid "Changing the scraper type will reset the scraper configuration. Do you want to proceed?"
+msgstr "Beim Ändern des Scraper-Typs wird die bisherige Konfiguration zurückgesetzt. Möchten Sie trotzdem fortfahren?"
+
+msgid "Abort"
+msgstr "Abbrechen"
+
+msgid "Proceed"
+msgstr "Fortfahren"
+
+msgid "Add"
+msgstr "Hinzufügen"
+
 msgid "Resolver Type %(type)s unsupported"
-msgstr "Resolvertyp %(type)s wird nicht unterstützt"
+msgstr "Resolver-Typ %(type)s wird nicht unterstützt"
 
 msgid "Attribute"
 msgstr "Attribut"
@@ -128,7 +143,7 @@ msgid "Item Selector"
 msgstr "Einzelselektor"
 
 msgid "Pagination Button Selector"
-msgstr "Pagninierungsselektor"
+msgstr "Paginierungsselektor"
 
 msgid "Max Pages"
 msgstr "Maximale Seitenzahl"
@@ -175,11 +190,11 @@ msgstr "Keine Einträge"
 msgid "New Thinktank"
 msgstr "Neuer Thinktank"
 
-msgid "Successfully created thinktank"
-msgstr "Thinktank erfolgreich angelegt"
-
 msgid "Create"
 msgstr "Anlegen"
+
+msgid "Successfully created thinktank"
+msgstr "Thinktank erfolgreich angelegt"
 
 msgid "Loading"
 msgstr "Lade…"
@@ -213,3 +228,6 @@ msgstr "Publikationen"
 
 msgid "Scrapers"
 msgstr "Scraper"
+
+#~ msgid "Active"
+#~ msgstr "Aktiv"

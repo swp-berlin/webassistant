@@ -109,6 +109,21 @@ msgstr ""
 msgid "No Results"
 msgstr ""
 
+msgid "Warning"
+msgstr ""
+
+msgid "Changing the scraper type will reset the scraper configuration. Do you want to proceed?"
+msgstr ""
+
+msgid "Abort"
+msgstr ""
+
+msgid "Proceed"
+msgstr ""
+
+msgid "Add"
+msgstr ""
+
 msgid "Resolver Type %(type)s unsupported"
 msgstr ""
 
@@ -175,10 +190,10 @@ msgstr ""
 msgid "New Thinktank"
 msgstr ""
 
-msgid "Successfully created thinktank"
+msgid "Create"
 msgstr ""
 
-msgid "Create"
+msgid "Successfully created thinktank"
 msgstr ""
 
 msgid "Loading"
