@@ -1,5 +1,7 @@
 from collections import OrderedDict
 
+from django.utils.translation import gettext_lazy as _
+
 from rest_framework.exceptions import ValidationError
 from rest_framework.fields import CharField, ChoiceField, IntegerField
 from rest_framework.serializers import ModelSerializer, Serializer
@@ -20,7 +22,7 @@ class ResolverConfigSerializer(Serializer):
     def to_representation(self, instance):
         serializer = self.get_serializer(instance['type'], instance)
 
-        return {**super().to_representation(instance), **serializer.to_representation(instance)}
+        return OrderedDict({**super().to_representation(instance), **serializer.to_representation(instance)})
 
     def to_internal_value(self, data):
         internal_data = super().to_internal_value(data)
@@ -35,7 +37,7 @@ class ResolverConfigSerializer(Serializer):
         type = data['type']
         serializer = self.get_serializer(type, data=data)
 
-        return {**data, **serializer.validate(data)}
+        return {**super().validate(data), **serializer.validate(data)}
 
 
 class PaginatorSerializer(Serializer):
@@ -47,19 +49,21 @@ class PaginatorSerializer(Serializer):
 class ListResolverSerializer(Serializer):
     selector = CharField()
     paginator = PaginatorSerializer()
+    resolvers = ResolverConfigSerializer(many=True)
 
 
 class LinkResolverSerializer(Serializer):
     selector = CharField()
+    resolvers = ResolverConfigSerializer(many=True)
 
 
 class DataResolverSerializer(Serializer):
     key = ChoiceField(choices=DataResolverKey.choices)
-    selector = CharField()
+    selector = CharField(required=True)
 
 
 class AttributeResolverSerializer(DataResolverSerializer):
-    attribute = CharField()
+    attribute = CharField(required=True)
 
 
 class StaticResolverSerializer(Serializer):
@@ -82,6 +86,8 @@ ResolverSerializers = {
 
 
 class ScraperSerializer(ModelSerializer):
+    REQUIRED_KEYS = ['title']
+
     thinktank = ThinktankField()
     data = ResolverConfigSerializer()
 
@@ -90,12 +96,17 @@ class ScraperSerializer(ModelSerializer):
         fields = ['id', 'type', 'thinktank', 'is_active', 'data', 'start_url', 'interval', 'last_run']
 
     def validate(self, attrs):
+        super().validate(attrs)
+
         keys = self.get_keys(attrs)
 
-        print(keys)
+        missing = set(self.REQUIRED_KEYS) - set(keys)
 
-        if DataResolverKey.TITLE not in keys:
-            raise ValidationError(detail='There must be a resolver for the title', code='not-title-resolver')
+        if missing:
+            raise ValidationError(
+                detail=_('There must be a resolver for the following fields: %s') % ','.join(missing),
+                code='missing-resolvers',
+            )
 
         return attrs
 
