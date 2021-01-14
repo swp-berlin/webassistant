@@ -1,5 +1,6 @@
 from collections import OrderedDict
 
+from rest_framework.exceptions import ValidationError
 from rest_framework.fields import CharField, ChoiceField, IntegerField
 from rest_framework.serializers import ModelSerializer, Serializer
 
@@ -46,12 +47,10 @@ class PaginatorSerializer(Serializer):
 class ListResolverSerializer(Serializer):
     selector = CharField()
     paginator = PaginatorSerializer()
-    resolvers = ResolverConfigSerializer(many=True)
 
 
 class LinkResolverSerializer(Serializer):
     selector = CharField()
-    resolvers = ResolverConfigSerializer(many=True)
 
 
 class DataResolverSerializer(Serializer):
@@ -89,6 +88,32 @@ class ScraperSerializer(ModelSerializer):
     class Meta:
         model = Scraper
         fields = ['id', 'type', 'thinktank', 'is_active', 'data', 'start_url', 'interval', 'last_run']
+
+    def validate(self, attrs):
+        keys = self.get_keys(attrs)
+
+        print(keys)
+
+        if DataResolverKey.TITLE not in keys:
+            raise ValidationError(detail='There must be a resolver for the title', code='not-title-resolver')
+
+        return attrs
+
+    def get_keys(self, value, key=None):
+        if key == 'key' and isinstance(value, str):
+            return [value]
+
+        keys = []
+
+        if isinstance(value, dict):
+            for k, v in value.items():
+                keys += self.get_keys(v, key=k)
+
+        elif isinstance(value, list):
+            for v in value:
+                keys += self.get_keys(v)
+
+        return keys
 
 
 class ScraperListSerializer(ModelSerializer):
