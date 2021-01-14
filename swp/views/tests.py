@@ -6,7 +6,10 @@ from django.utils.crypto import get_random_string
 
 from cosmogo.utils.testing import create_user, login, request
 
+from swp.api.v1.serializers import UserSerializer
+from swp.models import User
 from swp.views.auth import PasswordResetConfirmView
+from swp.tests.test_permissions import EDITOR_PERMS, MANAGER_PERMS, USERADMIN_PERMS
 
 
 class AuthViewTestCase(test.TestCase):
@@ -46,3 +49,44 @@ class AuthViewTestCase(test.TestCase):
 
         result = login(self, password=new_password)
         self.assertTrue(result)
+
+
+class UserDataTestCase(test.TestCase):
+    fixtures = ['groups', 'test-users']
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.user = User.objects.get_by_natural_key('admin@localhost')
+        cls.user_data = UserSerializer(cls.user).data
+
+        cls.useradmin = User.objects.get_by_natural_key('swp-useradmin@localhost')
+        cls.manager = User.objects.get_by_natural_key('swp-manager@localhost')
+        cls.editor = User.objects.get_by_natural_key('swp-editor@localhost')
+
+    def fetch_user_data(self, user: User = None) -> dict:
+        login(self, user)
+        response = request(self, 'index')
+
+        # TODO Parse #user-data from returned HTML ..
+        return response.context['user_data']
+
+    def test_user_data(self):
+        user_data = self.fetch_user_data()
+
+        self.assertEqual(user_data, self.user_data)
+        self.assertEqual(user_data['email'], self.user.email)
+        self.assertIn('permissions', user_data)
+
+    def check_user_perms(self, user, perm_list):
+        user_data = self.fetch_user_data(user)
+        for perm in perm_list:
+            self.assertIn(perm, user_data['permissions'], f'Permission {perm} missing for {user}')
+
+    def test_useradmin_permissions(self):
+        self.check_user_perms(self.useradmin, USERADMIN_PERMS)
+
+    def test_manager_permissions(self):
+        self.check_user_perms(self.manager, MANAGER_PERMS)
+
+    def test_editor_permissions(self):
+        self.check_user_perms(self.editor, EDITOR_PERMS)

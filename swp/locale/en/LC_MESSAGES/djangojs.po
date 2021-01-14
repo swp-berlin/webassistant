@@ -82,6 +82,18 @@ msgstr ""
 msgid "We are currently doing maintenance work. Please reload the page in a few seconds."
 msgstr ""
 
+msgid "Monitoring Profiles"
+msgstr ""
+
+msgid "No permission"
+msgstr ""
+
+msgid "Your accounts does not have sufficient privileges."
+msgstr ""
+
+msgid "Thinktanks & Scrapers"
+msgstr ""
+
 msgid "Log out"
 msgstr ""
 
