@@ -1,5 +1,3 @@
-from collections import OrderedDict
-
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework.exceptions import ValidationError
@@ -22,7 +20,7 @@ class ResolverConfigSerializer(Serializer):
     def to_representation(self, instance):
         serializer = self.get_serializer(instance['type'], instance)
 
-        return OrderedDict({**super().to_representation(instance), **serializer.to_representation(instance)})
+        return {**super().to_representation(instance), **serializer.to_representation(instance)}
 
     def to_internal_value(self, data):
         internal_data = super().to_internal_value(data)
@@ -31,7 +29,7 @@ class ResolverConfigSerializer(Serializer):
 
         serializer = self.get_serializer(type, data=data)
 
-        return OrderedDict({**internal_data, **serializer.to_internal_value(data)})
+        return {**internal_data, **serializer.to_internal_value(data)}
 
     def validate(self, data):
         type = data['type']
