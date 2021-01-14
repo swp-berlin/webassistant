@@ -1,11 +1,9 @@
-import {useCallback} from 'react';
-import {useHistory} from 'react-router-dom';
+import {useCallback, useEffect} from 'react';
 import PropTypes from 'prop-types';
-
 import {Button, Intent} from '@blueprintjs/core';
+
 import _ from 'utils/i18n';
-import {useMutation} from 'hooks/query';
-import {handleMutationResult} from 'components/Fetch/Form';
+import {useMutationResult} from 'components/Fetch/Form';
 
 
 const ActivateLabel = _('Activate');
@@ -15,30 +13,25 @@ const getLabel = isActive => (isActive ? DeactivateLabel : ActivateLabel);
 
 
 const ActivationButton = ({endpoint, isActive, onToggle, disabled, ...props}) => {
-    const history = useHistory();
-    const [mutate, result] = useMutation(endpoint);
+    const [handleSubmit, mutationResult] = useMutationResult(endpoint, {}, []);
+    const {loading, result: {data: thinktank}, success} = mutationResult;
 
-    const handleSubmit = useCallback(
-        async (data, method = 'PATCH') => {
-            const response = await mutate(data, method);
-            handleMutationResult(response, {history});
+    useEffect(() => {
+        if (success) onToggle(thinktank.is_active);
+    }, [success, thinktank, onToggle]);
 
-            if (response.success) {
-                onToggle(response.result.data.is_active);
-            }
-        },
-        [mutate, history, onToggle],
+    const handleClick = useCallback(
+        () => handleSubmit({is_active: !isActive}, 'PATCH'),
+        [isActive, handleSubmit],
     );
-
-    const onClick = () => handleSubmit({is_active: !isActive});
 
     const text = getLabel(isActive);
     return (
         <Button
             intent={Intent.PRIMARY}
             text={text}
-            onClick={onClick}
-            disabled={disabled || result.loading}
+            onClick={handleClick}
+            disabled={disabled || loading}
             {...props}
         />
     );

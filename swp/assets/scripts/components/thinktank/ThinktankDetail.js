@@ -25,11 +25,11 @@ const ScraperAddButton = ({...props}) => (
 
 const ThinktankDetail = ({id, ...props}) => {
     const endpoint = `/thinktank/${id}/`;
-    const {loading, result} = useQuery(endpoint);
+    const {loading, result: {data: thinktank}, success} = useQuery(endpoint);
     const [isActive, setActive] = useState(false);
 
     useThinktanksBreadcrumb();
-    const label = loading ? interpolate('Thinktank %s', [id], false) : result.data.name;
+    const label = loading ? interpolate('Thinktank %s', [id], false) : thinktank.name;
     useBreadcrumb(endpoint, label);
 
     const onToggle = useCallback(
@@ -38,14 +38,13 @@ const ThinktankDetail = ({id, ...props}) => {
     );
 
     useEffect(() => {
-        if (!loading) {
-            setActive(result.data.is_active);
+        if (success) {
+            setActive(thinktank.is_active);
         }
-    }, [loading]);
+    }, [success, thinktank]);
 
     if (loading) return Loading;
 
-    const {data: thinktank} = result;
     const {
         unique_field: uniqueField,
         scrapers,
