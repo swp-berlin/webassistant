@@ -279,6 +279,9 @@ class ResolverType(Enum):
     Document = DocumentResolver
     Static = StaticResolver
     Tags = TagsResolver
+    TagsData = Data
+    TagsAttribute = Attribute
+    TagsStatic = Static
 
     def create(self, context: dict, **config):
         return self.value(context, **config)

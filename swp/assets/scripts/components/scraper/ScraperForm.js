@@ -23,6 +23,7 @@ import {
 } from './ResolverForm/forms';
 
 import ScraperTypeSelect from './ScraperTypeSelect';
+import ScraperFormErrors from './ScraperFormErrors';
 
 
 const StartURLLabel = _('Start-URL');
@@ -92,6 +93,8 @@ const ScraperForm = ({id, data}) => {
                     <ResolverForm form={form} prefix="data" />
                 </ResolverFormProvider>
             </Field>
+
+            <ScraperFormErrors form={form} errors={errors} />
 
             <Button type="submit" intent="primary" text={SubmitButtonLabel} />
         </form>
