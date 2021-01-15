@@ -37,7 +37,7 @@ const ScraperTable = ({items, endpoint, ...props}) => {
     );
 
     return (
-        <HTMLTable className="w-full table-fixed my-4" bordered interactive {...props}>
+        <HTMLTable className="w-full table-fixed my-4" bordered {...props}>
             <thead>
                 <tr className="bg-gray-300">
                     <th className="w-1/2">{URLLabel}</th>
