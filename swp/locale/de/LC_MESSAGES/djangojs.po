@@ -82,6 +82,18 @@ msgstr "Wartungsarbeiten"
 msgid "We are currently doing maintenance work. Please reload the page in a few seconds."
 msgstr "Wartungsarbeiten. Bitte laden Sie die Seite in ein paar Sekunden erneut."
 
+msgid "Monitoring Profiles"
+msgstr "Monitoring-Profile"
+
+msgid "No permission"
+msgstr "Nicht erlaubt"
+
+msgid "Your accounts does not have sufficient privileges."
+msgstr "Ihr Konto hat unzureichende Berechtigungen."
+
+msgid "Thinktanks & Scrapers"
+msgstr "Thinktanks & Scraper"
+
 msgid "Log out"
 msgstr "Abmelden"
 
