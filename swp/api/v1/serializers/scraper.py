@@ -4,6 +4,8 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.fields import CharField, ChoiceField, IntegerField
 from rest_framework.serializers import ModelSerializer, Serializer
 
+from cosmogo.utils.text import enumeration
+
 from swp.models import Scraper
 from swp.models.choices import DataResolverKey, ResolverType
 
@@ -122,10 +124,8 @@ class ScraperSerializer(ModelSerializer):
         missing = {*self.REQUIRED_KEYS} - {*keys}
 
         if missing:
-            raise ValidationError(
-                detail=_('There must be a resolver for the following fields: %s') % ','.join(missing),
-                code='missing-resolvers',
-            )
+            message = _('There must be a resolver for the following fields: %(fields)s')
+            raise ValidationError(detail=message % {'fields': enumeration(missing)}, code='missing-resolvers')
 
         return attrs
 
