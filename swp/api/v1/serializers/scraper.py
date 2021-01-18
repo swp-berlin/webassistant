@@ -125,7 +125,9 @@ class ScraperSerializer(ModelSerializer):
 
         if missing:
             message = _('There must be a resolver for the following fields: %(fields)s')
-            raise ValidationError(detail=message % {'fields': enumeration(missing)}, code='missing-resolvers')
+            labels = dict(DataResolverKey.choices)
+            missing_labels = [labels[field] for field in missing]
+            raise ValidationError(detail=message % {'fields': enumeration(missing_labels)}, code='missing-resolvers')
 
         return attrs
 
