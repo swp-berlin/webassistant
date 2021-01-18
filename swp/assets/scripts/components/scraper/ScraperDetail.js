@@ -27,23 +27,20 @@ const ScraperDetail = ({id, thinktankID}) => {
     const endpoint = `/scraper/${id}/`;
     const {loading, result: {data: scraper}} = useQuery(endpoint);
 
-    const label = interpolate('Scraper %s', [id], false);
-    const title = loading ? label : interpolate('%s Scraper', [scraper.thinktank.name], false);
-
-    const thinktankURL = `/thinktank/${thinktankID}/`;
+    const label = loading ? interpolate('Scraper %s', [id], false) : scraper.name;
     const thinktankLabel = loading ? interpolate('Thinktank %s', [thinktankID], false) : scraper.thinktank.name;
 
     useBreadcrumb('/thinktank/', Thinktanks);
-    useBreadcrumb(thinktankURL, thinktankLabel);
-    useBreadcrumb(endpoint, title);
+    useBreadcrumb(`/thinktank/${thinktankID}/`, thinktankLabel);
+    useBreadcrumb(endpoint, label);
 
     if (loading) return Loading;
 
-    const {last_run: lastRun, is_active: isActive} = scraper;
+    const {name, last_run: lastRun, is_active: isActive} = scraper;
 
     return (
         <Page
-            title={title}
+            title={name}
             subtitle={lastRun && <LastRun lastRun={lastRun} />}
             actions={<Button intent="primary" text={isActive ? 'Disable' : 'Enable'} />}
         >

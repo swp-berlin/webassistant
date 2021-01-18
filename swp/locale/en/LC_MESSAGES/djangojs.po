@@ -169,9 +169,6 @@ msgstr ""
 msgid "Thinktanks"
 msgstr ""
 
-msgid "Thinktank"
-msgstr ""
-
 msgid "Start-URL"
 msgstr ""
 

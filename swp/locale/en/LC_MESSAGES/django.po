@@ -187,6 +187,10 @@ msgstr ""
 msgid "scraper"
 msgstr ""
 
+#, python-format
+msgid "%s Scraper"
+msgstr ""
+
 msgid "error code"
 msgstr ""
 
