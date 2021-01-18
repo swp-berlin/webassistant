@@ -26,10 +26,6 @@ urlpatterns = [
     path('api/', v1.urls),
 
     # app
-    path('scraper/', include(([
-        path('', react, name='list'),
-    ], 'scraper'))),
-
     path('thinktank/', include(([
         path('', react, name='list'),
         path('add/', react, name='add'),
