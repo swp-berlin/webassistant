@@ -240,9 +240,3 @@ msgstr "Publikationen"
 
 msgid "Scrapers"
 msgstr "Scraper"
-
-#~ msgid "Thinktank"
-#~ msgstr "Thinktank"
-
-#~ msgid "Active"
-#~ msgstr "Aktiv"
