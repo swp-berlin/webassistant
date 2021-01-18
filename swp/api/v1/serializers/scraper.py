@@ -109,12 +109,16 @@ ResolverSerializers = {
 class ScraperSerializer(ModelSerializer):
     REQUIRED_KEYS = ['title']
 
-    thinktank = ThinktankField()
+    thinktank = ThinktankField(read_only=True)
     data = ResolverConfigSerializer()
 
     class Meta:
         model = Scraper
-        fields = ['id', 'type', 'thinktank', 'is_active', 'data', 'start_url', 'interval', 'last_run']
+        read_only_fields = [
+            'name',
+            'last_run',
+        ]
+        fields = ['id', 'name', 'type', 'thinktank', 'is_active', 'data', 'start_url', 'interval', 'last_run']
 
     def validate(self, attrs):
         super().validate(attrs)

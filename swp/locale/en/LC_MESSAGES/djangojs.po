@@ -163,6 +163,12 @@ msgstr ""
 msgid "Value"
 msgstr ""
 
+msgid "Loading"
+msgstr ""
+
+msgid "Thinktanks"
+msgstr ""
+
 msgid "Start-URL"
 msgstr ""
 
@@ -208,9 +214,6 @@ msgstr ""
 msgid "Successfully created thinktank"
 msgstr ""
 
-msgid "Loading"
-msgstr ""
-
 msgid "New scraper"
 msgstr ""
 
@@ -230,9 +233,6 @@ msgid "Description"
 msgstr ""
 
 msgid "Unique Field"
-msgstr ""
-
-msgid "Thinktanks"
 msgstr ""
 
 msgid "Publications"

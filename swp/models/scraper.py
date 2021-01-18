@@ -57,6 +57,10 @@ class Scraper(ActivatableModel):
         return f'[{self.checksum}] {self.thinktank.name}'
 
     @cached_property
+    def name(self) -> str:
+        return _('%s Scraper') % self.thinktank.name
+
+    @cached_property
     def error_count(self) -> int:
         return self.errors.count()
 

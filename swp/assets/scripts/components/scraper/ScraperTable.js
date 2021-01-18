@@ -18,6 +18,7 @@ const ScraperRows = ({items}) => (
         <ScraperRow
             key={item.id}
             id={item.id}
+            thinktankID={item.thinktank_id}
             url={item.start_url}
             type={item.type}
             lastRun={item.last_run}

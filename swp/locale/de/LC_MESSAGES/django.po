@@ -187,6 +187,10 @@ msgstr "letzter Durchlauf"
 msgid "scraper"
 msgstr "Scraper"
 
+#, python-format
+msgid "%s Scraper"
+msgstr "%s Scraper"
+
 msgid "error code"
 msgstr "Fehlercode"
 

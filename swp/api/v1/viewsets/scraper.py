@@ -8,5 +8,5 @@ from ..router import router
 
 @router.register('scraper', basename='scraper')
 class ScraperViewSet(ModelViewSet):
-    queryset = Scraper.objects.all()
+    queryset = Scraper.objects.select_related('thinktank')
     serializer_class = ScraperSerializer
