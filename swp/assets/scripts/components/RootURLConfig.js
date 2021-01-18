@@ -19,7 +19,7 @@ const RootURLConfig = () => (
             <ThinktankAdd />
         </SimpleRoute>
         <SimpleRoute path="/thinktank/:id/" exact>
-            {({params}) => <ThinktankDetail id={params.id} />}
+            {({params}) => <ThinktankDetail id={parseInt(params.id)} />}
         </SimpleRoute>
         <SimpleRoute path="/thinktank/:id/edit/" exact>
             {({params}) => <ThinktankEdit id={params.id} />}

@@ -4,6 +4,7 @@ import {Link} from 'react-router-dom';
 import ActivationButton from 'components/buttons/ActivationButton';
 import {useBreadcrumb} from 'components/Navigation';
 import Page from 'components/Page';
+import PublicationPreview from 'components/publication/PublicationPreview';
 import ScraperTable from 'components/scraper/ScraperTable';
 import TableActions from 'components/tables/TableActions';
 
@@ -90,6 +91,8 @@ const ThinktankDetail = ({id, ...props}) => {
             </div>
 
             <ScraperTable items={scrapers} {...props} />
+
+            <PublicationPreview thinktankID={id} />
         </Page>
     );
 };
