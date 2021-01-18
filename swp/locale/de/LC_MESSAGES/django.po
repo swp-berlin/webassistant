@@ -35,6 +35,10 @@ msgstr "Berechtigungen"
 msgid "Important dates"
 msgstr "Wichtige Daten"
 
+#, python-format
+msgid "There must be a resolver for the following fields: %(fields)s"
+msgstr "Es muss ein Resolver für die folgenden Felder vorhanden sein: %(fields)s"
+
 msgid "Active"
 msgstr "Aktiv"
 

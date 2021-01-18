@@ -35,6 +35,10 @@ msgstr ""
 msgid "Important dates"
 msgstr ""
 
+#, python-format
+msgid "There must be a resolver for the following fields: %(fields)s"
+msgstr ""
+
 msgid "Active"
 msgstr ""
 
