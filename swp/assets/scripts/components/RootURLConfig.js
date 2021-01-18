@@ -11,9 +11,6 @@ const RootURLConfig = () => (
         <SimpleRoute path="/" exact>
             <Homepage />
         </SimpleRoute>
-        <SimpleRoute path="/scraper/:id/" exact>
-            {({params}) => <ScraperDetail id={params.id} />}
-        </SimpleRoute>
         <SimpleRoute path="/thinktank/" exact>
             <ThinktankList />
         </SimpleRoute>
@@ -25,6 +22,9 @@ const RootURLConfig = () => (
         </SimpleRoute>
         <SimpleRoute path="/thinktank/:id/edit/" exact>
             {({params}) => <ThinktankEdit id={params.id} />}
+        </SimpleRoute>
+        <SimpleRoute path="/thinktank/:thinktankID/scraper/:id/" exact>
+            {({params}) => <ScraperDetail id={params.id} thinktankID={params.thinktankID} />}
         </SimpleRoute>
     </Switch>
 );

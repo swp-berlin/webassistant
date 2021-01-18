@@ -28,7 +28,6 @@ urlpatterns = [
     # app
     path('scraper/', include(([
         path('', react, name='list'),
-        path('<int:pk>/', react, name='detail'),
     ], 'scraper'))),
 
     path('thinktank/', include(([
@@ -36,6 +35,7 @@ urlpatterns = [
         path('add/', react, name='add'),
         path('<int:pk>/', react, name='detail'),
         path('<int:pk>/edit/', react, name='edit'),
+        path('<int:thinktank_pk>/scraper/<int:pk>/', react, name='scraper'),
     ], 'thinktank'))),
 ]
 
