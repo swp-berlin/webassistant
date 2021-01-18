@@ -6,11 +6,15 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faClock} from '@fortawesome/free-solid-svg-icons/faClock';
 
 import {useQuery} from 'hooks/query';
-import {interpolate} from 'utils/i18n';
+import _, {interpolate} from 'utils/i18n';
 import {useBreadcrumb} from 'components/Navigation';
 import Page from 'components/Page';
 import ScraperForm from 'components/scraper/ScraperForm';
 
+
+const Loading = _('Loading');
+const Thinktanks = _('Thinktanks');
+const ThinktankLabel = _('Thinktank');
 
 const LastRun = ({lastRun}) => (
     <div className="mt-2 flex items-center text-sm text-gray-500">
@@ -20,20 +24,28 @@ const LastRun = ({lastRun}) => (
 );
 
 
-const Scraper = ({id}) => {
-    const {loading, result} = useQuery(`/scraper/${id}/`);
+const ScraperDetail = ({id}) => {
+    const endpoint = `/scraper/${id}/`;
+    const {loading, result: {data: scraper}} = useQuery(endpoint);
 
     const label = interpolate('Scraper %s', [id], false);
-    useBreadcrumb(`/scraper/${id}`, label);
+    const title = loading ? label : interpolate('%s Scraper', [scraper.thinktank.name], false);
+    const thinktankID = loading ? null : scraper.thinktank.id;
 
-    if (loading) return 'Loading';
+    const thinktankURL = loading ? '/thinktank/' : `/thinktank/${thinktankID}/`;
+    const thinktankLabel = loading ? ThinktankLabel : scraper.thinktank.name;
 
-    const {data: scraper} = result;
-    const {thinktank, last_run: lastRun, is_active: isActive} = scraper;
+    useBreadcrumb('/thinktank/', Thinktanks);
+    useBreadcrumb(thinktankURL, thinktankLabel);
+    useBreadcrumb(endpoint, title);
+
+    if (loading) return Loading;
+
+    const {last_run: lastRun, is_active: isActive} = scraper;
 
     return (
         <Page
-            title={`${thinktank.name} Scraper`}
+            title={title}
             subtitle={lastRun && <LastRun lastRun={lastRun} />}
             actions={<Button intent="primary" text={isActive ? 'Disable' : 'Enable'} />}
         >
@@ -42,4 +54,4 @@ const Scraper = ({id}) => {
     );
 };
 
-export default Scraper;
+export default ScraperDetail;

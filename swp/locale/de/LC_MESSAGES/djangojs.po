@@ -163,6 +163,15 @@ msgstr "Maximale Seitenzahl"
 msgid "Value"
 msgstr "Wert"
 
+msgid "Loading"
+msgstr "Lade…"
+
+msgid "Thinktanks"
+msgstr "Thinktanks"
+
+msgid "Thinktank"
+msgstr "Thinktank"
+
 msgid "Start-URL"
 msgstr ""
 
@@ -208,9 +217,6 @@ msgstr "Anlegen"
 msgid "Successfully created thinktank"
 msgstr "Thinktank erfolgreich angelegt"
 
-msgid "Loading"
-msgstr "Lade…"
-
 msgid "New scraper"
 msgstr "Neuer Scraper"
 
@@ -231,9 +237,6 @@ msgstr "Beschreibung"
 
 msgid "Unique Field"
 msgstr "Eindeutiges Feld"
-
-msgid "Thinktanks"
-msgstr "Thinktanks"
 
 msgid "Publications"
 msgstr "Publikationen"

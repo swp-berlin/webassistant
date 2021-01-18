@@ -2,7 +2,7 @@ import {Switch} from 'react-router-dom';
 
 import SimpleRoute from 'components/SimpleRoute';
 import Homepage from 'components/Homepage';
-import Scraper from 'components/scraper/Scraper';
+import {ScraperDetail} from 'components/scraper';
 import {ThinktankAdd, ThinktankDetail, ThinktankEdit, ThinktankList} from 'components/thinktank';
 
 
@@ -12,7 +12,7 @@ const RootURLConfig = () => (
             <Homepage />
         </SimpleRoute>
         <SimpleRoute path="/scraper/:id/" exact>
-            {({params}) => <Scraper id={params.id} />}
+            {({params}) => <ScraperDetail id={params.id} />}
         </SimpleRoute>
         <SimpleRoute path="/thinktank/" exact>
             <ThinktankList />
