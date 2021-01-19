@@ -17,8 +17,8 @@ const UniqueLabel = _('Unique on');
 const Nbsp = '\u00A0';
 
 
-const ScraperAddButton = ({...props}) => (
-    <Link to="/scraper/add/" className="bp3-button bp3-icon-add" {...props}>
+const ScraperAddButton = ({id, ...props}) => (
+    <Link to={`/thinktank/${id}/scraper/add/`} className="bp3-button bp3-icon-add" {...props}>
         {NewScraperLabel}
     </Link>
 );
@@ -71,7 +71,7 @@ const ThinktankDetail = ({id, ...props}) => {
     return (
         <Page title={label} subtitle={subtitle} actions={actions}>
             <TableActions>
-                <ScraperAddButton />
+                <ScraperAddButton id={id} />
             </TableActions>
 
             <ScraperTable items={scrapers} {...props} />
