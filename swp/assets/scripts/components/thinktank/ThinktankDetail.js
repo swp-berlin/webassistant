@@ -12,10 +12,17 @@ import _, {interpolate} from 'utils/i18n';
 import {useThinktanksBreadcrumb} from './ThinktankList';
 
 const Loading = _('Loading');
+const EditLabel = _('Edit');
 const NewScraperLabel = _('New scraper');
 const UniqueLabel = _('Unique on');
 const Nbsp = '\u00A0';
 
+
+const ThinktankEditButton = ({id, ...props}) => (
+    <Link to={`/thinktank/${id}/edit/`} className="bp3-button bp3-icon-edit" {...props}>
+        {EditLabel}
+    </Link>
+);
 
 const ScraperAddButton = ({id, ...props}) => (
     <Link to={`/thinktank/${id}/scraper/add/`} className="bp3-button bp3-icon-add" {...props}>
@@ -71,6 +78,7 @@ const ThinktankDetail = ({id, ...props}) => {
     return (
         <Page title={label} subtitle={subtitle} actions={actions}>
             <TableActions>
+                <ThinktankEditButton id={id} />
                 <ScraperAddButton id={id} />
             </TableActions>
 

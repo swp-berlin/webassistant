@@ -217,6 +217,9 @@ msgstr ""
 msgid "Successfully created thinktank"
 msgstr ""
 
+msgid "Edit"
+msgstr ""
+
 msgid "New scraper"
 msgstr ""
 
