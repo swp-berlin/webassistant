@@ -10,19 +10,19 @@ from django.utils.translation import gettext_lazy as _
 from swp.utils.scraping import Scraper as _Scraper
 from swp.scraper.types import ScraperType
 
-from .abstract import ActivatableModel, ActivatableQuerySet
+from .abstract import ActivatableModel, ActivatableQuerySet, UpdateQuerySet, LastModified
 from .choices import Interval
 from .publication import Publication
 from .fields import ChoiceField
 
 
-class ScraperQuerySet(ActivatableQuerySet):
+class ScraperQuerySet(ActivatableQuerySet, UpdateQuerySet):
 
     def annotate_error_count(self, to_attr='') -> ScraperQuerySet:
         return self.annotate(**{to_attr or 'error_count': Count('errors')})
 
 
-class Scraper(ActivatableModel):
+class Scraper(ActivatableModel, LastModified):
     """
     Extractor of publication data.
     """
@@ -43,7 +43,6 @@ class Scraper(ActivatableModel):
 
     interval = models.PositiveIntegerField(_('interval'), choices=Interval.choices, default=Interval.DAILY)
     last_run = models.DateTimeField(_('last run'), blank=True, null=True)
-    created = models.DateTimeField(_('created'), default=timezone.now, editable=False)
 
     objects = ScraperQuerySet.as_manager()
 
