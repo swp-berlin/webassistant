@@ -1,9 +1,10 @@
+from celery.schedules import crontab
 from dotenv import load_dotenv
 
 from pathlib import Path
 
 from cosmogo.utils.gettext import trans
-from cosmogo.utils.settings import env, get_git_commit, password_validators, truthy
+from cosmogo.utils.settings import env, get_git_commit, password_validators, truthy, redis
 
 from django.urls import reverse_lazy
 
@@ -18,6 +19,8 @@ RELEASE = get_git_commit(BASE_DIR)
 SECRET_KEY = env('SECRET_KEY')
 
 DEBUG = env('DEBUG', False, parser=truthy)
+
+SITE_ID = env('SITE_ID', 1, parser=int)
 
 BASE_URL = 'http://localhost:8000'
 
@@ -102,7 +105,6 @@ LOGIN_URL = reverse_lazy('login')
 LOGIN_REDIRECT_URL = reverse_lazy('index')
 LOGOUT_URL = reverse_lazy('logout')
 
-
 USE_I18N = True
 USE_L10N = True
 LANGUAGE_CODE = 'de'
@@ -154,12 +156,20 @@ LOGGING = {
     },
 }
 
+CELERY_BROKER_URL = CELERY_RESULT_BACKEND = redis(db=SITE_ID)
+
+CELERY_BEAT_SCHEDULE = {
+    'monitoring': {
+        'task': 'monitoring',
+        'schedule': crontab(minute='*'),
+    },
+}
+
 DEBUG_TOOLBAR = False
 
 SHELL_PLUS_PRINT_SQL = env('SHELL_PLUS_PRINT_SQL', default=False, parser=truthy)
 
 PYPPETEER_FILE_DOWNLOAD_FOLDER = env('PYPPETEER_FILE_DOWNLOAD_FOLDER', '/tmp')
-
 
 # <editor-fold desc="REST API">
 

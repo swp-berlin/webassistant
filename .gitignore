@@ -10,8 +10,9 @@ __pycache__
 
 # Celery
 celerybeat-schedule
+celery.check
 
-#Redis
+# Redis
 dump.rdb
 
 # Application
