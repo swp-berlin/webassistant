@@ -13,6 +13,7 @@ import ScraperForm from 'components/scraper/ScraperForm';
 
 
 const Loading = _('Loading');
+const ScraperLabel = _('Scraper');
 const Thinktanks = _('Thinktanks');
 
 const LastRun = ({lastRun}) => (
@@ -27,12 +28,11 @@ const ScraperDetail = ({id, thinktankID}) => {
     const endpoint = `/scraper/${id}/`;
     const {loading, result: {data: scraper}} = useQuery(endpoint);
 
-    const label = loading ? interpolate('Scraper %s', [id], false) : scraper.name;
     const thinktankLabel = loading ? interpolate('Thinktank %s', [thinktankID], false) : scraper.thinktank.name;
 
     useBreadcrumb('/thinktank/', Thinktanks);
     useBreadcrumb(`/thinktank/${thinktankID}/`, thinktankLabel);
-    useBreadcrumb(endpoint, label);
+    useBreadcrumb(endpoint, ScraperLabel);
 
     if (loading) return Loading;
 
