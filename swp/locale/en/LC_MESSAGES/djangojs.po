@@ -166,6 +166,9 @@ msgstr ""
 msgid "Loading"
 msgstr ""
 
+msgid "Scraper"
+msgstr ""
+
 msgid "Thinktanks"
 msgstr ""
 
