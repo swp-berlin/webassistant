@@ -69,8 +69,8 @@ const ScraperForm = ({endpoint, data, method, redirectURL}) => {
     const typeDescription = ScraperTypes.find(scraperType => scraperType.value === type).description;
 
     return (
-        <div className="flex">
-            <form className="scraper-form my-4 w-3/6" onSubmit={onSubmit}>
+        <div className="flex space-x-8 my-4">
+            <form className="scraper-form w-3/6" onSubmit={onSubmit}>
                 <TextInput
                     register={register({required: true})}
                     name="start_url"
@@ -109,7 +109,7 @@ const ScraperForm = ({endpoint, data, method, redirectURL}) => {
 
                 <Button type="submit" intent="primary" text={SubmitButtonLabel} />
             </form>
-            <Markdown className="w-3/6 p-4">{typeDescription}</Markdown>
+            <Markdown className="w-3/6">{typeDescription}</Markdown>
         </div>
     );
 };
