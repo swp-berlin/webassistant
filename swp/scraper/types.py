@@ -1,23 +1,33 @@
 from dataclasses import dataclass
 
+from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from swp.models.choices import DataResolverKey, ResolverType
+
+DESCRIPTIONS_PATH = settings.BASE_DIR / 'swp' / 'scraper' / 'descriptions'
+DEFAULT_DESCRIPTION = _('No description available.')
 
 
 @dataclass
 class ScraperTypeData:
     value: str
     label: str
-    description: str
     defaults: dict
+
+    @property
+    def description(self):
+        try:
+            with open(DESCRIPTIONS_PATH / f'{self.value}.md', 'r') as desc:
+                return desc.read()
+        except IOError:
+            return DEFAULT_DESCRIPTION
 
 
 ListWithLinkType = ScraperTypeData(
     value='list_with_link',
     label=_('List with Links'),
-    description=_('(paginated) Article-List with links to individual Articles which contain a single Document'),
     defaults={
         'type': ResolverType.LIST,
         'resolvers': [
@@ -39,7 +49,6 @@ ListWithLinkType = ScraperTypeData(
 ListWithLinkAndDocType = ScraperTypeData(
     value='list_with_link_and_doc',
     label=_('List with Links and Documents'),
-    description=_('(paginated) Article-List'),
     defaults={
         'type': ResolverType.LIST,
         'resolvers': [
@@ -62,7 +71,6 @@ ListWithLinkAndDocType = ScraperTypeData(
 ListWithDoc = ScraperTypeData(
     value='list_with_doc',
     label=_('List with Documents'),
-    description=_('(paginated) Article-List'),
     defaults={
         'type': ResolverType.LIST,
         'resolvers': [
