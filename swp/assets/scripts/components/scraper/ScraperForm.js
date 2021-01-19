@@ -48,15 +48,19 @@ const Forms = {
     TagsStatic: TagsStaticResolverForm,
 };
 
-const ScraperForm = ({id, data}) => {
-    const [onSubmit, form] = useMutationForm(
-        `/scraper/${id}/`,
-        {
-            defaultValues: data,
-        },
-        {method: 'PATCH'},
-    );
+const DEFAULT_VALUES = {
+    is_active: false,
+    interval: Intervals[0].value,
+    type: ScraperTypes[0].value,
+    data: ScraperTypes[0].defaults,
+};
 
+const ScraperForm = ({endpoint, data, method, redirectURL}) => {
+    const [onSubmit, form] = useMutationForm(
+        endpoint,
+        {defaultValues: data || DEFAULT_VALUES},
+        {method, redirectURL},
+    );
     const {control, register, errors} = form;
 
     return (
@@ -86,6 +90,7 @@ const ScraperForm = ({id, data}) => {
                 label={IntervalLabel}
                 errors={errors}
                 choices={Intervals}
+                required
             />
 
             <Field label={ConfigLabel}>
@@ -99,6 +104,10 @@ const ScraperForm = ({id, data}) => {
             <Button type="submit" intent="primary" text={SubmitButtonLabel} />
         </form>
     );
+};
+
+ScraperForm.defaultProps = {
+    method: 'POST',
 };
 
 export default ScraperForm;

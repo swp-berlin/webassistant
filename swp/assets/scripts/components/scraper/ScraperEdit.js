@@ -24,7 +24,7 @@ const LastRun = ({lastRun}) => (
 );
 
 
-const ScraperDetail = ({id, thinktankID}) => {
+const ScraperEdit = ({id, thinktankID}) => {
     const endpoint = `/scraper/${id}/`;
     const {loading, result: {data: scraper}} = useQuery(endpoint);
 
@@ -44,9 +44,9 @@ const ScraperDetail = ({id, thinktankID}) => {
             subtitle={lastRun && <LastRun lastRun={lastRun} />}
             actions={<Button intent="primary" text={isActive ? 'Disable' : 'Enable'} />}
         >
-            <ScraperForm id={id} data={scraper} />
+            <ScraperForm endpoint={endpoint} data={scraper} method="PATCH" redirectURL={`/thinktank/${thinktankID}/`} />
         </Page>
     );
 };
 
-export default ScraperDetail;
+export default ScraperEdit;

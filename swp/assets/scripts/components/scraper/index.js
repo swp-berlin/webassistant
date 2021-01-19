@@ -1,3 +1,7 @@
-import ScraperDetail from './ScraperDetail';
+import ScraperAdd from './ScraperAdd';
+import ScraperEdit from './ScraperEdit';
 
-export {ScraperDetail};
+export {
+    ScraperAdd,
+    ScraperEdit,
+};
