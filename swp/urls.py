@@ -36,6 +36,9 @@ urlpatterns = [
             path('<int:pk>/', react, name='edit'),
         ], 'scraper'))),
     ], 'thinktank'))),
+
+    # snippets
+    path('snippet/<path:identifier>/', SnippetView.as_view(), name='snippet'),
 ]
 
 if settings.DEBUG_TOOLBAR:  # pragma: no cover

@@ -7,6 +7,7 @@ from .auth import (
     PasswordResetView,
 )
 from .base import SWPView
+from .snippets import SnippetView
 
 __all__ = [
     'LoginView',
@@ -16,4 +17,5 @@ __all__ = [
     'PasswordResetDoneView',
     'PasswordResetView',
     'SWPView',
+    'SnippetView',
 ]

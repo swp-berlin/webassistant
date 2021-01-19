@@ -1,13 +1,9 @@
 from dataclasses import dataclass
 
-from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from swp.models.choices import DataResolverKey, ResolverType
-
-DESCRIPTIONS_PATH = settings.BASE_DIR / 'swp' / 'scraper' / 'descriptions'
-DEFAULT_DESCRIPTION = _('No description available.')
 
 
 @dataclass
@@ -15,14 +11,6 @@ class ScraperTypeData:
     value: str
     label: str
     defaults: dict
-
-    @property
-    def description(self):
-        try:
-            with open(DESCRIPTIONS_PATH / f'{self.value}.md', 'r') as desc:
-                return desc.read()
-        except IOError:
-            return DEFAULT_DESCRIPTION
 
 
 ListWithLinkType = ScraperTypeData(

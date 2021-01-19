@@ -1,5 +1,3 @@
-
-import Markdown from 'components/MarkDown';
 import {useMutationForm} from 'components/Fetch';
 import {Checkbox, Select, TextInput} from 'components/forms';
 import {Button} from '@blueprintjs/core';
@@ -26,6 +24,7 @@ import {
 
 import ScraperTypeSelect from './ScraperTypeSelect';
 import ScraperFormErrors from './ScraperFormErrors';
+import ScraperTypeDescription from './ScraperTypeDescription';
 
 
 const StartURLLabel = _('Start-URL');
@@ -63,10 +62,7 @@ const ScraperForm = ({endpoint, data, method, redirectURL}) => {
         {defaultValues: data || DEFAULT_VALUES},
         {method, redirectURL},
     );
-    const {control, register, errors, watch} = form;
-
-    const type = watch('type');
-    const typeDescription = ScraperTypes.find(scraperType => scraperType.value === type).description;
+    const {control, register, errors} = form;
 
     return (
         <div className="flex space-x-8 my-4">
@@ -109,7 +105,7 @@ const ScraperForm = ({endpoint, data, method, redirectURL}) => {
 
                 <Button type="submit" intent="primary" text={SubmitButtonLabel} />
             </form>
-            <Markdown className="w-3/6">{typeDescription}</Markdown>
+            <ScraperTypeDescription form={form} />
         </div>
     );
 };
