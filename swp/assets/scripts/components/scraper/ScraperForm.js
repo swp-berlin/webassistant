@@ -24,6 +24,7 @@ import {
 
 import ScraperTypeSelect from './ScraperTypeSelect';
 import ScraperFormErrors from './ScraperFormErrors';
+import ScraperTypeDescription from './ScraperTypeDescription';
 
 
 const StartURLLabel = _('Start-URL');
@@ -64,45 +65,48 @@ const ScraperForm = ({endpoint, data, method, redirectURL}) => {
     const {control, register, errors} = form;
 
     return (
-        <form className="scraper-form my-4 w-full max-w-screen-md" onSubmit={onSubmit}>
-            <TextInput
-                register={register({required: true})}
-                name="start_url"
-                label={StartURLLabel}
-                errors={errors}
-            />
-            <Checkbox
-                name="is_active"
-                control={control}
-                inline
-                label={EnabledLabel}
-            />
-            <ScraperTypeSelect
-                form={form}
-                name="type"
-                label={TypeLabel}
-                errors={errors}
-                choices={ScraperTypes}
-            />
-            <Select
-                control={control}
-                name="interval"
-                label={IntervalLabel}
-                errors={errors}
-                choices={Intervals}
-                required
-            />
+        <div className="flex space-x-8 my-4">
+            <form className="scraper-form w-3/6" onSubmit={onSubmit}>
+                <TextInput
+                    register={register({required: true})}
+                    name="start_url"
+                    label={StartURLLabel}
+                    errors={errors}
+                />
+                <Checkbox
+                    name="is_active"
+                    control={control}
+                    inline
+                    label={EnabledLabel}
+                />
+                <ScraperTypeSelect
+                    form={form}
+                    name="type"
+                    label={TypeLabel}
+                    errors={errors}
+                    choices={ScraperTypes}
+                />
+                <Select
+                    control={control}
+                    name="interval"
+                    label={IntervalLabel}
+                    errors={errors}
+                    choices={Intervals}
+                    required
+                />
 
-            <Field label={ConfigLabel}>
-                <ResolverFormProvider value={Forms}>
-                    <ResolverForm form={form} prefix="data" />
-                </ResolverFormProvider>
-            </Field>
+                <Field label={ConfigLabel}>
+                    <ResolverFormProvider value={Forms}>
+                        <ResolverForm form={form} prefix="data" />
+                    </ResolverFormProvider>
+                </Field>
 
-            <ScraperFormErrors form={form} errors={errors} />
+                <ScraperFormErrors form={form} errors={errors} />
 
-            <Button type="submit" intent="primary" text={SubmitButtonLabel} />
-        </form>
+                <Button type="submit" intent="primary" text={SubmitButtonLabel} />
+            </form>
+            <ScraperTypeDescription form={form} />
+        </div>
     );
 };
 

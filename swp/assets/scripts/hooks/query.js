@@ -6,7 +6,7 @@ import getResult, {DefaultResult, getJSONOptions} from 'utils/fetch';
 import {withParams} from 'utils/url';
 
 
-const useFetch = url => {
+export const useFetch = url => {
     const [loading, setLoading] = useState(false);
     const resultRef = useRef({...DefaultResult, request: null, called: false});
 

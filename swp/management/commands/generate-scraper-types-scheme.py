@@ -13,7 +13,6 @@ class Command(GenerateSchemeCommand):
             {
                 'value': choice.value,
                 'label': f'{choice.label}',
-                'description': f'{choice.description}',
                 'defaults': choice.defaults,
             }
             for choice in ScraperTypeChoices

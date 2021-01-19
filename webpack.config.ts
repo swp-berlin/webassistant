@@ -59,6 +59,9 @@ const config = {
             components: resolve(__dirname, 'swp', 'assets', 'scripts', 'components'),
             hooks: resolve(__dirname, 'swp', 'assets', 'scripts', 'hooks'),
         },
+        fallback: {
+            path: 'path-browserify',
+        },
     },
     output: {
         path: resolve(__dirname, 'swp', 'static'),
