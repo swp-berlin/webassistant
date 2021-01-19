@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('swp', '0010_resolver_types'),
+        ('swp', '0017_field_resolvers'),
     ]
 
     operations = [

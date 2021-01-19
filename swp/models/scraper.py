@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import datetime
+
 from asgiref.sync import async_to_sync, sync_to_async
 from django.db import models, transaction
 from django.db.models.aggregates import Count
@@ -43,6 +45,7 @@ class Scraper(ActivatableModel, LastModified):
 
     interval = models.PositiveIntegerField(_('interval'), choices=Interval.choices, default=Interval.DAILY)
     last_run = models.DateTimeField(_('last run'), blank=True, null=True)
+    is_running = models.BooleanField(_('is running'), default=False, editable=False)
 
     objects = ScraperQuerySet.as_manager()
 
@@ -58,6 +61,15 @@ class Scraper(ActivatableModel, LastModified):
     @cached_property
     def name(self) -> str:
         return _('%s Scraper') % self.thinktank.name
+
+    @cached_property
+    def next_run(self):
+        last_run = timezone.localtime(self.last_run)
+
+        if self.last_run:
+            last_run += datetime.timedelta(hours=self.interval)
+
+        return last_run
 
     @cached_property
     def error_count(self) -> int:
