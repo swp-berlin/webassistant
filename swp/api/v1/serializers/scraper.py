@@ -42,7 +42,7 @@ class ResolverConfigSerializer(Serializer):
 
 class PaginatorSerializer(Serializer):
     list_selector = CharField()
-    button_selector = CharField()
+    button_selector = CharField(allow_blank=True)
     max_pages = IntegerField(min_value=1)
 
 
