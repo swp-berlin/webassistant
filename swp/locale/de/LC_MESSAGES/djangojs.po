@@ -166,11 +166,14 @@ msgstr "Wert"
 msgid "Loading"
 msgstr "Lade…"
 
-msgid "Scraper"
-msgstr "Scraper"
-
 msgid "Thinktanks"
 msgstr "Thinktanks"
+
+msgid "New Scraper"
+msgstr "Neuer Scraper"
+
+msgid "Scraper"
+msgstr "Scraper"
 
 msgid "Start-URL"
 msgstr ""

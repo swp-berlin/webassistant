@@ -33,3 +33,8 @@ class DataResolverKey(models.TextChoices):
     PUBLICATION_DATE = 'publication_date', _('Publication Date')
     URL = 'url', _('URL')
     PDF_URL = 'pdf_url', _('PDF URL')
+
+
+class UniqueKey(models.TextChoices):
+    URL = 'url', _('URL')
+    NAME = 'name', _('Name')
