@@ -53,6 +53,7 @@ const ThinktankDetail = ({id, ...props}) => {
     if (loading) return Loading;
 
     const {
+        description,
         unique_field: uniqueField,
         scrapers,
     } = thinktank;
@@ -77,10 +78,16 @@ const ThinktankDetail = ({id, ...props}) => {
 
     return (
         <Page title={label} subtitle={subtitle} actions={actions}>
-            <TableActions>
-                <ThinktankEditButton id={id} />
-                <ScraperAddButton id={id} />
-            </TableActions>
+            <div className="flex justify-between items-end">
+                <p className="my-5 w-1/2">
+                    {description}
+                </p>
+
+                <TableActions>
+                    <ThinktankEditButton id={id} />
+                    <ScraperAddButton id={id} />
+                </TableActions>
+            </div>
 
             <ScraperTable items={scrapers} {...props} />
         </Page>
