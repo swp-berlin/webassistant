@@ -4,6 +4,7 @@ import {TextInput} from 'components/forms';
 import ResolverListForm from '../ResolverListForm';
 
 
+const LinkLabel = _('Link');
 const SelectorLabel = _('Selector');
 
 const LinkResolverForm = ({form, prefix, level, field}) => {
@@ -11,6 +12,8 @@ const LinkResolverForm = ({form, prefix, level, field}) => {
 
     return (
         <ResolverListForm form={form} prefix={prefix} level={level}>
+            <h2 className="text-lg mb-4">{LinkLabel}</h2>
+            <input name={`${prefix}.type`} ref={register({required: true})} type="hidden" defaultValue="Link" />
             <TextInput
                 register={register({required: true})}
                 name={`${prefix}.selector`}

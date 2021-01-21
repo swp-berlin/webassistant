@@ -6,9 +6,9 @@ import {getChoices} from 'utils/choices';
 import AddResolverWidget from './AddResolverWidget';
 import ResolverForm from './ResolverForm';
 
-const TagChoices = ['TagsData', 'TagsAttribute', 'TagsStatic'];
-const ResolverTypeChoices = getChoices('ResolverType').filter(choice => !TagChoices.includes(choice.value));
 
+const ListChildrenTypes = ['List', 'Link', 'Data', 'Document', 'Tag'];
+const ResolverTypeChoices = getChoices('ResolverType').filter(choice => ListChildrenTypes.includes(choice.value));
 
 const ResolverListForm = ({form, prefix, level, choices = ResolverTypeChoices, children}) => {
     const {control} = form;

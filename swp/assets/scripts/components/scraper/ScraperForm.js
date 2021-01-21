@@ -10,16 +10,14 @@ import Field from 'components/forms/Field';
 import ResolverForm from './ResolverForm/ResolverForm';
 import ResolverFormProvider from './ResolverForm/ResolverFormContext';
 import {
-    AttributeResolverForm,
-    DataResolverForm,
     DocumentResolverForm,
     LinkResolverForm,
     ListResolverForm,
-    StaticResolverForm,
-    TagsResolverForm,
-    TagsDataResolverForm,
-    TagsAttributeResolverForm,
-    TagsStaticResolverForm,
+    FieldResolverForm,
+    TagResolverForm,
+    TagDataResolverForm,
+    TagAttributeResolverForm,
+    TagStaticResolverForm,
 } from './ResolverForm/forms';
 
 import ScraperTypeSelect from './ScraperTypeSelect';
@@ -38,15 +36,15 @@ const Intervals = getChoices('interval');
 
 const Forms = {
     List: ListResolverForm,
-    Data: DataResolverForm,
     Link: LinkResolverForm,
-    Attribute: AttributeResolverForm,
+    Data: FieldResolverForm,
+    Attribute: FieldResolverForm,
+    Static: FieldResolverForm,
     Document: DocumentResolverForm,
-    Static: StaticResolverForm,
-    Tags: TagsResolverForm,
-    TagsData: TagsDataResolverForm,
-    TagsAttribute: TagsAttributeResolverForm,
-    TagsStatic: TagsStaticResolverForm,
+    Tag: TagResolverForm,
+    TagData: TagDataResolverForm,
+    TagAttribute: TagAttributeResolverForm,
+    TagStatic: TagStaticResolverForm,
 };
 
 const DEFAULT_VALUES = {

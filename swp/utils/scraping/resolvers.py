@@ -257,16 +257,15 @@ class StaticResolver:
 #  this should be better solved by splitting the selection and storage under a key into
 #  dedicated resolvers that can be composed to show the intended behavior
 
-class TagsResolver(IntermediateResolver):
-    def __init__(self, context: ScraperContext, *args, resolvers: [dict], **kwargs):
+class TagResolver(IntermediateResolver):
+    def __init__(self, context: ScraperContext, *args, resolver: dict, **kwargs):
         super().__init__(context, *args, selector='', **kwargs)
-        self.resolvers = [self.create_resolver(context, key=str(i), **config) for i, config in enumerate(resolvers)]
+        self.resolver = self.create_resolver(context, key='tag', **resolver)
 
     async def resolve(self, node: ElementHandle, context: dict):
         tags = {}
 
-        for resolver in self.resolvers:
-            await resolver.resolve(node, tags)
+        await self.resolver.resolve(node, tags)
 
         context.setdefault('tags', []).extend(tags.values())
 
@@ -278,10 +277,10 @@ class ResolverType(Enum):
     Attribute = AttributeResolver
     Document = DocumentResolver
     Static = StaticResolver
-    Tags = TagsResolver
-    TagsData = Data
-    TagsAttribute = Attribute
-    TagsStatic = Static
+    Tag = TagResolver
+    TagData = Data
+    TagAttribute = Attribute
+    TagStatic = Static
 
     def create(self, context: dict, **config):
         return self.value(context, **config)

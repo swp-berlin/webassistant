@@ -9,11 +9,12 @@ const SelectorLabel = _('Selector');
 
 const KeyChoices = getChoices('DataResolverKey');
 
-const DataResolverForm = ({form, prefix, field, children}) => {
+const DataResolverForm = props => {
+    const {form, prefix, field, children} = props;
     const {register, errors} = form;
 
     return (
-        <div>
+        <>
             <Select
                 control={form.control}
                 name={`${prefix}.key`}
@@ -30,7 +31,7 @@ const DataResolverForm = ({form, prefix, field, children}) => {
                 defaultValue={field.selector}
             />
             {children}
-        </div>
+        </>
     );
 };
 

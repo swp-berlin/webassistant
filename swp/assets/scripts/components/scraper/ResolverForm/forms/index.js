@@ -4,23 +4,25 @@ import DocumentResolverForm from './DocumentResolverForm';
 import LinkResolverForm from './LinkResolverForm';
 import ListResolverForm from './ListResolverForm';
 import StaticResolverForm from './StaticResolverForm';
+import FieldResolverForm from './FieldResolverForm';
 
 import {
-    TagsResolverForm,
-    TagsDataResolverForm,
-    TagsAttributeResolverForm,
-    TagsStaticResolverForm,
-} from './TagsResolverForm';
+    TagResolverForm,
+    TagDataResolverForm,
+    TagAttributeResolverForm,
+    TagStaticResolverForm,
+} from './TagResolverForm';
 
 export {
-    AttributeResolverForm,
-    DataResolverForm,
-    DocumentResolverForm,
-    LinkResolverForm,
     ListResolverForm,
+    LinkResolverForm,
+    DataResolverForm,
+    AttributeResolverForm,
     StaticResolverForm,
-    TagsResolverForm,
-    TagsDataResolverForm,
-    TagsAttributeResolverForm,
-    TagsStaticResolverForm,
+    FieldResolverForm,
+    DocumentResolverForm,
+    TagResolverForm,
+    TagDataResolverForm,
+    TagAttributeResolverForm,
+    TagStaticResolverForm,
 };

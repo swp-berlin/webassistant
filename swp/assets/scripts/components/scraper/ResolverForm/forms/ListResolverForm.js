@@ -4,6 +4,7 @@ import {TextInput, NumericInput} from 'components/forms';
 import ResolverListForm from '../ResolverListForm';
 
 
+const ListLabel = _('List');
 const ListSelectorLabel = _('List Selector');
 const ItemSelectorLabel = _('Item Selector');
 const PaginationButtonSelectorLabel = _('Pagination Button Selector');
@@ -15,6 +16,8 @@ const ListResolverForm = ({form, prefix, level}) => {
 
     return (
         <ResolverListForm form={form} prefix={prefix} level={level}>
+            <h2 className="text-lg mb-4">{ListLabel}</h2>
+            <input name={`${prefix}.type`} ref={register({required: true})} type="hidden" defaultValue="List" />
             <TextInput
                 register={register({required: true})}
                 name={`${prefix}.paginator.list_selector`}
