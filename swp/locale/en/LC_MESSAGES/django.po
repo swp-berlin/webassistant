@@ -109,6 +109,9 @@ msgstr ""
 msgid "PDF URL"
 msgstr ""
 
+msgid "Name"
+msgstr ""
+
 msgid "name"
 msgstr ""
 
@@ -230,13 +233,7 @@ msgstr ""
 msgid "List with Links"
 msgstr ""
 
-msgid "(paginated) Article-List with links to individual Articles which contain a single Document"
-msgstr ""
-
 msgid "List with Links and Documents"
-msgstr ""
-
-msgid "(paginated) Article-List"
 msgstr ""
 
 msgid "List with Documents"

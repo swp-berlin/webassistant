@@ -1,9 +1,10 @@
 import {Button, Intent} from '@blueprintjs/core';
 import {useMutationForm} from 'components/Fetch';
-import {TextArea, TextInput} from 'components/forms';
+import {Select, TextArea, TextInput} from 'components/forms';
 
 import _ from 'utils/i18n';
 import {CancelButton} from 'components/buttons';
+import {getChoices} from 'utils/choices';
 
 
 const NameLabel = _('Name');
@@ -11,12 +12,18 @@ const DescriptionLabel = _('Description');
 const URLLabel = _('URL');
 const UniqueFieldLabel = _('Unique Field');
 
+const UniqueChoices = getChoices('UniqueKey');
+
+const DefaultValues = {
+    unique_field: UniqueChoices[0].value,
+};
+
 
 const ThinktankForm = ({endpoint, method, backURL, successMessage, data, submitLabel, ...props}) => {
     const getRedirectURL = ({id}) => `/thinktank/${id}/`;
-    const [onSubmit, {register, errors}] = useMutationForm(
+    const [onSubmit, {control, register, errors}] = useMutationForm(
         endpoint,
-        {defaultValues: data},
+        {defaultValues: data || DefaultValues},
         {
             method,
             successMessage,
@@ -41,10 +48,11 @@ const ThinktankForm = ({endpoint, method, backURL, successMessage, data, submitL
                 errors={errors}
                 required
             />
-            <TextInput
-                register={register({required: true})}
+            <Select
                 name="unique_field"
                 label={UniqueFieldLabel}
+                choices={UniqueChoices}
+                control={control}
                 errors={errors}
                 required
             />
