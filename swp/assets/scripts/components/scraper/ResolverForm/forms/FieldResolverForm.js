@@ -22,7 +22,7 @@ const FieldForms = {
 const FieldResolverForm = props => {
     const {form: {control, watch}, prefix, field} = props;
 
-    const type = watch(`${prefix}.type`);
+    const type = watch(`${prefix}.type`, field.type);
     const Form = FieldForms[type];
 
     return (
