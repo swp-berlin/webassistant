@@ -2,13 +2,16 @@ import _ from 'utils/i18n';
 import {TextInput} from 'components/forms';
 
 
+const DataLabel = _('Data');
 const SelectorLabel = _('Selector');
 
-const TagsDataResolverForm = ({form, prefix, field, children}) => {
+const TagDataResolverForm = ({form, prefix, field}) => {
     const {register, errors} = form;
 
     return (
         <div>
+            <h2 className="text-lg mb-4">{DataLabel}</h2>
+            <input name={`${prefix}.type`} ref={register({required: true})} type="hidden" defaultValue="TagData" />
             <TextInput
                 register={register({required: true})}
                 name={`${prefix}.selector`}
@@ -16,9 +19,8 @@ const TagsDataResolverForm = ({form, prefix, field, children}) => {
                 errors={errors}
                 defaultValue={field.selector}
             />
-            {children}
         </div>
     );
 };
 
-export default TagsDataResolverForm;
+export default TagDataResolverForm;

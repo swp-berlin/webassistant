@@ -4,11 +4,12 @@ import {TextInput} from 'components/forms';
 
 const ValueLabel = _('Value');
 
-const TagsStaticResolverForm = ({form, prefix, field, children}) => {
+const TagStaticResolverForm = ({form, prefix, field, children}) => {
     const {register, errors} = form;
 
     return (
         <div>
+            <input name={`${prefix}.type`} ref={register({required: true})} type="hidden" defaultValue="TagStatic" />
             <TextInput
                 register={register({required: true})}
                 name={`${prefix}.value`}
@@ -21,4 +22,4 @@ const TagsStaticResolverForm = ({form, prefix, field, children}) => {
     );
 };
 
-export default TagsStaticResolverForm;
+export default TagStaticResolverForm;

@@ -75,19 +75,19 @@ class DocumentResolverSerializer(Serializer):
     selector = CharField()
 
 
-class TagsResolverSerializer(Serializer):
-    resolvers = ResolverConfigSerializer(many=True)
+class TagResolverSerializer(Serializer):
+    resolver = ResolverConfigSerializer()
 
 
-class TagsDataResolverSerializer(Serializer):
+class TagDataResolverSerializer(Serializer):
     selector = CharField(required=True)
 
 
-class TagsAttributeResolverSerializer(TagsDataResolverSerializer):
+class TagAttributeResolverSerializer(TagDataResolverSerializer):
     attribute = CharField(required=True)
 
 
-class TagsStaticResolverSerializer(Serializer):
+class TagStaticResolverSerializer(Serializer):
     key = ChoiceField(choices=DataResolverKey.choices)
     value = CharField()
 
@@ -99,10 +99,10 @@ ResolverSerializers = {
     ResolverType.ATTRIBUTE: AttributeResolverSerializer,
     ResolverType.STATIC: StaticResolverSerializer,
     ResolverType.DOCUMENT: DocumentResolverSerializer,
-    ResolverType.TAGS: TagsResolverSerializer,
-    ResolverType.TAGS_DATA: TagsDataResolverSerializer,
-    ResolverType.TAGS_ATTRIBUTE: TagsAttributeResolverSerializer,
-    ResolverType.TAGS_STATIC: TagsStaticResolverSerializer,
+    ResolverType.TAG: TagResolverSerializer,
+    ResolverType.TAG_DATA: TagDataResolverSerializer,
+    ResolverType.TAG_ATTRIBUTE: TagAttributeResolverSerializer,
+    ResolverType.TAG_STATIC: TagStaticResolverSerializer,
 }
 
 
