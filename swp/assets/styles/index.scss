@@ -13,6 +13,9 @@ $icon-font-path: '~@blueprintjs/icons/resources/icons';
 @import '~@blueprintjs/datetime/src/blueprint-datetime.scss';
 
 @tailwind base;
+
+@import 'common/base';
+
 @tailwind components;
 @tailwind utilities;
 
