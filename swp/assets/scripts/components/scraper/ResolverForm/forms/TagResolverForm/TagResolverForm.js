@@ -40,7 +40,7 @@ const TagResolverForm = props => {
                 choices={TagResolverChoices}
                 defaultValue="TagData"
             />
-            <Form {...props} prefix={`${prefix}.resolver`} field={field.resolver} />
+            <Form {...props} prefix={`${prefix}.resolver`} field={field.resolver || {}} />
         </div>
     );
 };
