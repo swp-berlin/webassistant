@@ -1,11 +1,15 @@
 import ExternalLink from 'components/Navigation/ExternalLink';
-import {interpolate} from 'utils/i18n';
+import CommaList from 'components/lists/CommaList';
+import _, {interpolate} from 'utils/i18n';
 
+
+const By = _('by');
 
 const Authors = ({authors}) => (
-    <ul className="inline list-inline">
-        {authors.map((author, i) => <li key={author}>{i > 0 ? `, ${author}` : author}</li>)}
-    </ul>
+    <span className="authors">
+        {`${By} `}
+        <CommaList>{authors}</CommaList>
+    </span>
 );
 
 const PublicationItem = ({id, title, authors, abstract, publicationDate, pdfURL, pdfPages, ...props}) => (
@@ -13,7 +17,6 @@ const PublicationItem = ({id, title, authors, abstract, publicationDate, pdfURL,
         <header>
             <h4>{title}</h4>
             <div className="subtitle">
-                <span>by </span>
                 <Authors authors={authors} />
                 <time>{publicationDate}</time>
             </div>
