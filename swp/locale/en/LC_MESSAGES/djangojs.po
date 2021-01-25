@@ -121,6 +121,18 @@ msgstr ""
 msgid "No Results"
 msgstr ""
 
+msgid "by"
+msgstr ""
+
+msgid "and"
+msgstr ""
+
+msgid "Loading"
+msgstr ""
+
+msgid "No publications"
+msgstr ""
+
 msgid "Warning"
 msgstr ""
 
@@ -148,6 +160,18 @@ msgstr ""
 msgid "Selector"
 msgstr ""
 
+msgid "Document"
+msgstr ""
+
+msgid "Type"
+msgstr ""
+
+msgid "Link"
+msgstr ""
+
+msgid "List"
+msgstr ""
+
 msgid "List Selector"
 msgstr ""
 
@@ -163,7 +187,10 @@ msgstr ""
 msgid "Value"
 msgstr ""
 
-msgid "Loading"
+msgid "Data"
+msgstr ""
+
+msgid "Tag"
 msgstr ""
 
 msgid "Thinktanks"
@@ -197,9 +224,6 @@ msgid "disabled"
 msgstr ""
 
 msgid "URL"
-msgstr ""
-
-msgid "Type"
 msgstr ""
 
 msgid "Last Run"

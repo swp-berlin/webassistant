@@ -121,6 +121,18 @@ msgstr "(erfordert)"
 msgid "No Results"
 msgstr "Keine Ergebnisse"
 
+msgid "by"
+msgstr "von"
+
+msgid "and"
+msgstr "und"
+
+msgid "Loading"
+msgstr "Lade…"
+
+msgid "No publications"
+msgstr "Keine Publikationen"
+
 msgid "Warning"
 msgstr "Warnung"
 
@@ -148,6 +160,18 @@ msgstr "Feld"
 msgid "Selector"
 msgstr "Selektor"
 
+msgid "Document"
+msgstr "Dokument"
+
+msgid "Type"
+msgstr "Typ"
+
+msgid "Link"
+msgstr "Link"
+
+msgid "List"
+msgstr "Liste"
+
 msgid "List Selector"
 msgstr "Listenselektor"
 
@@ -163,8 +187,11 @@ msgstr "Maximale Seitenzahl"
 msgid "Value"
 msgstr "Wert"
 
-msgid "Loading"
-msgstr "Lade…"
+msgid "Data"
+msgstr "Daten"
+
+msgid "Tag"
+msgstr "Tag"
 
 msgid "Thinktanks"
 msgstr "Thinktanks"
@@ -198,9 +225,6 @@ msgstr "deaktiviert"
 
 msgid "URL"
 msgstr "URL"
-
-msgid "Type"
-msgstr "Typ"
 
 msgid "Last Run"
 msgstr "Letzter Durchlauf"
