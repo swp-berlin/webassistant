@@ -15,6 +15,6 @@ class PublicationPagination(PageNumberPagination):
 class PublicationViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Publication.objects.all()
     filterset_fields = ['thinktank_id']
-    ordering = ['-created']
+    ordering = ['-last_access', '-created']
     pagination_class = PublicationPagination
     serializer_class = PublicationSerializer
