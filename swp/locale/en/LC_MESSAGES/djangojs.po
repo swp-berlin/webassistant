@@ -139,6 +139,10 @@ msgstr ""
 msgid "No publications"
 msgstr ""
 
+#, javascript-format
+msgid "%s Publications"
+msgstr ""
+
 msgid "Warning"
 msgstr ""
 
@@ -275,6 +279,10 @@ msgid "Unique Field"
 msgstr ""
 
 msgid "Publications"
+msgstr ""
+
+#, javascript-format
+msgid "Thinktank %s"
 msgstr ""
 
 msgid "Scrapers"

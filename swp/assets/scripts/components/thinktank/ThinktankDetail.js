@@ -4,7 +4,6 @@ import {Link} from 'react-router-dom';
 import ActivationButton from 'components/buttons/ActivationButton';
 import {useBreadcrumb} from 'components/Navigation';
 import Page from 'components/Page';
-import PublicationPreview from 'components/publication/PublicationPreview';
 import ScraperTable from 'components/scraper/ScraperTable';
 import TableActions from 'components/tables/TableActions';
 
@@ -56,6 +55,7 @@ const ThinktankDetail = ({id, ...props}) => {
     const {
         description,
         unique_field: uniqueField,
+        publication_count: publicationCount,
         scrapers,
     } = thinktank;
 
@@ -79,6 +79,10 @@ const ThinktankDetail = ({id, ...props}) => {
 
     return (
         <Page title={label} subtitle={subtitle} actions={actions}>
+            <Link to={`/thinktank/${id}/publications/`}>
+                {interpolate('%s Publications', [publicationCount], false)}
+            </Link>
+
             <div className="flex justify-between items-end">
                 <p className="my-5 w-1/2">
                     {description}
@@ -91,8 +95,6 @@ const ThinktankDetail = ({id, ...props}) => {
             </div>
 
             <ScraperTable items={scrapers} {...props} />
-
-            <PublicationPreview thinktankID={id} />
         </Page>
     );
 };

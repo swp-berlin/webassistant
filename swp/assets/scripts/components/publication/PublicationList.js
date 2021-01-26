@@ -17,10 +17,10 @@ const Authors = ({authors, className}) => (
 const PublicationItem = ({id, title, authors, abstract, publicationDate, pdfURL, pdfPages, ...props}) => (
     <article className="publication-item mb-2" {...props}>
         <header>
-            <h4>{title}</h4>
+            <h5>{title}</h5>
             <div className="subtitle">
                 <Authors authors={authors} />
-                <time>{publicationDate}</time>
+                <time className="ml-4">{publicationDate}</time>
             </div>
         </header>
         <p className="abstract my-2">
@@ -33,8 +33,8 @@ const PublicationItem = ({id, title, authors, abstract, publicationDate, pdfURL,
     </article>
 );
 
-const PublicationList = ({items, ...props}) => (
-    <ul className="list-none p-0" {...props}>
+const PublicationList = ({items, className, ...props}) => (
+    <ul className={classNames('publication-list', 'list-none', 'p-0', items.length || 'empty', className)} {...props}>
         {items.map(publication => (
             <li key={publication.id}>
                 <PublicationItem

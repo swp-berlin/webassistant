@@ -139,6 +139,10 @@ msgstr "Lade…"
 msgid "No publications"
 msgstr "Keine Publikationen"
 
+#, javascript-format
+msgid "%s Publications"
+msgstr "%s Publikationen"
+
 msgid "Warning"
 msgstr "Warnung"
 
@@ -276,6 +280,10 @@ msgstr "Eindeutiges Feld"
 
 msgid "Publications"
 msgstr "Publikationen"
+
+#, javascript-format
+msgid "Thinktank %s"
+msgstr "Thinktank %s"
 
 msgid "Scrapers"
 msgstr "Scraper"

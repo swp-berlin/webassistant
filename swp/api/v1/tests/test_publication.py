@@ -82,7 +82,3 @@ class PublicationTestCase(test.TestCase):
         self.assertEqual(response.data['abstract'], self.publication.abstract)
         self.assertEqual(response.data['pdf_url'], self.publication.pdf_url)
         self.assertEqual(response.data['pdf_pages'], self.publication.pdf_pages)
-
-        thinktank = response.data['thinktank']
-        self.assertEqual(thinktank['id'], self.publication.thinktank_id)
-        self.assertEqual(thinktank['name'], self.publication.thinktank.name)
