@@ -27,6 +27,8 @@ const PublicationPreview = ({thinktankID, page, pageSize, ...props}) => {
 
     const handleNextPage = () => (nextPage && setCurrentPage(currentPage + 1));
     const handlePrevPage = () => (prevPage && setCurrentPage(currentPage - 1));
+    const handleFirstPage = () => setCurrentPage(1);
+    const handleLastPage = () => setCurrentPage(pages.length);
 
     const title = interpolate('%s Publications', [total], false);
 
@@ -40,13 +42,15 @@ const PublicationPreview = ({thinktankID, page, pageSize, ...props}) => {
 
             <div className="pagination mt-4" key="pagination">
                 <ButtonGroup className="page-buttons">
-                    <Button key="prev" onClick={handlePrevPage} disabled={!prevPage} icon="double-chevron-left" />
+                    <Button key="first" onClick={handleFirstPage} disabled={!prevPage} icon="double-chevron-left" />
+                    <Button key="prev" onClick={handlePrevPage} disabled={!prevPage} icon="chevron-left" />
                     {pages.map(page => (
                         <Button key={page} onClick={() => setCurrentPage(page)} active={page === currentPage}>
                             {page}
                         </Button>
                     ))}
-                    <Button key="next" onClick={handleNextPage} disabled={!nextPage} icon="double-chevron-right" />
+                    <Button key="next" onClick={handleNextPage} disabled={!nextPage} icon="chevron-right" />
+                    <Button key="last" onClick={handleLastPage} disabled={!nextPage} icon="double-chevron-right" />
                 </ButtonGroup>
             </div>
         </div>
@@ -55,7 +59,7 @@ const PublicationPreview = ({thinktankID, page, pageSize, ...props}) => {
 
 PublicationPreview.defaultProps = {
     page: 1,
-    pageSize: 2,
+    pageSize: 3,
 };
 
 PublicationPreview.propTypes = {
