@@ -1,14 +1,16 @@
+import classNames from 'classnames';
 import ExternalLink from 'components/Navigation/ExternalLink';
 import CommaList from 'components/lists/CommaList';
 import _, {interpolate} from 'utils/i18n';
 
 
 const By = _('by');
+const UnknownLabel = _('unkown');
 
-const Authors = ({authors}) => (
-    <span className="authors">
-        {`${By} `}
-        <CommaList items={authors} />
+const Authors = ({authors, className}) => (
+    <span className={classNames('authors', authors.length || 'empty', className)}>
+        {`${By} ` }
+        {authors.length ? <CommaList items={authors} /> : UnknownLabel}
     </span>
 );
 

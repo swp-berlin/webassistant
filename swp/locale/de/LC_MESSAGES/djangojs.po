@@ -130,6 +130,9 @@ msgstr "und"
 msgid "or"
 msgstr "oder"
 
+msgid "unkown"
+msgstr "unbekannt"
+
 msgid "Loading"
 msgstr "Lade…"
 
