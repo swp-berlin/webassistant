@@ -63,7 +63,6 @@ class Scraper:
         await page.close()
         await browser.close()
 
-
     @contextmanager
     def get_download_path(self):
         if self.download_path:
