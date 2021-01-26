@@ -8,7 +8,7 @@ const By = _('by');
 const Authors = ({authors}) => (
     <span className="authors">
         {`${By} `}
-        <CommaList>{authors}</CommaList>
+        <CommaList items={authors} />
     </span>
 );
 

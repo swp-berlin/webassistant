@@ -127,6 +127,9 @@ msgstr ""
 msgid "and"
 msgstr ""
 
+msgid "or"
+msgstr ""
+
 msgid "Loading"
 msgstr ""
 

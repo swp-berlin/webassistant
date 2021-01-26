@@ -3,17 +3,20 @@ import _ from 'utils/i18n';
 
 
 const And = _('and');
+const Or = _('or');
 
-const CommaList = ({children, alwaysUseComma, ...props}) => {
-    const last = children.length - 1;
-    const chooseSeparator = i => (!alwaysUseComma && i < last ? ',' : ` ${And}`);
+const CommaList = ({items, alwaysUseComma, endWithOr, ...props}) => {
+    const last = items.length - 1;
+    const lastWord = endWithOr ? Or : And;
+    const finalSeparator = alwaysUseComma ? ',' : ` ${lastWord}`;
+
+    const chooseSeparator = i => (i < last ? ',' : finalSeparator);
 
     return (
         <ul className="inline list-inline" {...props}>
-            {children.map((item, i) => (
-                <li key={item}>
-                    {i > 0 ? `${chooseSeparator(i)} ${item}` : item}
-                </li>
+            {items.map((item, i) => (
+                // eslint-disable-next-line react/no-array-index-key
+                <li key={i}>{i > 0 ? `${chooseSeparator(i)} ${item}` : item}</li>
             ))}
         </ul>
     );
@@ -21,10 +24,12 @@ const CommaList = ({children, alwaysUseComma, ...props}) => {
 
 CommaList.defaultProps = {
     alwaysUseComma: false,
+    endWithOr: false,
 };
 
 CommaList.propTypes = {
     alwaysUseComma: PropTypes.bool,
+    endWithOr: PropTypes.bool,
 };
 
 export default CommaList;

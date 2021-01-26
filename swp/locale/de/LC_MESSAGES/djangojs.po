@@ -127,6 +127,9 @@ msgstr "von"
 msgid "and"
 msgstr "und"
 
+msgid "or"
+msgstr "oder"
+
 msgid "Loading"
 msgstr "Lade…"
 
