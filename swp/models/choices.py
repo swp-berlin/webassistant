@@ -25,6 +25,20 @@ class ResolverType(models.TextChoices):
     TAG_STATIC = 'TagStatic', _('Static')
 
 
+class ListResolverType(models.TextChoices):
+    LIST = 'List', _('List')
+    LINK = 'Link', _('Link')
+    FIELD = 'Data', _('Field')
+    STATIC = 'Static', _('Static')
+    TAG = 'Tag', _('Tag')
+
+
+class TagResolverType(models.TextChoices):
+    TAG_DATA = 'TagData', _('Data')
+    TAG_ATTRIBUTE = 'TagAttribute', _('Attribute')
+    TAG_STATIC = 'TagStatic', _('Static')
+
+
 class DataResolverKey(models.TextChoices):
     TITLE = 'title', _('Title')
     SUBTITLE = 'subtitle', _('Subtitle')
