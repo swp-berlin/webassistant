@@ -13,7 +13,7 @@ class PublicationPagination(PageNumberPagination):
 
 @router.register('publication', basename='publication')
 class PublicationViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Publication.objects.all()
+    queryset = Publication.objects.select_related('thinktank')
     filterset_fields = ['thinktank_id']
     ordering = ['-last_access', '-created']
     pagination_class = PublicationPagination
