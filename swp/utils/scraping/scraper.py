@@ -1,10 +1,11 @@
-from contextlib import contextmanager
+from contextlib import asynccontextmanager, contextmanager
 from dataclasses import dataclass
 from datetime import datetime
 
 from pyppeteer import launch
 
 from cosmogo.utils.tempdir import maketempdir
+from .browser import open_browser, open_page
 from .context import ScraperContext
 from .resolvers import ResolverType
 
@@ -45,23 +46,16 @@ class Scraper:
         self.download_path = download_path
 
     async def scrape(self, resolver_config: dict) -> [dict]:
-        browser = await launch(
-            handleSIGINT=False,
-            handleSIGTERM=False,
-            handleSIGHUP=False
-        )
-        page = await browser.newPage()
-        await page.goto(self.url)
+        async with open_browser(handleSIGINT=False, handleSIGTERM=False, handleSIGHUP=False) as browser:
+            async with open_page(browser) as page:
+                await page.goto(self.url)
 
-        with self.get_download_path() as download_path:
-            context = ScraperContext(browser, page, download_path)
-            resolver = self.get_resolver(context, **resolver_config)
+                with self.get_download_path() as download_path:
+                    context = ScraperContext(browser, page, download_path)
+                    resolver = self.get_resolver(context, **resolver_config)
 
-            async for resolved in resolver.resolve():
-                yield resolved
-
-        await page.close()
-        await browser.close()
+                    async for resolved in resolver.resolve():
+                        yield resolved
 
     @contextmanager
     def get_download_path(self):

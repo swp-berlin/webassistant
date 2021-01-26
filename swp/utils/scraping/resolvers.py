@@ -7,6 +7,7 @@ from urllib.parse import urlparse
 import pikepdf
 from pyppeteer.element_handle import ElementHandle
 
+from .browser import open_page
 from .context import ScraperContext
 from .exceptions import DocumentDownloadError, NodeNotFoundError, SkippedError
 from .paginators import PaginatorType
@@ -100,13 +101,11 @@ class LinkResolver(IntermediateResolver):
     async def resolve(self, node: ElementHandle, context: dict):
         href = await self.get_href(node)
 
-        detail_page = await self.context.browser.newPage()
-        await detail_page.goto(href)
+        async with open_page(self.context.browser) as detail_page:
+            await detail_page.goto(href)
 
-        for resolver in self.resolvers:
-            await resolver.resolve(detail_page, context)
-
-        await detail_page.close()
+            for resolver in self.resolvers:
+                await resolver.resolve(detail_page, context)
 
 
 class DataResolver(Resolver):
@@ -200,19 +199,17 @@ class DocumentResolver(DataResolver):
         download_path = self.context.download_path
         file_name = os.path.basename(urlparse(url).path)
 
-        page = await self.context.browser.newPage()
-        cdp = await page.target.createCDPSession()
+        async with open_page(self.context.browser) as page:
+            cdp = await page.target.createCDPSession()
 
-        await cdp.send(
-            'Page.setDownloadBehavior',
-            {'behavior': 'allow', 'downloadPath': download_path},
-        )
+            await cdp.send(
+                'Page.setDownloadBehavior',
+                {'behavior': 'allow', 'downloadPath': download_path},
+            )
 
-        download_promise = asyncio.ensure_future(page.waitForResponse(lambda res: res.url == url))
-        await page.evaluate(DOWNLOAD_TEMPLATE % (url, file_name))
-        await download_promise
-
-        await page.close()
+            download_promise = asyncio.ensure_future(page.waitForResponse(lambda res: res.url == url))
+            await page.evaluate(DOWNLOAD_TEMPLATE % (url, file_name))
+            await download_promise
 
         file_path = os.path.join(download_path, file_name)
 
