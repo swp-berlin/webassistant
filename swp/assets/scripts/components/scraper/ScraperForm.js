@@ -62,7 +62,7 @@ const ScraperForm = ({endpoint, data, method, redirectURL}) => {
 
     const [onSubmit, form] = useMutationForm(
         endpoint,
-        {defaultValues: data || DEFAULT_VALUES},
+        {defaultValues: data || DEFAULT_VALUES, criteriaMode: 'all'},
         {method, redirectURL},
     );
     const {control, register, errors} = form;

@@ -2,6 +2,7 @@ import _ from 'utils/i18n';
 import {TextInput} from 'components/forms';
 
 import ResolverListForm from '../ResolverListForm';
+import SelectorField from 'components/scraper/ResolverForm/forms/SelectorField';
 
 
 const LinkLabel = _('Link');
@@ -14,8 +15,8 @@ const LinkResolverForm = ({form, prefix, level, field}) => {
         <ResolverListForm form={form} prefix={prefix} level={level}>
             <h2 className="text-lg mb-4">{LinkLabel}</h2>
             <input name={`${prefix}.type`} ref={register({required: true})} type="hidden" defaultValue="Link" />
-            <TextInput
-                register={register({required: true})}
+            <SelectorField
+                register={register}
                 name={`${prefix}.selector`}
                 label={SelectorLabel}
                 errors={errors}
