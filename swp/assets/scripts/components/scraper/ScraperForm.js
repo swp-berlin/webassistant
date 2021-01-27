@@ -1,3 +1,4 @@
+import {useCallback, useState} from 'react';
 import {useMutationForm} from 'components/Fetch';
 import {Checkbox, Select, TextInput} from 'components/forms';
 import {Button} from '@blueprintjs/core';
@@ -19,6 +20,7 @@ import {
     TagAttributeResolverForm,
     TagStaticResolverForm,
 } from './ResolverForm/forms';
+import {Preview, PreviewButton} from './preview';
 
 import ScraperTypeSelect from './ScraperTypeSelect';
 import ScraperFormErrors from './ScraperFormErrors';
@@ -55,6 +57,9 @@ const DEFAULT_VALUES = {
 };
 
 const ScraperForm = ({endpoint, data, method, redirectURL}) => {
+    const [preview, setPreview] = useState(null);
+    const handlePreview = useCallback(preview => setPreview(preview.id), []);
+
     const [onSubmit, form] = useMutationForm(
         endpoint,
         {defaultValues: data || DEFAULT_VALUES},
@@ -63,48 +68,54 @@ const ScraperForm = ({endpoint, data, method, redirectURL}) => {
     const {control, register, errors} = form;
 
     return (
-        <div className="flex space-x-8 my-4">
-            <form className="scraper-form w-3/6" onSubmit={onSubmit}>
-                <TextInput
-                    register={register({required: true})}
-                    name="start_url"
-                    label={StartURLLabel}
-                    errors={errors}
-                />
-                <Checkbox
-                    name="is_active"
-                    control={control}
-                    inline
-                    label={EnabledLabel}
-                />
-                <ScraperTypeSelect
-                    form={form}
-                    name="type"
-                    label={TypeLabel}
-                    errors={errors}
-                    choices={ScraperTypes}
-                />
-                <Select
-                    control={control}
-                    name="interval"
-                    label={IntervalLabel}
-                    errors={errors}
-                    choices={Intervals}
-                    required
-                />
+        <>
+            <div className="flex space-x-8 my-4">
+                <form className="scraper-form w-1/2" onSubmit={onSubmit}>
+                    <TextInput
+                        register={register({required: true})}
+                        name="start_url"
+                        label={StartURLLabel}
+                        errors={errors}
+                    />
+                    <Checkbox
+                        name="is_active"
+                        control={control}
+                        inline
+                        label={EnabledLabel}
+                    />
+                    <ScraperTypeSelect
+                        form={form}
+                        name="type"
+                        label={TypeLabel}
+                        errors={errors}
+                        choices={ScraperTypes}
+                    />
+                    <Select
+                        control={control}
+                        name="interval"
+                        label={IntervalLabel}
+                        errors={errors}
+                        choices={Intervals}
+                        required
+                    />
 
-                <Field label={ConfigLabel}>
-                    <ResolverFormProvider value={Forms}>
-                        <ResolverForm form={form} prefix="data" />
-                    </ResolverFormProvider>
-                </Field>
+                    <Field label={ConfigLabel}>
+                        <ResolverFormProvider value={Forms}>
+                            <ResolverForm form={form} prefix="data" />
+                        </ResolverFormProvider>
+                    </Field>
 
-                <ScraperFormErrors form={form} errors={errors} />
+                    <ScraperFormErrors form={form} errors={errors} />
 
-                <Button type="submit" intent="primary" text={SubmitButtonLabel} />
-            </form>
-            <ScraperTypeDescription form={form} />
-        </div>
+                    <div className="flex justify-end space-x-2">
+                        <PreviewButton form={form} onPreview={handlePreview} />
+                        <Button type="submit" intent="primary" text={SubmitButtonLabel} />
+                    </div>
+                </form>
+                <ScraperTypeDescription form={form} />
+            </div>
+            {preview && <Preview id={preview} />}
+        </>
     );
 };
 

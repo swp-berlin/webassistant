@@ -5,6 +5,7 @@ from typing import Iterator
 
 from pyppeteer.element_handle import ElementHandle
 
+from swp.utils.scraping.browser import open_page
 from swp.utils.scraping.context import ScraperContext
 
 
@@ -103,15 +104,13 @@ class PagePaginator(Paginator):
             # noinspection PyTypeChecker
             href: str = await href_property.jsonValue()
 
-            page = await self.context.browser.newPage()
-            await page.goto(href)
+            async with open_page(self.context.browser) as page:
+                await page.goto(href)
 
-            nodes = await self.query_list_items(page)
+                nodes = await self.query_list_items(page)
 
-            for node in nodes:
-                yield node
-
-            await page.close()
+                for node in nodes:
+                    yield node
 
 
 class PaginatorType(Enum):
