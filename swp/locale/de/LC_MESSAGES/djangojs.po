@@ -130,6 +130,9 @@ msgstr "und"
 msgid "or"
 msgstr "oder"
 
+msgid "nor"
+msgstr "noch"
+
 msgid "unknown"
 msgstr "unbekannt"
 
