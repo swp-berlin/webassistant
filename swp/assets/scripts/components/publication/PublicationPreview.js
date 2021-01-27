@@ -29,14 +29,16 @@ const PublicationPreview = ({thinktankID, page, pageSize, noTitle, className, ..
         <div className={classNames('publication-preview', 'my-4', className)} {...props}>
             {noTitle || <header className="mb-2"><h3>{title}</h3></header>}
 
-            <PublicationResults
-                results={results}
-                pageCount={calculatePageCount(count, pageSize)}
-                currentPage={currentPage}
-                setCurrentPage={setCurrentPage}
-                nextPage={nextPage}
-                prevPage={prevPage}
-            />
+            {count > 1 && (
+                <PublicationResults
+                    results={results}
+                    pageCount={calculatePageCount(count, pageSize)}
+                    currentPage={currentPage}
+                    setCurrentPage={setCurrentPage}
+                    nextPage={nextPage}
+                    prevPage={prevPage}
+                />
+            )}
         </div>
     );
 };
