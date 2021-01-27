@@ -1,13 +1,15 @@
 from django.utils import translation
 
 from swp.management.scheme import GenerateSchemeCommand
-from swp.models.choices import DataResolverKey, Interval, ResolverType, UniqueKey
+from swp.models.choices import DataResolverKey, Interval, ListResolverType, ResolverType, TagResolverType, UniqueKey
 
 
 class Command(GenerateSchemeCommand):
     PROPERTIES = [
         ('interval', Interval.choices),
         ('ResolverType', ResolverType.choices),
+        ('ListResolverType', ListResolverType.choices),
+        ('TagResolverType', TagResolverType.choices),
         ('DataResolverKey', DataResolverKey.choices),
         ('UniqueKey', UniqueKey.choices),
     ]

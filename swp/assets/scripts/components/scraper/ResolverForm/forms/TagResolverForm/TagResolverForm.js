@@ -1,7 +1,7 @@
 import _ from 'utils/i18n';
 
 import {Select} from 'components/forms';
-
+import {getChoices} from 'utils/choices';
 
 import TagDataResolverForm from './TagDataResolverForm';
 import TagAttributeResolverForm from './TagAttributeResolverForm';
@@ -11,11 +11,7 @@ import TagStaticResolverForm from './TagStaticResolverForm';
 const TagLabel = _('Tag');
 const TypeLabel = _('Type');
 
-const TagResolverChoices = [
-    {value: 'TagData', label: 'Data'},
-    {value: 'TagAttribute', label: 'Attribute'},
-    {value: 'TagStatic', label: 'Static'},
-];
+const TagResolverChoices = getChoices('TagResolverType');
 
 const TagForms = {
     TagData: TagDataResolverForm,
