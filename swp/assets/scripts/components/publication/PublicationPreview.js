@@ -29,7 +29,7 @@ const PublicationPreview = ({thinktankID, page, pageSize, noTitle, className, ..
         <div className={classNames('publication-preview', 'my-4', className)} {...props}>
             {noTitle || <header className="mb-2"><h3>{title}</h3></header>}
 
-            {count > 1 && (
+            {count >= 1 && (
                 <PublicationResults
                     results={results}
                     pageCount={calculatePageCount(count, pageSize)}
