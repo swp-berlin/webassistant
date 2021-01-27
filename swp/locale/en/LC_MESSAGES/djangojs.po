@@ -133,6 +133,10 @@ msgstr ""
 msgid "unkown"
 msgstr ""
 
+#, javascript-format
+msgid "%s pages"
+msgstr ""
+
 msgid "Loading"
 msgstr ""
 

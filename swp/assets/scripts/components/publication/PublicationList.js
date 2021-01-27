@@ -6,6 +6,7 @@ import _, {interpolate} from 'utils/i18n';
 
 const By = _('by');
 const UnknownLabel = _('unkown');
+const PagesLabel = _('%s pages');
 
 const Authors = ({authors, className}) => (
     <span className={classNames('authors', authors.length || 'empty', className)}>
@@ -28,7 +29,7 @@ const PublicationItem = ({id, title, authors, abstract, publicationDate, pdfURL,
         </p>
         <footer className="flex justify-between">
             <ExternalLink to={pdfURL} />
-            <span>{interpolate('%s pages', [pdfPages], false)}</span>
+            <span>{interpolate(PagesLabel, [pdfPages], false)}</span>
         </footer>
     </article>
 );

@@ -85,8 +85,8 @@ msgstr "Dokument"
 msgid "Static"
 msgstr "Statisch"
 
-msgid "Tags"
-msgstr "Tags"
+msgid "Tag"
+msgstr "Tag"
 
 msgid "Title"
 msgstr "Titel"

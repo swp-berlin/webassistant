@@ -133,6 +133,10 @@ msgstr "oder"
 msgid "unkown"
 msgstr "unbekannt"
 
+#, javascript-format
+msgid "%s pages"
+msgstr "%s Seiten"
+
 msgid "Loading"
 msgstr "Lade…"
 
