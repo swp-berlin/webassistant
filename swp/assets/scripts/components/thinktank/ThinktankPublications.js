@@ -8,12 +8,13 @@ import {useQuery} from 'hooks/query';
 
 const Loading = _('Loading');
 const ThinktanksLabel = _('Thinktanks');
+const ThinktankLabel = _('Thinktank %s');
 const PublicationsLabel = _('Publications');
 
 const ThinktankPublications = ({id, ...props}) => {
     const endpoint = `/thinktank/${id}/`;
     const {loading, result: {data: thinktank}} = useQuery(endpoint);
-    const label = loading ? interpolate(_('Thinktank %s'), [id], false) : thinktank.name;
+    const label = loading ? interpolate(ThinktankLabel, [id], false) : thinktank.name;
 
     useBreadcrumb('/thinktank/', ThinktanksLabel);
     useBreadcrumb(`/thinktank/${id}/`, label);

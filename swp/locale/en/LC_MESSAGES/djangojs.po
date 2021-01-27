@@ -213,6 +213,10 @@ msgstr ""
 msgid "New Scraper"
 msgstr ""
 
+#, javascript-format
+msgid "Thinktank %s"
+msgstr ""
+
 msgid "Scraper"
 msgstr ""
 
@@ -283,10 +287,6 @@ msgid "Unique Field"
 msgstr ""
 
 msgid "Publications"
-msgstr ""
-
-#, javascript-format
-msgid "Thinktank %s"
 msgstr ""
 
 msgid "Scrapers"

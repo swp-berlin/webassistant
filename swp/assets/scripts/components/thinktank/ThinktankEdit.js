@@ -10,10 +10,11 @@ import {useThinktanksBreadcrumb} from './ThinktankList';
 
 const Title = _('Edit Thinktank');
 const Loading = _('Loading');
+const ThinktankLabel = _('Thinktank %s');
 
 const getLabel = (id, loading, result) => {
     if (loading || !result) {
-        return interpolate('Thinktank %s', [id], false);
+        return interpolate(ThinktankLabel, [id], false);
     }
 
     return result.data.name;
