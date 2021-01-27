@@ -23,7 +23,7 @@ const ThinktankPublications = ({id, ...props}) => {
 
     return (
         <Page title={label} subtitle={thinktank.description}>
-            <PublicationPreview thinktankID={id} {...props} />
+            <PublicationPreview thinktankID={+id} {...props} />
         </Page>
     );
 };
