@@ -6,9 +6,9 @@ import Conjunctions from './Conjunctions';
 const generateSeparators = (count, conjunction, delimiter = ',') => {
     const finalSeparator = !conjunction ? delimiter : ` ${conjunction} `;
     return new Array(count)
-        .fill('', 0, 1)
+        .fill(finalSeparator, count - 1, count)
         .fill(`${delimiter} `, 1, count - 1)
-        .fill(finalSeparator, count - 1, count);
+        .fill('', 0, 1);
 };
 
 const CommaList = ({items, conjunction, delimiter, ...props}) => {
