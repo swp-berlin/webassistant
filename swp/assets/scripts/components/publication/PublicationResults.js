@@ -22,11 +22,8 @@ const PageButtons = ({pages, currentPage, setCurrentPage}) => pages.map(page => 
 const PublicationResults = ({results, pageCount, currentPage, setCurrentPage, nextPage, prevPage, ...props}) => {
     const pages = useMemo(() => generatePageNumbers(pageCount), [pageCount]);
 
-    const setNextPage = () => nextPage && setCurrentPage(currentPage + 1);
-    const setPrevPage = () => prevPage && setCurrentPage(currentPage - 1);
-
-    const handleNextPage = useCallback(setNextPage, [currentPage, setCurrentPage, nextPage]);
-    const handlePrevPage = useCallback(setPrevPage, [currentPage, setCurrentPage, prevPage]);
+    const handleNextPage = useCallback(() => nextPage && setCurrentPage(page => page + 1), [setCurrentPage, nextPage]);
+    const handlePrevPage = useCallback(() => prevPage && setCurrentPage(page => page - 1), [setCurrentPage, prevPage]);
     const handleFirstPage = useCallback(() => setCurrentPage(1), [setCurrentPage]);
     const handleLastPage = useCallback(() => setCurrentPage(pageCount), [setCurrentPage, pageCount]);
 
