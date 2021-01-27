@@ -5,7 +5,7 @@ import _, {interpolate} from 'utils/i18n';
 
 
 const By = _('by');
-const UnknownLabel = _('unkown');
+const UnknownLabel = _('unknown');
 const PagesLabel = _('%s pages');
 
 const Authors = ({authors, className}) => (

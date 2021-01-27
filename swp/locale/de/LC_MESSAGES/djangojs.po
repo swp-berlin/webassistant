@@ -130,7 +130,7 @@ msgstr "und"
 msgid "or"
 msgstr "oder"
 
-msgid "unkown"
+msgid "unknown"
 msgstr "unbekannt"
 
 #, javascript-format
