@@ -1,4 +1,4 @@
-import {useCallback, useState} from 'react';
+import {useCallback, useMemo, useState} from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import {Button, ButtonGroup} from '@blueprintjs/core';
@@ -13,7 +13,7 @@ const NoPublications = _('No publications');
 const PublicationsLabel = _('%s Publications');
 
 const calculatePageCount = (total, pageSize) => Math.ceil(total / pageSize);
-const generatePageNumbers = (total, pageSize) => Array(calculatePageCount(total, pageSize)).fill().map((e, i) => i + 1);
+const generatePageNumbers = count => Array(count).fill(0).map((e, i) => i + 1);
 
 
 const PageButton = ({page, setCurrentPage, ...props}) => {
@@ -48,7 +48,8 @@ const PublicationPreview = ({thinktankID, page, pageSize, noTitle, className, ..
         count = result.data.count;
     }
 
-    const pages = generatePageNumbers(count, pageSize);
+    const pageCount = calculatePageCount(count, pageSize);
+    const pages = useMemo(() => generatePageNumbers(pageCount), [pageCount]);
 
     const handleNextPage = useCallback(() => nextPage && setCurrentPage(currentPage + 1), [currentPage, nextPage]);
     const handlePrevPage = useCallback(() => prevPage && setCurrentPage(currentPage - 1), [currentPage, prevPage]);

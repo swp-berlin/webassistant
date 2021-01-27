@@ -1,14 +1,21 @@
+import {useMemo} from 'react';
 import PropTypes from 'prop-types';
 import Conjunctions from './Conjunctions';
 
 
 const generateSeparators = (count, conjunction, delimiter = ',') => {
     const finalSeparator = !conjunction ? delimiter : ` ${conjunction} `;
-    return new Array(count).fill('', 0, 1).fill(`${delimiter} `, 1, count - 1).fill(finalSeparator, count - 1, count);
+    return new Array(count)
+        .fill('', 0, 1)
+        .fill(`${delimiter} `, 1, count - 1)
+        .fill(finalSeparator, count - 1, count);
 };
 
 const CommaList = ({items, conjunction, delimiter, ...props}) => {
-    const separators = generateSeparators(items.length, conjunction, delimiter);
+    const separators = useMemo(
+        () => generateSeparators(items.length, conjunction, delimiter),
+        [items.length, conjunction, delimiter],
+    );
 
     return (
         <ul className="inline list-inline" {...props}>
