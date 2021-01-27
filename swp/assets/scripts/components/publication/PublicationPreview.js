@@ -26,44 +26,23 @@ const PageButton = ({page, setCurrentPage, ...props}) => {
 };
 
 const PageButtons = ({pages, currentPage, setCurrentPage}) => pages.map(page => (
-    <PageButton page={page} setCurrentPage={setCurrentPage} active={page === currentPage} />
+    <PageButton key={page} page={page} setCurrentPage={setCurrentPage} active={page === currentPage} />
 ));
 
-
-const PublicationPreview = ({thinktankID, page, pageSize, noTitle, className, ...props}) => {
-    const [currentPage, setCurrentPage] = useState(page || 1);
-
-    const endpoint = '/publication/';
-    const params = {thinktank_id: thinktankID, page: currentPage, page_size: pageSize};
-    const {loading, result, success} = useQuery(endpoint, params);
-
-    let publications = [];
-    let nextPage = null;
-    let prevPage = null;
-    let count = 0;
-    if (success) {
-        publications = result.data.results;
-        nextPage = result.data.next;
-        prevPage = result.data.previous;
-        count = result.data.count;
-    }
-
-    const pageCount = calculatePageCount(count, pageSize);
+const PublicationResults = ({publications, pageCount, currentPage, setCurrentPage, nextPage, prevPage, ...props}) => {
     const pages = useMemo(() => generatePageNumbers(pageCount), [pageCount]);
 
-    const handleNextPage = useCallback(() => nextPage && setCurrentPage(currentPage + 1), [currentPage, nextPage]);
-    const handlePrevPage = useCallback(() => prevPage && setCurrentPage(currentPage - 1), [currentPage, prevPage]);
-    const handleFirstPage = useCallback(() => setCurrentPage(1), [setCurrentPage]);
-    const handleLastPage = useCallback(() => setCurrentPage(pages.length), [setCurrentPage, pages.length]);
+    const setNextPage = () => nextPage && setCurrentPage(currentPage + 1);
+    const setPrevPage = () => prevPage && setCurrentPage(currentPage - 1);
 
-    if (loading) return Loading;
-    const title = count ? interpolate(PublicationsLabel, [count], false) : NoPublications;
+    const handleNextPage = useCallback(setNextPage, [currentPage, setCurrentPage, nextPage]);
+    const handlePrevPage = useCallback(setPrevPage, [currentPage, setCurrentPage, prevPage]);
+    const handleFirstPage = useCallback(() => setCurrentPage(1), [setCurrentPage]);
+    const handleLastPage = useCallback(() => setCurrentPage(pageCount), [setCurrentPage, pageCount]);
 
     return (
-        <div className={classNames('publication-preview', 'my-4', className)} {...props}>
-            {noTitle || <header className="mb-2"><h3>{title}</h3></header>}
-
-            <PublicationList items={publications} />
+        <div className="publication-results">
+            <PublicationList items={publications} {...props} />
 
             <div className="pagination mt-4" key="pagination">
                 <ButtonGroup className="page-buttons">
@@ -78,9 +57,38 @@ const PublicationPreview = ({thinktankID, page, pageSize, noTitle, className, ..
     );
 };
 
+
+const PublicationPreview = ({thinktankID, page, pageSize, noTitle, className, ...props}) => {
+    const [currentPage, setCurrentPage] = useState(page || 1);
+
+    const endpoint = '/publication/';
+    const params = {thinktank_id: thinktankID, page: currentPage, page_size: pageSize};
+    const {loading, result} = useQuery(endpoint, params);
+
+    if (loading) return Loading;
+
+    const {data: {results: publications, next: nextPage, previous: prevPage, count}} = result;
+    const title = count ? interpolate(PublicationsLabel, [count], false) : NoPublications;
+
+    return (
+        <div className={classNames('publication-preview', 'my-4', className)} {...props}>
+            {noTitle || <header className="mb-2"><h3>{title}</h3></header>}
+
+            <PublicationResults
+                publications={publications}
+                pageCount={calculatePageCount(count, pageSize)}
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+                nextPage={nextPage}
+                prevPage={prevPage}
+            />
+        </div>
+    );
+};
+
 PublicationPreview.defaultProps = {
     page: 1,
-    pageSize: 3,
+    pageSize: 2,
     noTitle: false,
 };
 
