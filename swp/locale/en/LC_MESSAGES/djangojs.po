@@ -121,6 +121,35 @@ msgstr ""
 msgid "No Results"
 msgstr ""
 
+msgid "by"
+msgstr ""
+
+msgid "and"
+msgstr ""
+
+msgid "or"
+msgstr ""
+
+msgid "nor"
+msgstr ""
+
+msgid "unknown"
+msgstr ""
+
+#, javascript-format
+msgid "%s pages"
+msgstr ""
+
+msgid "Loading"
+msgstr ""
+
+msgid "No publications"
+msgstr ""
+
+#, javascript-format
+msgid "%s Publications"
+msgstr ""
+
 msgid "Warning"
 msgstr ""
 
@@ -148,6 +177,18 @@ msgstr ""
 msgid "Selector"
 msgstr ""
 
+msgid "Document"
+msgstr ""
+
+msgid "Type"
+msgstr ""
+
+msgid "Link"
+msgstr ""
+
+msgid "List"
+msgstr ""
+
 msgid "List Selector"
 msgstr ""
 
@@ -163,13 +204,20 @@ msgstr ""
 msgid "Value"
 msgstr ""
 
-msgid "Loading"
+msgid "Data"
+msgstr ""
+
+msgid "Tag"
 msgstr ""
 
 msgid "Thinktanks"
 msgstr ""
 
 msgid "New Scraper"
+msgstr ""
+
+#, javascript-format
+msgid "Thinktank %s"
 msgstr ""
 
 msgid "Scraper"
@@ -197,9 +245,6 @@ msgid "disabled"
 msgstr ""
 
 msgid "URL"
-msgstr ""
-
-msgid "Type"
 msgstr ""
 
 msgid "Last Run"

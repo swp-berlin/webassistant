@@ -15,6 +15,7 @@ import ScraperForm from 'components/scraper/ScraperForm';
 const Loading = _('Loading');
 const ScraperLabel = _('Scraper');
 const Thinktanks = _('Thinktanks');
+const ThinktankLabel = _('Thinktank %s');
 
 const LastRun = ({lastRun}) => (
     <div className="mt-2 flex items-center text-sm text-gray-500">
@@ -28,7 +29,7 @@ const ScraperEdit = ({id, thinktankID}) => {
     const endpoint = `/scraper/${id}/`;
     const {loading, result: {data: scraper}} = useQuery(endpoint);
 
-    const thinktankLabel = loading ? interpolate('Thinktank %s', [thinktankID], false) : scraper.thinktank.name;
+    const thinktankLabel = loading ? interpolate(ThinktankLabel, [thinktankID], false) : scraper.thinktank.name;
 
     useBreadcrumb('/thinktank/', Thinktanks);
     useBreadcrumb(`/thinktank/${thinktankID}/`, thinktankLabel);

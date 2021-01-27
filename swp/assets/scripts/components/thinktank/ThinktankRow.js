@@ -12,10 +12,16 @@ const ThinktankLink = ({id, children, ...props}) => (
     </Link>
 );
 
+const PublicationsLink = ({id, children}) => (
+    <Link to={`/thinktank/${id}/publications/`}>
+        {children}
+    </Link>
+);
+
 const ThinktankRow = ({id, name, publicationCount, scraperCount, lastRun, errorCount, isActive}) => (
     <tr className={isActive ? '' : 'disabled'}>
         <td><ThinktankLink id={id}>{name}</ThinktankLink></td>
-        <td className="text-right"><ThinktankLink id={id}>{publicationCount}</ThinktankLink></td>
+        <td className="text-right"><PublicationsLink id={id}>{publicationCount}</PublicationsLink></td>
         <td className="text-right"><ThinktankLink id={id}>{scraperCount}</ThinktankLink></td>
         <td className="text-right">{isActive ? <DateTime value={lastRun} /> : DisabledLabel}</td>
         <td className="text-right"><ThinktankLink id={id}>{errorCount}</ThinktankLink></td>

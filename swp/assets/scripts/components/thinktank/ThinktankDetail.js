@@ -12,9 +12,12 @@ import _, {interpolate} from 'utils/i18n';
 import {useThinktanksBreadcrumb} from './ThinktankList';
 
 const Loading = _('Loading');
+
+const ThinktankLabel = _('Thinktank %s');
 const EditLabel = _('Edit');
 const NewScraperLabel = _('New scraper');
 const UniqueLabel = _('Unique on');
+const PublicationsLabel = _('%s Publications');
 const Nbsp = '\u00A0';
 
 
@@ -36,7 +39,7 @@ const ThinktankDetail = ({id, ...props}) => {
     const [isActive, setActive] = useState(false);
 
     useThinktanksBreadcrumb();
-    const label = loading ? interpolate('Thinktank %s', [id], false) : thinktank.name;
+    const label = loading ? interpolate(ThinktankLabel, [id], false) : thinktank.name;
     useBreadcrumb(endpoint, label);
 
     const onToggle = useCallback(
@@ -55,6 +58,7 @@ const ThinktankDetail = ({id, ...props}) => {
     const {
         description,
         unique_field: uniqueField,
+        publication_count: publicationCount,
         scrapers,
     } = thinktank;
 
@@ -78,6 +82,10 @@ const ThinktankDetail = ({id, ...props}) => {
 
     return (
         <Page title={label} subtitle={subtitle} actions={actions}>
+            <Link to={`/thinktank/${id}/publications/`}>
+                {interpolate(PublicationsLabel, [publicationCount], false)}
+            </Link>
+
             <div className="flex justify-between items-end">
                 <p className="my-5 w-1/2">
                     {description}
