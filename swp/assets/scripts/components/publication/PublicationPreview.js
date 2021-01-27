@@ -10,6 +10,7 @@ import PublicationList from './PublicationList';
 
 const Loading = _('Loading');
 const NoPublications = _('No publications');
+const PublicationsLabel = _('%s Publications');
 
 const calculatePageCount = (total, pageSize) => Math.ceil(total / pageSize);
 const generatePageNumbers = (total, pageSize) => Array(calculatePageCount(total, pageSize)).fill().map((e, i) => i + 1);
@@ -31,7 +32,7 @@ const PublicationPreview = ({thinktankID, page, pageSize, noTitle, className, ..
     const handleFirstPage = () => setCurrentPage(1);
     const handleLastPage = () => setCurrentPage(pages.length);
 
-    const title = count ? interpolate(_('%s Publications'), [count], false) : NoPublications;
+    const title = count ? interpolate(PublicationsLabel, [count], false) : NoPublications;
 
     return (
         <div className={classNames('publication-preview', 'my-4', className)} {...props}>
