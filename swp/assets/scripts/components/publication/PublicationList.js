@@ -9,7 +9,7 @@ const UnknownLabel = _('unknown');
 const PagesLabel = _('%s pages');
 
 const Authors = ({authors, className}) => (
-    <span className={classNames('authors', authors.length || 'empty', className)}>
+    <span className={classNames('authors', {empty: authors.length === 0}, className)}>
         {`${By} ` }
         {authors.length ? <CommaList items={authors} /> : UnknownLabel}
     </span>
