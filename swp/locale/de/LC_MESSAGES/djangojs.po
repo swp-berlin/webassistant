@@ -274,6 +274,10 @@ msgstr "Neuer Scraper"
 msgid "Unique on"
 msgstr "Eindeutig für"
 
+#, javascript-format
+msgid "%s Publication"
+msgstr "%s Publikation"
+
 msgid "Edit Thinktank"
 msgstr "Thinktank bearbeiten"
 

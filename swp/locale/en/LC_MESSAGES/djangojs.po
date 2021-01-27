@@ -274,6 +274,10 @@ msgstr ""
 msgid "Unique on"
 msgstr ""
 
+#, javascript-format
+msgid "%s Publication"
+msgstr ""
+
 msgid "Edit Thinktank"
 msgstr ""
 
