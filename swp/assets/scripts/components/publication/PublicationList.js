@@ -35,7 +35,7 @@ const PublicationItem = ({id, title, authors, abstract, publicationDate, pdfURL,
 );
 
 const PublicationList = ({items, className, ...props}) => (
-    <ul className={classNames('publication-list', 'list-none', 'p-0', items.length || 'empty', className)} {...props}>
+    <ul className={classNames('publication-list', 'list-none', 'p-0', items.length > 0 || 'empty', className)} {...props}>
         {items.map(publication => (
             <li key={publication.id}>
                 <PublicationItem
