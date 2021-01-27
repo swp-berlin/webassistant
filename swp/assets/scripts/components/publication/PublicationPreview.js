@@ -16,6 +16,20 @@ const calculatePageCount = (total, pageSize) => Math.ceil(total / pageSize);
 const generatePageNumbers = (total, pageSize) => Array(calculatePageCount(total, pageSize)).fill().map((e, i) => i + 1);
 
 
+const PageButton = ({page, setCurrentPage, ...props}) => {
+    const handleClick = useCallback(() => setCurrentPage(page), [page, setCurrentPage]);
+    return (
+        <Button onClick={handleClick} {...props}>
+            {page}
+        </Button>
+    );
+};
+
+const PageButtons = ({pages, currentPage, setCurrentPage}) => pages.map(page => (
+    <PageButton page={page} setCurrentPage={setCurrentPage} active={page === currentPage} />
+));
+
+
 const PublicationPreview = ({thinktankID, page, pageSize, noTitle, className, ...props}) => {
     const [currentPage, setCurrentPage] = useState(page || 1);
 
@@ -39,8 +53,7 @@ const PublicationPreview = ({thinktankID, page, pageSize, noTitle, className, ..
     const handleNextPage = useCallback(() => nextPage && setCurrentPage(currentPage + 1), [currentPage, nextPage]);
     const handlePrevPage = useCallback(() => prevPage && setCurrentPage(currentPage - 1), [currentPage, prevPage]);
     const handleFirstPage = useCallback(() => setCurrentPage(1), [setCurrentPage]);
-    const handleLastPage = useCallback(() => setCurrentPage(pages.length), [pages.length]);
-    const handlePage = useCallback(page => setCurrentPage(page), [setCurrentPage]);
+    const handleLastPage = useCallback(() => setCurrentPage(pages.length), [setCurrentPage, pages.length]);
 
     if (loading) return Loading;
     const title = count ? interpolate(PublicationsLabel, [count], false) : NoPublications;
@@ -55,11 +68,7 @@ const PublicationPreview = ({thinktankID, page, pageSize, noTitle, className, ..
                 <ButtonGroup className="page-buttons">
                     <Button key="first" onClick={handleFirstPage} disabled={!prevPage} icon="double-chevron-left" />
                     <Button key="prev" onClick={handlePrevPage} disabled={!prevPage} icon="chevron-left" />
-                    {pages.map(page => (
-                        <Button key={page} onClick={() => handlePage(page)} active={page === currentPage}>
-                            {page}
-                        </Button>
-                    ))}
+                    <PageButtons pages={pages} currentPage={currentPage} setCurrentPage={setCurrentPage} />
                     <Button key="next" onClick={handleNextPage} disabled={!nextPage} icon="chevron-right" />
                     <Button key="last" onClick={handleLastPage} disabled={!nextPage} icon="double-chevron-right" />
                 </ButtonGroup>
