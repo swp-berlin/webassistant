@@ -2,34 +2,6 @@
   {
     "model": "auth.group",
     "fields": {
-      "name": "swp-useradmin",
-      "permissions": [
-        [
-          "add_user",
-          "swp",
-          "user"
-        ],
-        [
-          "change_user",
-          "swp",
-          "user"
-        ],
-        [
-          "delete_user",
-          "swp",
-          "user"
-        ],
-        [
-          "view_user",
-          "swp",
-          "user"
-        ]
-      ]
-    }
-  },
-  {
-    "model": "auth.group",
-    "fields": {
       "name": "swp-manager",
       "permissions": [
         [

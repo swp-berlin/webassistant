@@ -18,26 +18,6 @@
 {
   "model": "swp.user",
   "fields": {
-    "password": "pbkdf2_sha256$216000$Q2D1Q2xnERh1$ny+zcQlbGTQYpJCgrzbJlZppMGq4S0CWDZk+Csr7TBs=",
-    "last_login": "2020-12-03T17:24:33.234Z",
-    "is_superuser": false,
-    "first_name": "",
-    "last_name": "",
-    "is_staff": true,
-    "is_active": true,
-    "date_joined": "2020-12-03T17:22:44.028Z",
-    "email": "swp-useradmin@localhost",
-    "groups": [
-      [
-        "swp-useradmin"
-      ]
-    ],
-    "user_permissions": []
-  }
-},
-{
-  "model": "swp.user",
-  "fields": {
     "password": "pbkdf2_sha256$216000$JWKZCWSpTZ64$ED/rInsGhkqORIP/793E7z/aYPp0HIe+SPsMVKeaQ5s=",
     "last_login": "2020-12-04T12:21:20.426Z",
     "is_superuser": false,
