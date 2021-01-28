@@ -147,8 +147,10 @@ msgid "No publications"
 msgstr "Keine Publikationen"
 
 #, javascript-format
-msgid "%s Publications"
-msgstr "%s Publikationen"
+msgid "%s Publication"
+msgid_plural "%s Publications"
+msgstr[0] "%s Publikation"
+msgstr[1] "%s Publikationen"
 
 msgid "Warning"
 msgstr "Warnung"
@@ -273,10 +275,6 @@ msgstr "Neuer Scraper"
 
 msgid "Unique on"
 msgstr "Eindeutig für"
-
-#, javascript-format
-msgid "%s Publication"
-msgstr "%s Publikation"
 
 msgid "Edit Thinktank"
 msgstr "Thinktank bearbeiten"
