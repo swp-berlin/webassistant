@@ -88,6 +88,9 @@ msgstr "Statisch"
 msgid "Tag"
 msgstr "Tag"
 
+msgid "Field"
+msgstr "Feld"
+
 msgid "Title"
 msgstr "Titel"
 

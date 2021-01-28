@@ -140,6 +140,9 @@ msgstr ""
 msgid "%s pages"
 msgstr ""
 
+msgid "No PDF found"
+msgstr ""
+
 msgid "Loading"
 msgstr ""
 
@@ -253,6 +256,12 @@ msgid "Last Run"
 msgstr ""
 
 msgid "Errors"
+msgstr ""
+
+msgid "Loading Preview"
+msgstr ""
+
+msgid "The Scraper is collecting publications. This may take a while."
 msgstr ""
 
 msgid "No items"

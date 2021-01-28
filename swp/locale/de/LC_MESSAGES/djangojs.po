@@ -140,6 +140,9 @@ msgstr "unbekannt"
 msgid "%s pages"
 msgstr "%s Seiten"
 
+msgid "No PDF found"
+msgstr "Kein PDF gefunden"
+
 msgid "Loading"
 msgstr "Lade…"
 
@@ -254,6 +257,12 @@ msgstr "Letzter Durchlauf"
 
 msgid "Errors"
 msgstr "Fehler"
+
+msgid "Loading Preview"
+msgstr "Lade Vorschau …"
+
+msgid "The Scraper is collecting publications. This may take a while."
+msgstr "Der Scraper trägt Publikationen zusammen. Dieser Vorgang kann eine Weile dauern."
 
 msgid "No items"
 msgstr "Keine Einträge"
