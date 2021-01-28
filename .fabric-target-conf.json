@@ -25,6 +25,7 @@
         "npm run build",
         "env/bin/python manage.py collectstatic --no-input",
         "sudo systemctl start swp@production.service",
+        "sudo systemctl restart celery@production.service",
         "sudo systemctl restart nginx.service"
       ]
     },
@@ -54,6 +55,7 @@
         "npm run build",
         "env/bin/python manage.py collectstatic --no-input",
         "sudo systemctl start swp@staging.service",
+        "sudo systemctl restart celery@production.service",
         "sudo systemctl restart nginx.service"
       ]
     }
