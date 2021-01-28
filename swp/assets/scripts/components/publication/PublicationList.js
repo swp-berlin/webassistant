@@ -27,9 +27,9 @@ const PublicationItem = ({id, title, authors, abstract, publicationDate, pdfURL,
         <p className="abstract my-2">
             {abstract}
         </p>
-        <footer className="flex justify-between">
+        <footer>
             <ExternalLink to={pdfURL} />
-            <span>{interpolate(PagesLabel, [pdfPages], false)}</span>
+            {pdfPages > 0 && <span className="ml-2 text-gray-500">{interpolate(PagesLabel, [pdfPages], false)}</span>}
         </footer>
     </article>
 );

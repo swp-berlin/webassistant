@@ -2,14 +2,14 @@ import {useState} from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import {useQuery} from 'hooks/query';
-import _, {interpolate} from 'utils/i18n';
+import _ from 'utils/i18n';
 
+import {getPublicationsLabel} from './helper';
 import PublicationResults from './PublicationResults';
 
 
 const Loading = _('Loading');
 const NoPublications = _('No publications');
-const PublicationsLabel = _('%s Publications');
 
 const calculatePageCount = (total, pageSize) => Math.ceil(total / pageSize);
 
@@ -23,7 +23,7 @@ const PublicationPreview = ({thinktankID, page, pageSize, noTitle, className, ..
     if (loading) return Loading;
 
     const {data: {results, next: nextPage, previous: prevPage, count}} = result;
-    const title = count ? interpolate(PublicationsLabel, [count], false) : NoPublications;
+    const title = count ? getPublicationsLabel(count) : NoPublications;
 
     return (
         <div className={classNames('publication-preview', 'my-4', className)} {...props}>

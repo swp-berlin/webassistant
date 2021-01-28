@@ -5,6 +5,7 @@ import ActivationButton from 'components/buttons/ActivationButton';
 import {useBreadcrumb} from 'components/Navigation';
 import Page from 'components/Page';
 import ScraperTable from 'components/scraper/ScraperTable';
+import {getPublicationsLabel} from 'components/publication/helper';
 import TableActions from 'components/tables/TableActions';
 
 import {useQuery} from 'hooks/query';
@@ -17,7 +18,7 @@ const ThinktankLabel = _('Thinktank %s');
 const EditLabel = _('Edit');
 const NewScraperLabel = _('New scraper');
 const UniqueLabel = _('Unique on');
-const PublicationsLabel = _('%s Publications');
+
 const Nbsp = '\u00A0';
 
 
@@ -83,7 +84,7 @@ const ThinktankDetail = ({id, ...props}) => {
     return (
         <Page title={label} subtitle={subtitle} actions={actions}>
             <Link to={`/thinktank/${id}/publications/`}>
-                {interpolate(PublicationsLabel, [publicationCount], false)}
+                {getPublicationsLabel(publicationCount)}
             </Link>
 
             <div className="flex justify-between items-end">
