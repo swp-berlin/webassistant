@@ -43,7 +43,7 @@ class User {
     }
 
     canViewAdmin() {
-        return this.isActive && this.isStaff && this.isSuperUser;
+        return this.isActive && this.isStaff;
     }
 }
 
