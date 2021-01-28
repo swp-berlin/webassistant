@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import {Icon} from '@blueprintjs/core';
 import ExternalLink from 'components/Navigation/ExternalLink';
 import CommaList from 'components/lists/CommaList';
 import _, {interpolate} from 'utils/i18n';
@@ -7,11 +8,19 @@ import _, {interpolate} from 'utils/i18n';
 const By = _('by');
 const UnknownLabel = _('unknown');
 const PagesLabel = _('%s pages');
+const PDFNotFoundLabel = _('No PDF found');
 
 const Authors = ({authors, className}) => (
     <span className={classNames('authors', {empty: authors.length === 0}, className)}>
         {`${By} ` }
         {authors.length ? <CommaList items={authors} /> : UnknownLabel}
+    </span>
+);
+
+const PDFNotFound = () => (
+    <span className="text-gray-500">
+        <Icon className="mr-1" icon="issue" />
+        {PDFNotFoundLabel}
     </span>
 );
 
@@ -28,7 +37,7 @@ const PublicationItem = ({id, title, authors, abstract, publicationDate, pdfURL,
             {abstract}
         </p>
         <footer>
-            <ExternalLink to={pdfURL} />
+            {pdfURL ? <ExternalLink to={pdfURL} /> : <PDFNotFound />}
             {pdfPages > 0 && <span className="ml-2 text-gray-500">{interpolate(PagesLabel, [pdfPages], false)}</span>}
         </footer>
     </article>
