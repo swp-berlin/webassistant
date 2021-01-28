@@ -24,7 +24,7 @@ const PDFNotFound = () => (
     </span>
 );
 
-const PublicationItem = ({id, title, authors, abstract, publicationDate, pdfURL, pdfPages, ...props}) => (
+export const PublicationItem = ({id, title, authors, abstract, publicationDate, pdfURL, pdfPages, ...props}) => (
     <article className="publication-item mb-2" {...props}>
         <header>
             <h5>{title}</h5>
