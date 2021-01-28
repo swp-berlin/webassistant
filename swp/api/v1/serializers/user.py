@@ -12,6 +12,8 @@ class UserSerializer(ModelSerializer):
     class Meta:
         model = User
         read_only_fields = [
+            'is_superuser',
+            'is_staff',
             'name',
             'groups',
             'permissions',
