@@ -9,7 +9,7 @@ from cosmogo.utils.testing import create_user, login, request
 from swp.api.v1.serializers import UserSerializer
 from swp.models import User
 from swp.views.auth import PasswordResetConfirmView
-from swp.tests.test_permissions import EDITOR_PERMS, MANAGER_PERMS, USERADMIN_PERMS
+from swp.tests.test_permissions import EDITOR_PERMS, MANAGER_PERMS
 
 
 class AuthViewTestCase(test.TestCase):
@@ -59,7 +59,6 @@ class UserDataTestCase(test.TestCase):
         cls.user = User.objects.get_by_natural_key('admin@localhost')
         cls.user_data = UserSerializer(cls.user).data
 
-        cls.useradmin = User.objects.get_by_natural_key('swp-useradmin@localhost')
         cls.manager = User.objects.get_by_natural_key('swp-manager@localhost')
         cls.editor = User.objects.get_by_natural_key('swp-editor@localhost')
 
@@ -81,9 +80,6 @@ class UserDataTestCase(test.TestCase):
         user_data = self.fetch_user_data(user)
         for perm in perm_list:
             self.assertIn(perm, user_data['permissions'], f'Permission {perm} missing for {user}')
-
-    def test_useradmin_permissions(self):
-        self.check_user_perms(self.useradmin, USERADMIN_PERMS)
 
     def test_manager_permissions(self):
         self.check_user_perms(self.manager, MANAGER_PERMS)

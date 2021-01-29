@@ -99,7 +99,6 @@ Afterwards, you may load generic test accounts for development purposes:
 | User | Password | Group | is_staff | is_superuser |
 | ---- | -------- | ----- | -------- | ------------ |
 | admin@localhost | admin | - | + | + |
-| swp-useradmin@localhost | swp-useradmin | swp-useradmin | + | - |
 | swp-manager@localhost | swp-manager | swp-manager | + | - |
 | swp-editor@localhost | swp-editor | swp-editor | + | - |
 
