@@ -39,7 +39,7 @@ class User {
     }
 
     hasPerm(permission) {
-        return this.permissions.includes(permission);
+        return this.isSuperUser || this.permissions.includes(permission);
     }
 
     canViewAdmin() {
