@@ -5,9 +5,11 @@ from typing import Iterator
 
 from pyppeteer.element_handle import ElementHandle
 
+from django.utils.translation import gettext_lazy as _
+
 from swp.utils.scraping.browser import open_page
 from swp.utils.scraping.context import ScraperContext
-
+from swp.utils.scraping.exceptions import ResolverError
 
 ENDLESS_PAGINATION_OBSERVER_TEMPLATE = """
     () => {
@@ -38,8 +40,15 @@ class Paginator:
 
     async def query_list_items(self, page=None) -> [ElementHandle]:
         page = page or self.context.page
+        selector = f'{self.list_selector} {self.item_selector}'
 
-        nodes = await page.querySelectorAll(f'{self.list_selector} > {self.item_selector}')
+        nodes = await page.querySelectorAll(selector)
+
+        if not nodes:
+            raise ResolverError(
+                _('No elements matching %(selector)s found') % {'selector': selector}
+            )
+
         return nodes
 
 
@@ -94,11 +103,13 @@ class PagePaginator(Paginator):
         for node in nodes:
             yield node
 
-        for _ in range(self.max_pages):
+        for page_number in range(self.max_pages):
             next_page_link = await self.context.page.querySelector(self.button_selector)
 
             if not next_page_link:
-                return
+                raise ResolverError(
+                    _('No pagination button found for %(selector)s') % {'selector': self.button_selector}
+                )
 
             href_property = await next_page_link.getProperty('href')
             # noinspection PyTypeChecker

@@ -1,3 +1,5 @@
+import {Callout} from '@blueprintjs/core';
+
 import {Status} from './common';
 
 
@@ -7,9 +9,18 @@ const Publication = ({publication}) => (
 );
 
 
-const PreviewResult = ({status, publications, traceback}) => {
+const PreviewResult = ({status, result: {success, error, publications}, traceback}) => {
     if (status === Status.Failure) {
         return <pre>{traceback}</pre>;
+    }
+
+    if (!success) {
+        return (
+            <Callout intent="danger" title="Scraper Error">
+                <p>Scraping failed with the following error:</p>
+                <pre className="mt-2 whitespace-pre-line">{error}</pre>
+            </Callout>
+        );
     }
 
     return (
