@@ -5,7 +5,7 @@ from swp.utils.scraping import Scraper
 from swp.utils.scraping.exceptions import ScraperError
 
 
-PUBLICATION_PREVIEW_COUNT = 10
+PUBLICATION_PREVIEW_COUNT = 3
 
 
 async def scrape(scraper, config):

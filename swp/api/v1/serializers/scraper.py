@@ -73,7 +73,7 @@ class StaticResolverSerializer(Serializer):
 
 
 class DocumentResolverSerializer(Serializer):
-    key = CharField(default='document')
+    key = CharField(default='pdf_url')
     selector = CSSSelectorField()
 
 
