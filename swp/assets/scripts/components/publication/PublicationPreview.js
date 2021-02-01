@@ -45,7 +45,7 @@ const PublicationPreview = ({thinktankID, page, pageSize, noTitle, className, ..
 
 PublicationPreview.defaultProps = {
     page: 1,
-    pageSize: 3,
+    pageSize: 10,
     noTitle: false,
 };
 
