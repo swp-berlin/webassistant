@@ -82,6 +82,9 @@ msgstr "Wartungsarbeiten"
 msgid "We are currently doing maintenance work. Please reload the page in a few seconds."
 msgstr "Wartungsarbeiten. Bitte laden Sie die Seite in ein paar Sekunden erneut."
 
+msgid "Admin"
+msgstr "Admin"
+
 msgid "Monitoring Profiles"
 msgstr "Monitoring-Profile"
 
@@ -121,9 +124,6 @@ msgstr "(erfordert)"
 msgid "No Results"
 msgstr "Keine Ergebnisse"
 
-msgid "by"
-msgstr "von"
-
 msgid "and"
 msgstr "und"
 
@@ -132,6 +132,9 @@ msgstr "oder"
 
 msgid "nor"
 msgstr "noch"
+
+msgid "by"
+msgstr "von"
 
 msgid "unknown"
 msgstr "unbekannt"
@@ -205,6 +208,10 @@ msgstr "Paginierungsselektor"
 
 msgid "Max Pages"
 msgstr "Maximale Seitenzahl"
+
+
+msgid "Please enter a valid css selector"
+msgstr "Bitte geben Sie einen gültigen Selektor ein"
 
 msgid "Value"
 msgstr "Wert"
