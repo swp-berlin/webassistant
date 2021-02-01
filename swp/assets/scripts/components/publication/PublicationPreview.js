@@ -1,4 +1,5 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
+import {useHistory, useLocation} from 'react-router-dom';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import {useQuery} from 'hooks/query';
@@ -14,7 +15,24 @@ const NoPublications = _('No publications');
 const calculatePageCount = (total, pageSize) => Math.ceil(total / pageSize);
 
 const PublicationPreview = ({thinktankID, page, pageSize, noTitle, className, ...props}) => {
-    const [currentPage, setCurrentPage] = useState(page || 1);
+    const history = useHistory();
+    const location = useLocation();
+    const search = new URLSearchParams(location.search);
+
+    const [currentPage, setCurrentPage] = useState(page || +search.get('page') || 1);
+
+    useEffect(
+        () => {
+            const params = new URLSearchParams(location.search);
+            params.set('page', currentPage);
+
+            history.push({
+                pathname: location.pathname,
+                search: params.toString(),
+            });
+        },
+        [location.search, location.pathname, history, currentPage, setCurrentPage],
+    );
 
     const endpoint = '/publication/';
     const params = {thinktank_id: thinktankID, page: currentPage, page_size: pageSize};
@@ -44,7 +62,7 @@ const PublicationPreview = ({thinktankID, page, pageSize, noTitle, className, ..
 };
 
 PublicationPreview.defaultProps = {
-    page: 1,
+    page: null,
     pageSize: 10,
     noTitle: false,
 };
