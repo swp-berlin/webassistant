@@ -1,8 +1,7 @@
 import _ from 'utils/i18n';
-import {TextInput} from 'components/forms';
 
 import ResolverListForm from '../ResolverListForm';
-import SelectorField from 'components/scraper/ResolverForm/forms/SelectorField';
+import SelectorField from './SelectorField';
 
 
 const LinkLabel = _('Link');

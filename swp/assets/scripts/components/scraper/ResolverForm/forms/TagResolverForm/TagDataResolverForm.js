@@ -1,6 +1,6 @@
 import _ from 'utils/i18n';
-import {TextInput} from 'components/forms';
-import SelectorField from 'components/scraper/ResolverForm/forms/SelectorField';
+
+import SelectorField from '../SelectorField';
 
 
 const DataLabel = _('Data');
