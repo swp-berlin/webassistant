@@ -1,7 +1,11 @@
 import {Callout} from '@blueprintjs/core';
 
+import _ from 'utils/i18n';
+
 import {Status} from './common';
 
+
+const ScrapingErrorText = _('Scraping failed with the following error:');
 
 // TODO replace with Component from https://cosmocode.jira.com/browse/SWP-47
 const Publication = ({publication}) => (
@@ -17,7 +21,7 @@ const PreviewResult = ({status, result: {success, error, publications}, tracebac
     if (!success) {
         return (
             <Callout intent="danger" title="Scraper Error">
-                <p>Scraping failed with the following error:</p>
+                <p>{ScrapingErrorText}</p>
                 <pre className="mt-2 whitespace-pre-line">{error}</pre>
             </Callout>
         );
