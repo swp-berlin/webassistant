@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import _ from 'utils/i18n';
 
 import {Query} from 'components/Fetch';
-import {getPublicationsLabel} from './helper';
+import {getPublicationsLabel, parsePageParam} from './helper';
 import PublicationResults from './PublicationResults';
 
 
@@ -14,8 +14,7 @@ const calculatePageCount = (total, pageSize) => Math.ceil(total / pageSize);
 
 const PublicationPreview = ({thinktankID, endpoint, page, pageSize, noTitle, className, ...props}) => {
     const location = useLocation();
-    const search = new URLSearchParams(location.search);
-    const currentPage = page || +search.get('page') || 1;
+    const currentPage = page || parsePageParam(location.search) || 1;
 
     const params = {thinktank_id: thinktankID, page: currentPage, page_size: pageSize};
 

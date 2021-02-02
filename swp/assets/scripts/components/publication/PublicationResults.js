@@ -1,8 +1,9 @@
-import {useCallback, useMemo} from 'react';
+import {useMemo} from 'react';
 import {Link, useLocation} from 'react-router-dom';
 import classNames from 'classnames';
 import {ButtonGroup, Icon} from '@blueprintjs/core';
 
+import {withPageParam} from './helper';
 import PublicationList from './PublicationList';
 
 
@@ -10,11 +11,9 @@ const generatePageNumbers = count => Array(count).fill(0).map((e, i) => i + 1);
 
 const PageButton = ({page, setCurrentPage, active, icon, disabled, ...props}) => {
     const location = useLocation();
-    const search = new URLSearchParams(location.search);
-    search.set('page', page);
     const to = {
         pathname: location.pathname,
-        search: search.toString(),
+        search: withPageParam(location.search, page),
     };
 
     return (
