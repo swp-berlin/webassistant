@@ -98,11 +98,7 @@ class ListResolver(IntermediateResolver):
         for resolver in self.resolvers:
             await resolver.resolve(node, fields, errors)
 
-        result = {'fields': fields, 'errors': errors}
-
-        print(result)
-
-        return result
+        return {'fields': fields, 'errors': errors}
 
 
 class LinkResolver(SelectorMixin, IntermediateResolver):
