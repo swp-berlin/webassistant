@@ -1,16 +1,22 @@
 import {Callout} from '@blueprintjs/core';
 
 import _ from 'utils/i18n';
+import {PublicationItem} from 'components/publication';
 
 import {Status} from './common';
 
 
 const ScrapingErrorText = _('Scraping failed with the following error:');
 
-// TODO replace with Component from https://cosmocode.jira.com/browse/SWP-47
-const Publication = ({publication}) => (
-    <pre>{JSON.stringify(publication, null, 2)}</pre>
-);
+
+const getValues = (fields, errors) => ({
+    title: errors.title || fields.title,
+    authors: errors.author || [fields.author],
+    abstract: errors.abstract || fields.abstract,
+    publicationDate: errors.publication_date || fields.publication_date,
+    pdfURL: errors.pdf_url || fields.pdf_url,
+    pdfPages: fields.pdf_pages,
+});
 
 
 const PreviewResult = ({status, result: {success, error, publications}, traceback}) => {
@@ -28,10 +34,15 @@ const PreviewResult = ({status, result: {success, error, publications}, tracebac
     }
 
     return (
-        <ul>
-            {status === Status.Success && publications.map((publication, idx) => (
+        <ul className="list-none pl-0">
+            {status === Status.Success && publications.map(({fields, errors}, idx) => (
                 // eslint-disable-next-line react/no-array-index-key
-                <li key={idx}><Publication publication={publication} /></li>
+                <li key={idx}>
+                    <PublicationItem
+                        id={idx}
+                        {...getValues(fields, errors)}
+                    />
+                </li>
             ))}
         </ul>
     );
