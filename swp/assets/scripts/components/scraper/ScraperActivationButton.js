@@ -32,7 +32,7 @@ const ScraperActivationButton = ({id, initialIsActive}) => {
 
     const active = watch('is_active', !initialIsActive);
 
-    return <Button onClick={onSubmit} intent="primary" text={!active ? DisableLabel : EnableLabel} />;
+    return <Button onClick={onSubmit} intent="primary" text={active ? EnableLabel : DisableLabel} />;
 };
 
 export default ScraperActivationButton;
