@@ -1,31 +1,37 @@
-import {useCallback, useMemo} from 'react';
-import {Button, ButtonGroup} from '@blueprintjs/core';
+import {useMemo} from 'react';
+import {Link, useLocation} from 'react-router-dom';
+import classNames from 'classnames';
+import {ButtonGroup, Icon} from '@blueprintjs/core';
 
+import {withPageParam} from './helper';
 import PublicationList from './PublicationList';
 
 
 const generatePageNumbers = count => Array(count).fill(0).map((e, i) => i + 1);
 
-const PageButton = ({page, setCurrentPage, ...props}) => {
-    const handleClick = useCallback(() => setCurrentPage(page), [page, setCurrentPage]);
+const PageButton = ({page, active, icon, disabled, ...props}) => {
+    const location = useLocation();
+    const to = {
+        pathname: location.pathname,
+        search: withPageParam(location.search, page),
+    };
+
     return (
-        <Button onClick={handleClick} {...props}>
-            {page}
-        </Button>
+        <Link className={classNames('bp3-button', active && 'bp3-active', disabled && 'bp3-disabled')} to={to} disabled={disabled} {...props}>
+            {icon ? <Icon icon={icon} /> : page}
+        </Link>
     );
 };
 
-const PageButtons = ({pages, currentPage, setCurrentPage}) => pages.map(page => (
-    <PageButton key={page} page={page} setCurrentPage={setCurrentPage} active={page === currentPage} />
+const PageButtons = ({pages, currentPage}) => pages.map(page => (
+    <PageButton key={page} page={page} active={page === currentPage} />
 ));
 
-const PublicationResults = ({results, pageCount, currentPage, setCurrentPage, nextPage, prevPage, ...props}) => {
+const PublicationResults = ({results, pageCount, currentPage, nextPage, prevPage, ...props}) => {
     const pages = useMemo(() => generatePageNumbers(pageCount), [pageCount]);
 
-    const handleNextPage = useCallback(() => nextPage && setCurrentPage(page => page + 1), [setCurrentPage, nextPage]);
-    const handlePrevPage = useCallback(() => prevPage && setCurrentPage(page => page - 1), [setCurrentPage, prevPage]);
-    const handleFirstPage = useCallback(() => setCurrentPage(1), [setCurrentPage]);
-    const handleLastPage = useCallback(() => setCurrentPage(pageCount), [setCurrentPage, pageCount]);
+    const nextPageNumber = Math.min(currentPage + 1, pageCount);
+    const prevPageNumber = Math.max(currentPage - 1, 1);
 
     return (
         <div className="publication-results">
@@ -33,11 +39,11 @@ const PublicationResults = ({results, pageCount, currentPage, setCurrentPage, ne
 
             <div className="pagination mt-4" key="pagination">
                 <ButtonGroup className="page-buttons">
-                    <Button key="first" onClick={handleFirstPage} disabled={!prevPage} icon="double-chevron-left" />
-                    <Button key="prev" onClick={handlePrevPage} disabled={!prevPage} icon="chevron-left" />
-                    <PageButtons pages={pages} currentPage={currentPage} setCurrentPage={setCurrentPage} />
-                    <Button key="next" onClick={handleNextPage} disabled={!nextPage} icon="chevron-right" />
-                    <Button key="last" onClick={handleLastPage} disabled={!nextPage} icon="double-chevron-right" />
+                    <PageButton key="first" page={1} disabled={!prevPage} icon="double-chevron-left" />
+                    <PageButton key="prev" page={prevPageNumber} disabled={!prevPage} icon="chevron-left" />
+                    <PageButtons pages={pages} currentPage={currentPage} />
+                    <PageButton key="next" page={nextPageNumber} disabled={!nextPage} icon="chevron-right" />
+                    <PageButton key="last" page={pageCount} disabled={!nextPage} icon="double-chevron-right" />
                 </ButtonGroup>
             </div>
         </div>
