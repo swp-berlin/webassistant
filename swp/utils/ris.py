@@ -1,11 +1,11 @@
-from typing import Optional, Tuple
+from typing import Optional, Sequence, Tuple
 
 from django.http import HttpResponse
 
 from swp.models import Publication
 
 
-def get_ris_data(publication: Publication) -> [Tuple[str, Optional[str]]]:
+def get_ris_data(publication: Publication) -> Sequence[Tuple[str, Optional[str]]]:
     authors = publication.authors or []
 
     return [
