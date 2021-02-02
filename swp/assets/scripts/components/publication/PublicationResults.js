@@ -9,7 +9,7 @@ import PublicationList from './PublicationList';
 
 const generatePageNumbers = count => Array(count).fill(0).map((e, i) => i + 1);
 
-const PageButton = ({page, setCurrentPage, active, icon, disabled, ...props}) => {
+const PageButton = ({page, active, icon, disabled, ...props}) => {
     const location = useLocation();
     const to = {
         pathname: location.pathname,
@@ -23,8 +23,8 @@ const PageButton = ({page, setCurrentPage, active, icon, disabled, ...props}) =>
     );
 };
 
-const PageButtons = ({pages, currentPage, setCurrentPage}) => pages.map(page => (
-    <PageButton key={page} page={page} setCurrentPage={setCurrentPage} active={page === currentPage} />
+const PageButtons = ({pages, currentPage}) => pages.map(page => (
+    <PageButton key={page} page={page} active={page === currentPage} />
 ));
 
 const PublicationResults = ({results, pageCount, currentPage, nextPage, prevPage, ...props}) => {

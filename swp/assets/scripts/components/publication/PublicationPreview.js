@@ -1,4 +1,5 @@
 import {useLocation} from 'react-router-dom';
+import {AnchorButton} from '@blueprintjs/core';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import _ from 'utils/i18n';
@@ -9,6 +10,7 @@ import PublicationResults from './PublicationResults';
 
 
 const NoPublications = _('No publications');
+const DownloadLabel = _('Download .RIS');
 
 const calculatePageCount = (total, pageSize) => Math.ceil(total / pageSize);
 
@@ -23,8 +25,15 @@ const PublicationPreview = ({thinktankID, endpoint, page, pageSize, noTitle, cla
             {({results, next: nextPage, previous: prevPage, count}) => (
                 <div className={classNames('publication-preview', 'my-4', className)} {...props}>
                     {noTitle || (
-                        <header className="mb-2">
+                        <header className="flex space-x-4 mb-2">
                             <h3>{count ? getPublicationsLabel(count) : NoPublications}</h3>
+                            <AnchorButton
+                                minimal
+                                download
+                                icon="download"
+                                text={DownloadLabel}
+                                href={`/thinktank/${thinktankID}/download/`}
+                            />
                         </header>
                     )}
 
@@ -46,7 +55,7 @@ const PublicationPreview = ({thinktankID, endpoint, page, pageSize, noTitle, cla
 PublicationPreview.defaultProps = {
     endpoint: '/publication/',
     page: null,
-    pageSize: 3,
+    pageSize: 10,
     noTitle: false,
 };
 

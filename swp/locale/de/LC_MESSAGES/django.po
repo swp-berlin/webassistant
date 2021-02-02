@@ -42,6 +42,9 @@ msgstr "Es muss ein Resolver für die folgenden Felder vorhanden sein: %(fields)
 msgid "Active"
 msgstr "Aktiv"
 
+msgid "Invalid Selector"
+msgstr "Ungültiger Selektor"
+
 #, python-format
 msgid "Missing %s permission"
 msgstr "Fehlende Berechtigung %s"
@@ -331,3 +334,31 @@ msgstr "Ihr SWP Team"
 
 msgid "Please go to the following page and choose a new password:"
 msgstr "Bitte gehen Sie zur folgenden Seite um ein neues Passwort zu setzen:"
+
+#, python-format
+msgid "No elements matching %(selector)s found"
+msgstr "Keine Elemente, die auf %(selector)s zutreffen, gefunden"
+
+#, python-format
+msgid "No pagination button found for %(selector)s"
+msgstr "Kein Paginierungsbutton für %(selector)s gefunden"
+
+#, python-format
+msgid "No element matches %(selector)s"
+msgstr "Kein Element für %(selector)s gefunden"
+
+#, python-format
+msgid "Link %(href)s points to an external site."
+msgstr "Der Link %(href)s führt auf eine externe Seite."
+
+#, python-format
+msgid "Failed to open %(href)s: %(error)s"
+msgstr "%(href)s konnte nicht geöffnet werden: %(error)s"
+
+#, python-format
+msgid "Timeout waiting for download of %(url)s"
+msgstr "Zeitüberschreitung beim Warten auf das Herunterladen von %(url)s"
+
+#, python-format
+msgid "Failed to open pdf: %(error)s"
+msgstr "Fehler beim Öffnen von pdf: %(error)s"

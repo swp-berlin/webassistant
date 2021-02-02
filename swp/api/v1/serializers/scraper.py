@@ -9,7 +9,7 @@ from cosmogo.utils.text import enumeration
 from swp.models import Scraper
 from swp.models.choices import DataResolverKey, ResolverType
 
-from .fields import ThinktankField
+from .fields import ThinktankField, CSSSelectorField
 
 
 class ResolverConfigSerializer(Serializer):
@@ -42,25 +42,25 @@ class ResolverConfigSerializer(Serializer):
 
 class PaginatorSerializer(Serializer):
     type = CharField(default='Page')
-    list_selector = CharField()
-    button_selector = CharField(allow_blank=True)
+    list_selector = CSSSelectorField()
+    button_selector = CSSSelectorField(allow_blank=True)
     max_pages = IntegerField(min_value=1)
 
 
 class ListResolverSerializer(Serializer):
-    selector = CharField()
+    selector = CSSSelectorField()
     paginator = PaginatorSerializer()
     resolvers = ResolverConfigSerializer(many=True)
 
 
 class LinkResolverSerializer(Serializer):
-    selector = CharField()
+    selector = CSSSelectorField()
     resolvers = ResolverConfigSerializer(many=True)
 
 
 class DataResolverSerializer(Serializer):
     key = ChoiceField(choices=DataResolverKey.choices)
-    selector = CharField(required=True)
+    selector = CSSSelectorField(required=True)
 
 
 class AttributeResolverSerializer(DataResolverSerializer):
@@ -73,8 +73,8 @@ class StaticResolverSerializer(Serializer):
 
 
 class DocumentResolverSerializer(Serializer):
-    key = CharField(default='document')
-    selector = CharField()
+    key = CharField(default='pdf_url')
+    selector = CSSSelectorField()
 
 
 class TagResolverSerializer(Serializer):
@@ -82,7 +82,7 @@ class TagResolverSerializer(Serializer):
 
 
 class TagDataResolverSerializer(Serializer):
-    selector = CharField(required=True)
+    selector = CSSSelectorField(required=True)
 
 
 class TagAttributeResolverSerializer(TagDataResolverSerializer):
