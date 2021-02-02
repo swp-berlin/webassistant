@@ -270,7 +270,7 @@ class DocumentResolver(DataResolver):
         try:
             pdf = pikepdf.open(path)
         except pikepdf.PdfError as err:
-            raise ResolverError(_('Failed to open pdf: %(error)s') % {'error', str(err)})
+            raise ResolverError(_('Failed to open pdf: %(error)s') % {'error': str(err)})
 
         page_count = len(pdf.pages)
         meta = pdf.docinfo.as_dict()
