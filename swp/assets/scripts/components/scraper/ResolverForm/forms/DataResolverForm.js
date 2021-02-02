@@ -1,7 +1,8 @@
 import _ from 'utils/i18n';
-import {TextInput} from 'components/forms';
 import {getChoices} from 'utils/choices';
 import {Select} from 'components/forms/Select';
+
+import SelectorField from './SelectorField';
 
 
 const KeyLabel = _('Field');
@@ -23,8 +24,8 @@ const DataResolverForm = props => {
                 errors={errors}
                 defaultValue={field.key || KeyChoices[0].value}
             />
-            <TextInput
-                register={register({required: true})}
+            <SelectorField
+                register={register}
                 name={`${prefix}.selector`}
                 label={SelectorLabel}
                 errors={errors}

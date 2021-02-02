@@ -1,6 +1,7 @@
 import _ from 'utils/i18n';
 
 import {TextInput} from 'components/forms';
+import SelectorField from 'components/scraper/ResolverForm/forms/SelectorField';
 
 
 const SelectorLabel = _('Selector');
@@ -12,8 +13,8 @@ const TagAttributeResolverForm = props => {
     return (
         <div>
             <input name={`${prefix}.type`} ref={register({required: true})} type="hidden" defaultValue="TagAttribute" />
-            <TextInput
-                register={register({required: true})}
+            <SelectorField
+                register={register}
                 name={`${prefix}.selector`}
                 label={SelectorLabel}
                 errors={errors}

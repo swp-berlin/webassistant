@@ -42,6 +42,9 @@ msgstr ""
 msgid "Active"
 msgstr ""
 
+msgid "Invalid Selector"
+msgstr ""
+
 #, python-format
 msgid "Missing %s permission"
 msgstr ""
@@ -330,4 +333,32 @@ msgid "The SWP team"
 msgstr ""
 
 msgid "Please go to the following page and choose a new password:"
+msgstr ""
+
+#, python-format
+msgid "No elements matching %(selector)s found"
+msgstr ""
+
+#, python-format
+msgid "No pagination button found for %(selector)s"
+msgstr ""
+
+#, python-format
+msgid "No element matches %(selector)s"
+msgstr ""
+
+#, python-format
+msgid "Link %(href)s points to an external site."
+msgstr ""
+
+#, python-format
+msgid "Failed to open %(href)s: %(error)s"
+msgstr ""
+
+#, python-format
+msgid "Timeout waiting for download of %(url)s"
+msgstr ""
+
+#, python-format
+msgid "Failed to open pdf: %(error)s"
 msgstr ""

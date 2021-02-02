@@ -1,42 +1,27 @@
-from contextlib import asynccontextmanager, contextmanager
-from dataclasses import dataclass
-from datetime import datetime
+from contextlib import contextmanager
+from typing import List, TypedDict
 
-from pyppeteer import launch
+from pyppeteer.errors import PyppeteerError
 
 from cosmogo.utils.tempdir import maketempdir
+
 from .browser import open_browser, open_page
 from .context import ScraperContext
+from .exceptions import ScraperError
 from .resolvers import ResolverType
 
 
 URL = str
 
 
-@dataclass
-class Publication:
-    title: str
-    author: str = None
-    published_on: datetime = None
-
-    @property
-    def hash(self) -> str:
-        # TODO
-        return ''
+class Error(TypedDict):
+    message: str
+    level: str
 
 
-@dataclass
-class WatchTarget:
-    url: URL
-    resolver_config: dict
-
-    async def scrape(self) -> [Publication]:
-        scraper = Scraper(self.url)
-
-        scraped = await scraper.scrape(self.resolver_config)
-
-        # TODO
-        return [Publication(**context) for context in scraped]
+class Result(TypedDict):
+    fields: dict
+    errors: List[Error]
 
 
 class Scraper:
@@ -45,17 +30,20 @@ class Scraper:
         self.url = url
         self.download_path = download_path
 
-    async def scrape(self, resolver_config: dict) -> [dict]:
-        async with open_browser(handleSIGINT=False, handleSIGTERM=False, handleSIGHUP=False) as browser:
-            async with open_page(browser) as page:
-                await page.goto(self.url)
+    async def scrape(self, resolver_config: dict) -> [Result]:
+        try:
+            async with open_browser(handleSIGINT=False, handleSIGTERM=False, handleSIGHUP=False) as browser:
+                async with open_page(browser) as page:
+                    await page.goto(self.url)
 
-                with self.get_download_path() as download_path:
-                    context = ScraperContext(browser, page, download_path)
-                    resolver = self.get_resolver(context, **resolver_config)
+                    with self.get_download_path() as download_path:
+                        context = ScraperContext(browser, page, download_path)
+                        resolver = self.get_resolver(context, **resolver_config)
 
-                    async for resolved in resolver.resolve():
-                        yield resolved
+                        async for result in resolver.resolve():
+                            yield result
+        except PyppeteerError as err:
+            raise ScraperError(str(err))
 
     @contextmanager
     def get_download_path(self):

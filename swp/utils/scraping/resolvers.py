@@ -2,29 +2,48 @@ import asyncio
 import os
 import pathlib
 from enum import Enum
+from typing import Optional
 from urllib.parse import urlparse
 
 import pikepdf
 from pyppeteer.element_handle import ElementHandle
+from pyppeteer.errors import ElementHandleError, PageError
+
+from django.utils.translation import gettext_lazy as _
 
 from .browser import open_page
 from .context import ScraperContext
-from .exceptions import DocumentDownloadError, NodeNotFoundError, SkippedError
+from .exceptions import ErrorLevel, ResolverError
 from .paginators import PaginatorType
 from .selectors import Selector
+from .utils import get_error
 
 
 class Resolver:
 
-    def __init__(self, context: ScraperContext, *, selector: Selector, **kwargs):
+    def __init__(self, context: ScraperContext, **kwargs):
         self.context = context
+
+
+class SelectorMixin:
+
+    def __init__(self, *args, selector: Selector, **kwargs):
+        super().__init__(*args, **kwargs)
         self.selector = selector
+
+    async def get_element(self, node: ElementHandle) -> Optional[ElementHandle]:
+        try:
+            elem = await node.querySelector(self.selector)
+        except ElementHandleError as err:
+            raise ResolverError(str(err))
+
+        return elem
 
 
 class IntermediateResolver(Resolver):
 
     def __init__(self, context: ScraperContext, *args, resolvers: [dict], **kwargs):
-        super().__init__(context, *args, **kwargs)
+        super().__init__(context, **kwargs)
         self.resolvers = [self.create_resolver(context, **config) for config in resolvers]
 
     @staticmethod
@@ -37,11 +56,15 @@ class ListResolver(IntermediateResolver):
     Resolves every node selected by the given :selector by calling every resolver in the :resolvers list
     """
 
-    def __init__(self, context, *args, paginator: dict = None, **kwargs):
+    def __init__(self, context, *args, selector: str, paginator: dict = None,
+                 **kwargs):
         super().__init__(context, *args, **kwargs)
 
         if paginator:
-            self.paginator = self.create_paginator(context, **paginator)
+            self.paginator = self.create_paginator(context, item_selector=selector, **paginator)
+            self.selector = f'{paginator["list_selector"]} {selector}'
+        else:
+            self.selector = selector
 
     @staticmethod
     def create_paginator(context, *, type, **paginator):
@@ -49,10 +72,7 @@ class ListResolver(IntermediateResolver):
 
     async def resolve(self) -> [dict]:
         async for node in self.resolve_nodes():
-            try:
-                detail_context = await self.resolve_node(node)
-            except SkippedError:
-                continue
+            detail_context = await self.resolve_node(node)
 
             yield detail_context
 
@@ -63,28 +83,35 @@ class ListResolver(IntermediateResolver):
         else:
             nodes = await self.context.page.querySelectorAll(self.selector)
 
+            if not nodes:
+                raise ResolverError(
+                    _('No elements matching %(selector)s found') % {'selector': self.selector}
+                )
+
             for node in nodes:
                 yield node
 
     async def resolve_node(self, node: ElementHandle):
-        context = {}
+        fields = {}
+        errors = {}
 
         for resolver in self.resolvers:
-            await resolver.resolve(node, context)
+            await resolver.resolve(node, fields, errors)
 
-        print(context)
-
-        return context
+        return {'fields': fields, 'errors': errors}
 
 
-class LinkResolver(IntermediateResolver):
+class LinkResolver(SelectorMixin, IntermediateResolver):
 
     def __init__(self, *args, same_site: bool = False, **kwargs):
         super().__init__(*args, **kwargs)
         self.same_site = same_site
 
     async def get_href(self, node: ElementHandle) -> str:
-        elem = await node.querySelector(self.selector)
+        elem = await self.get_element(node)
+
+        if not elem:
+            raise ResolverError(_('No element matches %(selector)s') % {'selector': self.selector})
 
         href_property = await elem.getProperty('href')
         # noinspection PyTypeChecker
@@ -94,42 +121,51 @@ class LinkResolver(IntermediateResolver):
             url = self.context.page.url
 
             if urlparse(href).netloc != urlparse(url).netloc:
-                raise SkippedError
+                raise ResolverError(_('Link %(href)s points to an external site.') % {'href': href})
 
         return href
 
-    async def resolve(self, node: ElementHandle, context: dict):
+    async def resolve(self, node: ElementHandle, fields: dict, errors: dict):
         href = await self.get_href(node)
 
-        async with open_page(self.context.browser) as detail_page:
-            await detail_page.goto(href)
+        try:
+            async with open_page(self.context.browser) as detail_page:
+                await detail_page.goto(href)
 
-            for resolver in self.resolvers:
-                await resolver.resolve(detail_page, context)
+                for resolver in self.resolvers:
+                    await resolver.resolve(detail_page, fields, errors)
+        except PageError as err:
+            raise ResolverError(_('Failed to open %(href)s: %(error)s') % {'href': href, 'error': str(err)})
 
 
-class DataResolver(Resolver):
+class DataResolver(SelectorMixin, Resolver):
 
-    def __init__(self, *args, key: str, required: bool = True, **kwargs):
+    def __init__(self, *args, key: str, required: bool = False, **kwargs):
         super().__init__(*args, **kwargs)
         self.required = required
         self.key = key
 
-    async def resolve(self, node: ElementHandle, context: dict):
-        elem = await node.querySelector(self.selector)
+    async def resolve(self, node: ElementHandle, fields: dict, errors: dict):
+        try:
+            await self._resolve(node, fields, errors)
+        except ResolverError as err:
+            errors[self.key] = get_error(err)
+
+    async def _resolve(self, node: ElementHandle, fields: dict, errors: dict):
+        elem = await self.get_element(node)
 
         if not elem:
-            if self.required:
-                raise NodeNotFoundError
-            else:
-                return
+            raise ResolverError(
+                _('No element matches %(selector)s') % {'selector': self.selector},
+                level=ErrorLevel.ERROR if self.required else ErrorLevel.WARNING
+            )
 
-        await self.handle_element(elem, context)
+        await self.handle_element(elem, fields)
 
-    async def handle_element(self, elem: ElementHandle, context: dict):
+    async def handle_element(self, elem: ElementHandle, fields: dict):
         text = await self.get_content(elem)
 
-        context[self.key] = text
+        fields[self.key] = text
 
     async def get_content(self, elem):
         text_content_property = await elem.getProperty('textContent')
@@ -163,25 +199,21 @@ DOWNLOAD_TEMPLATE = """
 
 class DocumentResolver(DataResolver):
 
-    async def handle_element(self, elem: ElementHandle, context: dict):
+    async def handle_element(self, elem: ElementHandle, fields: dict):
         content = await self.get_content(elem)
 
         if content:
             href, pdf_pages, meta = content
 
             # TODO write meta information into context
-            context['pdf_url'] = href
-            context['pdf_pages'] = pdf_pages
+            fields['pdf_url'] = href
+            fields['pdf_pages'] = pdf_pages
 
     async def get_content(self, elem):
         href_property = await elem.getProperty('href')
         href = await href_property.jsonValue()
 
-        try:
-            file_path = await self.download(href)
-        except DocumentDownloadError:
-            return None
-
+        file_path = await self.download(href)
         suffix = pathlib.Path(file_path).suffix
 
         # TODO currently only supports pdf files
@@ -218,7 +250,7 @@ class DocumentResolver(DataResolver):
             # we wait for up to 10 seconds periodically checking if the file exists
             await asyncio.wait_for(self.wait_for_file(file_path), timeout=10)
         except asyncio.TimeoutError:
-            raise DocumentDownloadError
+            raise ResolverError(_('Timeout waiting for download of %(url)s') % {'url': url})
 
         return file_path
 
@@ -231,7 +263,11 @@ class DocumentResolver(DataResolver):
 
     @staticmethod
     def get_meta(path):
-        pdf = pikepdf.open(path)
+        try:
+            pdf = pikepdf.open(path)
+        except pikepdf.PdfError as err:
+            raise ResolverError(_('Failed to open pdf: %(error)s') % {'error': str(err)})
+
         page_count = len(pdf.pages)
         meta = pdf.docinfo.as_dict()
         pdf.close()
@@ -239,32 +275,31 @@ class DocumentResolver(DataResolver):
         return page_count, meta
 
 
-class StaticResolver:
-    def __init__(self, context: ScraperContext, *, key: str, value: str):
-        self.context = context
+class StaticResolver(Resolver):
+    def __init__(self, context: ScraperContext, *, key: str, value: str, **kwargs):
+        super().__init__(context, **kwargs)
         self.key = key
         self.value = value
 
-    async def resolve(self, node: ElementHandle, context: dict):
-        context[self.key] = self.value
+    async def resolve(self, node: ElementHandle, fields: dict, errors: dict):
+        fields[self.key] = self.value
 
 
 # FIXME
 #  temporary solution that passed empty values to unused required kwargs
 #  this should be better solved by splitting the selection and storage under a key into
 #  dedicated resolvers that can be composed to show the intended behavior
-
 class TagResolver(IntermediateResolver):
     def __init__(self, context: ScraperContext, *args, resolver: dict, **kwargs):
         super().__init__(context, *args, selector='', **kwargs)
         self.resolver = self.create_resolver(context, key='tag', **resolver)
 
-    async def resolve(self, node: ElementHandle, context: dict):
+    async def resolve(self, node: ElementHandle, fields: dict, errors: dict):
         tags = {}
 
         await self.resolver.resolve(node, tags)
 
-        context.setdefault('tags', []).extend(tags.values())
+        fields.setdefault('tags', []).extend(tags.values())
 
 
 class ResolverType(Enum):

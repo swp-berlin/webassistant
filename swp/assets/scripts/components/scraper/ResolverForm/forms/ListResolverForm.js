@@ -1,7 +1,8 @@
 import _ from 'utils/i18n';
-import {TextInput, NumericInput} from 'components/forms';
+import {NumericInput} from 'components/forms';
 
 import ResolverListForm from '../ResolverListForm';
+import SelectorField from './SelectorField';
 
 
 const ListLabel = _('List');
@@ -18,20 +19,20 @@ const ListResolverForm = ({form, prefix, level}) => {
         <ResolverListForm form={form} prefix={prefix} level={level}>
             <h2 className="text-lg mb-4">{ListLabel}</h2>
             <input name={`${prefix}.type`} ref={register({required: true})} type="hidden" defaultValue="List" />
-            <TextInput
-                register={register({required: true})}
+            <SelectorField
+                register={register}
                 name={`${prefix}.paginator.list_selector`}
                 label={ListSelectorLabel}
                 errors={errors}
             />
-            <TextInput
-                register={register({required: true})}
+            <SelectorField
+                register={register}
                 name={`${prefix}.selector`}
                 label={ItemSelectorLabel}
                 errors={errors}
             />
-            <TextInput
-                register={register()}
+            <SelectorField
+                register={register}
                 name={`${prefix}.paginator.button_selector`}
                 label={PaginationButtonSelectorLabel}
                 errors={errors}
