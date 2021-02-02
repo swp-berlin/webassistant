@@ -1,4 +1,5 @@
 import {useState} from 'react';
+import {AnchorButton} from '@blueprintjs/core';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import {useQuery} from 'hooks/query';
@@ -10,6 +11,7 @@ import PublicationResults from './PublicationResults';
 
 const Loading = _('Loading');
 const NoPublications = _('No publications');
+const DownloadLabel = _('Download .RIS');
 
 const calculatePageCount = (total, pageSize) => Math.ceil(total / pageSize);
 
@@ -27,7 +29,18 @@ const PublicationPreview = ({thinktankID, page, pageSize, noTitle, className, ..
 
     return (
         <div className={classNames('publication-preview', 'my-4', className)} {...props}>
-            {noTitle || <header className="mb-2"><h3>{title}</h3></header>}
+            {noTitle || (
+                <header className="flex space-x-4 mb-2">
+                    <h3>{title}</h3>
+                    <AnchorButton
+                        minimal
+                        download
+                        icon="download"
+                        text={DownloadLabel}
+                        href={`/thinktank/${thinktankID}/download/`}
+                    />
+                </header>
+            )}
 
             {count > 0 && (
                 <PublicationResults
