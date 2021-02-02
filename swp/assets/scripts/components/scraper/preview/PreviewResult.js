@@ -34,7 +34,7 @@ const PreviewResult = ({status, result: {success, error, publications}, tracebac
     }
 
     return (
-        <ul className="list-none pl-0">
+        <ul className="list-none pl-0 space-y-8">
             {status === Status.Success && publications.map(({fields, errors}, idx) => (
                 // eslint-disable-next-line react/no-array-index-key
                 <li key={idx}>

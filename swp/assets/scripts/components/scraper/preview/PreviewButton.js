@@ -16,7 +16,7 @@ const PreviewButton = ({form, onPreview}) => {
         if (success) onPreview(result.data);
     }, [onPreview, result.data, success]);
 
-    return <Button text="Preview" onClick={handleClick} />;
+    return <Button type="button" text="Preview" onClick={handleClick} />;
 };
 
 export default PreviewButton;
