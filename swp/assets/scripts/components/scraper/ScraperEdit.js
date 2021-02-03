@@ -8,15 +8,17 @@ import {useQuery} from 'hooks/query';
 import _, {interpolate} from 'utils/i18n';
 import {useBreadcrumb} from 'components/Navigation';
 import Page from 'components/Page';
+import {ActivationButton} from 'components/buttons';
 
 import ScraperForm from './ScraperForm';
-import ScraperActivationButton from './ScraperActivationButton';
 
 
 const Loading = _('Loading');
 const ScraperLabel = _('Scraper');
 const Thinktanks = _('Thinktanks');
 const ThinktankLabel = _('Thinktank %s');
+const ActivatedMessage = _('Scraper has been activated.');
+const DeactivatedMessage = _('Scraper has been deactivated.');
 
 const LastRun = ({lastRun}) => (
     <div className="mt-2 flex items-center text-sm text-gray-500">
@@ -44,7 +46,14 @@ const ScraperEdit = ({id, thinktankID}) => {
         <Page
             title={name}
             subtitle={lastRun && <LastRun lastRun={lastRun} />}
-            actions={<ScraperActivationButton id={id} initialIsActive={isActive} />}
+            actions={(
+                <ActivationButton
+                    endpoint={`/scraper/${id}/`}
+                    defaultIsActive={isActive}
+                    activatedMessage={ActivatedMessage}
+                    deactivatedMessage={DeactivatedMessage}
+                />
+            )}
         >
             <ScraperForm endpoint={endpoint} data={scraper} method="PATCH" redirectURL={`/thinktank/${thinktankID}/`} />
         </Page>
