@@ -199,6 +199,17 @@ DOWNLOAD_TEMPLATE = """
 
 class DocumentResolver(DataResolver):
 
+    async def get_element(self, node: ElementHandle) -> Optional[ElementHandle]:
+        try:
+            [elem, *other] = await node.querySelectorAll(self.selector)
+        except ElementHandleError as err:
+            raise ResolverError(str(err))
+
+        if other:
+            raise ResolverError(_('%(selector)s matches more than one document.') % {'selector': self.selector})
+
+        return elem
+
     async def handle_element(self, elem: ElementHandle, fields: dict):
         content = await self.get_content(elem)
 
