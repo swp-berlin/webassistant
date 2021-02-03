@@ -42,7 +42,7 @@ const Preview = ({id}) => {
     const loading = result.loading || (success && data.status === Status.Pending);
 
     return (
-        <div className="w-3/6">
+        <div className="mt-4">
             <Result
                 result={{...result, loading, fetch: refetch}}
                 loadingProps={LoadingProps}

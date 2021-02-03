@@ -68,54 +68,60 @@ const ScraperForm = ({endpoint, data, method, redirectURL}) => {
     const {control, register, errors} = form;
 
     return (
-        <>
-            <div className="flex space-x-8 my-4">
-                <form className="scraper-form w-1/2" onSubmit={onSubmit}>
-                    <TextInput
-                        register={register({required: true})}
-                        name="start_url"
-                        label={StartURLLabel}
-                        errors={errors}
-                    />
-                    <Checkbox
-                        name="is_active"
-                        control={control}
-                        inline
-                        label={EnabledLabel}
-                    />
-                    <ScraperTypeSelect
-                        form={form}
-                        name="type"
-                        label={TypeLabel}
-                        errors={errors}
-                        choices={ScraperTypes}
-                    />
-                    <Select
-                        control={control}
-                        name="interval"
-                        label={IntervalLabel}
-                        errors={errors}
-                        choices={Intervals}
-                        required
-                    />
+        <form className="mt-8 scraper-form grid grid-cols-1 lg:grid-cols-2 gap-8" onSubmit={onSubmit}>
+            <div>
+                <TextInput
+                    register={register({required: true})}
+                    name="start_url"
+                    label={StartURLLabel}
+                    errors={errors}
+                />
+                <Checkbox
+                    name="is_active"
+                    control={control}
+                    inline
+                    label={EnabledLabel}
+                />
+                <ScraperTypeSelect
+                    form={form}
+                    name="type"
+                    label={TypeLabel}
+                    errors={errors}
+                    choices={ScraperTypes}
+                />
+                <Select
+                    control={control}
+                    name="interval"
+                    label={IntervalLabel}
+                    errors={errors}
+                    choices={Intervals}
+                    required
+                />
+            </div>
 
-                    <Field label={ConfigLabel}>
-                        <ResolverFormProvider value={Forms}>
-                            <ResolverForm form={form} prefix="data" />
-                        </ResolverFormProvider>
-                    </Field>
-
-                    <ScraperFormErrors form={form} errors={errors} />
-
-                    <div className="flex justify-end space-x-2">
-                        <PreviewButton form={form} onPreview={handlePreview} />
-                        <Button type="submit" intent="primary" text={SubmitButtonLabel} />
-                    </div>
-                </form>
+            <div>
                 <ScraperTypeDescription form={form} />
             </div>
-            {preview && <Preview id={preview} />}
-        </>
+
+            <div>
+                <Field label={ConfigLabel}>
+                    <ResolverFormProvider value={Forms}>
+                        <ResolverForm form={form} prefix="data" />
+                    </ResolverFormProvider>
+                </Field>
+
+                <ScraperFormErrors form={form} errors={errors} />
+
+                <div className="flex justify-end space-x-2">
+                    <Button type="submit" intent="primary" text={SubmitButtonLabel} />
+                </div>
+            </div>
+
+            <div>
+                <PreviewButton form={form} onPreview={handlePreview} />
+                {preview && <Preview id={preview} />}
+            </div>
+        </form>
     );
 };
 
