@@ -33,4 +33,9 @@ class PublicationFilter(models.Model):
 
     @property
     def as_query(self):
-        return models.Q(**{f'{self.field}__{self.FILTERS[self.comparator]}': self.value})
+        field = self.field
+
+        if field == 'author':
+            field = 'authors'
+
+        return models.Q(**{f'{field}__{self.FILTERS[self.comparator]}': self.value})

@@ -6,7 +6,7 @@ from rest_framework.pagination import PageNumberPagination
 
 from swp.api.v1.router import router
 from swp.api.v1.serializers import PublicationSerializer
-from swp.models import Monitor, Publication
+from swp.models import Monitor, Publication, ThinktankFilter
 
 
 class PublicationPagination(PageNumberPagination):
@@ -17,16 +17,28 @@ class PublicationPagination(PageNumberPagination):
 class MonitorFilter(ModelChoiceFilter):
 
     def filter(self, qs, monitor: Monitor):
-        query = monitor.as_query
-        return qs.filter(query)
+        if monitor:
+            return qs.filter(monitor.as_query)
+
+        return qs
+
+
+class ThinktankFilterFilter(ModelChoiceFilter):
+
+    def filter(self, qs, thinktankfilter: ThinktankFilter):
+        if thinktankfilter:
+            return qs.filter(thinktankfilter.as_query)
+
+        return qs
 
 
 class PublicationFilter(FilterSet):
     monitor = MonitorFilter(queryset=Monitor.objects.all(), label=_('Monitor'))
+    thinktankfilter = ThinktankFilterFilter(queryset=ThinktankFilter.objects.all(), label=_('Think Tank Filter'))
 
     class Meta:
         model = Publication
-        fields = ['thinktank_id', 'monitor']
+        fields = ['thinktank_id', 'monitor', 'thinktankfilter']
 
 
 @router.register('publication', basename='publication')
