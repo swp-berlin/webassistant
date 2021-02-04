@@ -28,6 +28,7 @@ urlpatterns = [
     # app
     path('monitor/', include(([
         path('', react, name='list'),
+        path('<int:pk>/', react, name='detail'),
     ], 'monitor'))),
 
     path('thinktank/', include(([

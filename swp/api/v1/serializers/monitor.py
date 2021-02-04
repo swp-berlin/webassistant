@@ -13,4 +13,14 @@ class MonitorSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Monitor
-        fields = ['id', 'name', 'recipient_count', 'publication_count', 'new_publication_count', 'filters']
+        fields = [
+            'id',
+            'name',
+            'last_sent',
+            'interval',
+            'recipient_count',
+            'publication_count',
+            'new_publication_count',
+            'created',
+            'filters',
+        ]
