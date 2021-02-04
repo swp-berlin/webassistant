@@ -18,7 +18,7 @@ class MonitorFilter(ModelChoiceFilter):
 
     def filter(self, qs, monitor: Monitor):
         if monitor:
-            return qs.filter(monitor.as_query)
+            return qs.filter.filter(monitor.as_query)
 
         return qs
 

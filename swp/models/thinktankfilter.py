@@ -33,4 +33,4 @@ class ThinktankFilter(models.Model):
         publication_filters = self.publication_filters.all()
         queries = [publication_filter.as_query for publication_filter in publication_filters]
 
-        return reduce(operator.and_, queries, models.Q())
+        return models.Q(thinktank=self.thinktank) & reduce(operator.and_, queries, models.Q())
