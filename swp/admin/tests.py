@@ -8,11 +8,12 @@ from cosmogo.utils.testing import login, request, admin_url
 from swp.models import (
     Monitor,
     Publication,
-    Scraper,
+    PublicationFilter, Scraper,
     ScraperError,
     Thinktank,
     ThinktankFilter,
 )
+from swp.models.choices import Comparator, DataResolverKey
 from swp.scraper.types import ScraperType
 from swp.utils.testing import create_superuser
 
@@ -27,7 +28,13 @@ class AdminTestCase(TestCase):
     def setUpModels(cls, now):
         monitor = Monitor.objects.create(name='Test-Monitor', recipients=[cls.user.email])
         thinktank = Thinktank.objects.create(name='Test-Thinktank', url='https://www.piie.com/', unique_field='T1-AB')
-        ThinktankFilter.objects.create(thinktank=thinktank, monitor=monitor, query={'think': 'tank'})
+        thinktank_filter = ThinktankFilter.objects.create(thinktank=thinktank, monitor=monitor)
+        PublicationFilter.objects.create(
+            thinktank_filter=thinktank_filter,
+            field=DataResolverKey.TITLE,
+            comparator=Comparator.STARTS_WITH,
+            value='Taming',
+        )
 
         scraper = Scraper.objects.create(
             thinktank=thinktank,
