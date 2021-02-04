@@ -4,12 +4,17 @@ import SimpleRoute from 'components/SimpleRoute';
 import Homepage from 'components/Homepage';
 import {ScraperAdd, ScraperEdit} from 'components/scraper';
 import {ThinktankAdd, ThinktankDetail, ThinktankEdit, ThinktankList, ThinktankPublications} from 'components/thinktank';
+import MonitorList from 'components/monitor/MonitorList';
 
 
 const RootURLConfig = () => (
     <Switch>
         <SimpleRoute path="/" exact>
             <Homepage />
+        </SimpleRoute>
+
+        <SimpleRoute path="/monitor/" exact>
+            <MonitorList />
         </SimpleRoute>
 
         <SimpleRoute path="/thinktank/" exact>
