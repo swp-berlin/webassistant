@@ -2,6 +2,7 @@ from .abstract import ActivatableModel
 from .choices import Interval
 from .monitor import Monitor
 from .publication import Publication
+from .publicationfilter import PublicationFilter
 from .scraper import Scraper
 from .scrapererror import ScraperError
 from .thinktank import Thinktank
@@ -13,6 +14,7 @@ __all__ = [
     'Interval',
     'Monitor',
     'Publication',
+    'PublicationFilter',
     'Scraper',
     'ScraperError',
     'Thinktank',

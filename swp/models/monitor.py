@@ -1,3 +1,6 @@
+import operator
+from functools import reduce
+
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -24,3 +27,10 @@ class Monitor(ActivatableModel):
 
     def __str__(self) -> str:
         return self.name
+
+    @property
+    def as_query(self):
+        thinktank_filters = self.thinktank_filters.all()
+        queries = [thinktank_filter.as_query for thinktank_filter in thinktank_filters]
+
+        return reduce(operator.or_, queries, models.Q())

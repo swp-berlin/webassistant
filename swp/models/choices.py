@@ -52,3 +52,9 @@ class DataResolverKey(models.TextChoices):
 class UniqueKey(models.TextChoices):
     URL = 'url', _('URL')
     NAME = 'name', _('Name')
+
+
+class Comparator(models.TextChoices):
+    CONTAINS = 'contains', _('Contains')
+    STARTS_WITH = 'starts_with', _('Starts With')
+    ENDS_WITH = 'ends_with', _('Ends With')
