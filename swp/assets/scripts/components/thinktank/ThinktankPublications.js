@@ -2,30 +2,34 @@ import Page from 'components/Page';
 import {useBreadcrumb} from 'components/Navigation';
 import {PublicationPreview} from 'components/publication';
 
-import _, {interpolate} from 'utils/i18n';
+import {Result} from 'components/Fetch';
 import {useQuery} from 'hooks/query';
+import _ from 'utils/i18n';
 
+import {getThinktankLabel} from './helper';
 
-const Loading = _('Loading');
 const ThinktanksLabel = _('Thinktanks');
-const ThinktankLabel = _('Thinktank %s');
 const PublicationsLabel = _('Publications');
 
 const ThinktankPublications = ({id, ...props}) => {
     const endpoint = `/thinktank/${id}/`;
-    const {loading, result: {data: thinktank}} = useQuery(endpoint);
-    const label = loading ? interpolate(ThinktankLabel, [id], false) : thinktank.name;
+    const result = useQuery(endpoint);
+    const label = getThinktankLabel(id, result);
 
     useBreadcrumb('/thinktank/', ThinktanksLabel);
     useBreadcrumb(`/thinktank/${id}/`, label);
     useBreadcrumb(`/thinktank/${id}/publications/`, PublicationsLabel);
 
-    if (loading) return Loading;
-
     return (
-        <Page title={label} subtitle={thinktank.description}>
-            <PublicationPreview thinktankID={+id} {...props} />
-        </Page>
+        <Result result={result}>
+            {
+                ({description}) => (
+                    <Page title={label} subtitle={description}>
+                        <PublicationPreview thinktankID={+id} {...props} />
+                    </Page>
+                )
+            }
+        </Result>
     );
 };
 

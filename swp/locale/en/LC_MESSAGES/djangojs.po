@@ -124,6 +124,9 @@ msgstr ""
 msgid "No Results"
 msgstr ""
 
+msgid "by"
+msgstr ""
+
 msgid "and"
 msgstr ""
 
@@ -131,9 +134,6 @@ msgid "or"
 msgstr ""
 
 msgid "nor"
-msgstr ""
-
-msgid "by"
 msgstr ""
 
 msgid "unknown"
@@ -146,10 +146,10 @@ msgstr ""
 msgid "No PDF found"
 msgstr ""
 
-msgid "Loading"
+msgid "No publications"
 msgstr ""
 
-msgid "No publications"
+msgid "Download .RIS"
 msgstr ""
 
 #, javascript-format
@@ -221,14 +221,13 @@ msgstr ""
 msgid "Tag"
 msgstr ""
 
+msgid "Add Scraper"
+msgstr ""
+
 msgid "Thinktanks"
 msgstr ""
 
 msgid "New Scraper"
-msgstr ""
-
-#, javascript-format
-msgid "Thinktank %s"
 msgstr ""
 
 msgid "Scraper"
@@ -310,4 +309,8 @@ msgid "Publications"
 msgstr ""
 
 msgid "Scrapers"
+msgstr ""
+
+#, javascript-format
+msgid "Thinktank %s"
 msgstr ""
