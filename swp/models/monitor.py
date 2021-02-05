@@ -17,6 +17,7 @@ class Monitor(ActivatableModel):
     """
 
     name = models.CharField(_('name'), max_length=100)
+    description = models.TextField(_('description'), blank=True)
     recipients = ArrayField(models.EmailField(), verbose_name=_('recipients'))
     interval = models.PositiveIntegerField(_('interval'), choices=Interval.choices, default=Interval.DAILY)
     last_sent = models.DateTimeField(_('last sent'), blank=True, null=True)
