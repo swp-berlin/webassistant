@@ -6,6 +6,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.contrib.postgres.fields import ArrayField
 
+from .publication import Publication
 from .abstract import ActivatableModel
 from .choices import Interval
 
@@ -34,3 +35,24 @@ class Monitor(ActivatableModel):
         queries = [thinktank_filter.as_query for thinktank_filter in thinktank_filters]
 
         return reduce(operator.or_, queries, models.Q())
+
+    @property
+    def recipient_count(self):
+        return len(self.recipients)
+
+    @property
+    def publications(self):
+        return Publication.objects.filter(self.as_query)
+
+    @property
+    def publication_count(self):
+        return self.publications.count()
+
+    @property
+    def new_publication_count(self):
+        publications = self.publications
+
+        if self.last_sent:
+            publications = publications.filter(created__gt=self.last_sent)
+
+        return publications.count()

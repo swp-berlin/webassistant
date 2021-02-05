@@ -26,6 +26,10 @@ urlpatterns = [
     path('api/', v1.urls),
 
     # app
+    path('monitor/', include(([
+        path('', react, name='list'),
+    ], 'monitor'))),
+
     path('thinktank/', include(([
         path('', react, name='list'),
         path('add/', react, name='add'),
