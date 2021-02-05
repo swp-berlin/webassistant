@@ -16,6 +16,7 @@ class MonitorSerializer(serializers.ModelSerializer):
         fields = [
             'id',
             'name',
+            'description',
             'last_sent',
             'interval',
             'recipient_count',

@@ -9,6 +9,7 @@ class MonitorAdmin(ActivatableModelAdmin):
     date_hierarchy = 'created'
     fields = [
         'name',
+        'description',
         'recipients',
         'interval',
         'last_sent',

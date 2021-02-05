@@ -7,7 +7,7 @@ import {useBreadcrumb} from 'components/Navigation';
 import TableActions from 'components/tables/TableActions';
 import Page from 'components/Page';
 
-import {getMonitorLabel} from './common';
+import {getMonitorLabel} from './helper';
 import MonitorInfo from './MonitorInfo';
 import FilterTable from './FilterTable';
 import {useMonitorsBreadcrumb} from './MonitorList';
@@ -42,10 +42,15 @@ const MonitorDetail = ({id}) => {
                 last_sent: lastSent,
                 recipient_count: recipientCount,
                 name,
+                description,
                 interval,
                 filters,
             }) => (
                 <Page title={name} actions={<EditButton id={id} />}>
+                    <p className="abstract mt-4">
+                        {description}
+                    </p>
+
                     <MonitorInfo
                         className="my-4"
                         publicationCount={publicationCount}
