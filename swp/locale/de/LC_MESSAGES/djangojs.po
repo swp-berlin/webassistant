@@ -124,6 +124,9 @@ msgstr "(erfordert)"
 msgid "No Results"
 msgstr "Keine Ergebnisse"
 
+msgid "by"
+msgstr "von"
+
 msgid "and"
 msgstr "und"
 
@@ -132,9 +135,6 @@ msgstr "oder"
 
 msgid "nor"
 msgstr "noch"
-
-msgid "by"
-msgstr "von"
 
 msgid "unknown"
 msgstr "unbekannt"
@@ -145,9 +145,6 @@ msgstr "%s Seiten"
 
 msgid "No PDF found"
 msgstr "Kein PDF gefunden"
-
-msgid "Loading"
-msgstr "Lade…"
 
 msgid "No publications"
 msgstr "Keine Publikationen"
@@ -209,7 +206,6 @@ msgstr "Paginierungsselektor"
 msgid "Max Pages"
 msgstr "Maximale Seitenzahl"
 
-
 msgid "Please enter a valid css selector"
 msgstr "Bitte geben Sie einen gültigen Selektor ein"
 
@@ -222,15 +218,14 @@ msgstr "Daten"
 msgid "Tag"
 msgstr "Tag"
 
+msgid "Add Scraper"
+msgstr "Scraper hinzufügen"
+
 msgid "Thinktanks"
 msgstr "Thinktanks"
 
 msgid "New Scraper"
 msgstr "Neuer Scraper"
-
-#, javascript-format
-msgid "Thinktank %s"
-msgstr "Thinktank %s"
 
 msgid "Scraper"
 msgstr "Scraper"
@@ -312,3 +307,7 @@ msgstr "Publikationen"
 
 msgid "Scrapers"
 msgstr "Scraper"
+
+#, javascript-format
+msgid "Thinktank %s"
+msgstr "Thinktank %s"

@@ -5,18 +5,18 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faClock} from '@fortawesome/free-solid-svg-icons/faClock';
 
 import {useQuery} from 'hooks/query';
-import _, {interpolate} from 'utils/i18n';
+import _ from 'utils/i18n';
+import {Result} from 'components/Fetch';
 import {useBreadcrumb} from 'components/Navigation';
 import Page from 'components/Page';
 import {ActivationButton} from 'components/buttons';
+import {getThinktankLabel} from 'components/thinktank/helper';
 
 import ScraperForm from './ScraperForm';
 
 
-const Loading = _('Loading');
 const ScraperLabel = _('Scraper');
 const Thinktanks = _('Thinktanks');
-const ThinktankLabel = _('Thinktank %s');
 const ActivatedMessage = _('Scraper has been activated.');
 const DeactivatedMessage = _('Scraper has been deactivated.');
 
@@ -30,33 +30,34 @@ const LastRun = ({lastRun}) => (
 
 const ScraperEdit = ({id, thinktankID}) => {
     const endpoint = `/scraper/${id}/`;
-    const {loading, result: {data: scraper}} = useQuery(endpoint);
+    const query = useQuery(endpoint);
+    const {loading, success, result: {data: scraper}} = query;
 
-    const thinktankLabel = loading ? interpolate(ThinktankLabel, [thinktankID], false) : scraper.thinktank.name;
+    const thinktankLabel = loading || !success ? getThinktankLabel(thinktankID, query) : scraper.thinktank.name;
 
     useBreadcrumb('/thinktank/', Thinktanks);
     useBreadcrumb(`/thinktank/${thinktankID}/`, thinktankLabel);
     useBreadcrumb(endpoint, ScraperLabel);
 
-    if (loading) return Loading;
-
-    const {name, last_run: lastRun, is_active: isActive} = scraper;
-
     return (
-        <Page
-            title={name}
-            subtitle={lastRun && <LastRun lastRun={lastRun} />}
-            actions={(
-                <ActivationButton
-                    endpoint={`/scraper/${id}/`}
-                    defaultIsActive={isActive}
-                    activatedMessage={ActivatedMessage}
-                    deactivatedMessage={DeactivatedMessage}
-                />
+        <Result result={query}>
+            {({name, last_run: lastRun, is_active: isActive}) => (
+                <Page
+                    title={name}
+                    subtitle={lastRun && <LastRun lastRun={lastRun} />}
+                    actions={(
+                        <ActivationButton
+                            endpoint={`/scraper/${id}/`}
+                            defaultIsActive={isActive}
+                            activatedMessage={ActivatedMessage}
+                            deactivatedMessage={DeactivatedMessage}
+                        />
+                    )}
+                >
+                    <ScraperForm endpoint={endpoint} data={scraper} method="PATCH" backURL={`/thinktank/${thinktankID}/`} />
+                </Page>
             )}
-        >
-            <ScraperForm endpoint={endpoint} data={scraper} method="PATCH" redirectURL={`/thinktank/${thinktankID}/`} />
-        </Page>
+        </Result>
     );
 };
 

@@ -2,6 +2,7 @@ import {useCallback, useEffect, useState} from 'react';
 import {Link} from 'react-router-dom';
 
 import ActivationButton from 'components/buttons/ActivationButton';
+import {Result} from 'components/Fetch';
 import {useBreadcrumb} from 'components/Navigation';
 import Page from 'components/Page';
 import ScraperTable from 'components/scraper/ScraperTable';
@@ -9,12 +10,10 @@ import {getPublicationsLabel} from 'components/publication/helper';
 import TableActions from 'components/tables/TableActions';
 
 import {useQuery} from 'hooks/query';
-import _, {interpolate} from 'utils/i18n';
+import _ from 'utils/i18n';
 import {useThinktanksBreadcrumb} from './ThinktankList';
+import {getThinktankLabel} from './helper';
 
-const Loading = _('Loading');
-
-const ThinktankLabel = _('Thinktank %s');
 const EditLabel = _('Edit');
 const NewScraperLabel = _('New scraper');
 const UniqueLabel = _('Unique on');
@@ -34,13 +33,24 @@ const ScraperAddButton = ({id, ...props}) => (
     </Link>
 );
 
+const UniqueField = ({value}) => (
+    <span>
+        {UniqueLabel}
+        {Nbsp}
+        <strong>
+            {value}
+        </strong>
+    </span>
+);
+
 const ThinktankDetail = ({id, ...props}) => {
     const endpoint = `/thinktank/${id}/`;
-    const {loading, result: {data: thinktank}, success} = useQuery(endpoint);
+    const result = useQuery(endpoint);
     const [isActive, setActive] = useState(false);
+    const {loading, result: {data: thinktank}, success} = result;
 
+    const label = getThinktankLabel(id, result);
     useThinktanksBreadcrumb();
-    const label = loading ? interpolate(ThinktankLabel, [id], false) : thinktank.name;
     useBreadcrumb(endpoint, label);
 
     const onToggle = useCallback(
@@ -54,15 +64,6 @@ const ThinktankDetail = ({id, ...props}) => {
         }
     }, [success, thinktank]);
 
-    if (loading) return Loading;
-
-    const {
-        description,
-        unique_field: uniqueField,
-        publication_count: publicationCount,
-        scrapers,
-    } = thinktank;
-
     const actions = [
         <ActivationButton
             key="isActive"
@@ -73,33 +74,29 @@ const ThinktankDetail = ({id, ...props}) => {
         />,
     ];
 
-    const subtitle = (
-        <span>
-            {UniqueLabel}
-            {Nbsp}
-            <strong>{uniqueField}</strong>
-        </span>
-    );
-
     return (
-        <Page title={label} subtitle={subtitle} actions={actions}>
-            <Link to={`/thinktank/${id}/publications/`}>
-                {getPublicationsLabel(publicationCount)}
-            </Link>
+        <Result result={result}>
+            {({description, unique_field: uniqueField, publication_count: publicationCount, scrapers}) => (
+                <Page title={label} subtitle={<UniqueField value={uniqueField} />} actions={actions}>
+                    <Link to={`/thinktank/${id}/publications/`}>
+                        {getPublicationsLabel(publicationCount)}
+                    </Link>
 
-            <div className="flex justify-between items-end">
-                <p className="my-5 w-1/2">
-                    {description}
-                </p>
+                    <div className="flex justify-between items-end">
+                        <p className="my-5 w-1/2">
+                            {description}
+                        </p>
 
-                <TableActions>
-                    <ThinktankEditButton id={id} />
-                    <ScraperAddButton id={id} />
-                </TableActions>
-            </div>
+                        <TableActions>
+                            <ThinktankEditButton id={id} />
+                            <ScraperAddButton id={id} />
+                        </TableActions>
+                    </div>
 
-            <ScraperTable items={scrapers} {...props} />
-        </Page>
+                    <ScraperTable items={scrapers} {...props} />
+                </Page>
+            )}
+        </Result>
     );
 };
 
