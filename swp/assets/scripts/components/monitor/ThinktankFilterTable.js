@@ -1,8 +1,8 @@
 import {HTMLTable} from '@blueprintjs/core';
 
-import EmptyRow from 'components/tables/EmptyRow';
 import _ from 'utils/i18n';
-import FilterRow from './FilterRow';
+import EmptyRow from 'components/tables/EmptyRow';
+import ThinktankFilterRow from './ThinktankFilterRow';
 
 
 const NameLabel = _('Name');
@@ -13,7 +13,7 @@ const NewPublicationCountLabel = _('New');
 
 const FilterRows = ({items}) => (
     items.map(({id, name, filters, publication_count: publicationCount}) => (
-        <FilterRow
+        <ThinktankFilterRow
             key={id}
             id={id}
             name={name}
@@ -23,7 +23,7 @@ const FilterRows = ({items}) => (
     ))
 );
 
-const FilterTable = ({items, ...props}) => (
+const ThinktankFilterTable = ({items, ...props}) => (
     <HTMLTable className="filter-table w-full table-fixed my-4" bordered {...props}>
         <thead className="bg-gray-300">
             <tr>
@@ -39,4 +39,4 @@ const FilterTable = ({items, ...props}) => (
     </HTMLTable>
 );
 
-export default FilterTable;
+export default ThinktankFilterTable;

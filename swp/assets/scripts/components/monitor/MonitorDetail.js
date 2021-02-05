@@ -9,8 +9,8 @@ import Page from 'components/Page';
 
 import {getMonitorLabel} from './helper';
 import MonitorInfo from './MonitorInfo';
-import FilterTable from './FilterTable';
 import {useMonitorsBreadcrumb} from './MonitorList';
+import ThinktankFilterTable from './ThinktankFilterTable';
 
 
 const EditLabel = _('Edit');
@@ -64,7 +64,7 @@ const MonitorDetail = ({id}) => {
                         <AddThinktankButton />
                     </TableActions>
 
-                    <FilterTable items={filters} />
+                    <ThinktankFilterTable items={filters} />
                 </Page>
             )}
         </Result>

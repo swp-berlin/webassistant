@@ -16,7 +16,7 @@ const PublicationFilters = ({filters}) => filters.map(
 );
 
 
-const FilterRow = ({id, name, filters, publicationCount, newPublicationCount}) => (
+const ThinktankFilterRow = ({id, name, filters, publicationCount, newPublicationCount}) => (
     <tr dataid={id}>
         <td>{name || '—'}</td>
         <td>{filters.length ? <PublicationFilters filters={filters} /> : '—'}</td>
@@ -25,4 +25,4 @@ const FilterRow = ({id, name, filters, publicationCount, newPublicationCount}) =
     </tr>
 );
 
-export default FilterRow;
+export default ThinktankFilterRow;
