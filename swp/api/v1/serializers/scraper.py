@@ -122,10 +122,8 @@ class ScraperSerializer(ModelSerializer):
         ]
         fields = ['id', 'name', 'type', 'thinktank', 'is_active', 'data', 'start_url', 'interval', 'last_run']
 
-    def validate(self, attrs):
-        super().validate(attrs)
-
-        keys = self.get_keys(attrs)
+    def validate_data(self, data):
+        keys = self.get_keys(data)
 
         missing = {*self.REQUIRED_KEYS} - {*keys}
 
@@ -135,7 +133,7 @@ class ScraperSerializer(ModelSerializer):
             missing_labels = [labels[field] for field in missing]
             raise ValidationError(detail=message % {'fields': enumeration(missing_labels)}, code='missing-resolvers')
 
-        return attrs
+        return data
 
     def get_keys(self, value, key=None):
         if key == 'key' and isinstance(value, str):

@@ -9,7 +9,8 @@ class MonitorSerializer(serializers.ModelSerializer):
     publication_count = serializers.IntegerField(read_only=True)
     new_publication_count = serializers.IntegerField(read_only=True)
 
-    filters = ThinktankFilterSerializer(source='thinktank_filters', many=True)
+    recipients = serializers.ListField(child=serializers.EmailField())
+    filters = ThinktankFilterSerializer(source='thinktank_filters', many=True, read_only=True)
 
     class Meta:
         model = Monitor
@@ -23,5 +24,6 @@ class MonitorSerializer(serializers.ModelSerializer):
             'publication_count',
             'new_publication_count',
             'created',
+            'recipients',
             'filters',
         ]
