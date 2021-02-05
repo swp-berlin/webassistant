@@ -8,7 +8,8 @@ from cosmogo.utils.testing import login, request, admin_url
 from swp.models import (
     Monitor,
     Publication,
-    PublicationFilter, Scraper,
+    PublicationFilter,
+    Scraper,
     ScraperError,
     Thinktank,
     ThinktankFilter,
