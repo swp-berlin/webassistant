@@ -1,6 +1,6 @@
 import {useCallback, useState} from 'react';
 import {useMutationForm} from 'components/Fetch';
-import {Checkbox, Select, TextInput} from 'components/forms';
+import {Select, TextInput} from 'components/forms';
 import {Button} from '@blueprintjs/core';
 
 import ScraperTypes from 'schemes/scraperTypes.json';
@@ -28,7 +28,6 @@ import ScraperTypeDescription from './ScraperTypeDescription';
 
 
 const StartURLLabel = _('Start-URL');
-const EnabledLabel = _('Enabled');
 const TypeLabel = _('Scraper Type');
 const IntervalLabel = _('Interval');
 const ConfigLabel = _('Config');
@@ -50,7 +49,6 @@ const Forms = {
 };
 
 const DEFAULT_VALUES = {
-    is_active: false,
     interval: Intervals[0].value,
     type: ScraperTypes[0].value,
     data: ScraperTypes[0].defaults,
@@ -75,12 +73,6 @@ const ScraperForm = ({endpoint, data, method, redirectURL}) => {
                     name="start_url"
                     label={StartURLLabel}
                     errors={errors}
-                />
-                <Checkbox
-                    name="is_active"
-                    control={control}
-                    inline
-                    label={EnabledLabel}
                 />
                 <ScraperTypeSelect
                     form={form}

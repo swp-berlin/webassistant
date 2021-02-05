@@ -1,4 +1,3 @@
-import {Button} from '@blueprintjs/core';
 import parseISO from 'date-fns/parseISO';
 import format from 'date-fns/format';
 import {de} from 'date-fns/locale';
@@ -9,13 +8,17 @@ import {useQuery} from 'hooks/query';
 import _, {interpolate} from 'utils/i18n';
 import {useBreadcrumb} from 'components/Navigation';
 import Page from 'components/Page';
-import ScraperForm from 'components/scraper/ScraperForm';
+import {ActivationButton} from 'components/buttons';
+
+import ScraperForm from './ScraperForm';
 
 
 const Loading = _('Loading');
 const ScraperLabel = _('Scraper');
 const Thinktanks = _('Thinktanks');
 const ThinktankLabel = _('Thinktank %s');
+const ActivatedMessage = _('Scraper has been activated.');
+const DeactivatedMessage = _('Scraper has been deactivated.');
 
 const LastRun = ({lastRun}) => (
     <div className="mt-2 flex items-center text-sm text-gray-500">
@@ -43,7 +46,14 @@ const ScraperEdit = ({id, thinktankID}) => {
         <Page
             title={name}
             subtitle={lastRun && <LastRun lastRun={lastRun} />}
-            actions={<Button intent="primary" text={isActive ? 'Disable' : 'Enable'} />}
+            actions={(
+                <ActivationButton
+                    endpoint={`/scraper/${id}/`}
+                    defaultIsActive={isActive}
+                    activatedMessage={ActivatedMessage}
+                    deactivatedMessage={DeactivatedMessage}
+                />
+            )}
         >
             <ScraperForm endpoint={endpoint} data={scraper} method="PATCH" redirectURL={`/thinktank/${thinktankID}/`} />
         </Page>
