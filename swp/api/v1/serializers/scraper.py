@@ -112,7 +112,7 @@ class ScraperSerializer(ModelSerializer):
     REQUIRED_KEYS = ['title']
 
     thinktank = ThinktankField(read_only=True)
-    data = ResolverConfigSerializer(required=True)
+    data = ResolverConfigSerializer()
 
     class Meta:
         model = Scraper
