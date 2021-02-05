@@ -109,6 +109,12 @@ msgstr ""
 msgid "Deactivate"
 msgstr ""
 
+msgid "Sucessfully activated"
+msgstr ""
+
+msgid "Sucessfully deactivated"
+msgstr ""
+
 msgid "Back"
 msgstr ""
 
@@ -134,6 +140,73 @@ msgid "or"
 msgstr ""
 
 msgid "nor"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "Filter"
+msgstr ""
+
+msgid "Publications"
+msgstr ""
+
+msgid "New"
+msgstr ""
+
+msgid "New Monitor"
+msgstr ""
+
+msgid "Create"
+msgstr ""
+
+msgid "Successfully created monitor"
+msgstr ""
+
+msgid "Edit"
+msgstr ""
+
+msgid "Add Thinktank"
+msgstr ""
+
+msgid "Edit Monitor"
+msgstr ""
+
+#, javascript-format
+msgid "Monitor %s"
+msgstr ""
+
+msgid "Save"
+msgstr ""
+
+msgid "Successfully changed monitor"
+msgstr ""
+
+msgid "Description"
+msgstr ""
+
+msgid "Interval"
+msgstr ""
+
+msgid "Publications overall"
+msgstr ""
+
+msgid "Publications since last email"
+msgstr ""
+
+msgid "Email sent"
+msgstr ""
+
+msgid "Recipients"
+msgstr ""
+
+msgid "Monitors"
+msgstr ""
+
+msgid "New Publications"
+msgstr ""
+
+msgid "Recipients must be valid email addresses: %(addresses)s"
 msgstr ""
 
 msgid "unknown"
@@ -233,22 +306,19 @@ msgstr ""
 msgid "Scraper"
 msgstr ""
 
-msgid "Start-URL"
+msgid "Scraper has been activated."
 msgstr ""
 
-msgid "Enabled"
+msgid "Scraper has been deactivated."
+msgstr ""
+
+msgid "Start-URL"
 msgstr ""
 
 msgid "Scraper Type"
 msgstr ""
 
-msgid "Interval"
-msgstr ""
-
 msgid "Config"
-msgstr ""
-
-msgid "Save"
 msgstr ""
 
 msgid "disabled"
@@ -269,19 +339,16 @@ msgstr ""
 msgid "The Scraper is collecting publications. This may take a while."
 msgstr ""
 
+msgid "Scraping failed with the following error:"
+msgstr ""
+
 msgid "No items"
 msgstr ""
 
 msgid "New Thinktank"
 msgstr ""
 
-msgid "Create"
-msgstr ""
-
 msgid "Successfully created thinktank"
-msgstr ""
-
-msgid "Edit"
 msgstr ""
 
 msgid "New scraper"
@@ -296,16 +363,7 @@ msgstr ""
 msgid "Successfully changed thinktank"
 msgstr ""
 
-msgid "Name"
-msgstr ""
-
-msgid "Description"
-msgstr ""
-
 msgid "Unique Field"
-msgstr ""
-
-msgid "Publications"
 msgstr ""
 
 msgid "Scrapers"
