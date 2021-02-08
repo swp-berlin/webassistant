@@ -142,18 +142,6 @@ msgstr ""
 msgid "nor"
 msgstr ""
 
-msgid "Name"
-msgstr ""
-
-msgid "Filter"
-msgstr ""
-
-msgid "Publications"
-msgstr ""
-
-msgid "New"
-msgstr ""
-
 msgid "New Monitor"
 msgstr ""
 
@@ -182,31 +170,49 @@ msgstr ""
 msgid "Successfully changed monitor"
 msgstr ""
 
+msgid "Name"
+msgstr ""
+
 msgid "Description"
 msgstr ""
 
 msgid "Interval"
 msgstr ""
 
-msgid "Publications overall"
+msgid "Publications overall:"
 msgstr ""
 
-msgid "Publications since last email"
+msgid "Publications since last email:"
 msgstr ""
 
-msgid "Email sent"
+msgid "Email sent:"
+msgstr ""
+
+msgid "Interval:"
+msgstr ""
+
+msgid "Recipients:"
+msgstr ""
+
+msgid "Monitors"
 msgstr ""
 
 msgid "Recipients"
 msgstr ""
 
-msgid "Monitors"
+msgid "Publications"
 msgstr ""
 
 msgid "New Publications"
 msgstr ""
 
 msgid "Recipients must be valid email addresses: %(addresses)s"
+msgstr ""
+
+msgid "Filter"
+msgstr ""
+
+msgid "New"
 msgstr ""
 
 msgid "unknown"
