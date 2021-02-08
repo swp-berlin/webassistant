@@ -14,8 +14,8 @@ Below is a short description on how to set up the project to run it locally.
 * Python 3.7
   - with virtualenv
 
-* nodejs
-  * with npm
+* nodejs 14.15 (LTS)
+  * with npm 6
 
 * Postgres
 
