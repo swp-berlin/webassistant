@@ -1,22 +1,22 @@
-import {useEffect, useState} from 'react';
+import {useEffect, useRef} from 'react';
 
 
-const ScraperFormErrors = ({form, errors}) => {
-    const [dataErrors, setDataErrors] = useState(errors && errors.data);
+const ScraperFormErrors = ({form, errors: {non_field_errors: nonFieldErrors}}) => {
+    const nonFieldErrorsRef = useRef(nonFieldErrors);
 
     useEffect(() => {
-        if (errors && errors.data) {
-            setDataErrors(errors.data);
-            form.clearErrors('data');
+        if (nonFieldErrors) {
+            nonFieldErrorsRef.current = nonFieldErrors;
+            form.clearErrors('non_field_errors');
         }
-    }, [form, errors]);
+    }, [form, nonFieldErrors]);
 
-    if (!dataErrors) return null;
+    if (!nonFieldErrorsRef.current) return null;
 
     return (
         <ul className="my-8">
-            {Object.keys(dataErrors).filter(key => key !== 'ref').map(key => (
-                <li key={key} className="text-red-600">{dataErrors[key]}</li>
+            {Object.keys(nonFieldErrorsRef.current).filter(key => key !== 'ref').map(key => (
+                <li key={key} className="text-red-600">{nonFieldErrorsRef.current[key]}</li>
             ))}
         </ul>
     );
