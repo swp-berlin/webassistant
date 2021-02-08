@@ -35,6 +35,8 @@ urlpatterns = [
             path('add/', react, name='add'),
             path('<int:pk>/edit/', react, name='edit'),
         ], 'filter'))),
+        path('<int:pk>/publications/', react, name='publications'),
+        path('<int:pk>/publications/new/', react, name='new-publications'),
     ], 'monitor'))),
 
     path('thinktank/', include(([

@@ -1,4 +1,4 @@
-from django_filters.rest_framework import FilterSet, ModelChoiceFilter
+from django_filters.rest_framework import BooleanFilter, FilterSet, ModelChoiceFilter, DateTimeFilter
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework import viewsets
@@ -18,7 +18,7 @@ class MonitorFilter(ModelChoiceFilter):
 
     def filter(self, qs, monitor: Monitor):
         if monitor:
-            return qs.filter.filter(monitor.as_query)
+            return qs.filter(monitor.as_query)
 
         return qs
 
@@ -35,10 +35,17 @@ class ThinktankFilterFilter(ModelChoiceFilter):
 class PublicationFilter(FilterSet):
     monitor = MonitorFilter(queryset=Monitor.objects.all(), label=_('Monitor'))
     thinktankfilter = ThinktankFilterFilter(queryset=ThinktankFilter.objects.all(), label=_('Think Tank Filter'))
+    since = DateTimeFilter('last_access', 'gte')
+    is_active = BooleanFilter('thinktank__is_active')
 
     class Meta:
         model = Publication
-        fields = ['thinktank_id', 'monitor', 'thinktankfilter']
+        fields = [
+            'thinktank_id',
+            'monitor',
+            'thinktankfilter',
+            'since',
+        ]
 
 
 @router.register('publication', basename='publication')

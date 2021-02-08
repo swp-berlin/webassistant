@@ -1,9 +1,13 @@
+import datetime
+from urllib.parse import urlencode
+
 from django import test
 from django.urls import reverse
 from django.utils import timezone
+
 from cosmogo.utils.testing import create_user, login, request
 
-from swp.models import Publication, Thinktank
+from swp.models import Monitor, Publication, PublicationFilter, Thinktank, ThinktankFilter
 
 
 class PublicationTestCase(test.TestCase):
@@ -12,6 +16,12 @@ class PublicationTestCase(test.TestCase):
     def setUpTestData(cls):
         cls.now = now = timezone.localtime()
         cls.user = create_user('test@localhost')
+
+        cls.monitors = Monitor.objects.bulk_create([
+            Monitor(name='Monitor A', recipients=['nobody@localhost'], created=now),
+            Monitor(name='Monitor B', recipients=['nobody@localhost'], created=now, last_sent=now),
+            Monitor(name='Monitor C', recipients=['nobody@localhost'], created=now),
+        ])
 
         cls.thinktanks = Thinktank.objects.bulk_create([
             Thinktank(
@@ -30,6 +40,32 @@ class PublicationTestCase(test.TestCase):
         ])
         cls.thinktank = cls.thinktanks[1]
 
+        cls.thinktank_filters = ThinktankFilter.objects.bulk_create([
+            ThinktankFilter(monitor=cls.monitors[0], thinktank=cls.thinktanks[0]),
+            ThinktankFilter(monitor=cls.monitors[1], thinktank=cls.thinktanks[1]),
+        ])
+
+        cls.publication_filters = PublicationFilter.objects.bulk_create([
+            PublicationFilter(
+                thinktank_filter=cls.thinktank_filters[0],
+                field='title',
+                comparator='contains',
+                value='COVID-19',
+            ),
+            PublicationFilter(
+                thinktank_filter=cls.thinktank_filters[0],
+                field='title',
+                comparator='contains',
+                value='COVID-20',
+            ),
+            PublicationFilter(
+                thinktank_filter=cls.thinktank_filters[1],
+                field='title',
+                comparator='starts_with',
+                value='Annual Report',
+            ),
+        ])
+
         cls.publications = Publication.objects.bulk_create([
             Publication(
                 thinktank=cls.thinktanks[0],
@@ -46,6 +82,7 @@ class PublicationTestCase(test.TestCase):
                 url='http://en.cdi.org.cn/index.php?option=com_k2&view=item&layout=item&id=707',
                 pdf_url='http://en.cdi.org.cn/publications/annual-report/annual-report-2019/download',
                 pdf_pages=136,
+                last_access=now,
             ),
             Publication(
                 thinktank=cls.thinktanks[1],
@@ -70,7 +107,7 @@ class PublicationTestCase(test.TestCase):
         self.assertIsNone(response.data['previous'])
         self.assertEqual(len(response.data['results']), 3)
 
-    def test_list_filter(self):
+    def test_thinktank_filter(self):
         response = request(self, f'{self.list_url}?thinktank_id={self.thinktank.pk}')
         self.assertEqual(response.data['count'], 2)
 
@@ -82,3 +119,40 @@ class PublicationTestCase(test.TestCase):
         self.assertEqual(response.data['abstract'], self.publication.abstract)
         self.assertEqual(response.data['pdf_url'], self.publication.pdf_url)
         self.assertEqual(response.data['pdf_pages'], self.publication.pdf_pages)
+
+    def test_monitor_empty_filter(self):
+        response = request(self, f'{self.list_url}?monitor={self.monitors[0].pk}')
+        self.assertEqual(response.data['count'], 0)
+
+    def test_monitor_filter(self):
+        response = request(self, f'{self.list_url}?monitor={self.monitors[1].pk}')
+        self.assertEqual(response.data['count'], 2)
+
+    def test_monitor_active_filter(self):
+        response = request(self, f'{self.list_url}?monitor={self.monitors[1].pk}&is_active=true')
+        self.assertEqual(response.data['count'], 2)
+        self.assertEqual(self.monitors[1].publication_count, 2)
+
+    def test_monitor_inactive_filter(self):
+        response = request(self, f'{self.list_url}?monitor={self.monitors[1].pk}&is_active=false')
+        self.assertEqual(response.data['count'], 0)
+
+    def test_monitor_active_since_filter(self):
+        query_string = urlencode({
+            'monitor': self.monitors[1].pk,
+            'is_active': True,
+            'since': self.monitors[1].last_sent,
+        })
+
+        response = request(self, f'{self.list_url}?{query_string}')
+        self.assertEqual(response.data['count'], 1)
+
+    def test_monitor_active_outdated_filter(self):
+        query_string = urlencode({
+            'monitor': self.monitors[1].pk,
+            'is_active': True,
+            'since': self.now + datetime.timedelta(1),
+        })
+
+        response = request(self, f'{self.list_url}?{query_string}')
+        self.assertEqual(response.data['count'], 0)

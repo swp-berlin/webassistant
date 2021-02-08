@@ -1,5 +1,6 @@
 import {Link} from 'react-router-dom';
 
+
 const PublicationFilterItem = ({id, field, comparator, value}) => (
     <span className="publication-filter" dataid={id}>
         <span className="field">{field}</span>

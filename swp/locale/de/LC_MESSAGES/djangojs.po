@@ -197,14 +197,14 @@ msgstr "Empfänger:"
 msgid "Monitors"
 msgstr "Monitore"
 
-msgid "Recipients"
-msgstr "Empfänger"
-
 msgid "Publications"
 msgstr "Publikationen"
 
 msgid "New Publications"
 msgstr "Neue Publikationen"
+
+msgid "Recipients"
+msgstr "Empfänger"
 
 msgid "Recipients must be valid email addresses: %(addresses)s"
 msgstr "Empfänger müssen gültige E-Mail-Adressen sein: %(addresses)s"
@@ -214,6 +214,9 @@ msgstr "Filter"
 
 msgid "New"
 msgstr "Neu"
+
+msgid "Download .RIS"
+msgstr ".RIS herunterladen"
 
 msgid "unknown"
 msgstr "unbekannt"
@@ -227,9 +230,6 @@ msgstr "Kein PDF gefunden"
 
 msgid "No publications"
 msgstr "Keine Publikationen"
-
-msgid "Download .RIS"
-msgstr ".RIS herunterladen"
 
 #, javascript-format
 msgid "%s Publication"
