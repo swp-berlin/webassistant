@@ -14,6 +14,10 @@
     "eslint": "eslint swp/assets/scripts",
     "stylelint": "stylelint swp/assets/styles"
   },
+  "engines": {
+    "node": "^14.15",
+    "npm": ">=6"
+  },
   "dependencies": {
     "@blueprintjs/core": "^3.36.0",
     "@blueprintjs/datetime": "^3.20.0",
