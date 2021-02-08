@@ -16,7 +16,7 @@ const isValidSelector = selector => {
 
 const SelectorField = ({register, required, ...props}) => (
     <TextInput
-        register={register({required, validate: {invalid: isValidSelector}})}
+        register={register({required, validate: {invalid: value => !required || isValidSelector(value)}})}
         {...props}
     />
 );

@@ -122,7 +122,12 @@ class ScraperSerializer(ModelSerializer):
         ]
         fields = ['id', 'name', 'type', 'thinktank', 'is_active', 'data', 'start_url', 'interval', 'last_run']
 
-    def validate_data(self, data):
+    def validate(self, attrs):
+        self.check_missing_fields(attrs)
+
+        return attrs
+
+    def check_missing_fields(self, data):
         keys = self.get_keys(data)
 
         missing = {*self.REQUIRED_KEYS} - {*keys}
