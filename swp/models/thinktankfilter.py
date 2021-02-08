@@ -2,6 +2,7 @@ import operator
 from functools import reduce
 
 from django.db import models
+from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
 
@@ -27,6 +28,10 @@ class ThinktankFilter(models.Model):
     class Meta:
         verbose_name = _('think tank filter')
         verbose_name_plural = _('think tank filters')
+
+    @cached_property
+    def name(self) -> str:
+        return self.thinktank.name
 
     @property
     def as_query(self):

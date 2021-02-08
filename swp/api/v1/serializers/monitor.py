@@ -18,10 +18,12 @@ class MonitorSerializer(serializers.ModelSerializer):
             'id',
             'name',
             'description',
+            'last_sent',
             'interval',
             'recipient_count',
             'publication_count',
             'new_publication_count',
+            'created',
             'recipients',
             'filters',
         ]

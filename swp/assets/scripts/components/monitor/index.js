@@ -1,9 +1,11 @@
-import MonitorList from 'components/monitor/MonitorList';
-import MonitorAdd from 'components/monitor/MonitorAdd';
-import MonitorEdit from 'components/monitor/MonitorEdit';
+import MonitorAdd from './MonitorAdd';
+import MonitorDetail from './MonitorDetail';
+import MonitorEdit from './MonitorEdit';
+import MonitorList from './MonitorList';
 
 export {
     MonitorAdd,
+    MonitorDetail,
     MonitorEdit,
     MonitorList,
 };

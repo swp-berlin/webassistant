@@ -29,6 +29,7 @@ urlpatterns = [
     path('monitor/', include(([
         path('', react, name='list'),
         path('add/', react, name='add'),
+        path('<int:pk>/', react, name='detail'),
         path('<int:pk>/edit/', react, name='edit'),
     ], 'monitor'))),
 

@@ -10,7 +10,7 @@ class ThinktankFilterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ThinktankFilter
-        fields = ['id', 'monitor', 'thinktank', 'filters', 'publication_count']
+        fields = ['id', 'name', 'monitor', 'thinktank', 'filters', 'publication_count']
 
     def get_filter_count(self, thinktank_filter: ThinktankFilter):
         # FIXME this executes one query for each thinktank filter

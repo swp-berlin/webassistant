@@ -2,9 +2,9 @@ import {Switch} from 'react-router-dom';
 
 import SimpleRoute from 'components/SimpleRoute';
 import Homepage from 'components/Homepage';
+import {MonitorAdd, MonitorDetail, MonitorEdit, MonitorList} from 'components/monitor';
 import {ScraperAdd, ScraperEdit} from 'components/scraper';
 import {ThinktankAdd, ThinktankDetail, ThinktankEdit, ThinktankList, ThinktankPublications} from 'components/thinktank';
-import {MonitorAdd, MonitorEdit, MonitorList} from 'components/monitor';
 
 
 const RootURLConfig = () => (
@@ -18,6 +18,9 @@ const RootURLConfig = () => (
         </SimpleRoute>
         <SimpleRoute path="/monitor/add/" exact>
             <MonitorAdd />
+        </SimpleRoute>
+        <SimpleRoute path="/monitor/:id/" exact>
+            {({params}) => <MonitorDetail id={params.id} />}
         </SimpleRoute>
         <SimpleRoute path="/monitor/:id/edit" exact>
             {({params}) => <MonitorEdit id={params.id} />}
