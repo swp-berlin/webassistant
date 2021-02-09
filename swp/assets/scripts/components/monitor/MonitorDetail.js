@@ -22,8 +22,8 @@ const EditButton = ({id}) => (
     </Link>
 );
 
-const AddThinktankButton = () => (
-    <Link to="/thinktank/add/" className="bp3-button bp3-icon-add">
+const AddThinktankFilterButton = ({id}) => (
+    <Link to={`/monitor/${id}/filter/add/`} className="bp3-button bp3-icon-add">
         {AddThinktankLabel}
     </Link>
 );
@@ -61,7 +61,7 @@ const MonitorDetail = ({id}) => {
                     />
 
                     <TableActions>
-                        <AddThinktankButton />
+                        <AddThinktankFilterButton id={id} />
                     </TableActions>
 
                     <ThinktankFilterTable items={filters} monitorID={id} />
