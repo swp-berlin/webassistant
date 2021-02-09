@@ -24,12 +24,14 @@ const ListResolverForm = ({form, prefix, level}) => {
                 name={`${prefix}.paginator.list_selector`}
                 label={ListSelectorLabel}
                 errors={errors}
+                required
             />
             <SelectorField
                 register={register}
                 name={`${prefix}.selector`}
                 label={ItemSelectorLabel}
                 errors={errors}
+                required
             />
             <SelectorField
                 register={register}

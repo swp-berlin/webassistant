@@ -30,6 +30,7 @@ const DataResolverForm = props => {
                 label={SelectorLabel}
                 errors={errors}
                 defaultValue={field.selector}
+                required
             />
             {children}
         </>
