@@ -20,6 +20,7 @@ const LinkResolverForm = ({form, prefix, level, field}) => {
                 label={SelectorLabel}
                 errors={errors}
                 defaultValue={field.selector}
+                required
             />
         </ResolverListForm>
     );

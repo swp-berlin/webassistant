@@ -19,6 +19,7 @@ const DocumentResolverForm = ({form, prefix, field}) => {
                 label={SelectorLabel}
                 errors={errors}
                 defaultValue={field.selector}
+                required
             />
         </div>
     );
