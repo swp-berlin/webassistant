@@ -19,7 +19,7 @@ const AddResolverWidget = ({choices, onAdd}) => {
                 value={selected}
                 onChange={item => setSelected(item)}
             />
-            <div><Button onClick={handleAdd} text={Label} minimal /></div>
+            <Button className="mb-4" onClick={handleAdd} text={Label} minimal />
         </div>
     );
 };

@@ -5,6 +5,7 @@ import Homepage from 'components/Homepage';
 import {MonitorAdd, MonitorDetail, MonitorEdit, MonitorList} from 'components/monitor';
 import {ScraperAdd, ScraperEdit} from 'components/scraper';
 import {ThinktankAdd, ThinktankDetail, ThinktankEdit, ThinktankList, ThinktankPublications} from 'components/thinktank';
+import {ThinktankFilterAdd, ThinktankFilterEdit} from 'components/thinktankfilter';
 
 
 const RootURLConfig = () => (
@@ -24,6 +25,12 @@ const RootURLConfig = () => (
         </SimpleRoute>
         <SimpleRoute path="/monitor/:id/edit" exact>
             {({params}) => <MonitorEdit id={params.id} />}
+        </SimpleRoute>
+        <SimpleRoute path="/monitor/:id/filter/add/" exact>
+            {({params}) => <ThinktankFilterAdd monitorID={params.id} />}
+        </SimpleRoute>
+        <SimpleRoute path="/monitor/:monitorID/filter/:id/edit/" exact>
+            {({params}) => <ThinktankFilterEdit monitorID={params.monitorID} id={params.id} />}
         </SimpleRoute>
 
         <SimpleRoute path="/thinktank/" exact>
