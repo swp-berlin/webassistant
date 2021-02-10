@@ -29,7 +29,7 @@ const PDFNotFound = () => (
 );
 
 const PublicationItem = ({id, title, authors, abstract, publicationDate, url, pdfURL, pdfPages, ...props}) => (
-    <article className="publication-item" {...props}>
+    <article className="publication-item" data-id={id} {...props}>
         <header>
             <h5><PublicationField name="title" value={title}>{url ? <a href={url}>{title}</a> : title}</PublicationField></h5>
             <div className="subtitle">

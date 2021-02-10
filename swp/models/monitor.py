@@ -43,7 +43,7 @@ class Monitor(ActivatableModel):
 
     @property
     def publications(self):
-        return Publication.objects.filter(self.as_query)
+        return Publication.objects.active().filter(self.as_query)
 
     @property
     def publication_count(self):
@@ -54,6 +54,6 @@ class Monitor(ActivatableModel):
         publications = self.publications
 
         if self.last_sent:
-            publications = publications.filter(created__gt=self.last_sent)
+            publications = publications.filter(last_access__gte=self.last_sent)
 
         return publications.count()

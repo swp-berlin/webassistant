@@ -4,10 +4,11 @@ import Conjunctions from './Conjunctions';
 
 
 const generateSeparators = (count, conjunction, delimiter = ',') => {
-    const finalSeparator = !conjunction ? delimiter : ` ${conjunction} `;
+    const separator = `${delimiter} `;
+    const finalSeparator = conjunction ? ` ${conjunction} ` : separator;
     return new Array(count)
         .fill(finalSeparator, count - 1, count)
-        .fill(`${delimiter} `, 1, count - 1)
+        .fill(separator, 1, count - 1)
         .fill('', 0, 1);
 };
 

@@ -17,7 +17,7 @@ class ThinktankFilterSerializer(serializers.ModelSerializer):
 
     def get_filter_count(self, thinktank_filter: ThinktankFilter):
         # FIXME this executes one query for each thinktank filter
-        return Publication.objects.filter(thinktank_filter.as_query).count()
+        return Publication.objects.active().filter(thinktank_filter.as_query).count()
 
     @transaction.atomic
     def create(self, validated_data):

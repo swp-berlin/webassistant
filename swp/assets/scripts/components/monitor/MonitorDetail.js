@@ -52,6 +52,7 @@ const MonitorDetail = ({id}) => {
                     </p>
 
                     <MonitorInfo
+                        id={id}
                         className="my-4"
                         publicationCount={publicationCount}
                         newPublicationCount={newPublicationCount}

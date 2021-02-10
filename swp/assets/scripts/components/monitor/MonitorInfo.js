@@ -1,3 +1,5 @@
+import {Link} from 'react-router-dom';
+
 import DateTime from 'components/DateTime';
 import {getLabel} from 'utils/choices';
 import _ from 'utils/i18n';
@@ -10,19 +12,23 @@ const IntervalLabel = _('Interval:');
 const RecipientsLabel = _('Recipients:');
 
 
-const MonitorInfo = ({publicationCount, newPublicationCount, lastSent, interval, recipientCount, ...props}) => (
+const MonitorInfo = ({id, publicationCount, newPublicationCount, lastSent, interval, recipientCount, ...props}) => (
     <dl {...props}>
         <div className="mb-1 sm:grid sm:grid-cols-5 sm:gap-4">
             <dt>{PublicationCountLabel}</dt>
             <dd className="sm:col-span-4">
-                {publicationCount}
+                <Link to={`/monitor/${id}/publications/`}>
+                    {publicationCount}
+                </Link>
             </dd>
         </div>
 
         <div className="mb-1 sm:grid sm:grid-cols-5 sm:gap-4">
             <dt>{NewPublicationsLabel}</dt>
             <dd className="sm:col-span-4">
-                {newPublicationCount}
+                <Link to={`/monitor/${id}/publications/new/`}>
+                    {newPublicationCount}
+                </Link>
             </dd>
         </div>
 
