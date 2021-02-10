@@ -30,6 +30,7 @@ const ThinktankFilterAdd = ({monitorID}) => {
             <Page title={Title}>
                 <ThinktankFilterForm
                     endpoint={`/monitor/${monitorID}/add-filter/`}
+                    backURL={`/monitor/${monitorID}/`}
                     redirectURL={endpoint}
                     submitLabel={SubmitButtonLabel}
                 />
