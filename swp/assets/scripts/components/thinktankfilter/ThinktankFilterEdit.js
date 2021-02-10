@@ -34,7 +34,7 @@ const ThinktankFilterEdit = ({monitorID, id}) => {
                         endpoint={`/thinktankfilter/${id}/`}
                         backURL={`/monitor/${monitorID}/`}
                         method="PATCH"
-                        redirectURL={endpoint}
+                        redirectURL={`/monitor/${monitorID}/`}
                         submitLabel={SubmitButtonLabel}
                         successMessage={SuccessMessage}
                         data={filter}
