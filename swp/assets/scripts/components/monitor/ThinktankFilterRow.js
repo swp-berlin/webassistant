@@ -12,8 +12,10 @@ const PublicationFilterItem = ({id, field, comparator, value}) => (
     </span>
 );
 
-const PublicationFilters = ({filters}) => filters.map(
-    filter => <PublicationFilterItem key={filter.id} {...filter} />,
+const PublicationFilters = ({filters}) => (
+    <div className="flex flex-col">
+        {filters.map(filter => <PublicationFilterItem key={filter.id} {...filter} />)}
+    </div>
 );
 
 
