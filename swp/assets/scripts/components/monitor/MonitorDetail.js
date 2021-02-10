@@ -64,7 +64,7 @@ const MonitorDetail = ({id}) => {
                         <AddThinktankButton />
                     </TableActions>
 
-                    <ThinktankFilterTable items={filters} />
+                    <ThinktankFilterTable items={filters} monitorID={id} />
                 </Page>
             )}
         </Result>

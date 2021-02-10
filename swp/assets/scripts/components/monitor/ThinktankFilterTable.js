@@ -11,10 +11,11 @@ const PublicationCountLabel = _('Publications');
 const NewPublicationCountLabel = _('New');
 
 
-const FilterRows = ({items}) => (
+const FilterRows = ({monitorID, items}) => (
     items.map(({id, name, filters, publication_count: publicationCount}) => (
         <ThinktankFilterRow
             key={id}
+            monitorID={monitorID}
             id={id}
             name={name}
             filters={filters}
@@ -23,7 +24,7 @@ const FilterRows = ({items}) => (
     ))
 );
 
-const ThinktankFilterTable = ({items, ...props}) => (
+const ThinktankFilterTable = ({items, monitorID, ...props}) => (
     <HTMLTable className="filter-table w-full table-fixed my-4" bordered {...props}>
         <thead className="bg-gray-300">
             <tr>
@@ -34,7 +35,7 @@ const ThinktankFilterTable = ({items, ...props}) => (
             </tr>
         </thead>
         <tbody>
-            {items.length ? <FilterRows items={items} /> : <EmptyRow colSpan={4} />}
+            {items.length ? <FilterRows monitorID={monitorID} items={items} /> : <EmptyRow colSpan={4} />}
         </tbody>
     </HTMLTable>
 );
