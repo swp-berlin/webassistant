@@ -12,7 +12,7 @@ const AttributeResolverForm = props => {
     return (
         <DataResolverForm {...props}>
             <TextInput
-                register={register()}
+                register={register({required: true})}
                 name={`${prefix}.attribute`}
                 label={AttributeLabel}
                 errors={errors}
