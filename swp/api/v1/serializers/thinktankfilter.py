@@ -30,7 +30,7 @@ class ThinktankFilterSerializer(serializers.ModelSerializer):
 
     def create_publication_filters(self, thinktank_filter, publication_filters):
         PublicationFilter.objects.bulk_create([
-            PublicationFilter(thinktank_filter=thinktank_filter, *filter) for filter in publication_filters
+            PublicationFilter(thinktank_filter=thinktank_filter, **filter) for filter in publication_filters
         ])
 
     @transaction.atomic

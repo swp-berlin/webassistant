@@ -19,12 +19,12 @@ class MonitorViewSet(viewsets.ModelViewSet):
 
         return super().get_serializer_class()
 
-    def related_filter_action(self, request, thinktank=None, status=200):
-        thinktank = thinktank or self.get_object()
+    def related_filter_action(self, request, monitor=None, status=200):
+        monitor = monitor or self.get_object()
         serializer = self.get_serializer(data=request.data)
 
         serializer.is_valid(raise_exception=True)
-        serializer.save(thinktank=thinktank)
+        serializer.save(monitor=monitor)
 
         return Response(serializer.data, status=status)
 
