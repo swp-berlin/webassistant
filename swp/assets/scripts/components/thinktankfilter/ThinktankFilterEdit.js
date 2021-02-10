@@ -11,6 +11,7 @@ import ThinktankFilterForm from './ThinktankFilterForm';
 const Title = _('Edit Thinktank Filter');
 const MonitorLabel = _('Monitor %s');
 const SubmitButtonLabel = _('Save');
+const SuccessMessage = _('Successfully changed filter');
 
 const getMonitorLabel = (id, {result: {data}, loading}) => (
     loading || !data ? interpolate(MonitorLabel, [id], false) : data.monitor.name
@@ -35,6 +36,7 @@ const ThinktankFilterEdit = ({monitorID, id}) => {
                         method="PATCH"
                         redirectURL={endpoint}
                         submitLabel={SubmitButtonLabel}
+                        successMessage={SuccessMessage}
                         data={filter}
                     />
                 </Page>
