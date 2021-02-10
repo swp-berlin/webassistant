@@ -20,3 +20,10 @@ export const get = (obj, path, defaultValue) => {
         ? obj[path] || defaultValue
         : result;
 };
+
+export const isObjectType = value => typeof value === 'object';
+
+export const isObject = value => !isNullOrUndefined(value)
+    && !Array.isArray(value)
+    && isObjectType(value)
+    && !(value instanceof Date);

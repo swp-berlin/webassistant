@@ -15,8 +15,8 @@ const ScraperFormErrors = ({form, errors: {non_field_errors: nonFieldErrors}}) =
 
     return (
         <ul className="my-8">
-            {Object.keys(nonFieldErrorsRef.current).filter(key => key !== 'ref').map(key => (
-                <li key={key} className="text-red-600">{nonFieldErrorsRef.current[key]}</li>
+            {Object.keys(nonFieldErrorsRef.current.types).filter(key => key !== 'ref').map(key => (
+                <li key={key} className="text-red-600">{nonFieldErrorsRef.current.types[key]}</li>
             ))}
         </ul>
     );
