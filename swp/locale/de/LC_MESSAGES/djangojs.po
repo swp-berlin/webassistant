@@ -348,6 +348,9 @@ msgstr "Der Scraper trägt Publikationen zusammen. Dieser Vorgang kann eine Weil
 msgid "Scraping failed with the following error:"
 msgstr "Scraping ist mit folgendem Fehler fehlgeschlagen:"
 
+msgid "Internal Error"
+msgstr "Interner Fehler"
+
 msgid "No items"
 msgstr "Keine Einträge"
 

@@ -1,7 +1,8 @@
 from contextlib import contextmanager
-from typing import List, TypedDict
+from typing import AsyncGenerator, List, TypedDict
 
 from pyppeteer.errors import PyppeteerError
+from sentry_sdk import capture_exception
 
 from cosmogo.utils.tempdir import maketempdir
 
@@ -30,7 +31,7 @@ class Scraper:
         self.url = url
         self.download_path = download_path
 
-    async def scrape(self, resolver_config: dict) -> [Result]:
+    async def scrape(self, resolver_config: dict) -> AsyncGenerator[Result, None]:
         try:
             async with open_browser(handleSIGINT=False, handleSIGTERM=False, handleSIGHUP=False) as browser:
                 async with open_page(browser) as page:
@@ -43,7 +44,10 @@ class Scraper:
                         async for result in resolver.resolve():
                             yield result
         except PyppeteerError as err:
-            raise ScraperError(str(err))
+            raise ScraperError(str(err)) from err
+        except Exception as exc:
+            capture_exception(exc)
+            raise
 
     @contextmanager
     def get_download_path(self):
