@@ -1,12 +1,10 @@
-import {Callout} from '@blueprintjs/core';
-
 import _ from 'utils/i18n';
 import {PublicationItem} from 'components/publication';
 
 import {Status} from './common';
+import PreviewError from './PreviewError';
 
 
-const ScrapingErrorText = _('Scraping failed with the following error:');
 const InternalErrorText = _('Internal Error');
 
 
@@ -23,16 +21,12 @@ const getValues = (fields, errors) => ({
 // NOTE `result` refers to the response body, as the return value from `useQuery` gets shadowed.
 const PreviewResult = ({status, result, traceback}) => {
     if (status === Status.Failure) {
-        return <pre>{traceback}</pre>;
+        console.log(traceback); // eslint-disable-line no-console
+        return <PreviewError error={InternalErrorText} />;
     }
 
     if (!result.success) {
-        return (
-            <Callout intent="danger" title="Scraper Error">
-                <p>{ScrapingErrorText}</p>
-                <pre className="mt-2 whitespace-pre-line">{result.error || InternalErrorText}</pre>
-            </Callout>
-        );
+        return <PreviewError error={result.error} />;
     }
 
     return (
