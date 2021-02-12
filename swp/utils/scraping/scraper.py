@@ -6,7 +6,7 @@ from sentry_sdk import capture_exception
 
 from cosmogo.utils.tempdir import maketempdir
 
-from .browser import open_browser, open_page
+from .browser import open_browser, open_page, PAGE_WAIT_UNTIL
 from .context import ScraperContext
 from .exceptions import ScraperError
 from .resolvers import ResolverType
@@ -35,7 +35,7 @@ class Scraper:
         try:
             async with open_browser(handleSIGINT=False, handleSIGTERM=False, handleSIGHUP=False) as browser:
                 async with open_page(browser) as page:
-                    await page.goto(self.url)
+                    await page.goto(self.url, options={'waitUntil': PAGE_WAIT_UNTIL})
 
                     with self.get_download_path() as download_path:
                         context = ScraperContext(browser, page, download_path)

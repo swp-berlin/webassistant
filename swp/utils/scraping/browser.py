@@ -6,6 +6,13 @@ from pyppeteer.browser import Browser
 from pyppeteer.page import Page
 
 
+PAGE_WAIT_UNTIL = [
+    'domcontentloaded',  # Not strictly required, but seems sensible
+    'load',  # Default event for page.goto
+    'networkidle0',  # SWP-81 Required for dynamic pages
+]
+
+
 @asynccontextmanager
 async def open_browser(*args, **kwargs) -> ContextManager[Browser]:
     browser = await launch(*args, **kwargs)
