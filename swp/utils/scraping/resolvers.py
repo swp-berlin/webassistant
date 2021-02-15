@@ -117,6 +117,11 @@ class LinkResolver(SelectorMixin, IntermediateResolver):
         # noinspection PyTypeChecker
         href: str = await href_property.jsonValue()
 
+        if not href:
+            raise ResolverError(
+                _('[Link Resolver] Element matching %(selector)s has no attribute href.') % {'selector': self.selector}
+            )
+
         if self.same_site:
             url = self.context.page.url
 
@@ -183,6 +188,14 @@ class AttributeResolver(DataResolver):
     async def get_content(self, elem):
         attribute = await elem.getProperty(self.attribute)
         content = await attribute.jsonValue()
+
+        if not content:
+            raise ResolverError(
+                _('[Attribute Resolver] Element matching %(selector)s has no attribute %(attribute)s') % {
+                    'selector': self.selector,
+                    'attribute': self.attribute
+                }
+            )
 
         return content
 
