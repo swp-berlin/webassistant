@@ -12,16 +12,19 @@ const NewPublicationCountLabel = _('New');
 
 
 const FilterRows = ({monitorID, items}) => (
-    items.map(({id, name, filters, publication_count: publicationCount}) => (
-        <ThinktankFilterRow
-            key={id}
-            monitorID={monitorID}
-            id={id}
-            name={name}
-            filters={filters}
-            publicationCount={publicationCount}
-        />
-    ))
+    items.map(
+        ({id, name, filters, publication_count: publicationCount, new_publication_count: newPublicationCount}) => (
+            <ThinktankFilterRow
+                key={id}
+                monitorID={monitorID}
+                id={id}
+                name={name}
+                filters={filters}
+                publicationCount={publicationCount}
+                newPublicationCount={newPublicationCount}
+            />
+        ),
+    )
 );
 
 const ThinktankFilterTable = ({items, monitorID, ...props}) => (

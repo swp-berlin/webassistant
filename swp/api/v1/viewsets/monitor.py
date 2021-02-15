@@ -1,17 +1,28 @@
+from django_filters.rest_framework import FilterSet
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from swp.api.v1 import router
+from swp.api.v1.filters import UpdatePublicationCountFilter
 from swp.api.v1.serializers import ThinktankFilterSerializer
 from swp.api.v1.serializers.monitor import MonitorSerializer
 from swp.models import Monitor
+
+
+class MonitorFilterSet(FilterSet):
+    update_publications = UpdatePublicationCountFilter()
+
+    class Meta:
+        model = Monitor
+        fields = ['update_publications']
 
 
 @router.register('monitor', basename='monitor')
 class MonitorViewSet(viewsets.ModelViewSet):
     queryset = Monitor.objects.prefetch_related('thinktank_filters__publication_filters')
     serializer_class = MonitorSerializer
+    filterset_class = MonitorFilterSet
 
     def get_serializer_class(self):
         if self.action == 'add_filter':

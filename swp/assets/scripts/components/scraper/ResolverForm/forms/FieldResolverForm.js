@@ -21,8 +21,6 @@ const FieldForms = {
 
 const FieldResolverForm = props => {
     const {form: {control}, prefix, field} = props;
-
-    // [SWP-86] No `|| watch(...)` required, as this will never be a root field.
     const Form = FieldForms[field.type];
 
     return (
