@@ -8,6 +8,10 @@ from django.utils.translation import gettext_lazy as _
 from swp.models import Publication
 
 
+def as_query(thinktank, filters):
+    return models.Q(thinktank=thinktank) & reduce(operator.and_, filters, models.Q())
+
+
 class ThinktankFilter(models.Model):
     """
     Filter query for think tank publication.
@@ -43,7 +47,7 @@ class ThinktankFilter(models.Model):
         publication_filters = self.publication_filters.all()
         queries = [publication_filter.as_query for publication_filter in publication_filters]
 
-        return models.Q(thinktank=self.thinktank) & reduce(operator.and_, queries, models.Q())
+        return as_query(self.thinktank, queries)
 
     def update_publication_count(self, *, last_sent=None, commit=True):
         last_sent = last_sent or self.monitor.last_sent

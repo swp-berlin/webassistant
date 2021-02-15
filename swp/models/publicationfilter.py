@@ -5,6 +5,13 @@ from swp.models.choices import Comparator, DataResolverKey
 from swp.models.fields import ChoiceField
 
 
+def as_query(field, comparator, value):
+    if field == 'author':
+        field = 'authors'
+
+    return models.Q(**{f'{field}__{PublicationFilter.FILTERS[comparator]}': value})
+
+
 class PublicationFilter(models.Model):
     FILTERS = {
         Comparator.CONTAINS: 'icontains',
@@ -33,9 +40,4 @@ class PublicationFilter(models.Model):
 
     @property
     def as_query(self):
-        field = self.field
-
-        if field == 'author':
-            field = 'authors'
-
-        return models.Q(**{f'{field}__{self.FILTERS[self.comparator]}': self.value})
+        return as_query(self.field, self.comparator, self.value)
