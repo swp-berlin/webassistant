@@ -2,7 +2,7 @@ import asyncio
 import os
 import pathlib
 from enum import Enum
-from typing import Optional
+from typing import Mapping, Iterable, Optional
 from urllib.parse import urlparse
 
 import pikepdf
@@ -42,7 +42,7 @@ class SelectorMixin:
 
 class IntermediateResolver(Resolver):
 
-    def __init__(self, context: ScraperContext, *args, resolvers: [dict], **kwargs):
+    def __init__(self, context: ScraperContext, *args, resolvers: Iterable[Mapping], **kwargs):
         super().__init__(context, **kwargs)
         self.resolvers = [self.create_resolver(context, **config) for config in resolvers]
 
@@ -300,15 +300,19 @@ class StaticResolver(Resolver):
 #  temporary solution that passed empty values to unused required kwargs
 #  this should be better solved by splitting the selection and storage under a key into
 #  dedicated resolvers that can be composed to show the intended behavior
-class TagResolver(IntermediateResolver):
+class TagResolver(SelectorMixin, Resolver):
     def __init__(self, context: ScraperContext, *args, resolver: dict, **kwargs):
         super().__init__(context, *args, selector='', **kwargs)
         self.resolver = self.create_resolver(context, key='tag', **resolver)
 
+    @staticmethod
+    def create_resolver(context, *, type, **config):
+        return ResolverType[type].create(context, **config)
+
     async def resolve(self, node: ElementHandle, fields: dict, errors: dict):
         tags = {}
 
-        await self.resolver.resolve(node, tags)
+        await self.resolver.resolve(node, tags, errors)
 
         fields.setdefault('tags', []).extend(tags.values())
 

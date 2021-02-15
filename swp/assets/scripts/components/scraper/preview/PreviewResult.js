@@ -1,12 +1,11 @@
-import {Callout} from '@blueprintjs/core';
-
 import _ from 'utils/i18n';
 import {PublicationItem} from 'components/publication';
 
 import {Status} from './common';
+import PreviewError from './PreviewError';
 
 
-const ScrapingErrorText = _('Scraping failed with the following error:');
+const InternalErrorText = _('Internal Error');
 
 
 const getValues = (fields, errors) => ({
@@ -19,23 +18,20 @@ const getValues = (fields, errors) => ({
 });
 
 
-const PreviewResult = ({status, result: {success, error, publications}, traceback}) => {
+// NOTE `result` refers to the response body, as the return value from `useQuery` gets shadowed.
+const PreviewResult = ({status, result, traceback}) => {
     if (status === Status.Failure) {
-        return <pre>{traceback}</pre>;
+        console.log(traceback); // eslint-disable-line no-console
+        return <PreviewError error={InternalErrorText} />;
     }
 
-    if (!success) {
-        return (
-            <Callout intent="danger" title="Scraper Error">
-                <p>{ScrapingErrorText}</p>
-                <pre className="mt-2 whitespace-pre-line">{error}</pre>
-            </Callout>
-        );
+    if (!result.success) {
+        return <PreviewError error={result.error} />;
     }
 
     return (
         <ul className="list-none pl-0 space-y-8">
-            {status === Status.Success && publications.map(({fields, errors}, idx) => (
+            {status === Status.Success && result.publications.map(({fields, errors}, idx) => (
                 // eslint-disable-next-line react/no-array-index-key
                 <li key={idx}>
                     <PublicationItem

@@ -35,6 +35,9 @@ msgstr ""
 msgid "Important dates"
 msgstr ""
 
+msgid "Internal Error"
+msgstr ""
+
 #, python-format
 msgid "There must be a resolver for the following fields: %(fields)s"
 msgstr ""

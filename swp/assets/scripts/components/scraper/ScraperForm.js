@@ -93,6 +93,7 @@ const ScraperForm = ({endpoint, data, method, redirectURL}) => {
 
             <div>
                 <ScraperTypeDescription form={form} />
+                <PreviewButton form={form} onPreview={handlePreview} />
             </div>
 
             <div>
@@ -110,7 +111,6 @@ const ScraperForm = ({endpoint, data, method, redirectURL}) => {
             </div>
 
             <div>
-                <PreviewButton form={form} onPreview={handlePreview} />
                 {preview && <Preview id={preview} />}
             </div>
         </form>

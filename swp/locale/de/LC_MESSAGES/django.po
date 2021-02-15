@@ -35,6 +35,9 @@ msgstr "Berechtigungen"
 msgid "Important dates"
 msgstr "Wichtige Daten"
 
+msgid "Internal Error"
+msgstr "Interner Fehler"
+
 #, python-format
 msgid "There must be a resolver for the following fields: %(fields)s"
 msgstr "Es muss ein Resolver für die folgenden Felder vorhanden sein: %(fields)s"
