@@ -24,7 +24,9 @@ def get_ris_data(publication: Publication) -> Sequence[Tuple[str, Optional[str]]
 def write_ris_data(response: HttpResponse, *publications):
     for publication in publications:
         for tag, value in get_ris_data(publication):
+            if isinstance(value, str):
+                value = value.strip()
             if value:
-                response.write(f'{tag}  - {value.strip()}\n')
+                response.write(f'{tag}  - {value}\n')
 
         response.write('ER  - \n')
