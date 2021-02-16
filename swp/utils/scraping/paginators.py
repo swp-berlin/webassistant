@@ -115,6 +115,13 @@ class PagePaginator(Paginator):
             # noinspection PyTypeChecker
             href: str = await href_property.jsonValue()
 
+            if not href:
+                raise ResolverError(
+                    _('Pagination Button matching %(selector)s has no attribute href') % {
+                        'selector': self.button_selector
+                    }
+                )
+
             async with open_page(self.context.browser) as page:
                 await page.goto(href)
 
