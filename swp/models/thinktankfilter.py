@@ -9,7 +9,7 @@ from swp.models import Publication
 
 
 def as_query(thinktank, filters):
-    return models.Q(thinktank=thinktank) & reduce(operator.and_, filters, models.Q())
+    return reduce(operator.and_, filters, models.Q(thinktank=thinktank))
 
 
 class ThinktankFilter(models.Model):
