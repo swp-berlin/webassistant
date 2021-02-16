@@ -16,6 +16,7 @@ def get_ris_data(publication: Publication) -> Sequence[Tuple[str, Optional[str]]
         ('PY', publication.publication_date),
         ('UR', publication.url),
         ('L1', publication.pdf_url),
+        ('SP', publication.pdf_pages),
         *[('AU', author) for author in authors]
     ]
 
