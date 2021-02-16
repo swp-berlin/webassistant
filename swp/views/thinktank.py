@@ -12,7 +12,7 @@ class ThinkTankRISDownloadView(LoginRequiredMixin, BaseDetailView):
     def render_to_response(self, context):
         thinktank: Thinktank = self.object
 
-        response = HttpResponse(content_type='text/plain; charset=utf-8')
+        response = HttpResponse(content_type='application/x-research-info-systems')
         response['Content-Disposition'] = f'attachment; filename="{thinktank.name}.ris"'
 
         write_ris_data(response, *thinktank.publications.all())
