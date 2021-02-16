@@ -131,6 +131,8 @@ class PublicationTestCase(test.TestCase):
     def test_monitor_active_filter(self):
         response = request(self, f'{self.list_url}?monitor={self.monitors[1].pk}&is_active=true')
         self.assertEqual(response.data['count'], 2)
+
+        self.monitors[1].update_publication_count()
         self.assertEqual(self.monitors[1].publication_count, 2)
 
     def test_monitor_inactive_filter(self):

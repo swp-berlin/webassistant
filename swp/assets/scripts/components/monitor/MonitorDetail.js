@@ -1,11 +1,11 @@
 import {Link} from 'react-router-dom';
 
 import _ from 'utils/i18n';
-import {useQuery} from 'hooks/query';
 import {Result} from 'components/Fetch';
 import {useBreadcrumb} from 'components/Navigation';
 import TableActions from 'components/tables/TableActions';
 import Page from 'components/Page';
+import {useUpdatePublicationsQuery} from 'hooks/publications';
 
 import {getMonitorLabel} from './helper';
 import MonitorInfo from './MonitorInfo';
@@ -30,7 +30,7 @@ const AddThinktankFilterButton = ({id}) => (
 
 const MonitorDetail = ({id}) => {
     const endpoint = `/monitor/${id}/`;
-    const result = useQuery(endpoint);
+    const result = useUpdatePublicationsQuery(endpoint);
 
     useMonitorsBreadcrumb();
     useBreadcrumb(endpoint, getMonitorLabel(id, result));

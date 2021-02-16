@@ -2,6 +2,7 @@ import operator
 from functools import reduce
 
 from django.db import models
+from django.db.models import Count
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.contrib.postgres.fields import ArrayField
@@ -22,6 +23,9 @@ class Monitor(ActivatableModel):
     interval = models.PositiveIntegerField(_('interval'), choices=Interval.choices, default=Interval.DAILY)
     last_sent = models.DateTimeField(_('last sent'), blank=True, null=True)
     created = models.DateTimeField(_('created'), default=timezone.now, editable=False)
+
+    publication_count = models.PositiveIntegerField(_('publication count'), default=0, editable=False)
+    new_publication_count = models.PositiveIntegerField(_('new publication count'), default=0, editable=False)
 
     class Meta(ActivatableModel.Meta):
         verbose_name = _('monitor')
@@ -45,15 +49,18 @@ class Monitor(ActivatableModel):
     def publications(self):
         return Publication.objects.active().filter(self.as_query)
 
-    @property
-    def publication_count(self):
-        return self.publications.count()
+    def update_publication_count(self, commit=True):
+        publications = Publication.objects.active().filter(self.as_query)
 
-    @property
-    def new_publication_count(self):
-        publications = self.publications
+        self.publication_count = publications.count()
 
         if self.last_sent:
-            publications = publications.filter(last_access__gte=self.last_sent)
+            self.new_publication_count = publications.filter(last_access__gte=self.last_sent).count()
+        else:
+            self.new_publication_count = self.publication_count
 
-        return publications.count()
+        for filter in self.thinktank_filters.all():
+            filter.update_publication_count(last_sent=self.last_sent)
+
+        if commit:
+            self.save(update_fields=['publication_count', 'new_publication_count'])

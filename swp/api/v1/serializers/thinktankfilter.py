@@ -8,16 +8,13 @@ from swp.models import Publication, PublicationFilter, ThinktankFilter
 
 class ThinktankFilterSerializer(serializers.ModelSerializer):
     filters = PublicationFilterSerializer(source='publication_filters', many=True)
-    publication_count = serializers.SerializerMethodField('get_filter_count')
+    publication_count = serializers.IntegerField(read_only=True)
+    new_publication_count = serializers.IntegerField(read_only=True)
     monitor = MonitorField(read_only=True)
 
     class Meta:
         model = ThinktankFilter
-        fields = ['id', 'name', 'monitor', 'thinktank', 'filters', 'publication_count']
-
-    def get_filter_count(self, thinktank_filter: ThinktankFilter):
-        # FIXME this executes one query for each thinktank filter
-        return Publication.objects.active().filter(thinktank_filter.as_query).count()
+        fields = ['id', 'name', 'monitor', 'thinktank', 'filters', 'publication_count', 'new_publication_count']
 
     @transaction.atomic
     def create(self, validated_data):
