@@ -4,7 +4,7 @@ from django.urls import include, path
 
 from swp.views import *
 from swp.api import v1
-
+from swp.views import MonitorRISDownloadView
 
 react = SWPView.as_view()
 
@@ -36,7 +36,9 @@ urlpatterns = [
             path('<int:pk>/edit/', react, name='edit'),
         ], 'filter'))),
         path('<int:pk>/publications/', react, name='publications'),
+        path('<int:pk>/publications/download/', MonitorRISDownloadView.as_view(), name='download'),
         path('<int:pk>/publications/new/', react, name='new-publications'),
+        path('<int:pk>/publications/new/download/', MonitorRISDownloadView.as_view(exclude_sent=True), name='download-new'),
     ], 'monitor'))),
 
     path('thinktank/', include(([

@@ -15,7 +15,7 @@ import {useMonitorsBreadcrumb} from './MonitorList';
 const PublicationsLabel = _('Publications');
 const NewPublicationsLabel = _('New Publications');
 
-const MonitorPreview = ({id, onlyNew, ...props}) => {
+const MonitorPreview = ({id, onlyNew, downloadURL, ...props}) => {
     const endpoint = `/monitor/${id}/`;
     const location = useLocation();
     const query = useQuery(endpoint);
@@ -34,7 +34,13 @@ const MonitorPreview = ({id, onlyNew, ...props}) => {
                         {description}
                     </p>
 
-                    <PublicationPreview monitorID={id} since={onlyNew && lastSent} isActive {...props} />
+                    <PublicationPreview
+                        monitorID={id}
+                        downloadURL={downloadURL}
+                        since={onlyNew && lastSent}
+                        isActive
+                        {...props}
+                    />
                 </Page>
             )}
         </Result>

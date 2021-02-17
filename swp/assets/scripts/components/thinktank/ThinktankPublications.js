@@ -25,7 +25,11 @@ const ThinktankPublications = ({id, ...props}) => {
             {
                 ({description}) => (
                     <Page title={label} subtitle={description}>
-                        <PublicationPreview thinktankID={+id} {...props} />
+                        <PublicationPreview
+                            thinktankID={+id}
+                            downloadURL={`/thinktank/${id}/download/`}
+                            {...props}
+                        />
                     </Page>
                 )
             }

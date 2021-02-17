@@ -45,9 +45,17 @@ class Monitor(ActivatableModel):
     def recipient_count(self):
         return len(self.recipients)
 
+    def get_publications(self, exclude_sent=False):
+        qs = Publication.objects.active().filter(self.as_query)
+
+        if exclude_sent and self.last_sent:
+            qs = qs.filter(last_access__gte=self.last_sent)
+
+        return qs
+
     @property
     def publications(self):
-        return Publication.objects.active().filter(self.as_query)
+        return self.get_publications()
 
     def update_publication_count(self, commit=True):
         publications = Publication.objects.active().filter(self.as_query)
