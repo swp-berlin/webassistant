@@ -9,6 +9,7 @@ const ThinktankLabel = _('Thinktank');
 const ThinktankSelect = ({form: {control, errors}}) => (
     <ChoicesQuery
         endpoint="/thinktank/"
+        params={{is_active: true}}
     >
         <Select
             control={control}

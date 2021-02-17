@@ -4,6 +4,8 @@ from rest_framework import serializers
 from swp.api.v1.serializers.fields import MonitorField
 from swp.api.v1.serializers.publicationfilter import PublicationFilterSerializer
 from swp.models import Publication, PublicationFilter, ThinktankFilter
+from swp.models.publicationfilter import as_query
+from swp.models.thinktankfilter import as_query as as_thinktank_filter_query
 
 
 class ThinktankFilterSerializer(serializers.ModelSerializer):
@@ -51,3 +53,19 @@ class ThinktankFilterSerializer(serializers.ModelSerializer):
                 PublicationFilter.objects.filter(thinktank_filter=thinktank_filter, pk=id).update(**filter)
             else:
                 PublicationFilter.objects.create(thinktank_filter=thinktank_filter, **filter)
+
+    def preview(self):
+        thinktank = self.validated_data.get('thinktank')
+        publication_filters = self.validated_data.get('publication_filters')
+        queries = [
+            as_query(
+                publication_filter.get('field'),
+                publication_filter.get('comparator'),
+                publication_filter.get('value'),
+            )
+            for publication_filter in publication_filters
+        ]
+
+        query = as_thinktank_filter_query(thinktank, queries)
+
+        return Publication.objects.active().filter(query)
