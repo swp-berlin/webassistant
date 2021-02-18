@@ -1,29 +1,27 @@
-import {useEffect, useRef, useState} from 'react';
+import {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 
 const {createPortal} = require('react-dom');
 
 
 const Portal = ({children, id}) => {
-    const [mounted, setMounted] = useState(false);
-    const node = useRef(null);
+    const [currentID, setCurrentID] = useState();
 
-    useEffect(() => {
-        node.current = document.getElementById(id);
-        setMounted(true);
-    }, [id]);
+    useEffect(() => setCurrentID(id), [id]);
 
-    if (!mounted || !node.current) return null;
+    const node = document.getElementById(currentID || id);
 
-    return createPortal(children, node.current);
+    if (!node) return null;
+
+    return createPortal(children, node);
 };
 
 Portal.propTypes = {
-    selector: PropTypes.string,
+    id: PropTypes.string,
 };
 
 Portal.defaultProps = {
-    selector: 'body',
+    id: 'body',
 };
 
 export default Portal;
