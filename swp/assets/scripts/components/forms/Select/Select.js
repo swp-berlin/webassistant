@@ -6,12 +6,14 @@ import SelectController from './SelectController';
 
 const EMPTY = '---';
 
-const Select = ({value, ...props}) => (
-    <BPSelect {...props} filterable={false}>
+const Select = ({value, title, disabled, ...props}) => (
+    <BPSelect disabled={disabled} {...props} filterable={false}>
         <Button
             text={(value && value.label) || EMPTY}
             alignText="left"
             rightIcon="caret-down"
+            title={title}
+            disabled={disabled}
             fill
         />
     </BPSelect>

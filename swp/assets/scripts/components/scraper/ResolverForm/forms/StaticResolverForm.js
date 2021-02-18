@@ -9,7 +9,7 @@ const ValueLabel = _('Value');
 
 const KeyChoices = getChoices('DataResolverKey');
 
-const StaticResolverForm = ({form, prefix, field, children}) => {
+const StaticResolverForm = ({form, prefix, field, children, readOnly}) => {
     const {register, errors} = form;
 
     return (
@@ -21,6 +21,7 @@ const StaticResolverForm = ({form, prefix, field, children}) => {
                 choices={KeyChoices}
                 errors={errors}
                 defaultValue={field.key || KeyChoices[0].value}
+                disabled={readOnly}
             />
             <TextInput
                 register={register({required: true})}
@@ -28,6 +29,7 @@ const StaticResolverForm = ({form, prefix, field, children}) => {
                 label={ValueLabel}
                 errors={errors}
                 defaultValue={field.value}
+                readOnly={readOnly}
             />
             {children}
         </div>

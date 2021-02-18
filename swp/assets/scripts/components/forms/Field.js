@@ -16,7 +16,7 @@ const getErrorMessages = errors => errors && Object.keys(errors.types).map(
 ).filter(error => isString(error.msg));
 
 
-const Field = ({children, id, name, label, labelInfo, errors, hasError, className, ...props}) => {
+const Field = ({children, id, name, label, labelInfo, errors, hasError, className, disabled, readOnly, ...props}) => {
     const fieldErrors = errors && get(errors, name);
     const intent = (hasError || fieldErrors) ? 'danger' : 'none';
     const {required} = props;
@@ -31,8 +31,9 @@ const Field = ({children, id, name, label, labelInfo, errors, hasError, classNam
             labelInfo={labelInfo || (required && RequiredLabel)}
             intent={intent}
             helperText={errorMessages && <Errors errors={errorMessages} />}
+            disabled={disabled || readOnly}
         >
-            {cloneElement(children, {intent, id: id || name, name, ...props})}
+            {cloneElement(children, {intent, id: id || name, name, disabled, readOnly, ...props})}
         </FormGroup>
     );
 };

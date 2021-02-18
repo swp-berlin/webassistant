@@ -8,7 +8,7 @@ const SelectorLabel = _('Selector');
 const AttributeLabel = _('Attribute');
 
 const TagAttributeResolverForm = props => {
-    const {form: {register, errors}, prefix, field} = props;
+    const {form: {register, errors}, prefix, field, readOnly} = props;
 
     return (
         <div>
@@ -19,6 +19,7 @@ const TagAttributeResolverForm = props => {
                 label={SelectorLabel}
                 errors={errors}
                 defaultValue={field.selector}
+                readOnly={readOnly}
             />
             <TextInput
                 register={register()}
@@ -26,6 +27,7 @@ const TagAttributeResolverForm = props => {
                 label={AttributeLabel}
                 errors={errors}
                 defaultValue={field.attribute}
+                readOnly={readOnly}
             />
         </div>
     );

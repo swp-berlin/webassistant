@@ -12,11 +12,11 @@ const PaginationButtonSelectorLabel = _('Pagination Button Selector');
 const MaxPagesLabel = _('Max Pages');
 
 
-const ListResolverForm = ({form, prefix, level}) => {
+const ListResolverForm = ({form, prefix, level, readOnly}) => {
     const {control, register, errors} = form;
 
     return (
-        <ResolverListForm form={form} prefix={prefix} level={level}>
+        <ResolverListForm form={form} prefix={prefix} level={level} readOnly={readOnly}>
             <h2 className="text-lg mb-4">{ListLabel}</h2>
             <input name={`${prefix}.type`} ref={register({required: true})} type="hidden" defaultValue="List" />
             <SelectorField
@@ -25,6 +25,7 @@ const ListResolverForm = ({form, prefix, level}) => {
                 label={ListSelectorLabel}
                 errors={errors}
                 required
+                readOnly={readOnly}
             />
             <SelectorField
                 register={register}
@@ -32,12 +33,14 @@ const ListResolverForm = ({form, prefix, level}) => {
                 label={ItemSelectorLabel}
                 errors={errors}
                 required
+                readOnly={readOnly}
             />
             <SelectorField
                 register={register}
                 name={`${prefix}.paginator.button_selector`}
                 label={PaginationButtonSelectorLabel}
                 errors={errors}
+                readOnly={readOnly}
             />
             <NumericInput
                 control={control}
@@ -47,6 +50,7 @@ const ListResolverForm = ({form, prefix, level}) => {
                 defaultValue="1"
                 min={1}
                 fill
+                readOnly={readOnly}
             />
         </ResolverListForm>
     );

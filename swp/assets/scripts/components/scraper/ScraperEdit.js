@@ -9,7 +9,6 @@ import _ from 'utils/i18n';
 import {Result} from 'components/Fetch';
 import {useBreadcrumb} from 'components/Navigation';
 import Page from 'components/Page';
-import {ActivationButton} from 'components/buttons';
 import {getThinktankLabel} from 'components/thinktank/helper';
 
 import ScraperForm from './ScraperForm';
@@ -17,8 +16,6 @@ import ScraperForm from './ScraperForm';
 
 const ScraperLabel = _('Scraper');
 const Thinktanks = _('Thinktanks');
-const ActivatedMessage = _('Scraper has been activated.');
-const DeactivatedMessage = _('Scraper has been deactivated.');
 
 const LastRun = ({lastRun}) => (
     <div className="mt-2 flex items-center text-sm text-gray-500">
@@ -41,20 +38,20 @@ const ScraperEdit = ({id, thinktankID}) => {
 
     return (
         <Result result={query}>
-            {({name, last_run: lastRun, is_active: isActive}) => (
+            {scraper => (
                 <Page
-                    title={name}
-                    subtitle={lastRun && <LastRun lastRun={lastRun} />}
+                    title={scraper.name}
+                    subtitle={scraper.last_run && <LastRun lastRun={scraper.last_run} />}
                     actions={(
-                        <ActivationButton
-                            endpoint={`/scraper/${id}/`}
-                            defaultIsActive={isActive}
-                            activatedMessage={ActivatedMessage}
-                            deactivatedMessage={DeactivatedMessage}
-                        />
+                        <div id="scraper-activation-container" />
                     )}
                 >
-                    <ScraperForm endpoint={endpoint} data={scraper} method="PATCH" backURL={`/thinktank/${thinktankID}/`} />
+                    <ScraperForm
+                        endpoint={endpoint}
+                        data={scraper}
+                        method="PATCH"
+                        backURL={`/thinktank/${thinktankID}/`}
+                    />
                 </Page>
             )}
         </Result>

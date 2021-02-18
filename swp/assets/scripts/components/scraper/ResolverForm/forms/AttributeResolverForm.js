@@ -7,7 +7,7 @@ import DataResolverForm from './DataResolverForm';
 const AttributeLabel = _('Attribute');
 
 const AttributeResolverForm = props => {
-    const {form: {register, errors}, prefix, field} = props;
+    const {form: {register, errors}, prefix, field, readOnly} = props;
 
     return (
         <DataResolverForm {...props}>
@@ -17,6 +17,7 @@ const AttributeResolverForm = props => {
                 label={AttributeLabel}
                 errors={errors}
                 defaultValue={field.attribute}
+                readOnly={readOnly}
             />
         </DataResolverForm>
     );

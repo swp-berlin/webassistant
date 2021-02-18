@@ -6,7 +6,7 @@ import SelectorField from '../SelectorField';
 const DataLabel = _('Data');
 const SelectorLabel = _('Selector');
 
-const TagDataResolverForm = ({form, prefix, field}) => {
+const TagDataResolverForm = ({form, prefix, field, readOnly}) => {
     const {register, errors} = form;
 
     return (
@@ -20,6 +20,7 @@ const TagDataResolverForm = ({form, prefix, field}) => {
                 errors={errors}
                 defaultValue={field.selector}
                 required
+                readOnly={readOnly}
             />
         </div>
     );

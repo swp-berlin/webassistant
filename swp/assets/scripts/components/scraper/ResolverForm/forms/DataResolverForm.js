@@ -11,7 +11,7 @@ const SelectorLabel = _('Selector');
 const KeyChoices = getChoices('DataResolverKey');
 
 const DataResolverForm = props => {
-    const {form, prefix, field, children} = props;
+    const {form, prefix, field, children, readOnly} = props;
     const {register, errors} = form;
 
     return (
@@ -23,6 +23,7 @@ const DataResolverForm = props => {
                 choices={KeyChoices}
                 errors={errors}
                 defaultValue={field.key || KeyChoices[0].value}
+                disabled={readOnly}
             />
             <SelectorField
                 register={register}
@@ -31,6 +32,7 @@ const DataResolverForm = props => {
                 errors={errors}
                 defaultValue={field.selector}
                 required
+                readOnly={readOnly}
             />
             {children}
         </>

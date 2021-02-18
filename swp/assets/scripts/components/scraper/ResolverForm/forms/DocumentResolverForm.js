@@ -6,7 +6,7 @@ import SelectorField from './SelectorField';
 const DocumentLabel = _('Document');
 const SelectorLabel = _('Selector');
 
-const DocumentResolverForm = ({form, prefix, field}) => {
+const DocumentResolverForm = ({form, prefix, field, readOnly}) => {
     const {register, errors} = form;
 
     return (
@@ -20,6 +20,7 @@ const DocumentResolverForm = ({form, prefix, field}) => {
                 errors={errors}
                 defaultValue={field.selector}
                 required
+                readOnly={readOnly}
             />
         </div>
     );
