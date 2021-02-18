@@ -72,7 +72,6 @@ const ScraperForm = ({endpoint, data, method, redirectURL}) => {
     const {control, register, errors} = form;
 
     const [isActive, setIsActive] = useState(!!data?.is_active);
-    const handleToggleActive = useCallback(isActive => setIsActive(isActive), []);
 
     const handleSubmit = useCallback(async event => {
         event.preventDefault();
@@ -88,7 +87,7 @@ const ScraperForm = ({endpoint, data, method, redirectURL}) => {
         <form className="mt-8 scraper-form grid grid-cols-1 lg:grid-cols-2 gap-8" onSubmit={handleSubmit}>
             {id && (
                 <Portal id="scraper-activation-container">
-                    <ScraperActivationButton id={id} isActive={isActive} form={form} onToggle={handleToggleActive} />
+                    <ScraperActivationButton id={id} isActive={isActive} form={form} onToggle={setIsActive} />
                 </Portal>
             )}
             <div>
