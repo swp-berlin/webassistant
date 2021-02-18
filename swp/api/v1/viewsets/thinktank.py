@@ -4,7 +4,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from swp.api.v1.router import router
-from swp.api.v1.serializers import ScraperSerializer, ThinktankSerializer, ThinktankListSerializer
+from swp.api.v1.serializers import ScraperDraftSerializer, ThinktankSerializer, ThinktankListSerializer
 from swp.models import Scraper, Thinktank
 
 
@@ -30,7 +30,7 @@ class ThinktankViewSet(viewsets.ModelViewSet):
         if self.action == 'list':
             return ThinktankListSerializer
         elif self.action == 'add_scraper':
-            return ScraperSerializer
+            return ScraperDraftSerializer
 
         return super().get_serializer_class()
 

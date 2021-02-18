@@ -4,7 +4,7 @@ import {TextInput} from 'components/forms';
 
 const ValueLabel = _('Value');
 
-const TagStaticResolverForm = ({form, prefix, field, children}) => {
+const TagStaticResolverForm = ({form, prefix, field, children, readOnly}) => {
     const {register, errors} = form;
 
     return (
@@ -16,6 +16,7 @@ const TagStaticResolverForm = ({form, prefix, field, children}) => {
                 label={ValueLabel}
                 errors={errors}
                 defaultValue={field.value}
+                readOnly={readOnly}
             />
             {children}
         </div>

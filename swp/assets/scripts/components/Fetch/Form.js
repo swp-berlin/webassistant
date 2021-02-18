@@ -111,7 +111,7 @@ export const useMutationForm = (endpoint, formOptions, mutationOptions, mutation
     const [mutate, result] = useMutationResult(endpoint, options, [setError, ...mutationDependencies]);
     const onSubmit = useMemo(() => handleSubmit(values => mutate(values, method)), [handleSubmit, mutate, method]);
 
-    return [onSubmit, form, result];
+    return [onSubmit, form, result, mutate];
 };
 
 const Form = ({children, endpoint, ...options}) => {

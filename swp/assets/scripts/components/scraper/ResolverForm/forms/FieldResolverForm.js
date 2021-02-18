@@ -20,7 +20,9 @@ const FieldForms = {
 };
 
 const FieldResolverForm = props => {
-    const {form: {control}, prefix, field} = props;
+    const {form: {control}, prefix, field, readOnly} = props;
+
+    // [SWP-86] No `|| watch(...)` required, as this will never be a root field.
     const Form = FieldForms[field.type];
 
     return (
@@ -32,6 +34,7 @@ const FieldResolverForm = props => {
                 label={TypeLabel}
                 choices={FieldTypeChoices}
                 defaultValue={field.type || 'Data'}
+                disabled={readOnly}
             />
             <Form {...props} />
         </div>

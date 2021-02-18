@@ -1,7 +1,7 @@
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework.exceptions import ValidationError
-from rest_framework.fields import CharField, ChoiceField, IntegerField
+from rest_framework.fields import CharField, ChoiceField, IntegerField, JSONField
 from rest_framework.serializers import ModelSerializer, Serializer
 
 from cosmogo.utils.text import enumeration
@@ -156,6 +156,14 @@ class ScraperSerializer(ModelSerializer):
                 keys += self.get_keys(v)
 
         return keys
+
+
+class ScraperDraftSerializer(ModelSerializer):
+    data = JSONField(required=False)
+
+    class Meta:
+        model = Scraper
+        fields = ['start_url', 'type', 'interval', 'data']
 
 
 class ScraperListSerializer(ModelSerializer):

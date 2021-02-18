@@ -20,7 +20,7 @@ const TagForms = {
 };
 
 const TagResolverForm = props => {
-    const {form: {register, control, watch}, prefix, field} = props;
+    const {form: {register, control, watch}, prefix, field, readOnly} = props;
 
     const type = watch(`${prefix}.resolver.type`, 'TagData');
     const Form = TagForms[type];
@@ -35,8 +35,9 @@ const TagResolverForm = props => {
                 label={TypeLabel}
                 choices={TagResolverChoices}
                 defaultValue="TagData"
+                disabled={readOnly}
             />
-            <Form {...props} prefix={`${prefix}.resolver`} field={field.resolver || {}} />
+            <Form {...props} prefix={`${prefix}.resolver`} field={field.resolver || {}} readOnly={readOnly} />
         </div>
     );
 };

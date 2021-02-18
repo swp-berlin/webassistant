@@ -8,7 +8,7 @@ import ResolverForm from './ResolverForm';
 
 const ListResolverTypeChoices = getChoices('ListResolverType');
 
-const ResolverListForm = ({form, prefix, level, choices = ListResolverTypeChoices, children}) => {
+const ResolverListForm = ({form, prefix, level, choices = ListResolverTypeChoices, children, readOnly}) => {
     const {control} = form;
     const name = `${prefix}.resolvers`;
     const {append, fields, remove} = useFieldArray({control, name});
@@ -28,10 +28,11 @@ const ResolverListForm = ({form, prefix, level, choices = ListResolverTypeChoice
                             prefix={`${name}[${index}]`}
                             field={field}
                             onDelete={() => handleDelete(index)}
+                            readOnly={readOnly}
                         />
                     )))}
                 </ul>
-                <AddResolverWidget choices={choices} onAdd={handleAdd} />
+                <AddResolverWidget choices={choices} onAdd={handleAdd} readOnly={readOnly} />
             </div>
         </div>
     );
