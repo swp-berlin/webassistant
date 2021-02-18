@@ -13,17 +13,6 @@ const NoPublications = _('No publications');
 
 const calculatePageCount = (total, pageSize) => Math.ceil(total / pageSize);
 
-const getDownloadURL = ({thinktankID, monitorID, onlyNew}) => {
-    if (thinktankID) return `/thinktank/${thinktankID}/download/`;
-
-    if (monitorID) {
-        if (onlyNew) return `/monitor/${monitorID}/publications/new/download/`;
-        return `/monitor/${monitorID}/publications/download/`;
-    }
-
-    return null;
-};
-
 const PublicationPreview = ({
     thinktankID, monitorID, endpoint, since, isActive, page, pageSize, noTitle, className, downloadURL, ...props
 }) => {
