@@ -13,6 +13,7 @@ const getValues = (fields, errors) => ({
     authors: errors.author || [fields.author],
     abstract: errors.abstract || fields.abstract,
     publicationDate: errors.publication_date || fields.publication_date,
+    url: errors.url || fields.url,
     pdfURL: errors.pdf_url || fields.pdf_url,
     pdfPages: fields.pdf_pages,
 });
