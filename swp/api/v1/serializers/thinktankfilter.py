@@ -9,7 +9,7 @@ from swp.models.thinktankfilter import as_query as as_thinktank_filter_query
 
 
 class ThinktankFilterSerializer(serializers.ModelSerializer):
-    filters = PublicationFilterSerializer(source='publication_filters', many=True)
+    filters = PublicationFilterSerializer(source='publication_filters', many=True, required=False)
     publication_count = serializers.IntegerField(read_only=True)
     new_publication_count = serializers.IntegerField(read_only=True)
     monitor = MonitorField(read_only=True)
@@ -20,7 +20,7 @@ class ThinktankFilterSerializer(serializers.ModelSerializer):
 
     @transaction.atomic
     def create(self, validated_data):
-        publication_filters = validated_data.pop('publication_filters')
+        publication_filters = validated_data.pop('publication_filters', [])
 
         thinktank_filter = super().create(validated_data)
         self.create_publication_filters(thinktank_filter, publication_filters)
@@ -34,7 +34,7 @@ class ThinktankFilterSerializer(serializers.ModelSerializer):
 
     @transaction.atomic
     def update(self, instance, validated_data):
-        publication_filters = validated_data.pop('publication_filters')
+        publication_filters = validated_data.pop('publication_filters', [])
 
         thinktank_filter = super().update(instance, validated_data)
         self.update_publication_filters(instance, publication_filters)
@@ -56,7 +56,7 @@ class ThinktankFilterSerializer(serializers.ModelSerializer):
 
     def preview(self):
         thinktank = self.validated_data.get('thinktank')
-        publication_filters = self.validated_data.get('publication_filters')
+        publication_filters = self.validated_data.get('publication_filters', [])
         queries = [
             as_query(
                 publication_filter.get('field'),
