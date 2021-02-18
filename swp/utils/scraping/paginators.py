@@ -7,9 +7,10 @@ from pyppeteer.element_handle import ElementHandle
 
 from django.utils.translation import gettext_lazy as _
 
-from swp.utils.scraping.browser import open_page
+from swp.utils.scraping.browser import open_page, PAGE_WAIT_UNTIL
 from swp.utils.scraping.context import ScraperContext
 from swp.utils.scraping.exceptions import ResolverError
+
 
 ENDLESS_PAGINATION_OBSERVER_TEMPLATE = """
     () => {
@@ -123,7 +124,7 @@ class PagePaginator(Paginator):
                 )
 
             async with open_page(self.context.browser) as page:
-                await page.goto(href)
+                await page.goto(href, options={'waitUntil': PAGE_WAIT_UNTIL})
 
                 nodes = await self.query_list_items(page)
 
