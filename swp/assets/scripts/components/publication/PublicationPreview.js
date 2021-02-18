@@ -14,7 +14,7 @@ const NoPublications = _('No publications');
 const calculatePageCount = (total, pageSize) => Math.ceil(total / pageSize);
 
 const PublicationPreview = ({
-    thinktankID, monitorID, endpoint, since, isActive, page, pageSize, noTitle, className, ...props
+    thinktankID, monitorID, endpoint, since, isActive, page, pageSize, noTitle, className, downloadURL, ...props
 }) => {
     const location = useLocation();
     const currentPage = page || parsePageParam(location.search) || 1;
@@ -32,7 +32,7 @@ const PublicationPreview = ({
                     {noTitle || (
                         <header className="flex space-x-4 mb-2">
                             <h3>{count ? getPublicationsLabel(count) : NoPublications}</h3>
-                            {thinktankID && <DownloadButton thinktankID={thinktankID} />}
+                            {downloadURL && <DownloadButton href={downloadURL} />}
                         </header>
                     )}
 
@@ -60,6 +60,7 @@ PublicationPreview.defaultProps = {
     page: null,
     pageSize: 10,
     noTitle: false,
+    downloadURL: '',
 };
 
 PublicationPreview.propTypes = {
@@ -74,6 +75,7 @@ PublicationPreview.propTypes = {
     page: PropTypes.number,
     pageSize: PropTypes.number,
     noTitle: PropTypes.bool,
+    downloadURL: PropTypes.string,
 };
 
 export default PublicationPreview;
