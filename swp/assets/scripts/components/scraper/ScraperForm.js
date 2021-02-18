@@ -77,7 +77,7 @@ const ScraperForm = ({endpoint, data, method, redirectURL}) => {
     const handleSubmit = useCallback(async event => {
         event.preventDefault();
         form.clearErrors();
-        const valid = form.trigger('start_url');
+        const valid = await form.trigger('start_url');
 
         if (valid) await mutate(form.getValues(), id ? 'PATCH' : 'POST');
     }, [form, id, mutate]);
