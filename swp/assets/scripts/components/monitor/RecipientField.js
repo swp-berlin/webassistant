@@ -5,12 +5,12 @@ import _, {interpolate} from 'utils/i18n';
 const RecipientsLabel = _('Recipients');
 const InvalidEmailError = _('Recipients must be valid email addresses: %(addresses)s');
 
-const setValueAs = value => value.trim().split('\n').filter(e => e.length);
+const toEmailArray = value => value.trim().split('\n').filter(e => e.length);
 
 const validate = recipients => {
     const invalid = [];
 
-    recipients.forEach(email => {
+    toEmailArray(recipients).forEach(email => {
         if (!isEmail(email)) {
             invalid.push(email);
         }
@@ -27,7 +27,7 @@ const RecipientField = ({register, ...props}) => (
         register={register({
             required: false,
             validate,
-            setValueAs,
+            setValueAs: toEmailArray,
         })}
         label={RecipientsLabel}
         fill
