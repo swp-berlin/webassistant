@@ -1,3 +1,4 @@
+import {useController} from 'react-hook-form';
 import {Select} from 'components/forms';
 import _ from 'utils/i18n';
 import {getChoices} from 'utils/choices';
@@ -20,23 +21,25 @@ const FieldForms = {
 };
 
 const FieldResolverForm = props => {
-    const {form: {control}, prefix, field, readOnly} = props;
+    const {form: {control, errors}, prefix, field, readOnly} = props;
+    const name = `${prefix}.type`;
+    const {field: {value, onChange}} = useController({control, name, defaultValue: field.type || 'Data'});
 
-    // [SWP-86] No `|| watch(...)` required, as this will never be a root field.
-    const Form = FieldForms[field.type];
+    const Form = FieldForms[value];
 
     return (
         <div>
             <h2 className="text-lg mb-4">{FieldLabel}</h2>
             <Select
-                control={control}
-                name={`${prefix}.type`}
+                name={name}
                 label={TypeLabel}
                 choices={FieldTypeChoices}
-                defaultValue={field.type || 'Data'}
+                value={value}
+                onChange={onChange}
                 disabled={readOnly}
+                errors={errors}
             />
-            <Form {...props} />
+            {Form && <Form {...props} />}
         </div>
     );
 };
