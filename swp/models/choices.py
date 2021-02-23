@@ -45,7 +45,6 @@ class DataResolverKey(models.TextChoices):
     TITLE = 'title', _('Title')
     SUBTITLE = 'subtitle', _('Subtitle')
     ABSTRACT = 'abstract', _('Abstract')
-    AUTHOR = 'author', _('Author')
     AUTHORS = 'authors', _('Authors')
     PUBLICATION_DATE = 'publication_date', _('Publication Date')
     URL = 'url', _('URL')
