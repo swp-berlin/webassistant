@@ -26,7 +26,7 @@ ListWithLinkType = ScraperTypeData(
                 'type': ResolverType.LINK,
                 'resolvers': [
                     {'type': ResolverType.DATA, 'key': DataResolverKey.TITLE},
-                    {'type': ResolverType.DATA, 'key': DataResolverKey.AUTHOR},
+                    {'type': ResolverType.AUTHORS},
                     {'type': ResolverType.DATA, 'key': DataResolverKey.PUBLICATION_DATE},
                 ]
             }
@@ -47,7 +47,7 @@ ListWithLinkAndDocType = ScraperTypeData(
                 'type': ResolverType.LINK,
                 'resolvers': [
                     {'type': ResolverType.DATA, 'key': DataResolverKey.TITLE},
-                    {'type': ResolverType.DATA, 'key': DataResolverKey.AUTHOR},
+                    {'type': ResolverType.AUTHORS},
                     {'type': ResolverType.DATA, 'key': DataResolverKey.PUBLICATION_DATE},
                     {'type':  ResolverType.DOCUMENT, 'key':  'pdf'}
                 ]
@@ -63,7 +63,7 @@ ListWithDoc = ScraperTypeData(
         'type': ResolverType.LIST,
         'resolvers': [
             {'type': ResolverType.DATA, 'key': DataResolverKey.TITLE},
-            {'type': ResolverType.DATA, 'key': DataResolverKey.AUTHOR},
+            {'type': ResolverType.AUTHORS},
             {'type':  ResolverType.DOCUMENT, 'key':  'pdf'},
         ]
     }

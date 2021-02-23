@@ -8,23 +8,27 @@ import SelectorField from './SelectorField';
 const KeyLabel = _('Field');
 const SelectorLabel = _('Selector');
 
-const KeyChoices = getChoices('DataResolverKey');
+const KeyChoices = getChoices('DataResolverKey').filter(choice => !['author', 'authors'].includes(choice.value));
 
 const DataResolverForm = props => {
-    const {form, prefix, field, children, readOnly} = props;
+    const {form, prefix, field, children, readOnly, fieldKey} = props;
     const {register, errors} = form;
 
     return (
         <>
-            <Select
-                control={form.control}
-                name={`${prefix}.key`}
-                label={KeyLabel}
-                choices={KeyChoices}
-                errors={errors}
-                defaultValue={field.key || KeyChoices[0].value}
-                disabled={readOnly}
-            />
+            {fieldKey ? (
+                <input name={`${prefix}.key`} type="hidden" value={fieldKey} ref={register} />
+            ) : (
+                <Select
+                    control={form.control}
+                    name={`${prefix}.key`}
+                    label={KeyLabel}
+                    choices={KeyChoices}
+                    errors={errors}
+                    defaultValue={field.key || KeyChoices[0].value}
+                    disabled={readOnly}
+                />
+            )}
             <SelectorField
                 register={register}
                 name={`${prefix}.selector`}

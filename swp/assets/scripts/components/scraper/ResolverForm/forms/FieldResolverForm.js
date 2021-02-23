@@ -21,7 +21,7 @@ const FieldForms = {
 };
 
 const FieldResolverForm = props => {
-    const {form: {control, errors}, prefix, field, readOnly} = props;
+    const {form: {control, register, errors}, prefix, field, label, multiple, readOnly} = props;
     const name = `${prefix}.type`;
     const {field: {value, onChange}} = useController({control, name, defaultValue: field.type || 'Data'});
 
@@ -29,7 +29,7 @@ const FieldResolverForm = props => {
 
     return (
         <div>
-            <h2 className="text-lg mb-4">{FieldLabel}</h2>
+            <h2 className="text-lg mb-4">{label}</h2>
             <Select
                 name={name}
                 label={TypeLabel}
@@ -39,9 +39,16 @@ const FieldResolverForm = props => {
                 disabled={readOnly}
                 errors={errors}
             />
-            {Form && <Form {...props} />}
+            {multiple && <input name="multiple" type="hidden" value={multiple} ref={register} />}
+            <Form {...props} />
         </div>
     );
+};
+
+FieldResolverForm.defaultProps = {
+    label: FieldLabel,
+    multiple: false,
+    keyed: true,
 };
 
 export default FieldResolverForm;

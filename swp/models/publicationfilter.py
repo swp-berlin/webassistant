@@ -6,9 +6,6 @@ from swp.models.fields import ChoiceField
 
 
 def as_query(field, comparator, value):
-    if field == 'author':
-        field = 'authors'
-
     return models.Q(**{f'{field}__{PublicationFilter.FILTERS[comparator]}': value})
 
 

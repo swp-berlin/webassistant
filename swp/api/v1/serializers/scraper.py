@@ -94,6 +94,10 @@ class TagStaticResolverSerializer(Serializer):
     value = CharField()
 
 
+class AuthorsResolverSerializer(Serializer):
+    resolver = ResolverConfigSerializer()
+
+
 ResolverSerializers = {
     ResolverType.LIST: ListResolverSerializer,
     ResolverType.LINK: LinkResolverSerializer,
@@ -105,6 +109,7 @@ ResolverSerializers = {
     ResolverType.TAG_DATA: TagDataResolverSerializer,
     ResolverType.TAG_ATTRIBUTE: TagAttributeResolverSerializer,
     ResolverType.TAG_STATIC: TagStaticResolverSerializer,
+    ResolverType.AUTHORS: AuthorsResolverSerializer,
 }
 
 

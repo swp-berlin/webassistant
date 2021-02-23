@@ -20,6 +20,7 @@ import {
     TagDataResolverForm,
     TagAttributeResolverForm,
     TagStaticResolverForm,
+    AuthorsResolverForm,
 } from './ResolverForm/forms';
 import {Preview, PreviewButton} from './preview';
 
@@ -49,6 +50,7 @@ const Forms = {
     TagData: TagDataResolverForm,
     TagAttribute: TagAttributeResolverForm,
     TagStatic: TagStaticResolverForm,
+    Authors: AuthorsResolverForm,
 };
 
 const DEFAULT_VALUES = {

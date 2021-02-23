@@ -23,6 +23,7 @@ class ResolverType(models.TextChoices):
     TAG_DATA = 'TagData', _('Data')
     TAG_ATTRIBUTE = 'TagAttribute', _('Attribute')
     TAG_STATIC = 'TagStatic', _('Static')
+    AUTHORS = 'Authors', _('Authors')
 
 
 class ListResolverType(models.TextChoices):
@@ -31,6 +32,7 @@ class ListResolverType(models.TextChoices):
     FIELD = 'Data', _('Field')
     STATIC = 'Static', _('Static')
     TAG = 'Tag', _('Tag')
+    AUTHORS = 'Authors', _('Authors')
 
 
 class TagResolverType(models.TextChoices):
@@ -44,6 +46,7 @@ class DataResolverKey(models.TextChoices):
     SUBTITLE = 'subtitle', _('Subtitle')
     ABSTRACT = 'abstract', _('Abstract')
     AUTHOR = 'author', _('Author')
+    AUTHORS = 'authors', _('Authors')
     PUBLICATION_DATE = 'publication_date', _('Publication Date')
     URL = 'url', _('URL')
     PDF_URL = 'pdf_url', _('PDF URL')
