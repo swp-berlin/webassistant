@@ -169,8 +169,6 @@ DEBUG_TOOLBAR = False
 
 SHELL_PLUS_PRINT_SQL = env('SHELL_PLUS_PRINT_SQL', default=False, parser=truthy)
 
-PYPPETEER_FILE_DOWNLOAD_FOLDER = env('PYPPETEER_FILE_DOWNLOAD_FOLDER', '/tmp')
-
 # <editor-fold desc="REST API">
 
 REST_FRAMEWORK = {
