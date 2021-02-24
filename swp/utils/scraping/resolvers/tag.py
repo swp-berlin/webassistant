@@ -1,4 +1,4 @@
-from pyppeteer.element_handle import ElementHandle
+from playwright.async_api import ElementHandle
 
 from .base import Resolver, SelectorMixin, create_resolver
 from ..context import ScraperContext
