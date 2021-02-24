@@ -1,6 +1,6 @@
 from django.utils.translation import gettext_lazy as _
 
-from pyppeteer.element_handle import ElementHandle
+from playwright.async_api import ElementHandle
 
 from ..exceptions import ErrorLevel, ResolverError
 from ..utils import get_error

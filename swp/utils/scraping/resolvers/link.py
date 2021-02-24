@@ -2,12 +2,11 @@ from urllib.parse import urlparse
 
 from django.utils.translation import gettext_lazy as _
 
-from pyppeteer.element_handle import ElementHandle
-from pyppeteer.errors import PageError
+from playwright.async_api import ElementHandle, Error as PlaywrightError
 
 from ..browser import open_page
 from ..exceptions import ResolverError
-from .base import IntermediateResolver, SelectorMixin
+from .base import IntermediateResolver, SelectorMixin, get_content
 
 
 class LinkResolver(SelectorMixin, IntermediateResolver):
@@ -17,14 +16,12 @@ class LinkResolver(SelectorMixin, IntermediateResolver):
         self.same_site = same_site
 
     async def get_href(self, node: ElementHandle) -> str:
-        elem = await self.get_element(node)
+        elem: ElementHandle = await self.get_element(node)
 
         if not elem:
             raise ResolverError(_('No element matches %(selector)s') % {'selector': self.selector})
 
-        href_property = await elem.getProperty('href')
-        # noinspection PyTypeChecker
-        href: str = await href_property.jsonValue()
+        href = await get_content(elem, attr='href')
 
         if not href:
             raise ResolverError(
@@ -48,5 +45,5 @@ class LinkResolver(SelectorMixin, IntermediateResolver):
 
                 for resolver in self.resolvers:
                     await resolver.resolve(detail_page, fields, errors)
-        except PageError as err:
+        except PlaywrightError as err:
             raise ResolverError(_('Failed to open %(href)s: %(error)s') % {'href': href, 'error': str(err)})

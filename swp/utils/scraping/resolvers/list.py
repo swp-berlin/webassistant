@@ -1,6 +1,6 @@
 from django.utils.translation import gettext_lazy as _
 
-from pyppeteer.element_handle import ElementHandle
+from playwright.async_api import ElementHandle
 
 from ..exceptions import ResolverError
 from ..paginators import PaginatorType
@@ -37,7 +37,7 @@ class ListResolver(IntermediateResolver):
             async for node in self.paginator.get_nodes():
                 yield node
         else:
-            nodes = await self.context.page.querySelectorAll(self.selector)
+            nodes = await self.context.page.query_selector_all(self.selector)
 
             if not nodes:
                 raise ResolverError(

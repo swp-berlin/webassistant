@@ -1,11 +1,13 @@
-from dataclasses import dataclass
+from __future__ import annotations
 
-from pyppeteer.browser import Browser
-from pyppeteer.page import Page
+from dataclasses import dataclass
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from playwright.async_api import Browser, Page
 
 
 @dataclass
 class ScraperContext:
     browser: Browser
     page: Page
-    download_path: str

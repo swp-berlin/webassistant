@@ -1,7 +1,6 @@
 from typing import Iterable, Mapping, Optional
 
-from pyppeteer.element_handle import ElementHandle
-from pyppeteer.errors import ElementHandleError
+from playwright.async_api import ElementHandle, Error as PlaywrightError
 
 import swp.utils.scraping.resolvers.types as types
 
@@ -14,11 +13,11 @@ def create_resolver(context, *, type, **config):
     return types.ResolverType[type].create(context, **config)
 
 
-async def get_content(node, attr: str = 'textContent'):
-    text_content_property = await node.getProperty(attr)
-    text = await text_content_property.jsonValue()
+async def get_content(node: ElementHandle, attr: str = 'textContent'):
+    _property = await node.get_property(attr)
+    value = await _property.json_value()
 
-    return text
+    return value
 
 
 class Resolver:
@@ -37,11 +36,11 @@ class SelectorMixin:
     async def get_element(self, node: ElementHandle) -> Optional[ElementHandle]:
         try:
             if self.multiple:
-                elem = await node.querySelectorAll(self.selector)
+                elem = await node.query_selector_all(self.selector)
             else:
-                elem = await node.querySelector(self.selector)
+                elem = await node.query_selector(self.selector)
 
-        except ElementHandleError as err:
+        except PlaywrightError as err:
             raise ResolverError(str(err))
 
         return elem
