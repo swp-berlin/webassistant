@@ -5,7 +5,7 @@ import pikepdf
 
 from django.utils.translation import gettext_lazy as _
 
-from playwright.async_api import ElementHandle, Error as PlaywrightError, Page
+from playwright.async_api import ElementHandle, Error as PlaywrightError, Page, TimeoutError
 
 from swp.utils.scraping.exceptions import ResolverError
 from swp.utils.scraping.resolvers.data import DataResolver
@@ -16,8 +16,11 @@ class DocumentResolver(DataResolver):
     async def resolve(self, page: Page, fields: dict, errors: dict):
         elem = await self.get_element(page)
 
-        async with page.expect_download() as download_info:
-            await elem.click()
+        try:
+            async with page.expect_download() as download_info:
+                await elem.click()
+        except TimeoutError:
+            raise ResolverError(_('Timeout while trying to download the document at %(url)s' % {'url': page.url}))
 
         download = await download_info.value
         file_path = await download.path()
