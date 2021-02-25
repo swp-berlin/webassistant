@@ -3,7 +3,10 @@ import {Button} from '@blueprintjs/core';
 
 import {useMutationResult} from 'components/Fetch';
 import {setErrors} from 'utils/form';
+import _ from 'utils/i18n';
 
+
+const Label = _('Preview');
 
 const PreviewButton = ({form, onPreview}) => {
     const [mutate, {success, result}] = useMutationResult(
@@ -21,7 +24,7 @@ const PreviewButton = ({form, onPreview}) => {
         if (success) onPreview(result.data);
     }, [onPreview, result.data, success]);
 
-    return <Button className="lg:float-right" type="button" text="Preview" onClick={handleClick} />;
+    return <Button className="lg:float-right" type="button" text={Label} onClick={handleClick} />;
 };
 
 export default PreviewButton;

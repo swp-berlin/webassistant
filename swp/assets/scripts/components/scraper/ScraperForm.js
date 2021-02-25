@@ -29,7 +29,7 @@ import ScraperTypeDescription from './ScraperTypeDescription';
 import ScraperActivationButton from './ScraperActivationButton';
 
 
-const StartURLLabel = _('Start-URL');
+const StartURLLabel = _('Start URL');
 const TypeLabel = _('Scraper Type');
 const IntervalLabel = _('Interval');
 const ConfigLabel = _('Config');

@@ -142,6 +142,12 @@ msgstr ""
 msgid "nor"
 msgstr ""
 
+msgid "Monitor has been activated"
+msgstr ""
+
+msgid "Monitor has been deactivated"
+msgstr ""
+
 msgid "New Monitor"
 msgstr ""
 
@@ -300,6 +306,12 @@ msgstr ""
 msgid "Tag"
 msgstr ""
 
+msgid "Scraper has been activated."
+msgstr ""
+
+msgid "Scraper has been deactivated."
+msgstr ""
+
 msgid "Add Scraper"
 msgstr ""
 
@@ -312,19 +324,16 @@ msgstr ""
 msgid "Scraper"
 msgstr ""
 
-msgid "Scraper has been activated."
-msgstr ""
-
-msgid "Scraper has been deactivated."
-msgstr ""
-
-msgid "Start-URL"
+msgid "Start URL"
 msgstr ""
 
 msgid "Scraper Type"
 msgstr ""
 
 msgid "Config"
+msgstr ""
+
+msgid "You have to deactivate the scraper in order to edit it."
 msgstr ""
 
 msgid "disabled"
@@ -343,6 +352,12 @@ msgid "Loading Preview"
 msgstr ""
 
 msgid "The Scraper is collecting publications. This may take a while."
+msgstr ""
+
+msgid "Preview"
+msgstr ""
+
+msgid "Scraper Error"
 msgstr ""
 
 msgid "Scraping failed with the following error:"
@@ -380,4 +395,31 @@ msgstr ""
 
 #, javascript-format
 msgid "Thinktank %s"
+msgstr ""
+
+msgid "Filter on Field"
+msgstr ""
+
+msgid "Comparator"
+msgstr ""
+
+msgid "Remove Filter"
+msgstr ""
+
+msgid "Add Filter"
+msgstr ""
+
+msgid "Add Thinktank Filter"
+msgstr ""
+
+msgid "Successfully created filter"
+msgstr ""
+
+msgid "Edit Thinktank Filter"
+msgstr ""
+
+msgid "Successfully changed filter"
+msgstr ""
+
+msgid "Thinktank"
 msgstr ""
