@@ -35,7 +35,7 @@ msgid "Not found"
 msgstr "Nicht gefunden"
 
 msgid "These aren't the droids you're looking for."
-msgstr "Das sind nicht die Droiden, nach denen du suchst."
+msgstr "Das sind nicht die Droiden, nach denen Sie suchen."
 
 msgid "Your data has been saved successfully."
 msgstr "Ihre Daten wurden erfolgreich gespeichert."
@@ -59,7 +59,7 @@ msgid "Loading…"
 msgstr "Lade…"
 
 msgid "Please wait, we are loading your content."
-msgstr "Bitte warten, wir laden Ihre Daten…"
+msgstr "Bitte warten Sie, wir laden Ihre Daten…"
 
 msgid "Network Error"
 msgstr "Netzwerkfehler"
@@ -110,7 +110,7 @@ msgid "Deactivate"
 msgstr "Deaktivieren"
 
 msgid "Sucessfully activated"
-msgstr "Erfolgreich angelegt"
+msgstr "Erfolgreich aktiviert"
 
 msgid "Sucessfully deactivated"
 msgstr "Erfolgreich deaktiviert"
@@ -141,6 +141,12 @@ msgstr "oder"
 
 msgid "nor"
 msgstr "noch"
+
+msgid "Monitor has been activated"
+msgstr "Monitor erfolgreich aktiviert"
+
+msgid "Monitor has been deactivated"
+msgstr "Monitor erfolgreich deaktiviert"
 
 msgid "New Monitor"
 msgstr "Neuer Monitor"
@@ -300,6 +306,12 @@ msgstr "Daten"
 msgid "Tag"
 msgstr "Tag"
 
+msgid "Scraper has been activated."
+msgstr "Scraper erfolgreich aktiviert."
+
+msgid "Scraper has been deactivated."
+msgstr "Scraper erfolgreich deaktiviert."
+
 msgid "Add Scraper"
 msgstr "Scraper hinzufügen"
 
@@ -312,20 +324,17 @@ msgstr "Neuer Scraper"
 msgid "Scraper"
 msgstr "Scraper"
 
-msgid "Scraper has been activated."
-msgstr "Scraper erfolgreich aktiviert."
-
-msgid "Scraper has been deactivated."
-msgstr "Scraper erfolgreich deaktiviert."
-
-msgid "Start-URL"
-msgstr ""
+msgid "Start URL"
+msgstr "Start-URL"
 
 msgid "Scraper Type"
 msgstr "Scraper-Typ"
 
 msgid "Config"
 msgstr "Konfiguration"
+
+msgid "You have to deactivate the scraper in order to edit it."
+msgstr "Sie müssen den Scraper deaktivieren, bevor Sie ihn bearbeiten können."
 
 msgid "disabled"
 msgstr "deaktiviert"
@@ -344,6 +353,12 @@ msgstr "Lade Vorschau …"
 
 msgid "The Scraper is collecting publications. This may take a while."
 msgstr "Der Scraper trägt Publikationen zusammen. Dieser Vorgang kann eine Weile dauern."
+
+msgid "Preview"
+msgstr "Vorschau"
+
+msgid "Scraper Error"
+msgstr "Scraper-Fehler"
 
 msgid "Scraping failed with the following error:"
 msgstr "Scraping ist mit folgendem Fehler fehlgeschlagen:"
@@ -381,3 +396,30 @@ msgstr "Scraper"
 #, javascript-format
 msgid "Thinktank %s"
 msgstr "Thinktank %s"
+
+msgid "Filter on Field"
+msgstr "Filter nach Feld"
+
+msgid "Comparator"
+msgstr "Vergleichsoperator"
+
+msgid "Remove Filter"
+msgstr "Filter entfernen"
+
+msgid "Add Filter"
+msgstr "Filter hinzufügen"
+
+msgid "Add Thinktank Filter"
+msgstr "Thinktank-Filter hinzufügen"
+
+msgid "Successfully created filter"
+msgstr "Filter erfolgreich angelegt"
+
+msgid "Edit Thinktank Filter"
+msgstr "Thinktank-Filter bearbeiten"
+
+msgid "Successfully changed filter"
+msgstr "Änderungen am Filter erfolgreich gespeichert"
+
+msgid "Thinktank"
+msgstr "Thinktank"

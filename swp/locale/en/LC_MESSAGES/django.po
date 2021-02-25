@@ -35,6 +35,9 @@ msgstr ""
 msgid "Important dates"
 msgstr ""
 
+msgid "update publication count"
+msgstr ""
+
 msgid "Internal Error"
 msgstr ""
 
@@ -152,6 +155,12 @@ msgid "last sent"
 msgstr ""
 
 msgid "created"
+msgstr ""
+
+msgid "publication count"
+msgstr ""
+
+msgid "new publication count"
 msgstr ""
 
 msgid "monitor"
@@ -374,7 +383,15 @@ msgid "No pagination button found for %(selector)s"
 msgstr ""
 
 #, python-format
+msgid "Pagination Button matching %(selector)s has no attribute href"
+msgstr ""
+
+#, python-format
 msgid "No element matches %(selector)s"
+msgstr ""
+
+#, python-format
+msgid "[Link Resolver] Element matching %(selector)s has no attribute href."
 msgstr ""
 
 #, python-format
@@ -386,6 +403,10 @@ msgid "Failed to open %(href)s: %(error)s"
 msgstr ""
 
 #, python-format
+msgid "[Attribute Resolver] Element matching %(selector)s has no attribute %(attribute)s"
+msgstr ""
+
+#, python-format
 msgid "%(selector)s matches more than one document."
 msgstr ""
 
@@ -394,5 +415,5 @@ msgid "Timeout waiting for download of %(url)s"
 msgstr ""
 
 #, python-format
-msgid "Failed to open pdf: %(error)s"
+msgid "Failed to open PDF: %(error)s"
 msgstr ""
