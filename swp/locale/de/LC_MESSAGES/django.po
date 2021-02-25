@@ -363,10 +363,10 @@ msgid "Reset password"
 msgstr "Passwort zurücksetzen"
 
 msgid "You're receiving this email because you requested a password reset for your SWP account."
-msgstr "Sie erhalten diese E-Mail weil Sie das Passwort ihres SWP-Kontos zurückgesetzt haben."
+msgstr "Sie erhalten diese E-Mail weil Sie das Passwort Ihres SWP-Kontos zurückgesetzt haben."
 
 msgid "Click here to choose a new password"
-msgstr "Klicken Sie hier, um ihr Passwort zurückzusetzen"
+msgstr "Klicken Sie hier, um Ihr Passwort zurückzusetzen"
 
 msgid "The SWP team"
 msgstr "Ihr SWP Team"
