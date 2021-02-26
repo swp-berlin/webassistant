@@ -6,8 +6,10 @@ from .document import DocumentResolver
 from .link import LinkResolver
 from .list import ListResolver
 from .static import StaticResolver
-from .tag import TagResolver
-from .author import AuthorsResolver
+from .swp import (
+    TitleResolver, SubtitleResolver, AbstractResolver, PublicationDateResolver, URLResolver,
+    AuthorsResolver, TagsResolver,
+)
 
 
 class ResolverType(Enum):
@@ -17,11 +19,14 @@ class ResolverType(Enum):
     Attribute = AttributeResolver
     Document = DocumentResolver
     Static = StaticResolver
-    Tag = TagResolver
-    TagData = Data
-    TagAttribute = Attribute
-    TagStatic = Static
+
+    Title = TitleResolver
+    Subtitle = SubtitleResolver
+    Abstract = AbstractResolver
+    Publication_Date = PublicationDateResolver
+    URL = URLResolver
     Authors = AuthorsResolver
+    Tags = TagsResolver
 
     def create(self, context: dict, **config):
         return self.value(context, **config)

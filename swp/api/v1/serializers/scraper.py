@@ -59,7 +59,6 @@ class LinkResolverSerializer(Serializer):
 
 
 class DataResolverSerializer(Serializer):
-    key = ChoiceField(choices=DataResolverKey.choices)
     selector = CSSSelectorField(required=True)
 
 
@@ -68,7 +67,6 @@ class AttributeResolverSerializer(DataResolverSerializer):
 
 
 class StaticResolverSerializer(Serializer):
-    key = ChoiceField(choices=DataResolverKey.choices)
     value = CharField()
 
 
@@ -77,24 +75,7 @@ class DocumentResolverSerializer(Serializer):
     selector = CSSSelectorField()
 
 
-class TagResolverSerializer(Serializer):
-    resolver = ResolverConfigSerializer()
-
-
-class TagDataResolverSerializer(Serializer):
-    selector = CSSSelectorField(required=True)
-
-
-class TagAttributeResolverSerializer(TagDataResolverSerializer):
-    attribute = CharField(required=True)
-
-
-class TagStaticResolverSerializer(Serializer):
-    key = ChoiceField(choices=DataResolverKey.choices)
-    value = CharField()
-
-
-class AuthorsResolverSerializer(Serializer):
+class FieldResolverSerializer(Serializer):
     resolver = ResolverConfigSerializer()
 
 
@@ -105,11 +86,14 @@ ResolverSerializers = {
     ResolverType.ATTRIBUTE: AttributeResolverSerializer,
     ResolverType.STATIC: StaticResolverSerializer,
     ResolverType.DOCUMENT: DocumentResolverSerializer,
-    ResolverType.TAG: TagResolverSerializer,
-    ResolverType.TAG_DATA: TagDataResolverSerializer,
-    ResolverType.TAG_ATTRIBUTE: TagAttributeResolverSerializer,
-    ResolverType.TAG_STATIC: TagStaticResolverSerializer,
-    ResolverType.AUTHORS: AuthorsResolverSerializer,
+
+    ResolverType.TITLE: FieldResolverSerializer,
+    ResolverType.SUBTITLE: FieldResolverSerializer,
+    ResolverType.ABSTRACT: FieldResolverSerializer,
+    ResolverType.PUBLICATION_DATE: FieldResolverSerializer,
+    ResolverType.URL: FieldResolverSerializer,
+    ResolverType.AUTHORS: FieldResolverSerializer,
+    ResolverType.TAGS: FieldResolverSerializer,
 }
 
 

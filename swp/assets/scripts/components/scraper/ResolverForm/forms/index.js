@@ -5,14 +5,6 @@ import LinkResolverForm from './LinkResolverForm';
 import ListResolverForm from './ListResolverForm';
 import StaticResolverForm from './StaticResolverForm';
 import FieldResolverForm from './FieldResolverForm';
-import AuthorsResolverForm from './AuthorsResolverForm';
-
-import {
-    TagResolverForm,
-    TagDataResolverForm,
-    TagAttributeResolverForm,
-    TagStaticResolverForm,
-} from './TagResolverForm';
 
 export {
     ListResolverForm,
@@ -22,9 +14,4 @@ export {
     StaticResolverForm,
     FieldResolverForm,
     DocumentResolverForm,
-    TagResolverForm,
-    TagDataResolverForm,
-    TagAttributeResolverForm,
-    TagStaticResolverForm,
-    AuthorsResolverForm,
 };

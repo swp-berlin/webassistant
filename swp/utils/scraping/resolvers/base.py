@@ -25,6 +25,9 @@ class Resolver:
     def __init__(self, context: ScraperContext, **kwargs):
         self.context = context
 
+    async def resolve(self, *args, **kwargs):
+        raise NotImplementedError
+
 
 class SelectorMixin:
 

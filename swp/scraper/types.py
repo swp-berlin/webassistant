@@ -19,15 +19,13 @@ ListWithLinkType = ScraperTypeData(
     defaults={
         'type': ResolverType.LIST,
         'resolvers': [
-            {
-                'type': ResolverType.ATTRIBUTE, 'attribute': 'href', 'key': DataResolverKey.URL
-            },
+            {'type': ResolverType.URL, 'resolver': {'type': ResolverType.ATTRIBUTE, 'attribute': 'href'}},
             {
                 'type': ResolverType.LINK,
                 'resolvers': [
-                    {'type': ResolverType.DATA, 'key': DataResolverKey.TITLE},
+                    {'type': ResolverType.TITLE},
                     {'type': ResolverType.AUTHORS},
-                    {'type': ResolverType.DATA, 'key': DataResolverKey.PUBLICATION_DATE},
+                    {'type': ResolverType.PUBLICATION_DATE},
                 ]
             }
         ]
@@ -40,15 +38,13 @@ ListWithLinkAndDocType = ScraperTypeData(
     defaults={
         'type': ResolverType.LIST,
         'resolvers': [
-            {
-                'type': ResolverType.ATTRIBUTE, 'attribute': 'href', 'key': DataResolverKey.URL
-            },
+            {'type': ResolverType.URL, 'resolver': {'type': ResolverType.ATTRIBUTE, 'attribute': 'href'}},
             {
                 'type': ResolverType.LINK,
                 'resolvers': [
-                    {'type': ResolverType.DATA, 'key': DataResolverKey.TITLE},
+                    {'type': ResolverType.TITLE},
                     {'type': ResolverType.AUTHORS},
-                    {'type': ResolverType.DATA, 'key': DataResolverKey.PUBLICATION_DATE},
+                    {'type': ResolverType.PUBLICATION_DATE},
                     {'type':  ResolverType.DOCUMENT, 'key':  'pdf'}
                 ]
             }
@@ -62,8 +58,9 @@ ListWithDoc = ScraperTypeData(
     defaults={
         'type': ResolverType.LIST,
         'resolvers': [
-            {'type': ResolverType.DATA, 'key': DataResolverKey.TITLE},
+            {'type': ResolverType.TITLE},
             {'type': ResolverType.AUTHORS},
+            {'type': ResolverType.PUBLICATION_DATE},
             {'type':  ResolverType.DOCUMENT, 'key':  'pdf'},
         ]
     }
