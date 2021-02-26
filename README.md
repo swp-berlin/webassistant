@@ -83,6 +83,12 @@ DJANGO_SETTINGS_MODULE=swp.settings.dev python manage.py createsuperuser
 Before the first start of the development server you have to run:
 
 ``` console
+DJANGO_SETTINGS_MODULE=swp.settings.dev python manage.py generate-schemes
+```
+
+As well as the following to generate all translation files:
+
+``` console
 DJANGO_SETTINGS_MODULE=swp.settings.dev python manage.py compile-translations
 ```
 
