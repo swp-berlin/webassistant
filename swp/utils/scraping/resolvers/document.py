@@ -24,7 +24,7 @@ class DocumentResolver(DataResolver):
 
         download = await download_info.value
         file_path = await download.path()
-        suffix = pathlib.Path(file_path).suffix.lower()
+        suffix = pathlib.Path(download.url).suffix.lower()
 
         # TODO currently only supports pdf files
         if suffix != '.pdf':
