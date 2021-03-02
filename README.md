@@ -11,7 +11,7 @@ Below is a short description on how to set up the project to run it locally.
 
 ### Requirements
 
-* Python 3.7
+* Python 3.8
   - with virtualenv
 
 * nodejs 14.15 (LTS)
