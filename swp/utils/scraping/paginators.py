@@ -31,12 +31,15 @@ ENDLESS_PAGINATION_OBSERVER_TEMPLATE = """
 class Paginator:
 
     def __init__(self, context: ScraperContext, *, list_selector: str, button_selector: str, item_selector: str = None,
-                 max_pages: int = 10, timeout: int = 5):
+                 max_pages: int = 10,
+                 max_per_page: int = None,
+                 timeout: int = 5):
         self.context = context
         self.list_selector = list_selector
         self.item_selector = item_selector or '*'
         self.button_selector = button_selector
         self.max_pages = max_pages
+        self.max_per_page = max_per_page
         self.timeout = timeout
 
     async def query_list_items(self, page=None) -> [ElementHandle]:
@@ -50,7 +53,7 @@ class Paginator:
                 _('No elements matching %(selector)s found') % {'selector': selector}
             )
 
-        return nodes
+        return nodes[:self.max_per_page] if self.max_per_page else nodes
 
 
 class EndlessPaginator(Paginator):
