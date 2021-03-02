@@ -62,7 +62,7 @@ def migrate_config(apps, schema_editor):
 
     for scraper in scrapers:
         replace_old_config(scraper.data)
-        scraper.save()
+        scraper.save(update_fields=['data'])
 
 
 class Migration(migrations.Migration):
