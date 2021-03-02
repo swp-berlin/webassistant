@@ -12,7 +12,6 @@ class Command(GenerateSchemeCommand):
         ('interval', Interval.choices),
         ('ResolverType', ResolverType.choices),
         ('ListResolverType', ListResolverType.choices),
-        # ('TagResolverType', TagResolverType.choices),
         ('DataResolverKey', DataResolverKey.choices),
         ('UniqueKey', UniqueKey.choices),
         ('Comparator', Comparator.choices)
