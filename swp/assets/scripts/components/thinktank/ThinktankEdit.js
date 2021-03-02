@@ -17,7 +17,7 @@ const ThinktankEdit = ({id, ...props}) => {
     const result = useQuery(endpoint);
 
     useThinktanksBreadcrumb();
-    useBreadcrumb(`${endpoint}/edit/`, getThinktankLabel(id, result));
+    useBreadcrumb(endpoint, getThinktankLabel(id, result));
 
     return (
         <Page title={Title}>
