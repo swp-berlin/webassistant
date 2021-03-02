@@ -80,5 +80,5 @@ class Migration(migrations.Migration):
                          ('pdf_url', 'PDF URL'), ('tags', 'Tags')], db_index=True, default='title', max_length=16,
                 verbose_name='field'),
         ),
-        migrations.RunPython(code=migrate_config, reverse_code=migrations.RunPython.noop),
+        migrations.RunPython(code=migrate_config),
     ]
