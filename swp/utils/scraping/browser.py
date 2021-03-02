@@ -43,10 +43,10 @@ async def open_browser(*args, **kwargs) -> ContextManager[Browser]:
         with tempoary_user_dir() as user_dir:
             browser = await playwright.chromium.launch_persistent_context(user_dir, *args, **kwargs)
 
-        try:
-            yield browser
-        finally:
-            await browser.close()
+            try:
+                yield browser
+            finally:
+                await browser.close()
 
 
 @asynccontextmanager
