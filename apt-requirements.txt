@@ -1,5 +1,5 @@
 libqpdf-dev
-libpython3.7-dev
+libpython3.8-dev
 postgresql-server-dev-13
 python3-venv
 npm
