@@ -1,8 +1,14 @@
-from typing import Optional, Sequence, Tuple
+from __future__ import annotations
+from typing import Optional, Sequence, Tuple, TYPE_CHECKING
 
+import io
 from django.http import HttpResponse
 
-from swp.models import Publication
+if TYPE_CHECKING:
+    from swp.models import Publication
+
+
+RIS_MEDIA_TYPE = 'application/x-research-info-systems'
 
 
 def get_ris_data(publication: Publication) -> Sequence[Tuple[str, Optional[str]]]:
@@ -30,3 +36,10 @@ def write_ris_data(response: HttpResponse, *publications):
                 response.write(f'{tag}  - {value}\n')
 
         response.write('ER  - \n')
+
+
+def generate_ris_data(*publications) -> bytes:
+    buf = io.StringIO('')
+    write_ris_data(buf, *publications)
+
+    return buf.getvalue().encode()

@@ -9,7 +9,16 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 
-class ActivatableQuerySet(models.QuerySet):
+class UpdateQuerySet(models.QuerySet):
+    """
+    QuerySet for locking row during update.
+    """
+
+    def get_for_update(self, *, nowait: bool = False, **kwargs):
+        return self.select_for_update(nowait=nowait).get(**kwargs)
+
+
+class ActivatableQuerySet(UpdateQuerySet):
     """
     QuerySet for :class:`Activatable` models.
     """

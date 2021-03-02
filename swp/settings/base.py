@@ -163,6 +163,10 @@ CELERY_BEAT_SCHEDULE = {
         'task': 'monitoring',
         'schedule': crontab(minute='*'),
     },
+    'monitor.schedule': {
+        'task': 'monitor.schedule',
+        'schedule': crontab(hour='*', minute=0),
+    },
     'scraper.schedule': {
         'task': 'scraper.schedule',
         'schedule': crontab(hour='*', minute=0),

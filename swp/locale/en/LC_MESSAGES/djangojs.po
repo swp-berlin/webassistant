@@ -264,13 +264,13 @@ msgstr ""
 msgid "Attribute"
 msgstr ""
 
-msgid "Field"
-msgstr ""
-
 msgid "Selector"
 msgstr ""
 
 msgid "Document"
+msgstr ""
+
+msgid "Field"
 msgstr ""
 
 msgid "Type"
@@ -298,12 +298,6 @@ msgid "Please enter a valid css selector"
 msgstr ""
 
 msgid "Value"
-msgstr ""
-
-msgid "Data"
-msgstr ""
-
-msgid "Tag"
 msgstr ""
 
 msgid "Scraper has been activated."
