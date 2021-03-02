@@ -7,8 +7,13 @@ from .link import LinkResolver
 from .list import ListResolver
 from .static import StaticResolver
 from .swp import (
-    TitleResolver, SubtitleResolver, AbstractResolver, PublicationDateResolver, URLResolver,
-    AuthorsResolver, TagsResolver,
+    TitleResolver,
+    SubtitleResolver,
+    AbstractResolver,
+    PublicationDateResolver,
+    URLResolver,
+    AuthorsResolver,
+    TagsResolver,
 )
 
 
