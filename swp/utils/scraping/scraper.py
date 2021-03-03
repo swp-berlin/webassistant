@@ -1,15 +1,12 @@
-from contextlib import contextmanager
 from typing import AsyncGenerator, List, TypedDict
 
-from pyppeteer.errors import PyppeteerError
+from playwright.async_api import Error as PlaywrightError
 from sentry_sdk import capture_exception
-
-from cosmogo.utils.tempdir import maketempdir
 
 from .browser import open_browser, open_page, PAGE_WAIT_UNTIL
 from .context import ScraperContext
 from .exceptions import ScraperError
-from .resolvers import ResolverType
+from .resolvers.base import create_resolver
 
 
 URL = str
@@ -33,30 +30,20 @@ class Scraper:
 
     async def scrape(self, resolver_config: dict) -> AsyncGenerator[Result, None]:
         try:
-            async with open_browser(handleSIGINT=False, handleSIGTERM=False, handleSIGHUP=False) as browser:
+            async with open_browser() as browser:
                 async with open_page(browser) as page:
-                    await page.goto(self.url, options={'waitUntil': PAGE_WAIT_UNTIL})
+                    await page.goto(self.url, wait_until=PAGE_WAIT_UNTIL)
 
-                    with self.get_download_path() as download_path:
-                        context = ScraperContext(browser, page, download_path)
-                        resolver = self.get_resolver(context, **resolver_config)
+                    context = ScraperContext(browser, page)
+                    resolver = create_resolver(context, **resolver_config)
 
-                        async for result in resolver.resolve():
-                            yield result
-        except PyppeteerError as err:
+                    results = resolver.resolve()
+
+                    async for result in results:
+                        yield result
+
+        except PlaywrightError as err:
             raise ScraperError(str(err)) from err
         except Exception as exc:
             capture_exception(exc)
             raise
-
-    @contextmanager
-    def get_download_path(self):
-        if self.download_path:
-            yield self.download_path
-            return
-
-        with maketempdir() as download_path:
-            yield f'{download_path}'
-
-    def get_resolver(self, context, *, type: ResolverType, **config):
-        return ResolverType[type].create(context, **config)

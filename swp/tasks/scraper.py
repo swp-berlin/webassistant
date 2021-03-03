@@ -25,9 +25,10 @@ async def scrape(scraper, config):
     publications = []
 
     max_len = configure_preview_pagination(config)
+    results = scraper.scrape(config)
 
     try:
-        async for publication in scraper.scrape(config):
+        async for publication in results:
             publications.append(publication)
 
             if len(publications) == max_len:
@@ -37,6 +38,11 @@ async def scrape(scraper, config):
             'success': False,
             'error': str(err)
         }
+    finally:
+        # we explicitly have to await closing of the generator
+        # otherwise it will not be correctly finalized
+        # see https://stackoverflow.com/q/66349410/5005177
+        await results.aclose()
 
     return {
         'success': True,

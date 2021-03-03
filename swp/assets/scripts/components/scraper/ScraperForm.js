@@ -16,10 +16,6 @@ import {
     LinkResolverForm,
     ListResolverForm,
     FieldResolverForm,
-    TagResolverForm,
-    TagDataResolverForm,
-    TagAttributeResolverForm,
-    TagStaticResolverForm,
 } from './ResolverForm/forms';
 import {Preview, PreviewButton} from './preview';
 
@@ -44,11 +40,16 @@ const Forms = {
     Data: FieldResolverForm,
     Attribute: FieldResolverForm,
     Static: FieldResolverForm,
+
     Document: DocumentResolverForm,
-    Tag: TagResolverForm,
-    TagData: TagDataResolverForm,
-    TagAttribute: TagAttributeResolverForm,
-    TagStatic: TagStaticResolverForm,
+
+    Title: FieldResolverForm,
+    Subtitle: FieldResolverForm,
+    Abstract: FieldResolverForm,
+    Publication_Date: FieldResolverForm,
+    URL: FieldResolverForm,
+    Authors: FieldResolverForm,
+    Tags: FieldResolverForm,
 };
 
 const DEFAULT_VALUES = {

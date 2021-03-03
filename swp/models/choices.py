@@ -15,38 +15,43 @@ class Interval(models.IntegerChoices):
 class ResolverType(models.TextChoices):
     LIST = 'List', _('List')
     LINK = 'Link', _('Link')
+
     DATA = 'Data', _('Data')
     ATTRIBUTE = 'Attribute', _('Attribute')
-    DOCUMENT = 'Document', _('Document')
     STATIC = 'Static', _('Static')
-    TAG = 'Tag', _('Tag')
-    TAG_DATA = 'TagData', _('Data')
-    TAG_ATTRIBUTE = 'TagAttribute', _('Attribute')
-    TAG_STATIC = 'TagStatic', _('Static')
+
+    DOCUMENT = 'Document', _('Document')
+
+    TITLE = 'Title', _('Title')
+    SUBTITLE = 'Subtitle', _('Subtitle')
+    ABSTRACT = 'Abstract', _('Abstract')
+    PUBLICATION_DATE = 'Publication_Date', _('Publication Date')
+    URL = 'URL', _('URL')
+    AUTHORS = 'Authors', _('Authors')
+    TAGS = 'Tags', _('Tags')
 
 
 class ListResolverType(models.TextChoices):
-    LIST = 'List', _('List')
-    LINK = 'Link', _('Link')
-    FIELD = 'Data', _('Field')
-    STATIC = 'Static', _('Static')
-    TAG = 'Tag', _('Tag')
+    LINK = ResolverType.LINK
 
-
-class TagResolverType(models.TextChoices):
-    TAG_DATA = 'TagData', _('Data')
-    TAG_ATTRIBUTE = 'TagAttribute', _('Attribute')
-    TAG_STATIC = 'TagStatic', _('Static')
+    TITLE = ResolverType.TITLE
+    SUBTITLE = ResolverType.SUBTITLE
+    ABSTRACT = ResolverType.ABSTRACT
+    PUBLICATION_DATE = ResolverType.PUBLICATION_DATE
+    URL = ResolverType.URL
+    AUTHORS = ResolverType.AUTHORS
+    TAGS = ResolverType.TAGS
 
 
 class DataResolverKey(models.TextChoices):
     TITLE = 'title', _('Title')
     SUBTITLE = 'subtitle', _('Subtitle')
     ABSTRACT = 'abstract', _('Abstract')
-    AUTHOR = 'author', _('Author')
+    AUTHORS = 'authors', _('Authors')
     PUBLICATION_DATE = 'publication_date', _('Publication Date')
     URL = 'url', _('URL')
     PDF_URL = 'pdf_url', _('PDF URL')
+    TAGS = 'tags', _('Tags')
 
 
 class UniqueKey(models.TextChoices):

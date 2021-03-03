@@ -6,13 +6,6 @@ import ListResolverForm from './ListResolverForm';
 import StaticResolverForm from './StaticResolverForm';
 import FieldResolverForm from './FieldResolverForm';
 
-import {
-    TagResolverForm,
-    TagDataResolverForm,
-    TagAttributeResolverForm,
-    TagStaticResolverForm,
-} from './TagResolverForm';
-
 export {
     ListResolverForm,
     LinkResolverForm,
@@ -21,8 +14,4 @@ export {
     StaticResolverForm,
     FieldResolverForm,
     DocumentResolverForm,
-    TagResolverForm,
-    TagDataResolverForm,
-    TagAttributeResolverForm,
-    TagStaticResolverForm,
 };

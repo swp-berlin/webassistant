@@ -2,7 +2,8 @@ import copy
 from django import test
 
 from swp.tasks.scraper import configure_preview_pagination
-from swp.utils.scraping.resolvers import PaginatorType, ResolverType
+from swp.utils.scraping.paginators import PaginatorType
+from swp.utils.scraping.resolvers import ResolverType
 
 
 class PreviewPaginationTestCase(test.TestCase):

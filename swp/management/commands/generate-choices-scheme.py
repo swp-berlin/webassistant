@@ -2,7 +2,7 @@ from django.utils import translation
 
 from swp.management.scheme import GenerateSchemeCommand
 from swp.models.choices import (
-    Comparator, DataResolverKey, Interval, ListResolverType, ResolverType, TagResolverType,
+    Comparator, DataResolverKey, Interval, ListResolverType, ResolverType,
     UniqueKey,
 )
 
@@ -12,7 +12,6 @@ class Command(GenerateSchemeCommand):
         ('interval', Interval.choices),
         ('ResolverType', ResolverType.choices),
         ('ListResolverType', ListResolverType.choices),
-        ('TagResolverType', TagResolverType.choices),
         ('DataResolverKey', DataResolverKey.choices),
         ('UniqueKey', UniqueKey.choices),
         ('Comparator', Comparator.choices)

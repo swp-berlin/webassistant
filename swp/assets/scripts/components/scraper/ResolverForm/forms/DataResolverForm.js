@@ -1,14 +1,9 @@
 import _ from 'utils/i18n';
-import {getChoices} from 'utils/choices';
-import {Select} from 'components/forms/Select';
 
 import SelectorField from './SelectorField';
 
 
-const KeyLabel = _('Field');
 const SelectorLabel = _('Selector');
-
-const KeyChoices = getChoices('DataResolverKey');
 
 const DataResolverForm = props => {
     const {form, prefix, field, children, readOnly} = props;
@@ -16,15 +11,6 @@ const DataResolverForm = props => {
 
     return (
         <>
-            <Select
-                control={form.control}
-                name={`${prefix}.key`}
-                label={KeyLabel}
-                choices={KeyChoices}
-                errors={errors}
-                defaultValue={field.key || KeyChoices[0].value}
-                disabled={readOnly}
-            />
             <SelectorField
                 register={register}
                 name={`${prefix}.selector`}
