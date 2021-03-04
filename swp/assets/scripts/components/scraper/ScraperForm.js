@@ -133,7 +133,7 @@ const ScraperForm = ({endpoint, data, method, redirectURL}) => {
                     </ResolverFormProvider>
                 </Field>
 
-                <ScraperFormErrors form={form} errors={errors} />
+                <ScraperFormErrors form={form} />
 
                 <div className="flex justify-end space-x-2">
                     <Button type="submit" intent="primary" text={SubmitButtonLabel} disabled={isActive} />

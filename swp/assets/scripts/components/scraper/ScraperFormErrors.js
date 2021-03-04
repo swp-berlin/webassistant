@@ -1,7 +1,8 @@
 import {useEffect, useRef} from 'react';
 
 
-const ScraperFormErrors = ({form, errors: {non_field_errors: nonFieldErrors}}) => {
+const ScraperFormErrors = ({form}) => {
+    const {errors: {non_field_errors: nonFieldErrors}} = form;
     const nonFieldErrorsRef = useRef(nonFieldErrors);
 
     useEffect(() => {
