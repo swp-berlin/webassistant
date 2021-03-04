@@ -24,7 +24,6 @@ def schedule_scrapers(now=None):
     ).filter(
         is_active=True,
         is_running=False,
-        next_run__gte=start,
         next_run__lt=end,
     )
 
@@ -35,7 +34,7 @@ def schedule_scrapers(now=None):
 
 
 @app.task(name='scraper.run')
-def run_scraper(scraper, using=None):
+def run_scraper(scraper, now=None, using=None):
     with transaction.atomic(using=using):
         try:
             scraper = Scraper.objects.get_for_update(pk=scraper)
@@ -43,6 +42,9 @@ def run_scraper(scraper, using=None):
             return None
 
         if scraper.is_running:
+            return None
+
+        if scraper.next_run > localtime(now):
             return None
 
         scraper.update(is_running=True)
