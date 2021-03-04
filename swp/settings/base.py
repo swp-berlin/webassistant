@@ -169,6 +169,14 @@ CELERY_BEAT_SCHEDULE = {
     },
 }
 
+CELERY_TASK_CREATE_MISSING_QUEUES = True
+
+CELERY_TASK_ROUTES = {
+    'scraper.run': {
+        'queue': 'scraper',
+    },
+}
+
 DEBUG_TOOLBAR = False
 
 SHELL_PLUS_PRINT_SQL = env('SHELL_PLUS_PRINT_SQL', default=False, parser=truthy)
