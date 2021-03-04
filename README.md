@@ -123,6 +123,13 @@ You can run a local development server to test things like this:
 DJANGO_SETTINGS_MODULE=swp.settings.dev python manage.py runserver
 ```
 
+In order for scrapers to be run in development you have to start celery as well.
+Celery needs a running redis server, make sure to start it first.
+
+``` console
+DJANGO_SETTINGS_MODULE=swp.settings.dev celery -A swp worker -B -Q celery,scraper -l INFO --purge
+```
+
 
 ### Production Server
 
