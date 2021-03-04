@@ -9,9 +9,8 @@ from swp.models import Monitor, Publication, Scraper, Thinktank
 from swp.scraper.types import ScraperType
 from swp.tasks.monitor import (
     monitor_new_publications,
-    send_monitor_publications_mail,
+    send_monitor_publications,
     schedule_monitors,
-    update_monitor_sent,
 )
 
 ONE_HOUR = datetime.timedelta(hours=1)
@@ -223,12 +222,12 @@ class MonitorTestCase(test.TestCase):
         data = file.file.getvalue()
         self.assertEqual(data, FULL_RIS_DATA)
 
-    def test_send_monitor_publications_mail(self):
-        rv = send_monitor_publications_mail(self.monitor.pk, email='single-send@test')
-        self.assertEqual(len(mail.outbox), 1)
-        self.assertEqual(rv, 1)
+    def test_send_monitor_publications(self):
+        count = send_monitor_publications(self.monitor, now=self.now)
+        self.assertEqual(len(mail.outbox), 2)
+        self.assertEqual(count, 2)
 
-        self.assertEqual(mail.outbox[0].to, ['single-send@test'])
+        self.assertEqual(mail.outbox[0].to, ['test-1@localhost'])
         self.assertEqual(mail.outbox[0].subject, 'Publikationen für PIIE Monitor')
 
         attachments = mail.outbox[0].attachments
@@ -237,59 +236,68 @@ class MonitorTestCase(test.TestCase):
         self.assertEqual(attachments[0][1], FULL_RIS_DATA)
         self.assertEqual(attachments[0][2], 'application/x-research-info-systems')
 
-    def test_do_not_send_deactivated_monitor_publications_mail(self):
-        self.model.objects.filter(pk=self.monitor.pk).update(is_active=False)
-
-        rv = send_monitor_publications_mail(self.monitor.pk, email='single-send@test')
-        self.assertEqual(len(mail.outbox), 0)
-        self.assertEqual(rv, 0)
-
-    def test_do_not_send_empty_monitor_publications_mail(self):
-        Publication.objects.update(thinktank_id=self.thinktanks[1].pk)
-
-        rv = send_monitor_publications_mail(self.monitor.pk, email='single-send@test')
-        self.assertEqual(len(mail.outbox), 0)
-        self.assertEqual(rv, 0)
-
-    def test_do_not_send_outdated_monitor_publications_mail(self):
+    def test_send_only_new_monitor_publications(self):
         self.model.objects.filter(pk=self.monitor.pk).update(last_sent=self.now)
+        monitor = self.model.objects.get(pk=self.monitor.pk)
 
-        rv = send_monitor_publications_mail(self.monitor.pk, email='single-send@test')
-        self.assertEqual(len(mail.outbox), 1)
-        self.assertEqual(rv, 1)
+        count = send_monitor_publications(monitor, now=self.now)
+        self.assertEqual(len(mail.outbox), 2)
+        self.assertEqual(count, 2)
 
-    @mock.patch('swp.tasks.monitor.group', side_effect=lambda *tasks, **options: dict)
-    @mock.patch('swp.tasks.monitor.send_monitor_publications_mail.si', side_effect=send_monitor_publications_mail)
-    def test_dispatch_new_monitor_publications(self, mail_task, celery_group):
-        monitor_new_publications(self.monitor.pk)
+        self.assertEqual(mail.outbox[0].attachments[0][1], NEW_RIS_DATA)
+        self.assertEqual(mail.outbox[1].attachments[0][1], NEW_RIS_DATA)
+
+    def test_new_monitor_publications(self):
+        count = monitor_new_publications(self.monitor.pk, now=self.now)
 
         self.assertEqual(len(mail.outbox), 2)
-        self.assertTrue(celery_group.called)
-        self.assertTrue(mail_task.called)
+        self.assertEqual(count, 2)
 
-    @mock.patch('swp.tasks.monitor.send_monitor_publications_mail.si', side_effect=send_monitor_publications_mail)
-    def test_do_not_dispatch_deactivated_monitor_publications(self, mail_task):
+    def test_do_not_send_deactivated_monitor_publications(self):
         self.model.objects.filter(pk=self.monitor.pk).update(is_active=False)
 
-        monitor_new_publications(self.monitor.pk)
+        count = monitor_new_publications(self.monitor.pk, now=self.now)
 
         self.assertEqual(len(mail.outbox), 0)
-        self.assertFalse(mail_task.called)
+        self.assertFalse(count)
 
-    @mock.patch('swp.tasks.monitor.send_monitor_publications_mail.si', side_effect=send_monitor_publications_mail)
-    def test_do_not_dispatch_outdated_monitor_publications(self, mail_task):
+    def test_do_not_send_empty_monitor_publications(self):
+        Publication.objects.update(thinktank_id=self.thinktanks[1].pk)
+
+        count = monitor_new_publications(self.monitor.pk, now=self.now)
+
+        self.assertEqual(len(mail.outbox), 0)
+        self.assertFalse(count)
+
+    def test_do_not_send_outdated_monitor_publications(self):
+        self.model.objects.filter(pk=self.monitor.pk).update(last_sent=self.now)
+
+        count = monitor_new_publications(self.monitor.pk, now=self.now)
+
+        self.assertEqual(len(mail.outbox), 2)
+        self.assertEqual(count, 2)
+
+        self.assertEqual(mail.outbox[0].attachments[0][1], NEW_RIS_DATA)
+        self.assertEqual(mail.outbox[1].attachments[0][1], NEW_RIS_DATA)
+
+    def test_do_not_dispatch_deactivated_monitor_publications(self):
+        self.model.objects.filter(pk=self.monitor.pk).update(is_active=False)
+
+        count = monitor_new_publications(self.monitor.pk)
+
+        self.assertEqual(len(mail.outbox), 0)
+        self.assertFalse(count)
+
+    def test_do_not_dispatch_outdated_monitor_publications(self):
         Publication.objects.update(last_access=self.now - ONE_HOUR)
         self.model.objects.filter(pk=self.monitor.pk).update(last_sent=self.now)
 
-        monitor_new_publications(self.monitor.pk)
+        count = monitor_new_publications(self.monitor.pk)
 
         self.assertEqual(len(mail.outbox), 0)
-        self.assertFalse(mail_task.called)
+        self.assertFalse(count)
 
-    @mock.patch('swp.tasks.monitor.group', side_effect=lambda *tasks, **options: dict)
-    @mock.patch('swp.tasks.monitor.update_monitor_sent.si', side_effect=update_monitor_sent)
-    @mock.patch('swp.tasks.monitor.send_monitor_publications_mail.si', side_effect=send_monitor_publications_mail)
-    def test_schedule_monitors(self, mail_task, on_after_task, celery_group):
+    def test_schedule_monitors(self):
         with mock.patch(
             'swp.tasks.monitor.monitor_new_publications.apply_async',
             side_effect=lambda args, **kwargs: monitor_new_publications(*args)
@@ -297,7 +305,4 @@ class MonitorTestCase(test.TestCase):
             count = schedule_monitors(now=self.now)
 
             self.assertEqual(count, 1)
-            self.assertTrue(celery_group.called)
             self.assertTrue(dispatch_task.called)
-            self.assertTrue(mail_task.called)
-            self.assertTrue(on_after_task.called)
