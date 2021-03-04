@@ -5,6 +5,7 @@ from django.contrib.auth.models import AbstractUser as User
 from django.core.exceptions import ImproperlyConfigured, PermissionDenied
 from django.db import models
 from django.db.models.base import ModelBase
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 
@@ -105,3 +106,27 @@ class ActivatableModel(models.Model, metaclass=ActivatableModelBase):
             raise PermissionDenied(_('Deactivation denied'))
 
         self.set_active(False)
+
+
+class UpdateQuerySet(models.QuerySet):
+
+    def get_for_update(self, *, nowait=False, **kwargs):
+        return self.select_for_update(nowait=nowait).get(**kwargs)
+
+
+class LastModified(models.Model):
+    created = models.DateTimeField(_('created'), default=timezone.now, editable=False)
+    last_modified = models.DateTimeField(_('last modified'), auto_now=True)
+
+    objects = UpdateQuerySet.as_manager()
+
+    class Meta:
+        abstract = True
+
+    def update(self, *, using=None, **values):
+        update_fields = {*values, 'last_modified'}
+
+        for field, value in values.items():
+            setattr(self, field, value)
+
+        return self.save(update_fields=list(update_fields), using=using)
