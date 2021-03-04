@@ -1,3 +1,6 @@
+import asyncio
+from asyncio import Queue
+
 from django.utils.translation import gettext_lazy as _
 
 from playwright.async_api import ElementHandle
@@ -26,11 +29,48 @@ class ListResolver(IntermediateResolver):
     def create_paginator(context, *, type, **paginator):
         return PaginatorType[type].create(context, **paginator)
 
-    async def resolve(self) -> [dict]:
-        async for node in self.resolve_nodes():
-            detail_context = await self.resolve_node(node)
+    async def worker(self, nodes: Queue, results: Queue):
+        while True:
+            node = await nodes.get()
+            try:
+                resolved = await self.resolve_node(node)
+                results.put_nowait(resolved)
+            except Exception as error:
+                results.put_nowait(error)
+            finally:
+                nodes.task_done()
 
-            yield detail_context
+    async def process_nodes(self, nodes: Queue, results: Queue):
+        workers = [asyncio.create_task(self.worker(nodes, results)) for _ in range(4)]
+
+        async for node in self.resolve_nodes():
+            nodes.put_nowait(node)
+
+        await nodes.join()
+
+        for worker in workers:
+            worker.cancel()
+
+        await asyncio.gather(*workers, return_exceptions=True)
+
+        results.put_nowait(None)
+
+    async def resolve(self) -> [dict]:
+        nodes = Queue()
+        results = Queue()
+
+        asyncio.create_task(self.process_nodes(nodes, results))
+
+        while True:
+            result = await results.get()
+
+            if result:
+                if isinstance(result, Exception):
+                    raise result
+
+                yield result
+            else:
+                break
 
     async def resolve_nodes(self):
         if self.paginator:

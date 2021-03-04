@@ -13,7 +13,7 @@ from swp.utils.scraping.resolvers.data import DataResolver
 
 class DocumentResolver(DataResolver):
 
-    async def resolve(self, page: Page, fields: dict, errors: dict):
+    async def _resolve(self, page: Page, fields: dict, errors: dict):
         elem = await self.get_element(page)
 
         try:
