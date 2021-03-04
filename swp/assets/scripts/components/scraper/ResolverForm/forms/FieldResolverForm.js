@@ -38,7 +38,7 @@ const FieldResolverForm = props => {
     return (
         <div>
             <h2 className="text-lg mb-4">{getLabel(field?.type)}</h2>
-            <input name={`${prefix}.type`} type="hidden" value={field?.type} ref={register} />
+            <input name={`${prefix}.type`} type="hidden" value={field?.type} ref={register()} />
             <Select
                 name={`${prefix}.resolver.type`}
                 label={TypeLabel}
