@@ -18,7 +18,8 @@
       "POST_CMDS": [
         "npx npm install",
         "find . -name '*.pyc' -delete",
-        "env/bin/pip install -r requirements.txt -U",
+        "env/bin/pip install -r requirements.txt -U --no-input",
+        "env/bin/python -m playwright install",
         "env/bin/python manage.py migrate",
         "env/bin/python manage.py compile-translations",
         "env/bin/python manage.py generate-schemes",
@@ -48,7 +49,8 @@
       "POST_CMDS": [
         "npx npm install",
         "find . -name '*.pyc' -delete",
-        "env/bin/pip install -r requirements.txt -U",
+        "env/bin/pip install -r requirements.txt -U --no-input",
+        "env/bin/python -m playwright install",
         "env/bin/python manage.py migrate",
         "env/bin/python manage.py compile-translations",
         "env/bin/python manage.py generate-schemes",
