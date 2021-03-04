@@ -3,6 +3,7 @@ import {Button, Intent} from '@blueprintjs/core';
 
 import _ from 'utils/i18n';
 import {useMutationResult} from 'components/Fetch';
+import {setErrors} from 'utils/form';
 
 const ActivateLabel = _('Activate');
 const DeactivateLabel = _('Deactivate');
@@ -19,6 +20,7 @@ const ScraperActivationButton = ({id, isActive, form, onToggle}) => {
                 message: isActive ? ActivatedMessage : DeactivatedMessage,
             }),
             method: 'POST',
+            setErrors: errors => setErrors(form.setError, errors),
         },
         [],
     );
