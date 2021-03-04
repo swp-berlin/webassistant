@@ -98,7 +98,7 @@ ResolverSerializers = {
 
 
 class ScraperSerializer(ModelSerializer):
-    REQUIRED_KEYS = ['title']
+    REQUIRED_RESOLVERS = {ResolverType.TITLE.value}
 
     thinktank = ThinktankField(read_only=True)
     data = ResolverConfigSerializer()
@@ -118,31 +118,31 @@ class ScraperSerializer(ModelSerializer):
         return attrs
 
     def check_missing_fields(self, data):
-        keys = self.get_keys(data)
+        resolver_types = self.get_resolver_types(data)
 
-        missing = {*self.REQUIRED_KEYS} - {*keys}
+        missing = self.REQUIRED_RESOLVERS - resolver_types
 
         if missing:
             message = _('There must be a resolver for the following fields: %(fields)s')
-            labels = dict(DataResolverKey.choices)
+            labels = dict(ResolverType.choices)
             missing_labels = [labels[field] for field in missing]
             raise ValidationError(detail=message % {'fields': enumeration(missing_labels)}, code='missing-resolvers')
 
         return data
 
-    def get_keys(self, value, key=None):
-        if key == 'key' and isinstance(value, str):
-            return [value]
+    def get_resolver_types(self, value, key=None):
+        if key == 'type' and isinstance(value, str):
+            return {value}
 
-        keys = []
+        keys = set()
 
         if isinstance(value, dict):
             for k, v in value.items():
-                keys += self.get_keys(v, key=k)
+                keys.update(self.get_resolver_types(v, key=k))
 
         elif isinstance(value, list):
             for v in value:
-                keys += self.get_keys(v)
+                keys.update(self.get_resolver_types(v))
 
         return keys
 
