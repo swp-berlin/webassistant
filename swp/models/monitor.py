@@ -99,7 +99,7 @@ class Monitor(ActivatableModel):
         qs = Publication.objects.active().filter(self.as_query)
 
         if exclude_sent and self.last_sent:
-            qs = qs.filter(models.Q(last_access__isnull=True) | models.Q(last_access__gt=self.last_sent))
+            qs = qs.filter(last_access__gte=self.last_sent)
 
         return qs
 

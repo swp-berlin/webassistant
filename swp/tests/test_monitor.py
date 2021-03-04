@@ -81,6 +81,7 @@ class MonitorTestCase(test.TestCase):
                 url='https://piie.com/publications/policy-briefs/impact-covid-19-lockdowns-individual-mobility-and-importance',
                 pdf_url='https://www.piie.com/system/files/documents/pb20-14.pdf',
                 pdf_pages=22,
+                last_access=now,
                 created=now,
             ),
             Publication(
@@ -88,7 +89,7 @@ class MonitorTestCase(test.TestCase):
                 title='Already accessed publication',
                 publication_date='2021',
                 url='https://example.org',
-                last_access=now,
+                last_access=now - ONE_HOUR,
                 created=now,
             ),
         ])
@@ -209,7 +210,7 @@ class MonitorTestCase(test.TestCase):
         self.assertEqual(data, NEW_RIS_DATA)
 
     def test_do_not_generate_outdated_ris_data(self):
-        Publication.objects.update(last_access=self.now)
+        Publication.objects.update(last_access=self.now - ONE_HOUR)
         self.model.objects.filter(pk=self.monitor.pk).update(last_sent=self.now)
         monitor = self.model.objects.get(pk=self.monitor.pk)
 
