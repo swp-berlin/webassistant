@@ -162,7 +162,8 @@ class MonitorTestCase(test.TestCase):
     def test_next_run(self):
         monitor = self.model.objects.annotate_next_run('annotated_next_run', now=self.now).get(pk=self.monitor.pk)
         with mock.patch('django.utils.timezone.localtime', return_value=self.now):
-            self.assertEqual(monitor.next_run, monitor.annotated_next_run)
+            self.assertEqual(monitor.annotated_next_run, self.now)
+            self.assertEqual(monitor.next_run, self.now)
 
     def test_next_run_with_last_sent(self):
         self.model.objects.filter(pk=self.monitor.pk).update(last_sent=self.now)
@@ -237,13 +238,18 @@ class MonitorTestCase(test.TestCase):
         self.assertEqual(attachments[0][1], FULL_RIS_DATA)
         self.assertEqual(attachments[0][2], 'application/x-research-info-systems')
 
+        monitor = self.model.objects.get(pk=self.monitor.pk)
+        self.assertEqual(monitor.last_sent, self.now)
+
     def test_send_only_new_monitor_publications(self):
         self.model.objects.filter(pk=self.monitor.pk).update(last_sent=self.now)
         monitor = self.model.objects.get(pk=self.monitor.pk)
 
         count = send_monitor_publications(monitor, now=self.now)
+
         self.assertEqual(len(mail.outbox), 2)
         self.assertEqual(count, 2)
+        self.assertEqual(monitor.last_sent, self.now)
 
         self.assertEqual(mail.outbox[0].attachments[0][1], NEW_RIS_DATA)
         self.assertEqual(mail.outbox[1].attachments[0][1], NEW_RIS_DATA)
@@ -254,23 +260,10 @@ class MonitorTestCase(test.TestCase):
         self.assertEqual(len(mail.outbox), 2)
         self.assertEqual(count, 2)
 
-    def test_do_not_send_deactivated_monitor_publications(self):
-        self.model.objects.filter(pk=self.monitor.pk).update(is_active=False)
+        monitor = self.model.objects.get(pk=self.monitor.pk)
+        self.assertEqual(monitor.last_sent, self.now)
 
-        count = monitor_new_publications(self.monitor.pk, now=self.now)
-
-        self.assertEqual(len(mail.outbox), 0)
-        self.assertFalse(count)
-
-    def test_do_not_send_empty_monitor_publications(self):
-        Publication.objects.update(thinktank_id=self.thinktanks[1].pk)
-
-        count = monitor_new_publications(self.monitor.pk, now=self.now)
-
-        self.assertEqual(len(mail.outbox), 0)
-        self.assertFalse(count)
-
-    def test_do_not_send_outdated_monitor_publications(self):
+    def test_only_new_monitor_publications(self):
         self.model.objects.filter(pk=self.monitor.pk).update(last_sent=self.now)
 
         count = monitor_new_publications(self.monitor.pk, now=self.now)
@@ -281,15 +274,29 @@ class MonitorTestCase(test.TestCase):
         self.assertEqual(mail.outbox[0].attachments[0][1], NEW_RIS_DATA)
         self.assertEqual(mail.outbox[1].attachments[0][1], NEW_RIS_DATA)
 
-    def test_do_not_dispatch_deactivated_monitor_publications(self):
+    def test_do_not_send_deactivated_monitor_publications(self):
         self.model.objects.filter(pk=self.monitor.pk).update(is_active=False)
 
-        count = monitor_new_publications(self.monitor.pk)
+        count = monitor_new_publications(self.monitor.pk, now=self.now)
 
         self.assertEqual(len(mail.outbox), 0)
         self.assertFalse(count)
 
-    def test_do_not_dispatch_outdated_monitor_publications(self):
+        monitor = self.model.objects.get(pk=self.monitor.pk)
+        self.assertIsNone(monitor.last_sent)
+
+    def test_do_not_send_empty_monitor_publications(self):
+        Publication.objects.update(thinktank_id=self.thinktanks[1].pk)
+
+        count = monitor_new_publications(self.monitor.pk, now=self.now)
+
+        self.assertEqual(len(mail.outbox), 0)
+        self.assertFalse(count)
+
+        monitor = self.model.objects.get(pk=self.monitor.pk)
+        self.assertIsNone(monitor.last_sent)
+
+    def test_do_not_send_outdated_monitor_publications(self):
         Publication.objects.update(last_access=self.now - ONE_HOUR)
         self.model.objects.filter(pk=self.monitor.pk).update(last_sent=self.now)
 
@@ -301,9 +308,13 @@ class MonitorTestCase(test.TestCase):
     def test_schedule_monitors(self):
         with mock.patch(
             'swp.tasks.monitor.monitor_new_publications.apply_async',
-            side_effect=lambda args, **kwargs: monitor_new_publications(*args)
+            side_effect=lambda args, kwargs, **options: monitor_new_publications(*args, **kwargs)
         ) as dispatch_task:
             count = schedule_monitors(now=self.now)
 
             self.assertEqual(count, 1)
             self.assertTrue(dispatch_task.called)
+            self.assertEqual(dispatch_task.call_count, 1)
+
+            call_args = dispatch_task.call_args[1]
+            self.assertEqual(call_args['eta'], self.now)
