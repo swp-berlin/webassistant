@@ -229,7 +229,7 @@ class MonitorTestCase(test.TestCase):
         self.assertEqual(count, 2)
 
         self.assertEqual(mail.outbox[0].to, ['test-1@localhost'])
-        self.assertEqual(mail.outbox[0].subject, 'Publikationen für PIIE Monitor')
+        self.assertTrue('PIIE Monitor' in mail.outbox[0].subject)
 
         attachments = mail.outbox[0].attachments
         self.assertEqual(len(attachments), 1)
