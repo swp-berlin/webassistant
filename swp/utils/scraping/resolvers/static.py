@@ -8,7 +8,7 @@ class StaticResolver(Resolver):
     def __init__(self, context: ScraperContext, *, key: str, value: str, **kwargs):
         super().__init__(context, **kwargs)
         self.key = key
-        self.value = value
+        self.value = [value] if kwargs.get('multiple') else value
 
     async def resolve(self, node: ElementHandle, fields: dict, errors: dict):
         fields[self.key] = self.value
