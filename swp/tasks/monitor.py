@@ -1,5 +1,5 @@
 import datetime
-from typing import Iterable, Optional, Tuple
+from typing import Iterable, Optional
 
 from django.core.mail import EmailMultiAlternatives, get_connection as get_mail_connection
 from django.db import transaction
@@ -9,7 +9,7 @@ from cosmogo.utils.mail import render_mail
 
 from swp.celery import app
 from swp.models import Monitor, Publication
-from swp.utils.ris import generate_ris_data, RIS_MEDIA_TYPE
+from swp.utils.ris import generate_ris_attachment
 
 
 @app.task(name='monitor.schedule')
@@ -47,16 +47,6 @@ def monitor_new_publications(monitor_id: int, now: datetime.datetime = None, **k
         return send_monitor_publications(monitor, now=now, exclude_sent=True, **kwargs)
 
 
-def make_monitor_publications_attachment(
-    monitor: Monitor,
-    publications: Iterable[Publication],
-) -> Tuple[str, bytes, str]:
-    data = generate_ris_data(*publications)
-    name = f'{monitor.name}.ris'
-
-    return name, data, RIS_MEDIA_TYPE
-
-
 def make_monitor_publication_messages(
     monitor: Monitor,
     publications: Iterable[Publication],
@@ -69,7 +59,7 @@ def make_monitor_publication_messages(
     subject, message, html_message = render_mail('monitor-publications', context=context)
     alternatives = [(html_message, 'text/html')] if html_message else []
 
-    attachment = make_monitor_publications_attachment(monitor, publications)
+    attachment = generate_ris_attachment(monitor.name, publications)
 
     return [
         EmailMultiAlternatives(

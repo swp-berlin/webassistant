@@ -5,7 +5,6 @@ import operator
 from functools import reduce
 from typing import Iterable, Tuple
 
-from django.core.files.base import ContentFile
 from django.db import models
 from django.db.models.expressions import Case, ExpressionWrapper, F, When
 from django.utils import timezone
@@ -14,7 +13,7 @@ from django.utils.translation import gettext_lazy as _
 from django.contrib.postgres.fields import ArrayField
 
 from swp.db.expressions import MakeInterval
-from swp.utils.ris import generate_ris_data
+from swp.utils.ris import generate_ris_data, RIS_MEDIA_TYPE
 from .publication import Publication
 from .abstract import ActivatableModel, ActivatableQuerySet
 from .choices import Interval
@@ -140,11 +139,4 @@ class Monitor(ActivatableModel):
 
     def generate_ris_data(self, exclude_sent: bool = False) -> bytes:
         publications = self.get_publications(exclude_sent=exclude_sent)
-        return generate_ris_data(*iter(publications))
-
-    def generate_ris_file(self, filename: str = '', exclude_sent: bool = False) -> ContentFile:
-        filename = filename or f'{self.name}.ris'
-        data = self.generate_ris_data(exclude_sent=exclude_sent)
-        file = ContentFile(data, name=filename)
-
-        return file
+        return generate_ris_data(publications)

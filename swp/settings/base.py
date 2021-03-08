@@ -184,6 +184,10 @@ CELERY_TASK_ROUTES = {
 DEBUG_TOOLBAR = False
 
 SHELL_PLUS_PRINT_SQL = env('SHELL_PLUS_PRINT_SQL', default=False, parser=truthy)
+SHELL_PLUS_POST_IMPORTS = [
+    ('swp.tasks', '*'),
+    ('swp.utils.ris', '*'),
+]
 
 # <editor-fold desc="REST API">
 

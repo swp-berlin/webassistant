@@ -218,12 +218,6 @@ class MonitorTestCase(test.TestCase):
         data = monitor.generate_ris_data(exclude_sent=True)
         self.assertEqual(data, b'')
 
-    def test_generate_ris_file(self):
-        file = self.monitor.generate_ris_file(exclude_sent=True)
-        self.assertEqual(file.name, 'PIIE Monitor.ris')
-        data = file.file.getvalue()
-        self.assertEqual(data, FULL_RIS_DATA)
-
     def test_send_monitor_publications(self):
         count = send_monitor_publications(self.monitor, now=self.now)
         self.assertEqual(len(mail.outbox), 2)

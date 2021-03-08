@@ -1,6 +1,7 @@
 from __future__ import annotations
-from typing import Optional, Sequence, Tuple, TYPE_CHECKING
+from typing import Iterable, Optional, Sequence, Tuple, TYPE_CHECKING
 
+import datetime
 import io
 from django.http import HttpResponse
 
@@ -38,8 +39,29 @@ def write_ris_data(response: HttpResponse, *publications):
         response.write('ER  - \n')
 
 
-def generate_ris_data(*publications) -> bytes:
+def generate_ris_data(publications: Iterable[Publication]) -> bytes:
+    """ Generate raw RIS data from publications. """
     buf = io.StringIO('')
     write_ris_data(buf, *publications)
 
     return buf.getvalue().encode()
+
+
+def generate_ris_name(name: str, now: datetime.datetime = None, sep: str = ' ') -> str:
+    """ Generate RIS file name with optiobal timestamp. """
+    if now is not None:
+        return f'{name}{sep}{now:%Y-%m-%d_%H-%M}.ris'
+
+    return f'{name}.ris'
+
+
+def generate_ris_attachment(
+    name: str,
+    publications: Iterable[Publication],
+    now: datetime.datetime = None,
+) -> Tuple[str, bytes, str]:
+    """ Generate RIS attachment tuple for emails. """
+    data = generate_ris_data(publications)
+    filename = generate_ris_name(name, now=now)
+
+    return filename, data, RIS_MEDIA_TYPE
