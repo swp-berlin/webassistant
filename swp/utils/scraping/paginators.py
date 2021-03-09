@@ -135,8 +135,9 @@ class PagePaginator(Paginator):
             await self.context.page.goto(href)
         except TimeoutError:
             raise ResolverError(
-                _('Timeout while navigating to page %(page_number)s') % {
-                    'page_number': page_number
+                _('Timeout while navigating to page %(page_number)s: %(href)s') % {
+                    'page_number': page_number,
+                    'href': href,
                 }
             )
 
