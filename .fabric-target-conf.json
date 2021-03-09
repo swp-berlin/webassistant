@@ -12,7 +12,7 @@
       "PRE_CMDS": [
         "sudo systemctl stop swp@production.service",
         "sudo systemctl stop celery@production.service",
-        "sudo systemctl stop celery@production-scraper.service"
+        "sudo systemctl stop scraper@production.service"
       ],
       "POST_CMD_ENV": {
         "DJANGO_SETTINGS_MODULE": "swp.settings.production"
@@ -29,7 +29,7 @@
         "env/bin/python manage.py collectstatic --no-input",
         "sudo systemctl start swp@production.service",
         "sudo systemctl start celery@production.service",
-        "sudo systemctl start celery@production-scraper.service",
+        "sudo systemctl start scraper@production.service",
         "sudo systemctl restart nginx.service"
       ]
     },
@@ -46,7 +46,7 @@
       "PRE_CMDS": [
         "sudo systemctl stop swp@staging.service",
         "sudo systemctl stop celery@staging.service",
-        "sudo systemctl stop celery@staging-scraper.service"
+        "sudo systemctl stop scraper@staging.service"
       ],
       "POST_CMD_ENV": {
         "DJANGO_SETTINGS_MODULE": "swp.settings.staging"
@@ -63,7 +63,7 @@
         "env/bin/python manage.py collectstatic --no-input",
         "sudo systemctl start swp@staging.service",
         "sudo systemctl start celery@staging.service",
-        "sudo systemctl start celery@staging-scraper.service",
+        "sudo systemctl start scraper@staging.service",
         "sudo systemctl restart nginx.service"
       ]
     }
