@@ -15,6 +15,7 @@
         "sudo systemctl stop scraper@production.service"
       ],
       "POST_CMD_ENV": {
+        "PLAYWRIGHT_BROWSERS_PATH": "/var/www/production/browsers",
         "DJANGO_SETTINGS_MODULE": "swp.settings.production"
       },
       "POST_CMDS": [
@@ -49,6 +50,7 @@
         "sudo systemctl stop scraper@staging.service"
       ],
       "POST_CMD_ENV": {
+        "PLAYWRIGHT_BROWSERS_PATH": "/var/www/staging/browsers",
         "DJANGO_SETTINGS_MODULE": "swp.settings.staging"
       },
       "POST_CMDS": [
