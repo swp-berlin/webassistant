@@ -3,6 +3,8 @@ import datetime
 from django.db import models, transaction
 from django.utils.timezone import localtime
 
+from sentry_sdk import capture_exception
+
 from swp.celery import app
 from swp.db.expressions import MakeInterval
 from swp.models import Scraper
@@ -47,9 +49,13 @@ def run_scraper(scraper, now=None, using=None):
         if scraper.next_run > localtime(now):
             return None
 
+        scraper.errors.all().delete()
         scraper.update(is_running=True)
 
     try:
         return scraper.scrape()
+    except Exception as error:
+        scraper.errors.create(message=f'{error}')
+        capture_exception(error)
     finally:
         scraper.update(last_run=localtime(None), is_running=False)
