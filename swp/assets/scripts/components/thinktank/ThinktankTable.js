@@ -23,6 +23,7 @@ const ThinktankRows = ({items}) => (
             name={thinktank.name}
             publicationCount={thinktank.publication_count}
             scraperCount={thinktank.scraper_count}
+            activeScraperCount={thinktank.active_scraper_count}
             lastRun={thinktank.last_run}
             errorCount={thinktank.last_error_count}
             isActive={thinktank.is_active}

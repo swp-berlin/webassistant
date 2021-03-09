@@ -24,6 +24,10 @@ class ThinktankQuerySet(ActivatableQuerySet):
     def annotate_scraper_count(self, to_attr='') -> ThinktankQuerySet:
         return self.annotate(**{to_attr or 'scraper_count': Count('scrapers', distinct=True)})
 
+    def annotate_active_scraper_count(self, to_attr='') -> ThinktankQuerySet:
+        count = Count('scrapers', models.Q(is_active=True), distinct=True)
+        return self.annotate(**{to_attr or 'active_scraper_count': count})
+
     def annotate_error_count(self, to_attr='') -> ThinktankQuerySet:
         return self.annotate(**{to_attr or 'error_count': Count('scrapers__errors')})
 
@@ -58,6 +62,10 @@ class Thinktank(ActivatableModel):
     @cached_property
     def scraper_count(self) -> int:
         return self.scrapers.count()
+
+    @cached_property
+    def active_scraper_count(self) -> int:
+        return self.scrapers.active().count()
 
     @cached_property
     def error_count(self) -> int:

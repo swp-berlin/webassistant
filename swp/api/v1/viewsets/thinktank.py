@@ -23,6 +23,8 @@ class ThinktankViewSet(viewsets.ModelViewSet):
                     'scrapers', Scraper.objects.annotate_error_count(),
                 ),
             )
+        else:
+            queryset = queryset.annotate_active_scraper_count()
 
         return queryset
 
