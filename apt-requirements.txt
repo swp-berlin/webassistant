@@ -1,5 +1,8 @@
 libqpdf-dev
 libpython3.8-dev
+libdrm2
+libgbm1
+libxshmfence1
 postgresql-server-dev-13
 python3-venv
 npm
