@@ -1,0 +1,10 @@
+table {
+  tr.disabled td {
+    color: $pt-text-color-disabled;
+  }
+
+  td.text-right,
+  th.text-right {
+    text-align: right;
+  }
+}

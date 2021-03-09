@@ -10,6 +10,22 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+#, python-format
+msgid "Activated %(count)d %(name)s"
+msgstr "%(count)d %(name)s erfolgreich aktiviert"
+
+#, python-format
+msgid "Activate selected %(verbose_name_plural)s"
+msgstr "Ausgewählte %(verbose_name_plural)s aktivieren"
+
+#, python-format
+msgid "Deactivated %(count)d %(name)s"
+msgstr "%(count)d %(name)s erfolgreich deaktiviert"
+
+#, python-format
+msgid "Deactivate selected %(verbose_name_plural)s"
+msgstr "Ausgewählte %(verbose_name_plural)s deaktivieren"
+
 msgid "Personal info"
 msgstr "Persönliche Informationen"
 
@@ -19,8 +35,40 @@ msgstr "Berechtigungen"
 msgid "Important dates"
 msgstr "Wichtige Daten"
 
+msgid "update publication count"
+msgstr "Publikationszähler aktualisieren"
+
+msgid "Internal Error"
+msgstr "Interner Fehler"
+
+#, python-format
+msgid "There must be a resolver for the following fields: %(fields)s"
+msgstr "Es muss ein Resolver für die folgenden Felder vorhanden sein: %(fields)s"
+
+msgid "Active"
+msgstr "Aktiv"
+
+msgid "Invalid Selector"
+msgstr "Ungültiger Selektor"
+
+msgid "Monitor"
+msgstr "Monitor"
+
+msgid "Think Tank Filter"
+msgstr "Thinktank-Filter"
+
+#, python-format
+msgid "Missing %s permission"
+msgstr "Fehlende Berechtigung %s"
+
 msgid "active"
 msgstr "aktiv"
+
+msgid "Activation denied"
+msgstr "Aktivierung nicht erlaubt"
+
+msgid "Deactivation denied"
+msgstr "Deaktivierung nicht erlaubt"
 
 msgid "twice daily"
 msgstr "zweimal täglich"
@@ -34,23 +82,86 @@ msgstr "wöchentlich"
 msgid "monthly"
 msgstr "monatlich"
 
-msgid "Interval in days"
-msgstr "Intervall in Tagen"
+msgid "List"
+msgstr "Liste"
 
-msgid "interval"
-msgstr "Intervall"
+msgid "Link"
+msgstr "Link"
+
+msgid "Data"
+msgstr "Daten"
+
+msgid "Attribute"
+msgstr "Attribut"
+
+msgid "Document"
+msgstr "Dokument"
+
+msgid "Static"
+msgstr "Statisch"
+
+msgid "Tag"
+msgstr "Tag"
+
+msgid "Field"
+msgstr "Feld"
+
+msgid "Title"
+msgstr "Titel"
+
+msgid "Subtitle"
+msgstr "Untertitel"
+
+msgid "Abstract"
+msgstr "Abstract"
+
+msgid "Author"
+msgstr "Autoren"
+
+msgid "Publication Date"
+msgstr "Veröffentlichungsdatum"
+
+msgid "URL"
+msgstr "URL"
+
+msgid "PDF URL"
+msgstr "PDF URL"
+
+msgid "Name"
+msgstr "Name"
+
+msgid "Contains"
+msgstr "Beinhaltet"
+
+msgid "Starts With"
+msgstr "Beginnt mit"
+
+msgid "Ends With"
+msgstr "Endet auf"
 
 msgid "name"
 msgstr "Name"
 
+msgid "description"
+msgstr "Beschreibung"
+
 msgid "recipients"
 msgstr "Empfänger"
+
+msgid "interval"
+msgstr "Intervall"
 
 msgid "last sent"
 msgstr "gesendet am"
 
 msgid "created"
 msgstr "erzeugt am"
+
+msgid "publication count"
+msgstr "Publikationszähler"
+
+msgid "new publication count"
+msgstr "neuer Publikationszähler"
 
 msgid "monitor"
 msgstr "Monitor"
@@ -85,12 +196,6 @@ msgstr "Veröffentlichungsdatum"
 msgid "last access"
 msgstr "letzer Zugriff"
 
-msgid "URL"
-msgstr "URL"
-
-msgid "PDF URL"
-msgstr "PDF URL"
-
 msgid "number of pages"
 msgstr "Seitenzahl"
 
@@ -102,6 +207,24 @@ msgstr "Publikation"
 
 msgid "publications"
 msgstr "Publikationen"
+
+msgid "think tank filter"
+msgstr "Thinktank-Filter"
+
+msgid "field"
+msgstr "Feld"
+
+msgid "comparator"
+msgstr "Vergleichsoperator"
+
+msgid "value"
+msgstr "Wert"
+
+msgid "publication filter"
+msgstr "Publikationsfilter"
+
+msgid "publication filters"
+msgstr "Publikationsfilter"
 
 msgid "type"
 msgstr "Typ"
@@ -121,6 +244,10 @@ msgstr "letzter Durchlauf"
 msgid "scraper"
 msgstr "Scraper"
 
+#, python-format
+msgid "%s Scraper"
+msgstr "%s Scraper"
+
 msgid "error code"
 msgstr "Fehlercode"
 
@@ -136,18 +263,6 @@ msgstr "Scraping-Fehler"
 msgid "scraping errors"
 msgstr "Scraping-Fehler"
 
-msgid "config"
-msgstr "Konfiguration"
-
-msgid "scraper type"
-msgstr "Scraper-Typ"
-
-msgid "scraper types"
-msgstr "Scraper-Typen"
-
-msgid "description"
-msgstr "Beschreibung"
-
 msgid "Link to homepage"
 msgstr "Link zur Homepage"
 
@@ -157,14 +272,148 @@ msgstr "eindeutiges Feld"
 msgid "think tanks"
 msgstr "Thinktanks"
 
-msgid "query"
-msgstr "Query"
-
-msgid "think tank filter"
-msgstr "Thinktank-Filter"
-
 msgid "think tank filters"
 msgstr "Thinktank-Filter"
 
+msgid "List with Links"
+msgstr "Liste mit Links"
+
+msgid "List with Links and Documents"
+msgstr "Liste mit Links und Dokumenten"
+
+msgid "List with Documents"
+msgstr "Liste mit Dokumenten"
+
+msgid "SWP Administration"
+msgstr "SWP Administration"
+
+msgid "Overview"
+msgstr "Übersicht"
+
+msgid "Login"
+msgstr "Login"
+
+msgid "Forgot password?"
+msgstr "Passwort vergessen?"
+
+msgid "Log in"
+msgstr "Anmelden"
+
+msgid "Logged out"
+msgstr "Abgemeldet"
+
+msgid "Good bye"
+msgstr "Auf Wiedersehen"
+
+msgid "You have been logged out successfully."
+msgstr "Sie wurden erfolgreich abgemeldet."
+
+msgid "Log in again"
+msgstr "Erneut anmelden"
+
+msgid "Passwort reset"
+msgstr "Passwort zurücksetzen"
+
+msgid "Back"
+msgstr "Zurück"
+
+msgid "Submit"
+msgstr "Absenden"
+
+msgid "Your password has been set. You may go ahead and log in now."
+msgstr "Ihr Passwort wurde gesetzt. Sie können sich jetzt damit anmelden."
+
+msgid "Reset failed"
+msgstr "Zurücksetzen fehlgeschlagen"
+
+msgid "The password reset link was invalid, possibly because it has already been used. Please request a new password reset."
+msgstr "Der Link zum Zurücksetzen des Passworts wurde bereits genutzt und ist damit ungültig. Bitte fordern Sie einen neuen an."
+
+msgid "Please enter your new password twice so we can verify you typed it in correctly."
+msgstr "Bitte geben Sie Ihr neues Passwort zweimal ein, damit wir überprüfen können, ob es richtig eingetippt wurde."
+
+msgid "Set new password"
+msgstr "Neues Passwort setzen"
+
+msgid "Sent"
+msgstr "Gesendet"
+
+msgid "Reset mail sent"
+msgstr "E-Mail wurde versandt"
+
+msgid "We’ve emailed you instructions for setting your password, if an account exists with the email you entered. You should receive them shortly."
+msgstr "Wir haben eine E-Mail zum Zurücksetzen des Passwortes an die angegebene E-Mail-Adresse gesendet, sofern ein entsprechendes Konto existiert. Sie sollte in Kürze ankommen."
+
+msgid "If you don’t receive an email, please make sure you’ve entered the address you registered with, and check your spam folder."
+msgstr "Falls die E-Mail nicht angekommen sein sollte, bitte die E-Mail-Adresse auf Richtigkeit und gegebenenfalls den Spam-Ordner überprüfen."
+
+msgid "Done"
+msgstr "Fertig"
+
+msgid "Forgotten your password? Enter your email address below, and we’ll email instructions for setting a new one."
+msgstr "Haben Sie Ihr Passwort vergessen? Geben Sie bitte unten Ihre E-Mail-Adresse ein und folgen den Anweisungen zum Zurücksetzen des Passworts in der E-Mail."
+
+msgid "Send instructions"
+msgstr "Anweisungen schicken"
+
 msgid "SWP Webmonitor"
-msgstr ""
+msgstr "SWP Webmonitor"
+
+msgid "Reset password"
+msgstr "Passwort zurücksetzen"
+
+msgid "You're receiving this email because you requested a password reset for your SWP account."
+msgstr "Sie erhalten diese E-Mail weil Sie das Passwort Ihres SWP-Kontos zurückgesetzt haben."
+
+msgid "Click here to choose a new password"
+msgstr "Klicken Sie hier, um Ihr Passwort zurückzusetzen"
+
+msgid "The SWP team"
+msgstr "Ihr SWP Team"
+
+msgid "Please go to the following page and choose a new password:"
+msgstr "Bitte gehen Sie zur folgenden Seite um ein neues Passwort zu setzen:"
+
+#, python-format
+msgid "No elements matching %(selector)s found"
+msgstr "Keine Elemente, die auf %(selector)s zutreffen, gefunden"
+
+#, python-format
+msgid "No pagination button found for %(selector)s"
+msgstr "Kein Paginierungsbutton für %(selector)s gefunden"
+
+#, python-format
+msgid "Pagination Button matching %(selector)s has no attribute href"
+msgstr "Paginierungsbutton für %(selector)s hat kein Attribut href"
+
+#, python-format
+msgid "No element matches %(selector)s"
+msgstr "Kein Element für %(selector)s gefunden"
+
+#, python-format
+msgid "[Link Resolver] Element matching %(selector)s has no attribute href."
+msgstr "[Link-Resolver] Elemente, die auf %(selector)s zutreffen, haben kein Attribut href"
+
+#, python-format
+msgid "Link %(href)s points to an external site."
+msgstr "Der Link %(href)s führt auf eine externe Seite."
+
+#, python-format
+msgid "Failed to open %(href)s: %(error)s"
+msgstr "%(href)s konnte nicht geöffnet werden: %(error)s"
+
+#, python-format
+msgid "[Attribute Resolver] Element matching %(selector)s has no attribute %(attribute)s"
+msgstr "[Attribut-Resolver] Element, das auf %(selector)s zutrifft, hat kein Attribut %(attribute)s"
+
+#, python-format
+msgid "%(selector)s matches more than one document."
+msgstr "%(selector)s selektiert mehr als ein Dokument."
+
+#, python-format
+msgid "Timeout waiting for download of %(url)s"
+msgstr "Zeitüberschreitung beim Warten auf das Herunterladen von %(url)s"
+
+#, python-format
+msgid "Failed to open PDF: %(error)s"
+msgstr "Fehler beim Öffnen von PDF: %(error)s"

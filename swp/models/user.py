@@ -6,7 +6,7 @@ from cosmogo.utils.gettext import trans
 
 class UserManager(DjangoUserManager):
 
-    def create_user(self, username, email=None, password=None, **extra_fields):
+    def create_user(self, username=None, email=None, password=None, **extra_fields):
         return super().create_user(email, email=email, password=password, **extra_fields)
 
     def create_superuser(self, email=None, password=None, **extra_fields):

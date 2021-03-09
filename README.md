@@ -11,11 +11,11 @@ Below is a short description on how to set up the project to run it locally.
 
 ### Requirements
 
-* Python 3.7
+* Python 3.8
   - with virtualenv
 
-* nodejs
-  * with npm
+* nodejs 14.15 (LTS)
+  * with npm 6
 
 * Postgres
 
@@ -83,8 +83,36 @@ DJANGO_SETTINGS_MODULE=swp.settings.dev python manage.py createsuperuser
 Before the first start of the development server you have to run:
 
 ``` console
+DJANGO_SETTINGS_MODULE=swp.settings.dev python manage.py generate-schemes
+```
+
+As well as the following to generate all translation files:
+
+``` console
 DJANGO_SETTINGS_MODULE=swp.settings.dev python manage.py compile-translations
 ```
+
+#### Fixtures
+
+You will probably want to install the predefined groups:
+
+``` console
+python manage.py loaddata groups
+```
+
+Afterwards, you may load generic test accounts for development purposes:
+
+| User | Password | Group | is_staff | is_superuser |
+| ---- | -------- | ----- | -------- | ------------ |
+| admin@localhost | admin | - | + | + |
+| swp-manager@localhost | swp-manager | swp-manager | + | - |
+| swp-editor@localhost | swp-editor | swp-editor | + | - |
+
+``` console
+python manage.py loaddata test-users
+```
+
+> **NOTE** These are totally optional and included mainly for automated tests.
 
 
 ### Development Server
@@ -95,13 +123,21 @@ You can run a local development server to test things like this:
 DJANGO_SETTINGS_MODULE=swp.settings.dev python manage.py runserver
 ```
 
+In order for scrapers to be run in development you have to start celery as well.
+Celery needs a running redis server, make sure to start it first.
+
+``` console
+DJANGO_SETTINGS_MODULE=swp.settings.dev celery -A swp worker -B -Q celery,scraper -l INFO --purge
+```
+
 
 ### Production Server
 
-Please copy .env.default and adjust the configuration parameters.
+Please copy .env.default, adjust the configuration parameters and install apt requirements.
 
 ``` console
 cp conf/.env.example .env
+while read apt ; do apt install "$apt" ; done < apt-requirements.txt
 ```
 
 

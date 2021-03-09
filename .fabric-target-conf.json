@@ -10,20 +10,62 @@
         "host": "proxmox.swp.cosmoco.de"
       },
       "PRE_CMDS": [
-        "sudo systemctl stop swp@production.service"
+        "sudo systemctl stop swp@production.service",
+        "sudo systemctl stop celery@production.service",
+        "sudo systemctl stop scraper@production.service"
       ],
       "POST_CMD_ENV": {
+        "PLAYWRIGHT_BROWSERS_PATH": "/var/www/production/browsers",
         "DJANGO_SETTINGS_MODULE": "swp.settings.production"
       },
       "POST_CMDS": [
         "npx npm install",
         "find . -name '*.pyc' -delete",
-        "env/bin/pip install -r requirements.txt -U",
+        "env/bin/pip install -r requirements.txt -U --no-input",
+        "env/bin/python -m playwright install chromium",
         "env/bin/python manage.py migrate",
         "env/bin/python manage.py compile-translations",
+        "env/bin/python manage.py generate-schemes",
         "npm run build",
         "env/bin/python manage.py collectstatic --no-input",
         "sudo systemctl start swp@production.service",
+        "sudo systemctl start celery@production.service",
+        "sudo systemctl start scraper@production.service",
+        "sudo systemctl restart nginx.service"
+      ]
+    },
+    "deploy_staging": {
+      "TARGET_HOST": "10.1.0.4",
+      "TARGET_PORT": "6589",
+      "TARGET_USER": "ci",
+      "TARGET_PATH": "/var/www/staging",
+      "GATEWAY_SERVER": {
+        "port": 6589,
+        "user": "ci",
+        "host": "proxmox.swp.cosmoco.de"
+      },
+      "PRE_CMDS": [
+        "sudo systemctl stop swp@staging.service",
+        "sudo systemctl stop celery@staging.service",
+        "sudo systemctl stop scraper@staging.service"
+      ],
+      "POST_CMD_ENV": {
+        "PLAYWRIGHT_BROWSERS_PATH": "/var/www/staging/browsers",
+        "DJANGO_SETTINGS_MODULE": "swp.settings.staging"
+      },
+      "POST_CMDS": [
+        "npx npm install",
+        "find . -name '*.pyc' -delete",
+        "env/bin/pip install -r requirements.txt -U --no-input",
+        "env/bin/python -m playwright install chromium",
+        "env/bin/python manage.py migrate",
+        "env/bin/python manage.py compile-translations",
+        "env/bin/python manage.py generate-schemes",
+        "npm run build",
+        "env/bin/python manage.py collectstatic --no-input",
+        "sudo systemctl start swp@staging.service",
+        "sudo systemctl start celery@staging.service",
+        "sudo systemctl start scraper@staging.service",
         "sudo systemctl restart nginx.service"
       ]
     }

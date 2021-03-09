@@ -1,4 +1,4 @@
-<!DOCTYPE html> {% load i18n static url %} {% get_current_language as lang %}
+<!DOCTYPE html> {% load i18n static format url %} {% get_current_language as lang %}
 <html lang="{{ lang }}">
 <head>
     <meta charset="UTF-8">
@@ -8,12 +8,20 @@
     {% block styles %}
         <link rel="stylesheet" href="{% static 'css/swp.css' %}">
     {% endblock %}
-    {% block sentry %}{% endblock %}
+    {% block sentry %}
+        <script>
+            SentryEnvironment = {{ ENVIRONMENT|json }};
+            SentryRelease = {{ RELEASE|json }};
+        </script>
+        <script src="{% static 'js/sentry.js' %}"></script>
+    {% endblock %}
 </head>
 <body class="{% block body-class %}swp{% endblock %}">
 {% block body %}
-    <div id="app">
-        {% csrf_token %}
+    <div id="app" class="{% block main-class %}container mx-auto{% endblock %}">
+        {% block content %}
+            {% csrf_token %}
+        {% endblock %}
     </div>
 {% endblock %}
 

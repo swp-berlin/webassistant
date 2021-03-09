@@ -1,7 +1,13 @@
+celery==5.0.5
+cssselect==1.1.0
 Django==3.1.4
+django-filter==2.4.0
+djangorestframework==3.12.2
 pikepdf==2.0.0
+playwright==1.9.0
 polib==1.1.0
 psycopg2==2.8.6
-pyppeteer==0.2.2
 python-dotenv==0.15.0
-uwsgi==2.0.19.1
+redis==3.5.3
+sentry-sdk==0.19.5
+uWSGI==2.0.19.1

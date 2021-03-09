@@ -10,8 +10,9 @@ __pycache__
 
 # Celery
 celerybeat-schedule
+celery.check
 
-#Redis
+# Redis
 dump.rdb
 
 # Application
@@ -32,6 +33,7 @@ dump.rdb
 node_modules
 /swp/static
 /swp/assets/i18n
+/swp/assets/schemes
 /swp/assets/assets.map.json
 
 # jupyter

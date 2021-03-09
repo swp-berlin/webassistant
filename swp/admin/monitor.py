@@ -1,23 +1,27 @@
 from django.contrib import admin
 
 from swp.models import Monitor
+from .abstract import ActivatableModelAdmin
 
 
 @admin.register(Monitor)
-class MonitorAdmin(admin.ModelAdmin):
+class MonitorAdmin(ActivatableModelAdmin):
     date_hierarchy = 'created'
     fields = [
         'name',
+        'description',
         'recipients',
         'interval',
         'last_sent',
+        'is_active',
         'created',
     ]
-    readonly_fields = ['created']
+    readonly_fields = ['created', 'last_sent']
     list_display = [
         'name',
         'created',
         'last_sent',
+        'is_active',
     ]
     list_filter = [
         'is_active',

@@ -1,9 +1,19 @@
+from __future__ import annotations
 from typing import Optional
 
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.contrib.postgres.fields import ArrayField
+
+
+class PublicationQuerySet(models.QuerySet):
+
+    def active(self) -> PublicationQuerySet:
+        return self.filter(thinktank__is_active=True)
+
+    def inactive(self) -> PublicationQuerySet:
+        return self.filter(thinktank__is_active=False)
 
 
 class Publication(models.Model):
@@ -28,7 +38,7 @@ class Publication(models.Model):
     title = models.CharField(_('title'), max_length=255)  # [T1]
     subtitle = models.CharField(_('subtitle'), max_length=255, blank=True)  # [T2]
     abstract = models.TextField(_('abstract'), blank=True)  # [AB]
-    authors = ArrayField(models.CharField(max_length=100), blank=True, null=True, verbose_name=_('authors'))  # [AU]
+    authors = ArrayField(models.CharField(max_length=255), blank=True, null=True, verbose_name=_('authors'))  # [AU]
     publication_date = models.CharField(_('publication date'), max_length=255, blank=True, default='')  # [PY]
     last_access = models.DateTimeField(_('last access'), editable=False, null=True)  # [Y2]
     url = models.URLField(_('URL'))  # [UR]
@@ -36,6 +46,8 @@ class Publication(models.Model):
     pdf_pages = models.PositiveIntegerField(_('number of pages'), default=0)  # [EP]
     tags = ArrayField(models.CharField(max_length=32), blank=True, null=True, verbose_name=_('tags'))  # [KW]
     created = models.DateTimeField(_('created'), default=timezone.now, editable=False)
+
+    objects = PublicationQuerySet.as_manager()
 
     class Meta:
         verbose_name = _('publication')

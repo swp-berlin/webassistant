@@ -1,0 +1,425 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Language: en\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Client Error"
+msgstr ""
+
+msgid "We couldn't handle the data your client send us."
+msgstr ""
+
+msgid "Unauthorized"
+msgstr ""
+
+msgid "You have to be logged in to see this page."
+msgstr ""
+
+msgid "Login"
+msgstr ""
+
+msgid "Forbidden"
+msgstr ""
+
+msgid "You have no permission to request this page."
+msgstr ""
+
+msgid "Not found"
+msgstr ""
+
+msgid "These aren't the droids you're looking for."
+msgstr ""
+
+msgid "Your data has been saved successfully."
+msgstr ""
+
+msgid "We are currently doing maintenance work. Please try again in a few seconds."
+msgstr ""
+
+msgid "Please correct the errors below."
+msgstr ""
+
+msgid "You have to be logged in to make this request."
+msgstr ""
+
+msgid "You are not allowed to make this request."
+msgstr ""
+
+msgid "The data you wanted to change does not exist anymore."
+msgstr ""
+
+msgid "Loading…"
+msgstr ""
+
+msgid "Please wait, we are loading your content."
+msgstr ""
+
+msgid "Network Error"
+msgstr ""
+
+msgid "A network error occurred. Please try again."
+msgstr ""
+
+msgid "Reload"
+msgstr ""
+
+msgid "Server Error"
+msgstr ""
+
+msgid "Something went wrong on our side…"
+msgstr ""
+
+msgid "Maintenance"
+msgstr ""
+
+msgid "We are currently doing maintenance work. Please reload the page in a few seconds."
+msgstr ""
+
+msgid "Admin"
+msgstr ""
+
+msgid "Monitoring Profiles"
+msgstr ""
+
+msgid "No permission"
+msgstr ""
+
+msgid "Your accounts does not have sufficient privileges."
+msgstr ""
+
+msgid "Thinktanks & Scrapers"
+msgstr ""
+
+msgid "Log out"
+msgstr ""
+
+msgid "Home"
+msgstr ""
+
+msgid "Activate"
+msgstr ""
+
+msgid "Deactivate"
+msgstr ""
+
+msgid "Sucessfully activated"
+msgstr ""
+
+msgid "Sucessfully deactivated"
+msgstr ""
+
+msgid "Back"
+msgstr ""
+
+msgid "Cancel"
+msgstr ""
+
+msgid "Please enter a valid date in the format %(format)s"
+msgstr ""
+
+msgid "(required)"
+msgstr ""
+
+msgid "No Results"
+msgstr ""
+
+msgid "by"
+msgstr ""
+
+msgid "and"
+msgstr ""
+
+msgid "or"
+msgstr ""
+
+msgid "nor"
+msgstr ""
+
+msgid "Monitor has been activated"
+msgstr ""
+
+msgid "Monitor has been deactivated"
+msgstr ""
+
+msgid "New Monitor"
+msgstr ""
+
+msgid "Create"
+msgstr ""
+
+msgid "Successfully created monitor"
+msgstr ""
+
+msgid "Edit"
+msgstr ""
+
+msgid "Add Thinktank"
+msgstr ""
+
+msgid "Edit Monitor"
+msgstr ""
+
+#, javascript-format
+msgid "Monitor %s"
+msgstr ""
+
+msgid "Save"
+msgstr ""
+
+msgid "Successfully changed monitor"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "Description"
+msgstr ""
+
+msgid "Interval"
+msgstr ""
+
+msgid "Publications overall:"
+msgstr ""
+
+msgid "Publications since last email:"
+msgstr ""
+
+msgid "Email sent:"
+msgstr ""
+
+msgid "Interval:"
+msgstr ""
+
+msgid "Recipients:"
+msgstr ""
+
+msgid "Monitors"
+msgstr ""
+
+msgid "Publications"
+msgstr ""
+
+msgid "New Publications"
+msgstr ""
+
+msgid "Recipients"
+msgstr ""
+
+msgid "Recipients must be valid email addresses: %(addresses)s"
+msgstr ""
+
+msgid "Filter"
+msgstr ""
+
+msgid "New"
+msgstr ""
+
+msgid "Download .RIS"
+msgstr ""
+
+msgid "unknown"
+msgstr ""
+
+#, javascript-format
+msgid "%s pages"
+msgstr ""
+
+msgid "No PDF found"
+msgstr ""
+
+msgid "No publications"
+msgstr ""
+
+#, javascript-format
+msgid "%s Publication"
+msgid_plural "%s Publications"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Warning"
+msgstr ""
+
+msgid "Changing the scraper type will reset the scraper configuration. Do you want to proceed?"
+msgstr ""
+
+msgid "Abort"
+msgstr ""
+
+msgid "Proceed"
+msgstr ""
+
+msgid "Add"
+msgstr ""
+
+msgid "Resolver Type %(type)s unsupported"
+msgstr ""
+
+msgid "Attribute"
+msgstr ""
+
+msgid "Field"
+msgstr ""
+
+msgid "Selector"
+msgstr ""
+
+msgid "Document"
+msgstr ""
+
+msgid "Type"
+msgstr ""
+
+msgid "Link"
+msgstr ""
+
+msgid "List"
+msgstr ""
+
+msgid "List Selector"
+msgstr ""
+
+msgid "Item Selector"
+msgstr ""
+
+msgid "Pagination Button Selector"
+msgstr ""
+
+msgid "Max Pages"
+msgstr ""
+
+msgid "Please enter a valid css selector"
+msgstr ""
+
+msgid "Value"
+msgstr ""
+
+msgid "Data"
+msgstr ""
+
+msgid "Tag"
+msgstr ""
+
+msgid "Scraper has been activated."
+msgstr ""
+
+msgid "Scraper has been deactivated."
+msgstr ""
+
+msgid "Add Scraper"
+msgstr ""
+
+msgid "Thinktanks"
+msgstr ""
+
+msgid "New Scraper"
+msgstr ""
+
+msgid "Scraper"
+msgstr ""
+
+msgid "Start URL"
+msgstr ""
+
+msgid "Scraper Type"
+msgstr ""
+
+msgid "Config"
+msgstr ""
+
+msgid "You have to deactivate the scraper in order to edit it."
+msgstr ""
+
+msgid "disabled"
+msgstr ""
+
+msgid "URL"
+msgstr ""
+
+msgid "Last Run"
+msgstr ""
+
+msgid "Errors"
+msgstr ""
+
+msgid "Loading Preview"
+msgstr ""
+
+msgid "The Scraper is collecting publications. This may take a while."
+msgstr ""
+
+msgid "Preview"
+msgstr ""
+
+msgid "Scraper Error"
+msgstr ""
+
+msgid "Scraping failed with the following error:"
+msgstr ""
+
+msgid "Internal Error"
+msgstr ""
+
+msgid "No items"
+msgstr ""
+
+msgid "New Thinktank"
+msgstr ""
+
+msgid "Successfully created thinktank"
+msgstr ""
+
+msgid "New scraper"
+msgstr ""
+
+msgid "Unique on"
+msgstr ""
+
+msgid "Edit Thinktank"
+msgstr ""
+
+msgid "Successfully changed thinktank"
+msgstr ""
+
+msgid "Unique Field"
+msgstr ""
+
+msgid "Scrapers"
+msgstr ""
+
+#, javascript-format
+msgid "Thinktank %s"
+msgstr ""
+
+msgid "Filter on Field"
+msgstr ""
+
+msgid "Comparator"
+msgstr ""
+
+msgid "Remove Filter"
+msgstr ""
+
+msgid "Add Filter"
+msgstr ""
+
+msgid "Add Thinktank Filter"
+msgstr ""
+
+msgid "Successfully created filter"
+msgstr ""
+
+msgid "Edit Thinktank Filter"
+msgstr ""
+
+msgid "Successfully changed filter"
+msgstr ""
+
+msgid "Thinktank"
+msgstr ""

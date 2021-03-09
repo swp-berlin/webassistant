@@ -1,0 +1,425 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Language: de\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Client Error"
+msgstr "Browserfehler"
+
+msgid "We couldn't handle the data your client send us."
+msgstr "Wir konnten die Daten Ihres Browsers nicht verarbeiten"
+
+msgid "Unauthorized"
+msgstr "Nicht berechtigt"
+
+msgid "You have to be logged in to see this page."
+msgstr "Sie müssen angemeldet sein, um diese Seite anzuzeigen."
+
+msgid "Login"
+msgstr "Anmelden"
+
+msgid "Forbidden"
+msgstr "Nicht erlaubt"
+
+msgid "You have no permission to request this page."
+msgstr "Sie haben nicht die Berechtigung diese Seite anzuzeigen."
+
+msgid "Not found"
+msgstr "Nicht gefunden"
+
+msgid "These aren't the droids you're looking for."
+msgstr "Das sind nicht die Droiden, nach denen Sie suchen."
+
+msgid "Your data has been saved successfully."
+msgstr "Ihre Daten wurden erfolgreich gespeichert."
+
+msgid "We are currently doing maintenance work. Please try again in a few seconds."
+msgstr "Wartungsarbeiten. Bitte versuchen Sie es in ein paar Sekunden erneut."
+
+msgid "Please correct the errors below."
+msgstr "Bitte beheben Sie die nachfolgenden Fehler."
+
+msgid "You have to be logged in to make this request."
+msgstr "Sie müssen angemeldet sein, um diese Anfrage auszuführen."
+
+msgid "You are not allowed to make this request."
+msgstr "Sie sind nicht berechtigt diese Anfrage auszuführen."
+
+msgid "The data you wanted to change does not exist anymore."
+msgstr "Die Daten die Sie ändern wollten, existieren nicht mehr."
+
+msgid "Loading…"
+msgstr "Lade…"
+
+msgid "Please wait, we are loading your content."
+msgstr "Bitte warten Sie, wir laden Ihre Daten…"
+
+msgid "Network Error"
+msgstr "Netzwerkfehler"
+
+msgid "A network error occurred. Please try again."
+msgstr "Ein Netzwerkfehler ist aufgetreten. Bitte versuchen Sie es erneut."
+
+msgid "Reload"
+msgstr "Neu Laden"
+
+msgid "Server Error"
+msgstr "Serverfehler"
+
+msgid "Something went wrong on our side…"
+msgstr "Etwas ist auf unserer Seite schief gelaufen…"
+
+msgid "Maintenance"
+msgstr "Wartungsarbeiten"
+
+msgid "We are currently doing maintenance work. Please reload the page in a few seconds."
+msgstr "Wartungsarbeiten. Bitte laden Sie die Seite in ein paar Sekunden erneut."
+
+msgid "Admin"
+msgstr "Admin"
+
+msgid "Monitoring Profiles"
+msgstr "Monitoring-Profile"
+
+msgid "No permission"
+msgstr "Nicht erlaubt"
+
+msgid "Your accounts does not have sufficient privileges."
+msgstr "Ihr Konto hat unzureichende Berechtigungen."
+
+msgid "Thinktanks & Scrapers"
+msgstr "Thinktanks & Scraper"
+
+msgid "Log out"
+msgstr "Abmelden"
+
+msgid "Home"
+msgstr "Start"
+
+msgid "Activate"
+msgstr "Aktivieren"
+
+msgid "Deactivate"
+msgstr "Deaktivieren"
+
+msgid "Sucessfully activated"
+msgstr "Erfolgreich aktiviert"
+
+msgid "Sucessfully deactivated"
+msgstr "Erfolgreich deaktiviert"
+
+msgid "Back"
+msgstr "Zurück"
+
+msgid "Cancel"
+msgstr "Abbrechen"
+
+msgid "Please enter a valid date in the format %(format)s"
+msgstr "Bitte geben Sie ein gültigtges Datum im Format %(format)s ein"
+
+msgid "(required)"
+msgstr "(erfordert)"
+
+msgid "No Results"
+msgstr "Keine Ergebnisse"
+
+msgid "by"
+msgstr "von"
+
+msgid "and"
+msgstr "und"
+
+msgid "or"
+msgstr "oder"
+
+msgid "nor"
+msgstr "noch"
+
+msgid "Monitor has been activated"
+msgstr "Monitor erfolgreich aktiviert"
+
+msgid "Monitor has been deactivated"
+msgstr "Monitor erfolgreich deaktiviert"
+
+msgid "New Monitor"
+msgstr "Neuer Monitor"
+
+msgid "Create"
+msgstr "Anlegen"
+
+msgid "Successfully created monitor"
+msgstr "Monitor erfolgreich angelegt"
+
+msgid "Edit"
+msgstr "Bearbeiten"
+
+msgid "Add Thinktank"
+msgstr "Thinktank hinzufügen"
+
+msgid "Edit Monitor"
+msgstr "Monitor bearbeiten"
+
+#, javascript-format
+msgid "Monitor %s"
+msgstr "Monitor %s"
+
+msgid "Save"
+msgstr "Speichern"
+
+msgid "Successfully changed monitor"
+msgstr "Änderungen am Monitor erfolgreich gespeichert"
+
+msgid "Name"
+msgstr "Name"
+
+msgid "Description"
+msgstr "Beschreibung"
+
+msgid "Interval"
+msgstr "Intervall"
+
+msgid "Publications overall:"
+msgstr "Publikationen gesamt:"
+
+msgid "Publications since last email:"
+msgstr "Publikationen seit letzter E-Mail:"
+
+msgid "Email sent:"
+msgstr "Letzte E-Mail:"
+
+msgid "Interval:"
+msgstr "Intervall:"
+
+msgid "Recipients:"
+msgstr "Empfänger:"
+
+msgid "Monitors"
+msgstr "Monitore"
+
+msgid "Publications"
+msgstr "Publikationen"
+
+msgid "New Publications"
+msgstr "Neue Publikationen"
+
+msgid "Recipients"
+msgstr "Empfänger"
+
+msgid "Recipients must be valid email addresses: %(addresses)s"
+msgstr "Empfänger müssen gültige E-Mail-Adressen sein: %(addresses)s"
+
+msgid "Filter"
+msgstr "Filter"
+
+msgid "New"
+msgstr "Neu"
+
+msgid "Download .RIS"
+msgstr ".RIS herunterladen"
+
+msgid "unknown"
+msgstr "unbekannt"
+
+#, javascript-format
+msgid "%s pages"
+msgstr "%s Seiten"
+
+msgid "No PDF found"
+msgstr "Kein PDF gefunden"
+
+msgid "No publications"
+msgstr "Keine Publikationen"
+
+#, javascript-format
+msgid "%s Publication"
+msgid_plural "%s Publications"
+msgstr[0] "%s Publikation"
+msgstr[1] "%s Publikationen"
+
+msgid "Warning"
+msgstr "Warnung"
+
+msgid "Changing the scraper type will reset the scraper configuration. Do you want to proceed?"
+msgstr "Beim Ändern des Scraper-Typs wird die bisherige Konfiguration zurückgesetzt. Möchten Sie trotzdem fortfahren?"
+
+msgid "Abort"
+msgstr "Abbrechen"
+
+msgid "Proceed"
+msgstr "Fortfahren"
+
+msgid "Add"
+msgstr "Hinzufügen"
+
+msgid "Resolver Type %(type)s unsupported"
+msgstr "Resolver-Typ %(type)s wird nicht unterstützt"
+
+msgid "Attribute"
+msgstr "Attribut"
+
+msgid "Field"
+msgstr "Feld"
+
+msgid "Selector"
+msgstr "Selektor"
+
+msgid "Document"
+msgstr "Dokument"
+
+msgid "Type"
+msgstr "Typ"
+
+msgid "Link"
+msgstr "Link"
+
+msgid "List"
+msgstr "Liste"
+
+msgid "List Selector"
+msgstr "Listenselektor"
+
+msgid "Item Selector"
+msgstr "Einzelselektor"
+
+msgid "Pagination Button Selector"
+msgstr "Paginierungsselektor"
+
+msgid "Max Pages"
+msgstr "Maximale Seitenzahl"
+
+msgid "Please enter a valid css selector"
+msgstr "Bitte geben Sie einen gültigen Selektor ein"
+
+msgid "Value"
+msgstr "Wert"
+
+msgid "Data"
+msgstr "Daten"
+
+msgid "Tag"
+msgstr "Tag"
+
+msgid "Scraper has been activated."
+msgstr "Scraper erfolgreich aktiviert."
+
+msgid "Scraper has been deactivated."
+msgstr "Scraper erfolgreich deaktiviert."
+
+msgid "Add Scraper"
+msgstr "Scraper hinzufügen"
+
+msgid "Thinktanks"
+msgstr "Thinktanks"
+
+msgid "New Scraper"
+msgstr "Neuer Scraper"
+
+msgid "Scraper"
+msgstr "Scraper"
+
+msgid "Start URL"
+msgstr "Start-URL"
+
+msgid "Scraper Type"
+msgstr "Scraper-Typ"
+
+msgid "Config"
+msgstr "Konfiguration"
+
+msgid "You have to deactivate the scraper in order to edit it."
+msgstr "Sie müssen den Scraper deaktivieren, bevor Sie ihn bearbeiten können."
+
+msgid "disabled"
+msgstr "deaktiviert"
+
+msgid "URL"
+msgstr "URL"
+
+msgid "Last Run"
+msgstr "Letzter Durchlauf"
+
+msgid "Errors"
+msgstr "Fehler"
+
+msgid "Loading Preview"
+msgstr "Lade Vorschau …"
+
+msgid "The Scraper is collecting publications. This may take a while."
+msgstr "Der Scraper trägt Publikationen zusammen. Dieser Vorgang kann eine Weile dauern."
+
+msgid "Preview"
+msgstr "Vorschau"
+
+msgid "Scraper Error"
+msgstr "Scraper-Fehler"
+
+msgid "Scraping failed with the following error:"
+msgstr "Scraping ist mit folgendem Fehler fehlgeschlagen:"
+
+msgid "Internal Error"
+msgstr "Interner Fehler"
+
+msgid "No items"
+msgstr "Keine Einträge"
+
+msgid "New Thinktank"
+msgstr "Neuer Thinktank"
+
+msgid "Successfully created thinktank"
+msgstr "Thinktank erfolgreich angelegt"
+
+msgid "New scraper"
+msgstr "Neuer Scraper"
+
+msgid "Unique on"
+msgstr "Eindeutig für"
+
+msgid "Edit Thinktank"
+msgstr "Thinktank bearbeiten"
+
+msgid "Successfully changed thinktank"
+msgstr "Änderungen am Thinktank gespeichert"
+
+msgid "Unique Field"
+msgstr "Eindeutiges Feld"
+
+msgid "Scrapers"
+msgstr "Scraper"
+
+#, javascript-format
+msgid "Thinktank %s"
+msgstr "Thinktank %s"
+
+msgid "Filter on Field"
+msgstr "Filter nach Feld"
+
+msgid "Comparator"
+msgstr "Vergleichsoperator"
+
+msgid "Remove Filter"
+msgstr "Filter entfernen"
+
+msgid "Add Filter"
+msgstr "Filter hinzufügen"
+
+msgid "Add Thinktank Filter"
+msgstr "Thinktank-Filter hinzufügen"
+
+msgid "Successfully created filter"
+msgstr "Filter erfolgreich angelegt"
+
+msgid "Edit Thinktank Filter"
+msgstr "Thinktank-Filter bearbeiten"
+
+msgid "Successfully changed filter"
+msgstr "Änderungen am Filter erfolgreich gespeichert"
+
+msgid "Thinktank"
+msgstr "Thinktank"

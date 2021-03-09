@@ -1,8 +1,14 @@
+from cosmogo.utils.settings import configure_sentry
+
 from .base import *
 
-DEBUG = False
+ENVIRONMENT = env('ENVIRONMENT', 'production')
+
+configure_sentry('https://3710c408a1494bc6b43038ed20acfed5@sentry.cosmocode.de/48', ENVIRONMENT, RELEASE, celery=True)
 
 ALLOWED_HOSTS = ['production.swp.cosmoco.de', 'production.swp.cosmocode.de']
+
+DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL', 'production@swp.cosmocode.de')
 
 USE_X_FORWARDED_FOR = True
 USE_X_FORWARDED_HOST = True

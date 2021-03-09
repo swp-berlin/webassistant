@@ -9,7 +9,7 @@ variables:
 
 test:
   stage: test
-  image: python:3.7
+  image: python:3.8
   variables:
     DJANGO_SETTINGS_MODULE: swp.settings.test
     POSTGRES_DB: swp
@@ -27,8 +27,13 @@ test:
     - pip install -U pip coverage
     - pip install -Ur requirements.txt
   script:
+    - python manage.py generate-schemes
     - coverage run manage.py test --noinput
     - coverage report
+  artifacts:
+    paths:
+      - swp/assets/schemes
+    expire_in: 30 minutes
 
 lint:
   stage: lint
@@ -65,3 +70,14 @@ deploy_production:
     - always_on
   only:
     - production
+
+deploy_staging:
+  <<: *deploy_definition
+  environment:
+    name: staging
+    url: https://staging.swp.cosmoco.de
+  tags:
+    - docker
+    - always_on
+  only:
+    - master

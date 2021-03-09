@@ -1,3 +1,6 @@
+@import "common/colors";
+@import "common/variables";
+
 /* Include the font face for the icon fonts with WebPack compatible path. */
 $icon-font-path: '~@blueprintjs/icons/resources/icons';
 
@@ -6,6 +9,19 @@ $icon-font-path: '~@blueprintjs/icons/resources/icons';
 /* We currently include all blueprint components but may
    shrink that down to the used components sometime. */
 @import '~@blueprintjs/core/src/blueprint.scss';
+@import '~@blueprintjs/select/src/blueprint-select.scss';
+@import '~@blueprintjs/datetime/src/blueprint-datetime.scss';
+
+@tailwind base;
+
+@import 'common/base';
+
+@tailwind components;
+@tailwind utilities;
 
 /* components */
+@import 'components/main';
 @import 'components/footer';
+@import 'components/form';
+@import 'components/list';
+@import 'components/table';

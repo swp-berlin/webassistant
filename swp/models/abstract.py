@@ -1,6 +1,11 @@
 from __future__ import annotations
 
+from django.contrib.auth import get_permission_codename
+from django.contrib.auth.models import AbstractUser as User
+from django.core.exceptions import ImproperlyConfigured, PermissionDenied
 from django.db import models
+from django.db.models.base import ModelBase
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 
@@ -33,13 +38,95 @@ class ActivatableManager(models.Manager.from_queryset(ActivatableQuerySet, 'Base
     use_in_migrations = True
 
 
-class ActivatableModel(models.Model):
+class ActivatableModelBase(ModelBase):
+
+    actions = ('activate', 'deactivate')
+
+    def __new__(cls, name, bases, attrs, **kwargs):
+        new_class = super().__new__(cls, name, bases, attrs, **kwargs)
+
+        # Check if required permissions are set on model.
+        if not new_class._meta.abstract:
+            new_permissions = new_class._meta.permissions
+            new_codenames = tuple(codename for codename, label in new_permissions)
+            for action in cls.actions:
+                if action in new_class._meta.default_permissions:
+                    continue
+                codename = get_permission_codename(action, new_class._meta)
+                if codename not in new_codenames:
+                    raise ImproperlyConfigured(_('Missing %s permission') % codename)
+
+        return new_class
+
+
+class ActivatableModel(models.Model, metaclass=ActivatableModelBase):
     """
     Mixin for (de)activatable models.
     """
-    is_active = models.BooleanField(_('active'), default=True)
+    is_active = models.BooleanField(_('active'), default=False)
 
     objects = ActivatableManager()
 
     class Meta:
         abstract = True
+        default_permissions = (
+            'add',
+            'change',
+            'delete',
+            'view',
+            'activate',
+            'deactivate',
+        )
+
+    def can_activate(self, user: User) -> bool:
+        """ Check user for permission to activate. """
+        codename = get_permission_codename('activate', self._meta)
+        return user.has_perm(f'{self._meta.app_label}.{codename}')
+
+    def can_deactivate(self, user: User) -> bool:
+        """ Check user for permission to deactivate. """
+        codename = get_permission_codename('deactivate', self._meta)
+        return user.has_perm(f'{self._meta.app_label}.{codename}')
+
+    def set_active(self, is_active: bool, *, commit: bool = True):
+        self.is_active = is_active
+        if commit:
+            self.save(update_fields=['is_active'])
+
+    def activate(self, user: User):
+        """ Activate instance. """
+        if not self.can_activate(user):
+            raise PermissionDenied(_('Activation denied'))
+
+        self.set_active(True)
+
+    def deactivate(self, user: User):
+        """ Deactivate instance. """
+        if not self.can_deactivate(user):
+            raise PermissionDenied(_('Deactivation denied'))
+
+        self.set_active(False)
+
+
+class UpdateQuerySet(models.QuerySet):
+
+    def get_for_update(self, *, nowait=False, **kwargs):
+        return self.select_for_update(nowait=nowait).get(**kwargs)
+
+
+class LastModified(models.Model):
+    created = models.DateTimeField(_('created'), default=timezone.now, editable=False)
+    last_modified = models.DateTimeField(_('last modified'), auto_now=True)
+
+    objects = UpdateQuerySet.as_manager()
+
+    class Meta:
+        abstract = True
+
+    def update(self, *, using=None, **values):
+        update_fields = {*values, 'last_modified'}
+
+        for field, value in values.items():
+            setattr(self, field, value)
+
+        return self.save(update_fields=list(update_fields), using=using)

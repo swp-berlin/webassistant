@@ -2,10 +2,11 @@
 
 import {resolve} from 'path';
 
-import * as AutoPrefixer from 'autoprefixer';
 import * as CopyPlugin from 'copy-webpack-plugin';
 import * as MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import * as StylelintPlugin from 'stylelint-webpack-plugin';
+import * as webpack from 'webpack';
+const ESLintPlugin = require('eslint-webpack-plugin');
 
 // @ts-ignore
 import * as AssetsMapWriterPlugin from './cosmogo/assets/assets-map-writer-plugin';
@@ -28,6 +29,13 @@ const plugins = [
         ],
     }),
     new AssetsMapWriterPlugin('../assets/assets.map.json'),
+
+    // FIXME
+    // temporary fix for an issue with blueprintjs and webpack 5 (https://github.com/palantir/blueprint/issues/4393)
+    // should be removed when this is fixed in blueprintjs
+    new webpack.DefinePlugin({"process.env": "{}"}),
+
+    new ESLintPlugin(),
 ];
 
 const uncommon = [
@@ -40,15 +48,19 @@ const config = {
         swp: 'swp/index.js',
 
         /* uncommon */
-        // sentry: 'swp/sentry.js',
+        sentry: 'swp/sentry.js',
     },
     resolve: {
         alias: {
             styles: resolve(__dirname, 'swp', 'assets', 'styles'),
+            schemes: resolve(__dirname, 'swp', 'assets', 'schemes'),
             swp: resolve(__dirname, 'swp', 'assets', 'scripts'),
             utils: resolve(__dirname, 'swp', 'assets', 'scripts', 'utils'),
             components: resolve(__dirname, 'swp', 'assets', 'scripts', 'components'),
             hooks: resolve(__dirname, 'swp', 'assets', 'scripts', 'hooks'),
+        },
+        fallback: {
+            path: 'path-browserify',
         },
     },
     output: {
@@ -76,15 +88,9 @@ const config = {
                 use: [
                     {loader: MiniCssExtractPlugin.loader},
                     {loader: 'css-loader', options: {sourceMap: true, url: true}},
-                    {loader: 'postcss-loader', options: {postcssOptions: {plugins: [AutoPrefixer()]}, sourceMap: true}},
+                    'postcss-loader',
                     {loader: 'sass-loader', options: {sourceMap: true}},
                 ],
-            },
-            {
-                enforce: 'pre',
-                test: /\.js$/,
-                exclude: /node_modules/,
-                loader: 'eslint-loader',
             },
             {
                 test: /\.js$/,
@@ -93,7 +99,6 @@ const config = {
                     loader: 'babel-loader',
                     options: {
                         presets: [
-                            ['@babel/preset-react', {'runtime': 'automatic'}],
                             ['@babel/preset-env', {
                                 modules: false,
                                 useBuiltIns: 'usage',
@@ -104,6 +109,7 @@ const config = {
                                     safari: 7,
                                 },
                             }],
+                            ['@babel/preset-react', {runtime: 'automatic'}],
                         ],
                         plugins: [
                             '@babel/proposal-object-rest-spread',

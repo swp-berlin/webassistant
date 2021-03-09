@@ -10,3 +10,56 @@ class Interval(models.IntegerChoices):
     DAILY = 24, _('daily')
     WEEKLY = 24 * 7, _('weekly')
     MONTHLY = 24 * 7 * 30, _('monthly')
+
+
+class ResolverType(models.TextChoices):
+    LIST = 'List', _('List')
+    LINK = 'Link', _('Link')
+
+    DATA = 'Data', _('Data')
+    ATTRIBUTE = 'Attribute', _('Attribute')
+    STATIC = 'Static', _('Static')
+
+    DOCUMENT = 'Document', _('Document')
+
+    TITLE = 'Title', _('Title')
+    SUBTITLE = 'Subtitle', _('Subtitle')
+    ABSTRACT = 'Abstract', _('Abstract')
+    PUBLICATION_DATE = 'Publication_Date', _('Publication Date')
+    URL = 'URL', _('URL')
+    AUTHORS = 'Authors', _('Authors')
+    TAGS = 'Tags', _('Tags')
+
+
+class ListResolverType(models.TextChoices):
+    LINK = ResolverType.LINK
+
+    TITLE = ResolverType.TITLE
+    SUBTITLE = ResolverType.SUBTITLE
+    ABSTRACT = ResolverType.ABSTRACT
+    PUBLICATION_DATE = ResolverType.PUBLICATION_DATE
+    URL = ResolverType.URL
+    AUTHORS = ResolverType.AUTHORS
+    TAGS = ResolverType.TAGS
+
+
+class DataResolverKey(models.TextChoices):
+    TITLE = 'title', _('Title')
+    SUBTITLE = 'subtitle', _('Subtitle')
+    ABSTRACT = 'abstract', _('Abstract')
+    AUTHORS = 'authors', _('Authors')
+    PUBLICATION_DATE = 'publication_date', _('Publication Date')
+    URL = 'url', _('URL')
+    PDF_URL = 'pdf_url', _('PDF URL')
+    TAGS = 'tags', _('Tags')
+
+
+class UniqueKey(models.TextChoices):
+    URL = 'url', _('URL')
+    NAME = 'name', _('Name')
+
+
+class Comparator(models.TextChoices):
+    CONTAINS = 'contains', _('Contains')
+    STARTS_WITH = 'starts_with', _('Starts With')
+    ENDS_WITH = 'ends_with', _('Ends With')

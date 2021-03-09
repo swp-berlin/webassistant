@@ -8,12 +8,14 @@ from cosmogo.utils.testing import login, request, admin_url
 from swp.models import (
     Monitor,
     Publication,
+    PublicationFilter,
     Scraper,
     ScraperError,
-    ScraperType,
     Thinktank,
     ThinktankFilter,
 )
+from swp.models.choices import Comparator, DataResolverKey
+from swp.scraper.types import ScraperType
 from swp.utils.testing import create_superuser
 
 
@@ -27,12 +29,17 @@ class AdminTestCase(TestCase):
     def setUpModels(cls, now):
         monitor = Monitor.objects.create(name='Test-Monitor', recipients=[cls.user.email])
         thinktank = Thinktank.objects.create(name='Test-Thinktank', url='https://www.piie.com/', unique_field='T1-AB')
-        ThinktankFilter.objects.create(thinktank=thinktank, monitor=monitor, query={'think': 'tank'})
+        thinktank_filter = ThinktankFilter.objects.create(thinktank=thinktank, monitor=monitor)
+        PublicationFilter.objects.create(
+            thinktank_filter=thinktank_filter,
+            field=DataResolverKey.TITLE,
+            comparator=Comparator.STARTS_WITH,
+            value='Taming',
+        )
 
-        scrapertype = ScraperType.objects.create(name='Test-Type', config={'how-to': 'scrape'})
         scraper = Scraper.objects.create(
             thinktank=thinktank,
-            type=scrapertype,
+            type=ScraperType.LIST_WITH_LINK_AND_DOC.value,
             data={'hue?': 'hue!'},
             start_url='https://www.piie.com/research/publications/policy-briefs',
             checksum='de9474fa85634623fd9ae9838f949a02c9365ede3499a26c9be52363a8b7f214',
@@ -96,7 +103,3 @@ class AdminTestCase(TestCase):
             return admin_url(obj, 'change', obj.pk)
 
         return self.helper_for_model(get_url)
-
-
-
-

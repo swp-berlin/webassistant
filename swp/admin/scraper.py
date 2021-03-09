@@ -1,10 +1,11 @@
 from django.contrib import admin
 
 from swp.models import Scraper
+from .abstract import ActivatableModelAdmin
 
 
 @admin.register(Scraper)
-class ScraperAdmin(admin.ModelAdmin):
+class ScraperAdmin(ActivatableModelAdmin):
     date_hierarchy = 'created'
     fields = [
         'thinktank',
@@ -14,6 +15,7 @@ class ScraperAdmin(admin.ModelAdmin):
         'checksum',
         'interval',
         'last_run',
+        'is_active',
         'created',
     ]
     readonly_fields = ['created', 'last_run']
@@ -23,6 +25,7 @@ class ScraperAdmin(admin.ModelAdmin):
         'start_url',
         'checksum',
         'last_run',
+        'is_active',
     ]
     list_filter = [
         'is_active',

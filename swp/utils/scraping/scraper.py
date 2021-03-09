@@ -1,41 +1,25 @@
-from contextlib import contextmanager
-from dataclasses import dataclass
-from datetime import datetime
+from typing import AsyncGenerator, List, TypedDict
 
-from pyppeteer import launch
+from playwright.async_api import Error as PlaywrightError
+from sentry_sdk import capture_exception
 
-from cosmogo.utils.tempdir import maketempdir
+from .browser import open_browser, open_page, PAGE_WAIT_UNTIL
 from .context import ScraperContext
-from .resolvers import ResolverType
+from .exceptions import ScraperError
+from .resolvers.base import create_resolver
 
 
 URL = str
 
 
-@dataclass
-class Publication:
-    title: str
-    author: str = None
-    published_on: datetime = None
-
-    @property
-    def hash(self) -> str:
-        # TODO
-        return ''
+class Error(TypedDict):
+    message: str
+    level: str
 
 
-@dataclass
-class WatchTarget:
-    url: URL
-    resolver_config: dict
-
-    async def scrape(self) -> [Publication]:
-        scraper = Scraper(self.url)
-
-        scraped = await scraper.scrape(self.resolver_config)
-
-        # TODO
-        return [Publication(**context) for context in scraped]
+class Result(TypedDict):
+    fields: dict
+    errors: List[Error]
 
 
 class Scraper:
@@ -44,34 +28,22 @@ class Scraper:
         self.url = url
         self.download_path = download_path
 
-    async def scrape(self, resolver_config: dict) -> [dict]:
-        browser = await launch(
-            handleSIGINT=False,
-            handleSIGTERM=False,
-            handleSIGHUP=False
-        )
-        page = await browser.newPage()
-        await page.goto(self.url)
+    async def scrape(self, resolver_config: dict) -> AsyncGenerator[Result, None]:
+        try:
+            async with open_browser() as browser:
+                async with open_page(browser) as page:
+                    await page.goto(self.url, wait_until=PAGE_WAIT_UNTIL)
 
-        with self.get_download_path() as download_path:
-            context = ScraperContext(browser, page, download_path)
-            resolver = self.get_resolver(context, **resolver_config)
+                    context = ScraperContext(browser, page)
+                    resolver = create_resolver(context, **resolver_config)
 
-            async for resolved in resolver.resolve():
-                yield resolved
+                    results = resolver.resolve()
 
-        await page.close()
-        await browser.close()
+                    async for result in results:
+                        yield result
 
-
-    @contextmanager
-    def get_download_path(self):
-        if self.download_path:
-            yield self.download_path
-            return
-
-        with maketempdir() as download_path:
-            yield f'{download_path}'
-
-    def get_resolver(self, context, *, type: ResolverType, **config):
-        return ResolverType[type].create(context, **config)
+        except PlaywrightError as err:
+            raise ScraperError(str(err)) from err
+        except Exception as exc:
+            capture_exception(exc)
+            raise
