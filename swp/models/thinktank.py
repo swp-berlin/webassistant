@@ -16,7 +16,7 @@ from .scraper import Scraper
 class ThinktankQuerySet(ActivatableQuerySet):
 
     def annotate_counts(self) -> ThinktankQuerySet:
-        return self.annotate_publication_count().annotate_scraper_count()
+        return self.annotate_publication_count().annotate_scraper_count().annotate_active_scraper_count()
 
     def annotate_publication_count(self, to_attr='') -> ThinktankQuerySet:
         return self.annotate(**{to_attr or 'publication_count': Count('publications', distinct=True)})
