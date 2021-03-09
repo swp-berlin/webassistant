@@ -1,7 +1,7 @@
 import asyncio
 from asyncio import Queue
 from enum import Enum
-from typing import Iterator
+from typing import Iterable, Iterator
 
 from playwright.async_api import ElementHandle
 
@@ -42,7 +42,7 @@ class Paginator:
         self.max_per_page = max_per_page
         self.timeout = timeout
 
-    async def query_list_items(self, page=None) -> [ElementHandle]:
+    async def query_list_items(self, page=None) -> Iterable[ElementHandle]:
         page = page or self.context.page
         selector = f'{self.list_selector} {self.item_selector}'
 

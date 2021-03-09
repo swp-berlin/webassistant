@@ -44,9 +44,14 @@ async def scrape(scraper, config):
         # see https://stackoverflow.com/q/66349410/5005177
         await results.aclose()
 
+    max_per_page = config['paginator']['max_per_page']
+    is_multipage = len(publications) > max_per_page
+
     return {
         'success': True,
         'publications': publications,
+        'max_per_page': max_per_page,
+        'is_multipage': is_multipage,
     }
 
 

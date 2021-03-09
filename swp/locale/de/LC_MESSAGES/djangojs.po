@@ -360,6 +360,9 @@ msgstr "Scraping ist mit folgendem Fehler fehlgeschlagen:"
 msgid "Internal Error"
 msgstr "Interner Fehler"
 
+msgid "Continued from page 2"
+msgstr "Weitere von Seite 2"
+
 msgid "No items"
 msgstr "Keine Einträge"
 
