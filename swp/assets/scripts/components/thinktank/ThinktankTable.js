@@ -1,4 +1,4 @@
-import {HTMLTable} from '@blueprintjs/core';
+import {HTMLTable, Tooltip} from '@blueprintjs/core';
 
 import {useFetchHandler} from 'hooks/table';
 import _ from 'utils/i18n';
@@ -13,6 +13,8 @@ const PublicationsLabel = _('Publications');
 const ScrapersLabel = _('Scrapers');
 const LastRunLabel = _('Last Run');
 const ErrorsLabel = _('Errors');
+
+const ActiveTotalLabel = _('active / total');
 
 
 const ThinktankRows = ({items}) => (
@@ -40,7 +42,11 @@ const ThinktankTable = ({endpoint, ...props}) => {
                 <tr className="bg-gray-300">
                     <th className="w-1/2">{NameLabel}</th>
                     <th className="text-right">{PublicationsLabel}</th>
-                    <th className="text-right">{ScrapersLabel}</th>
+                    <th className="text-right">
+                        <Tooltip content={ActiveTotalLabel}>
+                            {ScrapersLabel}
+                        </Tooltip>
+                    </th>
                     <th className="text-right">{LastRunLabel}</th>
                     <th className="text-right">{ErrorsLabel}</th>
                 </tr>

@@ -5,6 +5,7 @@ import _ from 'utils/i18n';
 
 
 const DisabledLabel = _('disabled');
+const ActiveTotalLabel = _('active / total');
 
 const ThinktankLink = ({id, children, ...props}) => (
     <Link to={`/thinktank/${id}/`} {...props}>
@@ -24,7 +25,7 @@ const ThinktankRow = ({
     <tr className={isActive ? '' : 'disabled'}>
         <td><ThinktankLink id={id}>{name}</ThinktankLink></td>
         <td className="text-right"><PublicationsLink id={id}>{publicationCount}</PublicationsLink></td>
-        <td className="text-right">
+        <td className="text-right" title={ActiveTotalLabel}>
             <ThinktankLink id={id}>
                 {`${activeScraperCount} / ${scraperCount}`}
             </ThinktankLink>
