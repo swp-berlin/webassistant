@@ -4,7 +4,7 @@ from .base import *
 
 ENVIRONMENT = env('ENVIRONMENT', 'staging')
 
-configure_sentry('https://3710c408a1494bc6b43038ed20acfed5@sentry.cosmocode.de/48', ENVIRONMENT, RELEASE)
+configure_sentry('https://3710c408a1494bc6b43038ed20acfed5@sentry.cosmocode.de/48', ENVIRONMENT, RELEASE, celery=True)
 
 ALLOWED_HOSTS = ['staging.swp.cosmoco.de', 'staging.swp.cosmocode.de']
 
