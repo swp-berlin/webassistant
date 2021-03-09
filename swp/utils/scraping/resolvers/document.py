@@ -37,14 +37,14 @@ class DocumentResolver(DataResolver):
 
     async def get_element(self, page: Page) -> Optional[ElementHandle]:
         try:
-            [elem, *other] = await page.query_selector_all(self.selector)
+            elements = await page.query_selector_all(self.selector)
         except PlaywrightError as err:
             raise ResolverError(str(err))
 
-        if other:
+        if len(elements) > 1:
             raise ResolverError(_('%(selector)s matches more than one document.') % {'selector': self.selector})
 
-        return elem
+        return elements[0] if elements else None
 
     @staticmethod
     def get_meta(path):
