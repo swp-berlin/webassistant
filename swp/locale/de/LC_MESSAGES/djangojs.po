@@ -264,14 +264,14 @@ msgstr "Resolver-Typ %(type)s wird nicht unterstützt"
 msgid "Attribute"
 msgstr "Attribut"
 
-msgid "Field"
-msgstr "Feld"
-
 msgid "Selector"
 msgstr "Selektor"
 
 msgid "Document"
 msgstr "Dokument"
+
+msgid "Field"
+msgstr "Feld"
 
 msgid "Type"
 msgstr "Typ"
@@ -299,12 +299,6 @@ msgstr "Bitte geben Sie einen gültigen Selektor ein"
 
 msgid "Value"
 msgstr "Wert"
-
-msgid "Data"
-msgstr "Daten"
-
-msgid "Tag"
-msgstr "Tag"
 
 msgid "Scraper has been activated."
 msgstr "Scraper erfolgreich aktiviert."
@@ -389,6 +383,9 @@ msgstr "Änderungen am Thinktank gespeichert"
 
 msgid "Unique Field"
 msgstr "Eindeutiges Feld"
+
+msgid "active / total"
+msgstr "aktiv / gesamt"
 
 msgid "Scrapers"
 msgstr "Scraper"

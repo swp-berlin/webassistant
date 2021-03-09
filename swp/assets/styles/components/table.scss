@@ -1,4 +1,8 @@
 table {
+  td {
+    font-variant: tabular-nums;
+  }
+
   tr.disabled td {
     color: $pt-text-color-disabled;
   }

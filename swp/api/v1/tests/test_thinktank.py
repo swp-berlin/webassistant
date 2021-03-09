@@ -18,6 +18,7 @@ FIELDS = (
     'last_run',
     'publication_count',
     'scraper_count',
+    'active_scraper_count',
     'last_error_count',
 )
 
@@ -155,6 +156,13 @@ class ThinktankTestCase(test.TestCase):
         deactivated_item = self.get_result(response.data, self.deactivated_thinktank.pk)
         self.assertEqual(deactivated_item['scraper_count'], 2)
         self.assertEqual(self.deactivated_thinktank.scraper_count, 2)
+
+    def test_active_scraper_count(self):
+        response = request(self, '1:thinktank-list')
+
+        item: Mapping = self.get_result(response.data, self.thinktank.pk)
+        self.assertEqual(item['active_scraper_count'], 1)
+        self.assertEqual(self.thinktank.active_scraper_count, 1)
 
     def test_last_error_count(self):
         response = request(self, '1:thinktank-list')

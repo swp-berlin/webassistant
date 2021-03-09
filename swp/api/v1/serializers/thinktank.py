@@ -12,7 +12,6 @@ class ThinktankSerializer(ModelSerializer):
     Full thinktank serializer.
     """
 
-    scraper_count = SerializerMethodField()
     last_error_count = SerializerMethodField()
     scrapers = ScraperListSerializer(many=True, read_only=True)
 
@@ -25,6 +24,7 @@ class ThinktankSerializer(ModelSerializer):
             'created',
             'publication_count',
             'scraper_count',
+            'active_scraper_count',
             'last_error_count',
             'scrapers',
         ]
@@ -37,9 +37,6 @@ class ThinktankSerializer(ModelSerializer):
             'is_active',
             *read_only_fields,
         ]
-
-    def get_scraper_count(self, obj: Thinktank) -> int:
-        return len(obj.scrapers.all())
 
     def get_last_scraper(self, obj: Thinktank):
         scrapers = [scraper for scraper in obj.scrapers.all() if scraper.last_run is not None]
@@ -68,6 +65,7 @@ class ThinktankListSerializer(ModelSerializer):
             'created',
             'publication_count',
             'scraper_count',
+            'active_scraper_count',
             'last_error_count',
         ]
         fields = [
