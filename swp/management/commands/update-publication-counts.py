@@ -1,4 +1,3 @@
-from sys import stdout
 from django.core.management import BaseCommand
 from django.db import transaction
 from django.db.utils import DEFAULT_DB_ALIAS
