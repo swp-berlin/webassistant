@@ -7,10 +7,13 @@ class ErrorLevel(Enum):
 
 
 class ScraperError(Exception):
-    pass
+
+    def __init__(self, message: str, *, field: str = '', **kwargs):
+        super().__init__(message, **kwargs)
+        self.field = field
 
 
 class ResolverError(ScraperError):
     def __init__(self, message, level: ErrorLevel = None, **kwargs):
-        super().__init__(message)
+        super().__init__(message, **kwargs)
         self.level = level

@@ -21,7 +21,7 @@ def configure_preview_pagination(config: dict) -> int:
     return max_pages * max_per_page
 
 
-async def scrape(scraper, config):
+async def scrape(scraper: Scraper, config: dict) -> dict:
     publications = []
 
     max_len = configure_preview_pagination(config)

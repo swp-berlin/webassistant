@@ -13,6 +13,10 @@ from swp.utils.scraping.resolvers.data import DataResolver
 
 class DocumentResolver(DataResolver):
 
+    def __init__(self, *args, required: bool = False, **kwargs):
+        safe_key = kwargs.pop('key', '') or 'document'
+        super().__init__(*args, key=safe_key, required=required, **kwargs)
+
     async def _resolve(self, page: Page, fields: dict, errors: dict):
         elem = await self.get_element(page)
 

@@ -54,7 +54,7 @@ class Publication(models.Model):
         verbose_name_plural = _('publications')
 
     def __str__(self) -> str:
-        return self.title
+        return self.title or f'{self.pk}'
 
     @property
     def year(self) -> Optional[int]:

@@ -18,6 +18,17 @@ class ScraperError(models.Model):
         verbose_name=_('scraper'),
     )
 
+    publication = models.ForeignKey(
+        'swp.Publication',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name='errors',
+        verbose_name=_('publication'),
+    )
+
+    field = models.CharField(_('field'), max_length=50, blank=True)
+
     code = models.CharField(_('error code'), max_length=8, default=DEFAULT_ERROR)
     message = models.TextField(_('message'))
     timestamp = models.DateTimeField(_('timestamp'), default=timezone.now, editable=False)
