@@ -40,7 +40,7 @@ class Publication(models.Model):
     abstract = models.TextField(_('abstract'), blank=True)  # [AB]
     authors = ArrayField(models.CharField(max_length=255), blank=True, null=True, verbose_name=_('authors'))  # [AU]
     publication_date = models.CharField(_('publication date'), max_length=255, blank=True, default='')  # [PY]
-    last_access = models.DateTimeField(_('last access'), editable=False, null=True)  # [Y2]
+    last_access = models.DateTimeField(_('last access'), default=timezone.now, editable=False)  # [Y2]
     url = models.URLField(_('URL'))  # [UR]
     pdf_url = models.URLField(_('PDF URL'), blank=True)  # [L1]
     pdf_pages = models.PositiveIntegerField(_('number of pages'), default=0)  # [EP]
