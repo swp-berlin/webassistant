@@ -3,11 +3,10 @@ from asyncio import Queue
 from enum import Enum
 from typing import Iterator
 
-from playwright.async_api import ElementHandle
+from playwright.async_api import ElementHandle, TimeoutError
 
 from django.utils.translation import gettext_lazy as _
 
-from swp.utils.scraping.browser import open_page, PAGE_WAIT_UNTIL
 from swp.utils.scraping.context import ScraperContext
 from swp.utils.scraping.exceptions import ResolverError
 from swp.utils.scraping.resolvers.base import get_content
@@ -37,6 +36,7 @@ class Paginator:
         self.context = context
         self.list_selector = list_selector
         self.item_selector = item_selector or '*'
+        self.selector = f'{self.list_selector} {self.item_selector}'
         self.button_selector = button_selector
         self.max_pages = max_pages
         self.max_per_page = max_per_page
@@ -44,13 +44,12 @@ class Paginator:
 
     async def query_list_items(self, page=None) -> [ElementHandle]:
         page = page or self.context.page
-        selector = f'{self.list_selector} {self.item_selector}'
 
-        nodes = await page.query_selector_all(selector)
+        nodes = await page.query_selector_all(self.selector)
 
         if not nodes:
             raise ResolverError(
-                _('No elements matching %(selector)s found') % {'selector': selector}
+                _('No elements matching %(selector)s found') % {'selector': self.selector}
             )
 
         return nodes[:self.max_per_page] if self.max_per_page else nodes
@@ -101,21 +100,23 @@ class EndlessPaginator(Paginator):
 
 class PagePaginator(Paginator):
 
-    async def get_nodes(self) -> Iterator[ElementHandle]:
+    async def get_next_page(self) -> Iterator[ElementHandle]:
         nodes = await self.query_list_items()
 
-        for node in nodes:
-            yield node
+        if not nodes:
+            raise ResolverError(
+                _('No elements matching %(selector)s found') % {'selector': self.selector}
+            )
 
-        for page_number in range(self.max_pages):
+        yield nodes
+
+        for page_number in range(self.max_pages - 1):
             next_page_link = await self.context.page.query_selector(self.button_selector)
 
             if not next_page_link:
-                raise ResolverError(
-                    _('No pagination button found for %(selector)s') % {'selector': self.button_selector}
-                )
+                break
 
-            href: str = await get_content(next_page_link, attr='href')
+            href = await get_content(next_page_link, attr='href')
 
             if not href:
                 raise ResolverError(
@@ -124,13 +125,21 @@ class PagePaginator(Paginator):
                     }
                 )
 
-            async with open_page(self.context.browser) as page:
-                await page.goto(href, wait_until=PAGE_WAIT_UNTIL)
+            await self.nagigate_to_next_page(href, page_number)
 
-                nodes = await self.query_list_items(page)
+            nodes = await self.query_list_items()
+            yield nodes
 
-                for node in nodes:
-                    yield node
+    async def nagigate_to_next_page(self, href, page_number):
+        try:
+            await self.context.page.goto(href)
+        except TimeoutError:
+            raise ResolverError(
+                _('Timeout while navigating to page %(page_number)s: %(href)s') % {
+                    'page_number': page_number,
+                    'href': href,
+                }
+            )
 
 
 class PaginatorType(Enum):
