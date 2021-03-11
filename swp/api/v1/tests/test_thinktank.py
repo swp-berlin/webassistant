@@ -71,6 +71,7 @@ class ThinktankTestCase(test.TestCase):
                 data={'reported': True},
                 start_url='https://en.cdi.org.cn/publications/annual-report',
                 checksum='EN-CDI-ORG-CN',
+                is_active=True,
                 created=now,
             ),
             Scraper(
@@ -160,9 +161,11 @@ class ThinktankTestCase(test.TestCase):
     def test_active_scraper_count(self):
         response = request(self, '1:thinktank-list')
 
-        item: Mapping = self.get_result(response.data, self.thinktank.pk)
+        item: Mapping = self.get_result(response.data, self.thinktanks[1].pk)
+        self.assertEqual(item['scraper_count'], 2)
+        self.assertEqual(self.thinktanks[1].scraper_count, 2)
         self.assertEqual(item['active_scraper_count'], 1)
-        self.assertEqual(self.thinktank.active_scraper_count, 1)
+        self.assertEqual(self.thinktanks[1].active_scraper_count, 1)
 
     def test_last_error_count(self):
         response = request(self, '1:thinktank-list')

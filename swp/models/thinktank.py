@@ -25,7 +25,7 @@ class ThinktankQuerySet(ActivatableQuerySet):
         return self.annotate(**{to_attr or 'scraper_count': Count('scrapers', distinct=True)})
 
     def annotate_active_scraper_count(self, to_attr='') -> ThinktankQuerySet:
-        count = Count('scrapers', models.Q(is_active=True), distinct=True)
+        count = Count('scrapers', models.Q(scrapers__is_active=True), distinct=True)
         return self.annotate(**{to_attr or 'active_scraper_count': count})
 
     def annotate_error_count(self, to_attr='') -> ThinktankQuerySet:
