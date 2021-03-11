@@ -148,6 +148,12 @@ msgstr "Endlos"
 msgid "Page"
 msgstr "Seite"
 
+msgid "Warning"
+msgstr "Warnung"
+
+msgid "Error"
+msgstr "Fehler"
+
 msgid "name"
 msgstr "Name"
 
@@ -259,6 +265,9 @@ msgstr "%s Scraper"
 
 msgid "Scraping Error"
 msgstr "Scraping-Fehler"
+
+msgid "level"
+msgstr "Level"
 
 msgid "error code"
 msgstr "Fehlercode"

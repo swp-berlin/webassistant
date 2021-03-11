@@ -1,5 +1,5 @@
 from .abstract import ActivatableModel
-from .choices import Interval
+from .choices import ErrorLevel, Interval
 from .monitor import Monitor
 from .publication import Publication
 from .publicationfilter import PublicationFilter
@@ -11,6 +11,7 @@ from .user import User
 
 __all__ = [
     'ActivatableModel',
+    'ErrorLevel',
     'Interval',
     'Monitor',
     'Publication',

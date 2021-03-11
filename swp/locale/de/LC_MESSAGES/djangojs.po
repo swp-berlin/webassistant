@@ -130,6 +130,9 @@ msgstr "(erfordert)"
 msgid "No Results"
 msgstr "Keine Ergebnisse"
 
+msgid "by"
+msgstr "von"
+
 msgid "and"
 msgstr "und"
 
@@ -221,9 +224,6 @@ msgstr "Neu"
 msgid "Download .RIS"
 msgstr ".RIS herunterladen"
 
-msgid "by"
-msgstr "von"
-
 msgid "unknown"
 msgstr "unbekannt"
 
@@ -242,6 +242,21 @@ msgid "%s Publication"
 msgid_plural "%s Publications"
 msgstr[0] "%s Publikation"
 msgstr[1] "%s Publikationen"
+
+#, javascript-format
+msgid "Publication %s"
+msgstr "Publikation %s"
+
+msgid "Error in "
+msgstr "Fehler in "
+
+#, javascript-format
+msgid "Field: %s"
+msgstr "Feld: %s"
+
+#, javascript-format
+msgid "Code: %s"
+msgstr "Code: %s"
 
 msgid "Warning"
 msgstr "Warnung"
@@ -426,3 +441,7 @@ msgstr "Änderungen am Filter erfolgreich gespeichert"
 
 msgid "Thinktank"
 msgstr "Thinktank"
+
+#, javascript-format
+#~ msgid "Error: %s"
+#~ msgstr "Fehler: %s"
