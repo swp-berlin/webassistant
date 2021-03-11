@@ -7,7 +7,7 @@ from rest_framework.serializers import ModelSerializer, Serializer
 from cosmogo.utils.text import enumeration
 
 from swp.models import Scraper
-from swp.models.choices import DataResolverKey, ResolverType
+from swp.models.choices import DataResolverKey, PaginatorType, ResolverType
 
 from .fields import ThinktankField, CSSSelectorField
 
@@ -41,7 +41,7 @@ class ResolverConfigSerializer(Serializer):
 
 
 class PaginatorSerializer(Serializer):
-    type = CharField(default='Page')
+    type = ChoiceField(choices=PaginatorType.choices)
     list_selector = CSSSelectorField()
     button_selector = CSSSelectorField(allow_blank=True)
     max_pages = IntegerField(min_value=1)

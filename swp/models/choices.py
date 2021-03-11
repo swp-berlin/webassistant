@@ -63,3 +63,8 @@ class Comparator(models.TextChoices):
     CONTAINS = 'contains', _('Contains')
     STARTS_WITH = 'starts_with', _('Starts With')
     ENDS_WITH = 'ends_with', _('Ends With')
+
+
+class PaginatorType(models.TextChoices):
+    ENDLESS = 'Endless', _('Endless')
+    PAGE = 'page', _('Page')
