@@ -75,6 +75,10 @@ class Scraper(ActivatableModel, LastModified):
     def error_count(self) -> int:
         return self.errors.count()
 
+    @cached_property
+    def unique_field(self):
+        return self.thinktank.unique_field
+
     def scrape(self):
         scraper = _Scraper(self.start_url)
 
@@ -97,7 +101,8 @@ class Scraper(ActivatableModel, LastModified):
 
     @sync_to_async
     def save_publication(self, publication):
-        if not self.scraped_publications.filter(url=publication.url).exists():
+        unique_filter = models.Q(**{self.unique_field: getattr(publication, self.unique_field)})
+        if not self.scraped_publications.filter(unique_filter).exists():
             publication.save()
             self.scraped_publications.add(publication)
 
