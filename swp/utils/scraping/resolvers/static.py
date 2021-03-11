@@ -5,10 +5,14 @@ from ..context import ScraperContext
 
 
 class StaticResolver(Resolver):
-    def __init__(self, context: ScraperContext, *, key: str, value: str, **kwargs):
+    def __init__(self, context: ScraperContext, *, key: str, value: str, multiple=False, **kwargs):
         super().__init__(context, **kwargs)
         self.key = key
-        self.value = [value] if kwargs.get('multiple') else value
+        self.multiple = multiple
+        self.value = value
 
     async def resolve(self, node: ElementHandle, fields: dict, errors: dict):
-        fields[self.key] = self.value
+        if self.multiple:
+            fields.setdefault(self.key, []).append(self.value)
+        else:
+            fields[self.key] = self.value
