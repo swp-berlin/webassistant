@@ -1,9 +1,9 @@
 import asyncio
-from asyncio import Queue
+from contextlib import asynccontextmanager
 from enum import Enum
 from typing import Iterable, Iterator
 
-from playwright.async_api import ElementHandle, TimeoutError
+from playwright.async_api import ElementHandle, Page, TimeoutError
 
 from django.utils.translation import gettext_lazy as _
 
@@ -11,20 +11,47 @@ from swp.utils.scraping.context import ScraperContext
 from swp.utils.scraping.exceptions import ResolverError
 from swp.utils.scraping.resolvers.base import get_content
 
-ENDLESS_PAGINATION_OBSERVER_TEMPLATE = """
-    () => {
-        const listElem = document.querySelector('%s');
-        const observer = new MutationObserver(mutationList => {
-            mutationList.forEach(mutation => {
-                const nodes = Array.from(mutation.target.children);
-                const addedNodes = Array.from(mutation.addedNodes);
-                const indexes = addedNodes.map(node => nodes.indexOf(node));
-                window.scraperHandleMutation(indexes);
-            });
+REGISTER_OBSERVER = """
+    listElem => {
+        window.observeListPromise = new Promise(resolve => {
+            new MutationObserver((mutationList, observer) => {
+                mutationList.forEach(mutation => {
+                    resolve(Array.from(mutation.addedNodes));
+                    observer.disconnect();
+                });
+            }).observe(listElem, {childList: true});
         });
-        observer.observe(listElem, {childList: true});
     }
 """
+
+GET_NODE_COUNT = """
+    async () => {
+        nodes = await window.observeListPromise;
+        return nodes.length;
+    }
+"""
+
+GET_NODE = """
+    async i => {
+        nodes = await window.observeListPromise;
+        return nodes[i];
+    }
+"""
+
+
+async def get_nodes_from_result(page: Page):
+    nodes = []
+    length = await page.evaluate(GET_NODE_COUNT)
+    for i in range(length):
+        nodes.append(await page.evaluate_handle(GET_NODE, i))
+
+    return nodes
+
+
+@asynccontextmanager
+async def wait_for_nodes(page, list_element: ElementHandle):
+    await list_element.evaluate(REGISTER_OBSERVER)
+    yield asyncio.create_task(get_nodes_from_result(page))
 
 
 class Paginator:
@@ -59,43 +86,37 @@ class EndlessPaginator(Paginator):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.queue = Queue()
 
-    async def get_nodes(self) -> Iterator[ElementHandle]:
-
+    async def get_next_page(self) -> Iterator[ElementHandle]:
         nodes = await self.query_list_items()
 
-        for node in nodes:
-            yield node
+        if not nodes:
+            raise ResolverError(
+                _('No elements matching %(selector)s found') % {'selector': self.selector}
+            )
 
-        await self.register_mutation_observer()
+        yield nodes
 
-        for _ in range(self.max_pages):
-            button = await self.context.page.query_selector(self.button_selector)
+        for page_number in range(self.max_pages - 1):
+            next_page_link = await self.context.page.query_selector(self.button_selector)
 
-            if not button:
-                return
+            if not next_page_link:
+                break
 
-            await button.click()
+            list_element = await self.context.page.query_selector(self.list_selector)
 
-            try:
-                indexes = await asyncio.wait_for(self.queue.get(), timeout=self.timeout)
-            except asyncio.TimeoutError:
-                return
+            async with wait_for_nodes(self.context.page, list_element) as get_nodes:
+                await next_page_link.click()
 
-            nodes = await self.query_list_items()
+                try:
+                    nodes = await asyncio.wait_for(get_nodes, timeout=30)
+                except asyncio.TimeoutError:
+                    raise ResolverError(
+                        _('Endless Pagination on page %(page_number)s did not load any new items.') % {
+                            'page_number': page_number
+                        })
 
-            for idx in indexes:
-                yield nodes[idx]
-
-            self.queue.task_done()
-
-    def handle_mutation(self, indexes: [int]):
-        self.queue.put_nowait(indexes)
-
-    async def register_mutation_observer(self):
-        await self.context.page.expose_function('scraperHandleMutation', self.handle_mutation)
-        await self.context.page.evaluate(ENDLESS_PAGINATION_OBSERVER_TEMPLATE % self.list_selector)
+                yield nodes
 
 
 class PagePaginator(Paginator):
