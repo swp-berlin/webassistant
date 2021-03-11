@@ -19,7 +19,7 @@ class ListResolver(IntermediateResolver):
         self.paginator = self.create_paginator(context, item_selector=selector, **paginator)
 
     @staticmethod
-    def create_paginator(context, *, type, **paginator):
+    def create_paginator(context, *, type: str = 'Page', **paginator):
         return PaginatorType[type].create(context, **paginator)
 
     async def worker(self, nodes: Queue, results: Queue):

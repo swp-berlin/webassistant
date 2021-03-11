@@ -8,8 +8,10 @@ class ScraperErrorAdmin(admin.ModelAdmin):
     date_hierarchy = 'timestamp'
     fields = [
         'scraper',
+        'publication',
         'message',
         'code',
+        'field',
         'timestamp',
     ]
     readonly_fields = ['timestamp']
@@ -20,9 +22,12 @@ class ScraperErrorAdmin(admin.ModelAdmin):
         'timestamp',
     ]
     list_filter = [
+        'field',
         'code',
+        'timestamp',
     ]
     search_fields = [
         'code',
         'message',
+        'publication__title',
     ]

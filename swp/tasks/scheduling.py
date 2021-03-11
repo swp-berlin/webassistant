@@ -36,17 +36,17 @@ def schedule_scrapers(now=None):
 
 
 @app.task(name='scraper.run')
-def run_scraper(scraper, now=None, using=None):
+def run_scraper(scraper, now=None, using=None, force=False):
     with transaction.atomic(using=using):
         try:
             scraper = Scraper.objects.get_for_update(pk=scraper)
         except Scraper.DoesNotExist:
             return None
 
-        if scraper.is_running:
+        if not force and scraper.is_running:
             return None
 
-        if scraper.next_run > localtime(now):
+        if not force and scraper.next_run > localtime(now):
             return None
 
         scraper.errors.all().delete()
