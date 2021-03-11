@@ -28,11 +28,20 @@ const PDFNotFound = () => (
     </span>
 );
 
-const PublicationItem = ({id, title, authors, abstract, publicationDate, url, pdfURL, pdfPages, ...props}) => (
+const PublicationItem = ({
+    id, title, subtitle, tags, authors, abstract, publicationDate, url, pdfURL, pdfPages, ...props
+}) => (
     <article className="publication-item" data-id={id} {...props}>
         <header>
             <h5><PublicationField name="title" value={title}>{url ? <a href={url}>{title}</a> : title}</PublicationField></h5>
             <div className="subtitle">
+                {subtitle && (
+                    <PublicationField name="subtitle" value={subtitle}>
+                        <h6 className="italic mb-2 text-base text-gray-800">
+                            {subtitle}
+                        </h6>
+                    </PublicationField>
+                )}
                 <PublicationField name="author" value={authors}><Authors authors={authors} /></PublicationField>
                 <PublicationField name="publication_date" value={publicationDate}>
                     <time className="ml-4">{publicationDate}</time>
@@ -45,6 +54,13 @@ const PublicationItem = ({id, title, authors, abstract, publicationDate, url, pd
             </p>
         </PublicationField>
         <footer>
+            {tags && (
+                <PublicationField name="tags" value={tags}>
+                    <p className="italic text-gray-400">
+                        <CommaList items={tags} conjunction="," />
+                    </p>
+                </PublicationField>
+            )}
             {pdfURL ? (
                 <PublicationField name="pdf_url" value={pdfURL}><ExternalLink to={pdfURL} /></PublicationField>
             ) : <PDFNotFound />}
