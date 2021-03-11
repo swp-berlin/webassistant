@@ -40,12 +40,9 @@ GET_NODE = """
 
 
 async def get_nodes_from_result(page: Page):
-    nodes = []
     length = await page.evaluate(GET_NODE_COUNT)
-    for i in range(length):
-        nodes.append(await page.evaluate_handle(GET_NODE, i))
 
-    return nodes
+    return [await page.evaluate_handle(GET_NODE, i) for i in range(length)]
 
 
 @asynccontextmanager
