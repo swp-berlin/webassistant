@@ -67,4 +67,4 @@ class Comparator(models.TextChoices):
 
 class PaginatorType(models.TextChoices):
     ENDLESS = 'Endless', _('Endless')
-    PAGE = 'page', _('Page')
+    PAGE = 'Page', _('Page')
