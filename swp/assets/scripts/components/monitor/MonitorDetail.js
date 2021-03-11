@@ -8,6 +8,7 @@ import Page from 'components/Page';
 import {useUpdatePublicationsQuery} from 'hooks/publications';
 
 import {getMonitorLabel} from './helper';
+import MonitorActivationButton from './MonitorActivationButton';
 import MonitorInfo from './MonitorInfo';
 import {useMonitorsBreadcrumb} from './MonitorList';
 import ThinktankFilterTable from './ThinktankFilterTable';
@@ -41,12 +42,21 @@ const MonitorDetail = ({id}) => {
                 new_publication_count: newPublicationCount,
                 last_sent: lastSent,
                 recipient_count: recipientCount,
+                is_active: isActive,
                 name,
                 description,
                 interval,
                 filters,
             }) => (
-                <Page title={name} actions={<EditButton id={id} />}>
+                <Page
+                    title={name}
+                    actions={(
+                        <MonitorActivationButton
+                            endpoint={endpoint}
+                            defaultIsActive={isActive}
+                        />
+                    )}
+                >
                     <p className="abstract mt-4">
                         {description}
                     </p>
@@ -62,6 +72,7 @@ const MonitorDetail = ({id}) => {
                     />
 
                     <TableActions>
+                        <EditButton id={id} />
                         <AddThinktankFilterButton id={id} />
                     </TableActions>
 
