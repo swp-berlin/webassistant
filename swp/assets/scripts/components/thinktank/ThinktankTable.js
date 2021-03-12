@@ -47,8 +47,8 @@ const ThinktankTable = ({endpoint, ...props}) => {
                             {ScrapersLabel}
                         </Tooltip>
                     </th>
-                    <th className="text-right">{LastRunLabel}</th>
                     <th className="text-right">{ErrorsLabel}</th>
+                    <th className="text-right">{LastRunLabel}</th>
                 </tr>
             </thead>
             <tbody>
