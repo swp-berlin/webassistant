@@ -148,6 +148,12 @@ msgstr ""
 msgid "Page"
 msgstr ""
 
+msgid "Warning"
+msgstr ""
+
+msgid "Error"
+msgstr ""
+
 msgid "name"
 msgstr ""
 
@@ -258,6 +264,9 @@ msgid "%s Scraper"
 msgstr ""
 
 msgid "Scraping Error"
+msgstr ""
+
+msgid "level"
 msgstr ""
 
 msgid "error code"

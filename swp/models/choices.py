@@ -1,5 +1,19 @@
 from django.db import models
+from django.db.models import enums
 from django.utils.translation import gettext_lazy as _
+
+
+class CodesMeta(enums.ChoicesMeta):
+
+    @property
+    def max_length(self) -> int:
+        return max(map(len, self.values))
+
+
+class CodeChoices(models.TextChoices, metaclass=CodesMeta):
+    """
+    TextChoices with additional model helpers.
+    """
 
 
 class Interval(models.IntegerChoices):
@@ -68,3 +82,8 @@ class Comparator(models.TextChoices):
 class PaginatorType(models.TextChoices):
     ENDLESS = 'Endless', _('Endless')
     PAGE = 'Page', _('Page')
+
+
+class ErrorLevel(CodeChoices):
+    WARNING = 'warning', _('Warning')
+    ERROR = 'error', _('Error')

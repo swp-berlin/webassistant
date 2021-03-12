@@ -130,6 +130,9 @@ msgstr ""
 msgid "No Results"
 msgstr ""
 
+msgid "by"
+msgstr ""
+
 msgid "and"
 msgstr ""
 
@@ -221,9 +224,6 @@ msgstr ""
 msgid "Download .RIS"
 msgstr ""
 
-msgid "by"
-msgstr ""
-
 msgid "unknown"
 msgstr ""
 
@@ -242,6 +242,21 @@ msgid "%s Publication"
 msgid_plural "%s Publications"
 msgstr[0] ""
 msgstr[1] ""
+
+#, javascript-format
+msgid "Publication %s"
+msgstr ""
+
+msgid "Error in "
+msgstr ""
+
+#, javascript-format
+msgid "Field: %s"
+msgstr ""
+
+#, javascript-format
+msgid "Code: %s"
+msgstr ""
 
 msgid "Warning"
 msgstr ""
