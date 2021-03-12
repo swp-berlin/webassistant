@@ -24,6 +24,7 @@ def schedule_scrapers(now=None):
             ),
         ),
     ).filter(
+        thinktank__is_active=True,
         is_active=True,
         is_running=False,
         next_run__lt=end,
