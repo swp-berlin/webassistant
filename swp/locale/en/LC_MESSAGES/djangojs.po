@@ -130,9 +130,6 @@ msgstr ""
 msgid "No Results"
 msgstr ""
 
-msgid "by"
-msgstr ""
-
 msgid "and"
 msgstr ""
 
@@ -224,6 +221,9 @@ msgstr ""
 msgid "Download .RIS"
 msgstr ""
 
+msgid "by"
+msgstr ""
+
 msgid "unknown"
 msgstr ""
 
@@ -286,6 +286,9 @@ msgid "List Selector"
 msgstr ""
 
 msgid "Item Selector"
+msgstr ""
+
+msgid "Paginator Type"
 msgstr ""
 
 msgid "Pagination Button Selector"
