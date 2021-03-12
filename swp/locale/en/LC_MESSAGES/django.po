@@ -70,6 +70,12 @@ msgstr ""
 msgid "Deactivation denied"
 msgstr ""
 
+msgid "created"
+msgstr ""
+
+msgid "last modified"
+msgstr ""
+
 msgid "twice daily"
 msgstr ""
 
@@ -136,6 +142,12 @@ msgstr ""
 msgid "Ends With"
 msgstr ""
 
+msgid "Endless"
+msgstr ""
+
+msgid "Page"
+msgstr ""
+
 msgid "name"
 msgstr ""
 
@@ -149,9 +161,6 @@ msgid "interval"
 msgstr ""
 
 msgid "last sent"
-msgstr ""
-
-msgid "created"
 msgstr ""
 
 msgid "publication count"
@@ -238,11 +247,17 @@ msgstr ""
 msgid "last run"
 msgstr ""
 
+msgid "is running"
+msgstr ""
+
 msgid "scraper"
 msgstr ""
 
 #, python-format
 msgid "%s Scraper"
+msgstr ""
+
+msgid "Scraping Error"
 msgstr ""
 
 msgid "error code"
@@ -388,11 +403,15 @@ msgid "No elements matching %(selector)s found"
 msgstr ""
 
 #, python-format
-msgid "No pagination button found for %(selector)s"
+msgid "Endless Pagination on page %(page_number)s did not load any new items."
 msgstr ""
 
 #, python-format
 msgid "Pagination Button matching %(selector)s has no attribute href"
+msgstr ""
+
+#, python-format
+msgid "Timeout while navigating to page %(page_number)s: %(href)s"
 msgstr ""
 
 #, python-format
@@ -401,6 +420,10 @@ msgstr ""
 
 #, python-format
 msgid "No element matches %(selector)s"
+msgstr ""
+
+#, python-format
+msgid "No document for selector %(selector)s found."
 msgstr ""
 
 #, python-format

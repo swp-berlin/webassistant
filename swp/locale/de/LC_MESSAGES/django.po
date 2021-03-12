@@ -70,6 +70,12 @@ msgstr "Aktivierung nicht erlaubt"
 msgid "Deactivation denied"
 msgstr "Deaktivierung nicht erlaubt"
 
+msgid "created"
+msgstr "erzeugt am"
+
+msgid "last modified"
+msgstr "zuletzt geändert"
+
 msgid "twice daily"
 msgstr "zweimal täglich"
 
@@ -136,6 +142,12 @@ msgstr "Beginnt mit"
 msgid "Ends With"
 msgstr "Endet auf"
 
+msgid "Endless"
+msgstr "Endlos"
+
+msgid "Page"
+msgstr "Seite"
+
 msgid "name"
 msgstr "Name"
 
@@ -150,9 +162,6 @@ msgstr "Intervall"
 
 msgid "last sent"
 msgstr "gesendet am"
-
-msgid "created"
-msgstr "erzeugt am"
 
 msgid "publication count"
 msgstr "Publikationszähler"
@@ -238,12 +247,18 @@ msgstr "Checksumme"
 msgid "last run"
 msgstr "letzter Durchlauf"
 
+msgid "is running"
+msgstr "läuft"
+
 msgid "scraper"
 msgstr "Scraper"
 
 #, python-format
 msgid "%s Scraper"
 msgstr "%s Scraper"
+
+msgid "Scraping Error"
+msgstr "Scraping-Fehler"
 
 msgid "error code"
 msgstr "Fehlercode"
@@ -388,12 +403,16 @@ msgid "No elements matching %(selector)s found"
 msgstr "Keine Elemente, die auf %(selector)s zutreffen, gefunden"
 
 #, python-format
-msgid "No pagination button found for %(selector)s"
-msgstr "Kein Paginierungsbutton für %(selector)s gefunden"
+msgid "Endless Pagination on page %(page_number)s did not load any new items."
+msgstr "Endlos-Paginierung auf Seite %(page_number)s hat keine neuen Elemente geladen."
 
 #, python-format
 msgid "Pagination Button matching %(selector)s has no attribute href"
 msgstr "Paginierungsbutton für %(selector)s hat kein Attribut href"
+
+#, python-format
+msgid "Timeout while navigating to page %(page_number)s: %(href)s"
+msgstr "Zeitüberschreitung beim navigieren zu Seite %(page_number)s: %(href)s"
 
 #, python-format
 msgid "[Attribute Resolver] Element matching %(selector)s has no attribute %(attribute)s"
@@ -402,6 +421,10 @@ msgstr "[Attribut-Resolver] Element, das auf %(selector)s zutrifft, hat kein Att
 #, python-format
 msgid "No element matches %(selector)s"
 msgstr "Kein Element für %(selector)s gefunden"
+
+#, python-format
+msgid "No document for selector %(selector)s found."
+msgstr "Kein Document für Selektor %(selector)s gefunden."
 
 #, python-format
 msgid "Timeout while trying to download the document at %(url)s"
