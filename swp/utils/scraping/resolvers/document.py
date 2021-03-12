@@ -21,7 +21,7 @@ class DocumentResolver(DataResolver):
         elem = await self.get_element(page)
 
         if not elem:
-            raise ResolverError(_('No document for selector %(selector)s found.' % {'selector': self.selector}))
+            raise ResolverError(_('No document for selector %(selector)s found.') % {'selector': self.selector})
 
         try:
             async with page.expect_download() as download_info:
