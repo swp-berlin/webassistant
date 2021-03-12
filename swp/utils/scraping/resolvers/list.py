@@ -34,26 +34,27 @@ class ListResolver(IntermediateResolver):
                 nodes.task_done()
 
     async def process_nodes(self, nodes: Queue, results: Queue):
-        workers = [asyncio.create_task(self.worker(nodes, results)) for _ in range(4)]
+        try:
+            workers = [asyncio.create_task(self.worker(nodes, results)) for _ in range(4)]
 
-        async for page in self.paginator.get_next_page():
-            for node in page:
-                nodes.put_nowait(node)
+            async for page in self.paginator.get_next_page():
+                for node in page:
+                    nodes.put_nowait(node)
 
-            await nodes.join()
+                await nodes.join()
 
-        for worker in workers:
-            worker.cancel()
+            for worker in workers:
+                worker.cancel()
 
-        await asyncio.gather(*workers, return_exceptions=True)
-
-        results.put_nowait(None)
+            await asyncio.gather(*workers, return_exceptions=True)
+        finally:
+            results.put_nowait(None)
 
     async def resolve(self) -> [dict]:
         nodes = Queue()
         results = Queue()
 
-        asyncio.create_task(self.process_nodes(nodes, results))
+        process = asyncio.create_task(self.process_nodes(nodes, results))
 
         while True:
             result = await results.get()
@@ -65,6 +66,11 @@ class ListResolver(IntermediateResolver):
                 yield result
             else:
                 break
+
+        await process
+
+        if process.exception():
+            raise process.exception()
 
     async def resolve_node(self, node: ElementHandle):
         fields = {}
