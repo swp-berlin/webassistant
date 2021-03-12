@@ -30,8 +30,8 @@ const ThinktankRow = ({
                 {`${activeScraperCount} / ${scraperCount}`}
             </ThinktankLink>
         </td>
-        <td className="text-right">{isActive ? <DateTime value={lastRun} /> : DisabledLabel}</td>
         <td className="text-right"><ThinktankLink id={id}>{errorCount}</ThinktankLink></td>
+        <td className="text-right">{isActive ? <DateTime value={lastRun} /> : DisabledLabel}</td>
     </tr>
 );
 
