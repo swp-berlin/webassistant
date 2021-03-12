@@ -20,6 +20,9 @@ class DocumentResolver(DataResolver):
     async def _resolve(self, page: Page, fields: dict, errors: dict):
         elem = await self.get_element(page)
 
+        if not elem:
+            raise ResolverError(_('No document for selector %(selector)s found.' % {'selector': self.selector}))
+
         try:
             async with page.expect_download() as download_info:
                 await elem.click()
