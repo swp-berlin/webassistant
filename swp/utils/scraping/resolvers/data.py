@@ -14,6 +14,10 @@ class DataResolver(SelectorMixin, Resolver):
         self.required = required
         self.key = key
 
+    def make_error(self, message: str, **kwargs) -> ResolverError:
+        kwargs.setdefault('level', ErrorLevel.ERROR if self.required else ErrorLevel.WARNING)
+        return ResolverError(message, **kwargs)
+
     async def resolve(self, node: ElementHandle, fields: dict, errors: dict):
         try:
             await self._resolve(node, fields, errors)

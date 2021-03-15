@@ -99,8 +99,12 @@ class Scraper(ActivatableModel, LastModified):
         async for result in scraper.scrape(config):
             fields = result.get('fields')
             errors = result.get('errors')
-
             now = timezone.now()
+
+            is_complete = await self.check_scraped_fields(fields, errors, now=now)
+            if not is_complete:
+                continue
+
             publication = Publication(
                 thinktank=thinktank,
                 ris_type='UNPB' if 'pdf_url' in fields else 'ICOMM',
@@ -128,11 +132,55 @@ class Scraper(ActivatableModel, LastModified):
                         message=error.get('message') or _('Scraping Error'),
                         publication_id=publication.pk,
                         field=field,
+                        level=error.get('level'),
                         timestamp=now,
                     ) for field, error in errors.items()
                 ]
 
                 await self.save_errors(scraper_errors)
+
+    async def check_scraped_fields(
+        self,
+        fields: Mapping[str, Any],
+        errors: Mapping[str, Any], *,
+        now: datetime.datetime,
+    ) -> bool:
+        """
+        Validate scraped publication data for missing fields.
+
+        :return: ``True`` if publication is complete, otherwise ``False``.
+        """
+        title = fields.get('title')
+        url = fields.get('url')
+
+        if title and url:
+            return True
+
+        if not title and not url:
+            message = _('Missing title and URL')
+            field = ''
+        elif not title:
+            error_message = errors.get('title', {}).get('message', '')
+            message = error_message or _('Missing title for %s') % url
+            field = 'title'
+        elif not url:
+            error_message = errors.get('url', {}).get('message', '')
+            message = error_message or _('Missing URL element for "%s"') % title
+
+            field = 'url'
+
+        field_error = ScraperError(
+            scraper=self,
+            identifier=ScraperError.make_identifier(title, url),
+            message=message,
+            field=field,
+            code='missing',
+            timestamp=now,
+        )
+
+        await self.save_error(field_error)
+
+        return False
 
     @sync_to_async
     def save_publication(self, publication):
