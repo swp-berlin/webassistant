@@ -15,8 +15,16 @@ const ThinktankRow = ({id, name, recipientCount, publicationCount, newPublicatio
     <tr className={isActive ? '' : 'disabled'}>
         <td><MonitorLink id={id}>{name}</MonitorLink></td>
         <td className="text-right">{recipientCount}</td>
-        <td className="text-right">{publicationCount}</td>
-        <td className="text-right">{newPublicationCount}</td>
+        <td className="text-right">
+            <Link to={`/monitor/${id}/publications/`}>
+                {publicationCount}
+            </Link>
+        </td>
+        <td className="text-right">
+            <Link to={`/monitor/${id}/publications/new/`}>
+                {newPublicationCount}
+            </Link>
+        </td>
         <td className="text-right">{isActive ? <DateTime value={lastSent} /> : DisabledLabel}</td>
     </tr>
 );
