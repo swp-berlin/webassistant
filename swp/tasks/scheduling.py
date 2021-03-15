@@ -3,6 +3,8 @@ import datetime
 from django.db import models, transaction
 from django.utils.timezone import localtime
 
+from sentry_sdk import capture_exception
+
 from swp.celery import app
 from swp.db.expressions import MakeInterval
 from swp.models import Scraper
@@ -22,6 +24,7 @@ def schedule_scrapers(now=None):
             ),
         ),
     ).filter(
+        thinktank__is_active=True,
         is_active=True,
         is_running=False,
         next_run__lt=end,
@@ -34,22 +37,26 @@ def schedule_scrapers(now=None):
 
 
 @app.task(name='scraper.run')
-def run_scraper(scraper, now=None, using=None):
+def run_scraper(scraper, now=None, using=None, force=False):
     with transaction.atomic(using=using):
         try:
             scraper = Scraper.objects.get_for_update(pk=scraper)
         except Scraper.DoesNotExist:
             return None
 
-        if scraper.is_running:
+        if not force and scraper.is_running:
             return None
 
-        if scraper.next_run > localtime(now):
+        if not force and scraper.next_run > localtime(now):
             return None
 
+        scraper.errors.all().delete()
         scraper.update(is_running=True)
 
     try:
         return scraper.scrape()
+    except Exception as error:
+        scraper.errors.create(message=f'{error}')
+        capture_exception(error)
     finally:
         scraper.update(last_run=localtime(None), is_running=False)

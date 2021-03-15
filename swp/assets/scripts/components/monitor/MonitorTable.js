@@ -13,6 +13,7 @@ const NameLabel = _('Name');
 const RecipientsLabel = _('Recipients');
 const PublicationsLabel = _('Publications');
 const NewPublicationsLabel = _('New Publications');
+const LastRunLabel = _('Last Run');
 
 
 const MonitorRows = ({monitors}) => (
@@ -24,6 +25,8 @@ const MonitorRows = ({monitors}) => (
             recipientCount={monitor.recipient_count}
             publicationCount={monitor.publication_count}
             newPublicationCount={monitor.new_publication_count}
+            lastSent={monitor.last_sent}
+            isActive={monitor.is_active}
         />
     ))
 );
@@ -41,12 +44,13 @@ const ThinktankTable = ({endpoint, ...props}) => {
                     <th className="text-right">{RecipientsLabel}</th>
                     <th className="text-right">{PublicationsLabel}</th>
                     <th className="text-right">{NewPublicationsLabel}</th>
+                    <th className="text-right">{LastRunLabel}</th>
                 </tr>
             </thead>
             <tbody>
                 <Result query={query} {...handler}>
                     {monitors => (
-                        monitors.length ? <MonitorRows monitors={monitors} /> : <EmptyRow colSpan={4} />
+                        monitors.length ? <MonitorRows monitors={monitors} /> : <EmptyRow colSpan={5} />
                     )}
                 </Result>
             </tbody>

@@ -1,31 +1,54 @@
 import asyncio
-from asyncio import Queue
+from contextlib import asynccontextmanager
 from enum import Enum
-from typing import Iterator
+from typing import Iterable, Iterator
 
-from playwright.async_api import ElementHandle
+from playwright.async_api import ElementHandle, Page, TimeoutError
 
 from django.utils.translation import gettext_lazy as _
 
-from swp.utils.scraping.browser import open_page, PAGE_WAIT_UNTIL
 from swp.utils.scraping.context import ScraperContext
 from swp.utils.scraping.exceptions import ResolverError
 from swp.utils.scraping.resolvers.base import get_content
 
-ENDLESS_PAGINATION_OBSERVER_TEMPLATE = """
-    () => {
-        const listElem = document.querySelector('%s');
-        const observer = new MutationObserver(mutationList => {
-            mutationList.forEach(mutation => {
-                const nodes = Array.from(mutation.target.children);
-                const addedNodes = Array.from(mutation.addedNodes);
-                const indexes = addedNodes.map(node => nodes.indexOf(node));
-                window.scraperHandleMutation(indexes);
-            });
+REGISTER_OBSERVER = """
+    listElem => {
+        window.observeListPromise = new Promise(resolve => {
+            new MutationObserver((mutationList, observer) => {
+                mutationList.forEach(mutation => {
+                    resolve(Array.from(mutation.addedNodes));
+                    observer.disconnect();
+                });
+            }).observe(listElem, {childList: true});
         });
-        observer.observe(listElem, {childList: true});
     }
 """
+
+GET_NODE_COUNT = """
+    async () => {
+        nodes = await window.observeListPromise;
+        return nodes.length;
+    }
+"""
+
+GET_NODE = """
+    async i => {
+        nodes = await window.observeListPromise;
+        return nodes[i];
+    }
+"""
+
+
+async def get_nodes_from_result(page: Page):
+    length = await page.evaluate(GET_NODE_COUNT)
+
+    return [await page.evaluate_handle(GET_NODE, i) for i in range(length)]
+
+
+@asynccontextmanager
+async def wait_for_nodes(page, list_element: ElementHandle):
+    await list_element.evaluate(REGISTER_OBSERVER)
+    yield asyncio.create_task(get_nodes_from_result(page))
 
 
 class Paginator:
@@ -37,20 +60,20 @@ class Paginator:
         self.context = context
         self.list_selector = list_selector
         self.item_selector = item_selector or '*'
+        self.selector = f'{self.list_selector} {self.item_selector}'
         self.button_selector = button_selector
         self.max_pages = max_pages
         self.max_per_page = max_per_page
         self.timeout = timeout
 
-    async def query_list_items(self, page=None) -> [ElementHandle]:
+    async def query_list_items(self, page=None) -> Iterable[ElementHandle]:
         page = page or self.context.page
-        selector = f'{self.list_selector} {self.item_selector}'
 
-        nodes = await page.query_selector_all(selector)
+        nodes = await page.query_selector_all(self.selector)
 
         if not nodes:
             raise ResolverError(
-                _('No elements matching %(selector)s found') % {'selector': selector}
+                _('No elements matching %(selector)s found') % {'selector': self.selector}
             )
 
         return nodes[:self.max_per_page] if self.max_per_page else nodes
@@ -60,62 +83,58 @@ class EndlessPaginator(Paginator):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.queue = Queue()
 
-    async def get_nodes(self) -> Iterator[ElementHandle]:
-
+    async def get_next_page(self) -> Iterator[ElementHandle]:
         nodes = await self.query_list_items()
 
-        for node in nodes:
-            yield node
+        if not nodes:
+            raise ResolverError(
+                _('No elements matching %(selector)s found') % {'selector': self.selector}
+            )
 
-        await self.register_mutation_observer()
+        yield nodes
 
-        for _ in range(self.max_pages):
-            button = await self.context.page.query_selector(self.button_selector)
+        for page_number in range(self.max_pages - 1):
+            next_page_link = await self.context.page.query_selector(self.button_selector)
 
-            if not button:
-                return
+            if not next_page_link:
+                break
 
-            await button.click()
+            list_element = await self.context.page.query_selector(self.list_selector)
 
-            try:
-                indexes = await asyncio.wait_for(self.queue.get(), timeout=self.timeout)
-            except asyncio.TimeoutError:
-                return
+            async with wait_for_nodes(self.context.page, list_element) as get_nodes:
+                await next_page_link.click()
 
-            nodes = await self.query_list_items()
+                try:
+                    nodes = await asyncio.wait_for(get_nodes, timeout=30)
+                except asyncio.TimeoutError:
+                    raise ResolverError(
+                        _('Endless Pagination on page %(page_number)s did not load any new items.') % {
+                            'page_number': page_number
+                        })
 
-            for idx in indexes:
-                yield nodes[idx]
-
-            self.queue.task_done()
-
-    def handle_mutation(self, indexes: [int]):
-        self.queue.put_nowait(indexes)
-
-    async def register_mutation_observer(self):
-        await self.context.page.expose_function('scraperHandleMutation', self.handle_mutation)
-        await self.context.page.evaluate(ENDLESS_PAGINATION_OBSERVER_TEMPLATE % self.list_selector)
+                yield nodes
 
 
 class PagePaginator(Paginator):
 
-    async def get_nodes(self) -> Iterator[ElementHandle]:
+    async def get_next_page(self) -> Iterator[ElementHandle]:
         nodes = await self.query_list_items()
 
-        for node in nodes:
-            yield node
+        if not nodes:
+            raise ResolverError(
+                _('No elements matching %(selector)s found') % {'selector': self.selector}
+            )
 
-        for page_number in range(self.max_pages):
+        yield nodes
+
+        for page_number in range(self.max_pages - 1):
             next_page_link = await self.context.page.query_selector(self.button_selector)
 
             if not next_page_link:
-                raise ResolverError(
-                    _('No pagination button found for %(selector)s') % {'selector': self.button_selector}
-                )
+                break
 
-            href: str = await get_content(next_page_link, attr='href')
+            href = await get_content(next_page_link, attr='href')
 
             if not href:
                 raise ResolverError(
@@ -124,13 +143,21 @@ class PagePaginator(Paginator):
                     }
                 )
 
-            async with open_page(self.context.browser) as page:
-                await page.goto(href, wait_until=PAGE_WAIT_UNTIL)
+            await self.nagigate_to_next_page(href, page_number)
 
-                nodes = await self.query_list_items(page)
+            nodes = await self.query_list_items()
+            yield nodes
 
-                for node in nodes:
-                    yield node
+    async def nagigate_to_next_page(self, href, page_number):
+        try:
+            await self.context.page.goto(href)
+        except TimeoutError:
+            raise ResolverError(
+                _('Timeout while navigating to page %(page_number)s: %(href)s') % {
+                    'page_number': page_number,
+                    'href': href,
+                }
+            )
 
 
 class PaginatorType(Enum):

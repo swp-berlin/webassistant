@@ -7,7 +7,8 @@ class FieldResolver(Resolver):
 
     def __init__(self, context, *, resolver: dict):
         super(FieldResolver, self).__init__(context)
-        self.resolver: Resolver = create_resolver(context, **resolver, key=self.key, multiple=self.multiple)
+        config = {**resolver, 'key': self.key, 'multiple': self.multiple}
+        self.resolver: Resolver = create_resolver(context, **config)
 
     async def resolve(self, *args, **kwargs):
         return await self.resolver.resolve(*args, **kwargs)

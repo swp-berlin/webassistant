@@ -1,7 +1,18 @@
 from django.contrib import admin
 
-from swp.models import Scraper
+from swp.models import Scraper, ScraperError
 from .abstract import ActivatableModelAdmin
+
+
+class ScraperErrorInline(admin.StackedInline):
+    model = ScraperError
+    readonly_fields = ['publication']
+    fields = [
+        'publication',
+        'message',
+        'field',
+        'code',
+    ]
 
 
 @admin.register(Scraper)
@@ -35,4 +46,8 @@ class ScraperAdmin(ActivatableModelAdmin):
     search_fields = [
         'checksum',
         'thinktank__name',
+    ]
+
+    inlines = [
+        ScraperErrorInline,
     ]

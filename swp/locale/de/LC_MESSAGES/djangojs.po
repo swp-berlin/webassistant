@@ -243,6 +243,21 @@ msgid_plural "%s Publications"
 msgstr[0] "%s Publikation"
 msgstr[1] "%s Publikationen"
 
+#, javascript-format
+msgid "Publication %s"
+msgstr "Publikation %s"
+
+msgid "Error in "
+msgstr "Fehler in "
+
+#, javascript-format
+msgid "Field: %s"
+msgstr "Feld: %s"
+
+#, javascript-format
+msgid "Code: %s"
+msgstr "Code: %s"
+
 msgid "Warning"
 msgstr "Warnung"
 
@@ -264,14 +279,14 @@ msgstr "Resolver-Typ %(type)s wird nicht unterstützt"
 msgid "Attribute"
 msgstr "Attribut"
 
-msgid "Field"
-msgstr "Feld"
-
 msgid "Selector"
 msgstr "Selektor"
 
 msgid "Document"
 msgstr "Dokument"
+
+msgid "Field"
+msgstr "Feld"
 
 msgid "Type"
 msgstr "Typ"
@@ -288,6 +303,9 @@ msgstr "Listenselektor"
 msgid "Item Selector"
 msgstr "Einzelselektor"
 
+msgid "Paginator Type"
+msgstr "Paginierungstyp"
+
 msgid "Pagination Button Selector"
 msgstr "Paginierungsselektor"
 
@@ -299,12 +317,6 @@ msgstr "Bitte geben Sie einen gültigen Selektor ein"
 
 msgid "Value"
 msgstr "Wert"
-
-msgid "Data"
-msgstr "Daten"
-
-msgid "Tag"
-msgstr "Tag"
 
 msgid "Scraper has been activated."
 msgstr "Scraper erfolgreich aktiviert."
@@ -366,6 +378,9 @@ msgstr "Scraping ist mit folgendem Fehler fehlgeschlagen:"
 msgid "Internal Error"
 msgstr "Interner Fehler"
 
+msgid "Continued from page 2"
+msgstr "Weitere von Seite 2"
+
 msgid "No items"
 msgstr "Keine Einträge"
 
@@ -389,6 +404,9 @@ msgstr "Änderungen am Thinktank gespeichert"
 
 msgid "Unique Field"
 msgstr "Eindeutiges Feld"
+
+msgid "active / total"
+msgstr "aktiv / gesamt"
 
 msgid "Scrapers"
 msgstr "Scraper"
@@ -423,3 +441,7 @@ msgstr "Änderungen am Filter erfolgreich gespeichert"
 
 msgid "Thinktank"
 msgstr "Thinktank"
+
+#, javascript-format
+#~ msgid "Error: %s"
+#~ msgstr "Fehler: %s"

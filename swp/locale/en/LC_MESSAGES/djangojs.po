@@ -243,6 +243,21 @@ msgid_plural "%s Publications"
 msgstr[0] ""
 msgstr[1] ""
 
+#, javascript-format
+msgid "Publication %s"
+msgstr ""
+
+msgid "Error in "
+msgstr ""
+
+#, javascript-format
+msgid "Field: %s"
+msgstr ""
+
+#, javascript-format
+msgid "Code: %s"
+msgstr ""
+
 msgid "Warning"
 msgstr ""
 
@@ -264,13 +279,13 @@ msgstr ""
 msgid "Attribute"
 msgstr ""
 
-msgid "Field"
-msgstr ""
-
 msgid "Selector"
 msgstr ""
 
 msgid "Document"
+msgstr ""
+
+msgid "Field"
 msgstr ""
 
 msgid "Type"
@@ -288,6 +303,9 @@ msgstr ""
 msgid "Item Selector"
 msgstr ""
 
+msgid "Paginator Type"
+msgstr ""
+
 msgid "Pagination Button Selector"
 msgstr ""
 
@@ -298,12 +316,6 @@ msgid "Please enter a valid css selector"
 msgstr ""
 
 msgid "Value"
-msgstr ""
-
-msgid "Data"
-msgstr ""
-
-msgid "Tag"
 msgstr ""
 
 msgid "Scraper has been activated."
@@ -366,6 +378,9 @@ msgstr ""
 msgid "Internal Error"
 msgstr ""
 
+msgid "Continued from page 2"
+msgstr ""
+
 msgid "No items"
 msgstr ""
 
@@ -388,6 +403,9 @@ msgid "Successfully changed thinktank"
 msgstr ""
 
 msgid "Unique Field"
+msgstr ""
+
+msgid "active / total"
 msgstr ""
 
 msgid "Scrapers"

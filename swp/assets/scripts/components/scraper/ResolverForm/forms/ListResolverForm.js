@@ -1,5 +1,7 @@
 import _ from 'utils/i18n';
+import {getChoices} from 'utils/choices';
 import {NumericInput} from 'components/forms';
+import {Select} from 'components/forms/Select';
 
 import ResolverListForm from '../ResolverListForm';
 import SelectorField from './SelectorField';
@@ -8,8 +10,11 @@ import SelectorField from './SelectorField';
 const ListLabel = _('List');
 const ListSelectorLabel = _('List Selector');
 const ItemSelectorLabel = _('Item Selector');
+const PaginatorTypeLabel = _('Paginator Type');
 const PaginationButtonSelectorLabel = _('Pagination Button Selector');
 const MaxPagesLabel = _('Max Pages');
+
+const PaginatorTypes = getChoices('PaginatorType');
 
 
 const ListResolverForm = ({form, prefix, level, readOnly}) => {
@@ -34,6 +39,14 @@ const ListResolverForm = ({form, prefix, level, readOnly}) => {
                 errors={errors}
                 required
                 readOnly={readOnly}
+            />
+            <Select
+                name={`${prefix}.paginator.type`}
+                label={PaginatorTypeLabel}
+                control={control}
+                choices={PaginatorTypes}
+                errors={errors}
+                disabled={readOnly}
             />
             <SelectorField
                 register={register}

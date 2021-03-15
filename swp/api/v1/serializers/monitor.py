@@ -28,4 +28,5 @@ class MonitorSerializer(serializers.ModelSerializer):
             'created',
             'recipients',
             'filters',
+            'is_active',
         ]

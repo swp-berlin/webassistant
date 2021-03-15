@@ -1,4 +1,4 @@
-from typing import AsyncGenerator, List, TypedDict
+from typing import Any, AsyncGenerator, Mapping, TypedDict
 
 from playwright.async_api import Error as PlaywrightError
 from sentry_sdk import capture_exception
@@ -19,7 +19,7 @@ class Error(TypedDict):
 
 class Result(TypedDict):
     fields: dict
-    errors: List[Error]
+    errors: Mapping[str, Error]
 
 
 class Scraper:
@@ -28,7 +28,7 @@ class Scraper:
         self.url = url
         self.download_path = download_path
 
-    async def scrape(self, resolver_config: dict) -> AsyncGenerator[Result, None]:
+    async def scrape(self, resolver_config: Mapping[str, Any]) -> AsyncGenerator[Result, None]:
         try:
             async with open_browser() as browser:
                 async with open_page(browser) as page:

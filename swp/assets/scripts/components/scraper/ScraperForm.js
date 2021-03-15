@@ -19,6 +19,7 @@ import {
 } from './ResolverForm/forms';
 import {Preview, PreviewButton} from './preview';
 
+import BackendScraperErrors from './BackendScraperErrors';
 import ScraperTypeSelect from './ScraperTypeSelect';
 import ScraperFormErrors from './ScraperFormErrors';
 import ScraperTypeDescription from './ScraperTypeDescription';
@@ -83,6 +84,7 @@ const ScraperForm = ({endpoint, data, method, redirectURL}) => {
     }, [form, id, mutate]);
 
     const disabledTitle = isActive ? DisabledTitle : null;
+    const scraperErrors = data?.errors;
 
     return (
         <form className="mt-8 scraper-form grid grid-cols-1 lg:grid-cols-2 gap-8" onSubmit={handleSubmit}>
@@ -141,7 +143,7 @@ const ScraperForm = ({endpoint, data, method, redirectURL}) => {
             </div>
 
             <div>
-                {preview && <Preview id={preview} />}
+                {preview ? <Preview id={preview} /> : <BackendScraperErrors errors={scraperErrors} />}
             </div>
         </form>
     );

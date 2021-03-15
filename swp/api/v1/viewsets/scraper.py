@@ -11,7 +11,9 @@ from ..router import router
 
 @router.register('scraper', basename='scraper')
 class ScraperViewSet(ModelViewSet):
-    queryset = Scraper.objects.select_related('thinktank')
+    queryset = Scraper.objects.select_related('thinktank').prefetch_related(
+        'errors',
+    )
     serializer_class = ScraperDraftSerializer
 
     def get_serializer_class(self):

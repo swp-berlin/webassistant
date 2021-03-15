@@ -1,0 +1,1 @@
+{% load i18n %}{% autoescape off %}{% blocktrans %}Publications for {{ monitor }}{% endblocktrans %}{% endautoescape %}

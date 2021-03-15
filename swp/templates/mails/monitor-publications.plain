@@ -1,0 +1,8 @@
+{% load i18n %}{% autoescape off %}
+
+{% blocktranslate trimmed %}
+    Attached you will find all new publications for {{ monitor }}.
+{% endblocktranslate %}
+
+{% blocktrans %}The SWP team{% endblocktrans %}
+{% endautoescape %}

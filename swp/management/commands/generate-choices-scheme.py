@@ -2,7 +2,7 @@ from django.utils import translation
 
 from swp.management.scheme import GenerateSchemeCommand
 from swp.models.choices import (
-    Comparator, DataResolverKey, Interval, ListResolverType, ResolverType,
+    Comparator, DataResolverKey, Interval, ListResolverType, PaginatorType, ResolverType,
     UniqueKey,
 )
 
@@ -14,7 +14,8 @@ class Command(GenerateSchemeCommand):
         ('ListResolverType', ListResolverType.choices),
         ('DataResolverKey', DataResolverKey.choices),
         ('UniqueKey', UniqueKey.choices),
-        ('Comparator', Comparator.choices)
+        ('Comparator', Comparator.choices),
+        ('PaginatorType', PaginatorType.choices),
     ]
 
     filename = 'choices.json'

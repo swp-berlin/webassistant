@@ -1,9 +1,10 @@
 from __future__ import annotations
 
 import datetime
+from typing import Any, Iterable, Mapping, TYPE_CHECKING
 
 from asgiref.sync import async_to_sync, sync_to_async
-from django.db import models, transaction
+from django.db import models, transaction, IntegrityError
 from django.db.models.aggregates import Count
 from django.utils import timezone
 from django.utils.functional import cached_property
@@ -14,8 +15,12 @@ from swp.scraper.types import ScraperType
 
 from .abstract import ActivatableModel, ActivatableQuerySet, UpdateQuerySet, LastModified
 from .choices import Interval
-from .publication import Publication
 from .fields import ChoiceField
+from .publication import Publication
+from .scrapererror import ScraperError
+
+if TYPE_CHECKING:
+    from .thinktank import Thinktank
 
 
 class ScraperQuerySet(ActivatableQuerySet, UpdateQuerySet):
@@ -75,29 +80,64 @@ class Scraper(ActivatableModel, LastModified):
     def error_count(self) -> int:
         return self.errors.count()
 
+    @cached_property
+    def unique_field(self):
+        return self.thinktank.unique_field
+
     def scrape(self):
         scraper = _Scraper(self.start_url)
 
         self.async_scrape(scraper, self.data, self.thinktank)
 
     @async_to_sync
-    async def async_scrape(self, scraper, config, thinktank):
-        async for data in scraper.scrape(config):
-            authors = [data.pop('author', '')]
+    async def async_scrape(
+        self,
+        scraper: _Scraper,
+        config: Mapping[str, Any],
+        thinktank: Thinktank,
+    ):
+        async for result in scraper.scrape(config):
+            fields = result.get('fields')
+            errors = result.get('errors')
 
+            now = timezone.now()
             publication = Publication(
-                **data,
                 thinktank=thinktank,
-                last_access=timezone.now(),
-                ris_type='UNPB' if 'pdf_url' in data else 'ICOMM',
-                authors=authors,
+                ris_type='UNPB' if 'pdf_url' in fields else 'ICOMM',
+                last_access=now,
+                created=now,
+                **fields
             )
 
-            await self.save_publication(publication)
+            try:
+                await self.save_publication(publication)
+            except IntegrityError as exc:
+                publication_error = ScraperError(
+                    scraper=self,
+                    message=str(exc),
+                    code='database',  # TODO Define error codes for global classification
+                    timestamp=now,
+                )
+
+                await self.save_error(publication_error)
+
+            if errors and publication.pk:
+                scraper_errors = [
+                    ScraperError(
+                        scraper=self,
+                        message=error.get('message') or _('Scraping Error'),
+                        publication_id=publication.pk,
+                        field=field,
+                        timestamp=now,
+                    ) for field, error in errors.items()
+                ]
+
+                await self.save_errors(scraper_errors)
 
     @sync_to_async
     def save_publication(self, publication):
-        if not self.scraped_publications.filter(url=publication.url).exists():
+        unique_filter = models.Q(**{self.unique_field: getattr(publication, self.unique_field)})
+        if not self.scraped_publications.filter(unique_filter).exists():
             publication.save()
             self.scraped_publications.add(publication)
 
@@ -105,3 +145,11 @@ class Scraper(ActivatableModel, LastModified):
     def save_publications(self, publications):
         Publication.objects.bulk_create(publications)
         self.scraped_publications.add(*publications)
+
+    @sync_to_async
+    def save_error(self, error: ScraperError):
+        error.save(force_insert=True)
+
+    @sync_to_async
+    def save_errors(self, errors: Iterable[ScraperError]):
+        ScraperError.objects.bulk_create(errors)

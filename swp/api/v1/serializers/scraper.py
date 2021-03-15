@@ -7,9 +7,10 @@ from rest_framework.serializers import ModelSerializer, Serializer
 from cosmogo.utils.text import enumeration
 
 from swp.models import Scraper
-from swp.models.choices import DataResolverKey, ResolverType
+from swp.models.choices import PaginatorType, ResolverType
 
 from .fields import ThinktankField, CSSSelectorField
+from .scrapererror import ScraperErrorSerializer
 
 
 class ResolverConfigSerializer(Serializer):
@@ -41,7 +42,7 @@ class ResolverConfigSerializer(Serializer):
 
 
 class PaginatorSerializer(Serializer):
-    type = CharField(default='Page')
+    type = ChoiceField(choices=PaginatorType.choices)
     list_selector = CSSSelectorField()
     button_selector = CSSSelectorField(allow_blank=True)
     max_pages = IntegerField(min_value=1)
@@ -102,6 +103,7 @@ class ScraperSerializer(ModelSerializer):
 
     thinktank = ThinktankField(read_only=True)
     data = ResolverConfigSerializer()
+    errors = ScraperErrorSerializer(many=True, read_only=True)
 
     class Meta:
         model = Scraper
@@ -109,7 +111,17 @@ class ScraperSerializer(ModelSerializer):
             'name',
             'last_run',
         ]
-        fields = ['id', 'name', 'type', 'thinktank', 'is_active', 'data', 'start_url', 'interval', 'last_run']
+        fields = [
+            'id',
+            'name',
+            'type',
+            'thinktank',
+            'data',
+            'start_url',
+            'interval',
+            'is_active',
+            'errors',
+        ]
 
     def validate(self, attrs):
         if not self.partial or attrs.get('data'):

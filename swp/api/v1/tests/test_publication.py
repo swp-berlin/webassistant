@@ -10,6 +10,9 @@ from cosmogo.utils.testing import create_user, login, request
 from swp.models import Monitor, Publication, PublicationFilter, Thinktank, ThinktankFilter
 
 
+ONE_HOUR = datetime.timedelta(hours=1)
+
+
 class PublicationTestCase(test.TestCase):
 
     @classmethod
@@ -74,6 +77,8 @@ class PublicationTestCase(test.TestCase):
                 url='https://piie.com/publications/policy-briefs/impact-covid-19-lockdowns-individual-mobility-and-importance',
                 pdf_url='https://www.piie.com/system/files/documents/pb20-14.pdf',
                 pdf_pages=22,
+                last_access=now,
+                created=now,
             ),
             Publication(
                 thinktank=cls.thinktanks[1],
@@ -82,7 +87,8 @@ class PublicationTestCase(test.TestCase):
                 url='http://en.cdi.org.cn/index.php?option=com_k2&view=item&layout=item&id=707',
                 pdf_url='http://en.cdi.org.cn/publications/annual-report/annual-report-2019/download',
                 pdf_pages=136,
-                last_access=now,
+                last_access=now - ONE_HOUR,
+                created=now,
             ),
             Publication(
                 thinktank=cls.thinktanks[1],
@@ -91,6 +97,8 @@ class PublicationTestCase(test.TestCase):
                 url='http://en.cdi.org.cn/index.php?option=com_k2&view=item&layout=item&id=529',
                 pdf_url='http://en.cdi.org.cn/publications/annual-report/annual-report-2018/download',
                 pdf_pages=148,
+                last_access=now,
+                created=now,
             ),
         ])
         cls.publication = cls.publications[1]
@@ -153,7 +161,7 @@ class PublicationTestCase(test.TestCase):
         query_string = urlencode({
             'monitor': self.monitors[1].pk,
             'is_active': True,
-            'since': self.now + datetime.timedelta(1),
+            'since': self.now + ONE_HOUR,
         })
 
         response = request(self, f'{self.list_url}?{query_string}')

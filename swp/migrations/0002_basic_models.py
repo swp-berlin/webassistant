@@ -5,6 +5,7 @@ from django.db import migrations, models
 import django.db.models.deletion
 import django.utils.timezone
 import swp.models.abstract
+import swp.models.monitor
 import swp.models.user
 
 
@@ -31,7 +32,7 @@ class Migration(migrations.Migration):
                 'verbose_name_plural': 'monitors',
             },
             managers=[
-                ('objects', swp.models.abstract.ActivatableManager()),
+                ('objects', swp.models.monitor.MonitorManager()),
             ],
         ),
         migrations.CreateModel(

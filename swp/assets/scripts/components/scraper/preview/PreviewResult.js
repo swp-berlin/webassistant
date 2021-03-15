@@ -6,10 +6,20 @@ import PreviewError from './PreviewError';
 
 
 const InternalErrorText = _('Internal Error');
+const MultiPageLabel = _('Continued from page 2');
 
+
+const MultiPageMarker = () => (
+    <div>
+        <hr className="mb-4" />
+        <span>{MultiPageLabel}</span>
+    </div>
+);
 
 const getValues = (fields, errors) => ({
     title: errors.title || fields.title,
+    subtitle: errors.subtitle || fields.subtitle,
+    tags: errors.tags || fields.tags,
     authors: errors.authors || fields.authors,
     abstract: errors.abstract || fields.abstract,
     publicationDate: errors.publication_date || fields.publication_date,
@@ -30,16 +40,20 @@ const PreviewResult = ({status, result, traceback}) => {
         return <PreviewError error={result.error} />;
     }
 
+    const {is_multipage: isMultipage, max_per_page: maxPerPage} = result;
+
     return (
         <ul className="list-none pl-0 space-y-8">
             {status === Status.Success && result.publications.map(({fields, errors}, idx) => (
-                // eslint-disable-next-line react/no-array-index-key
-                <li key={idx}>
-                    <PublicationItem
-                        id={idx}
-                        {...getValues(fields, errors)}
-                    />
-                </li>
+                <>
+                    <li key={idx /* eslint-disable-line react/no-array-index-key */}>
+                        <PublicationItem
+                            id={idx}
+                            {...getValues(fields, errors)}
+                        />
+                    </li>
+                    {isMultipage && maxPerPage - 1 === idx && <MultiPageMarker />}
+                </>
             ))}
         </ul>
     );

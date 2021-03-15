@@ -10,6 +10,8 @@ const PublicationList = ({items, className, ...props}) => (
                 <PublicationItem
                     id={publication.id}
                     title={publication.title}
+                    subtitle={publication.subtitle}
+                    tags={publication.tags}
                     authors={publication.authors}
                     abstract={publication.abstract}
                     publicationDate={publication.publication_date}

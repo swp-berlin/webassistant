@@ -46,10 +46,10 @@ class DataResolver(SelectorMixin, Resolver):
         return await get_content(element)
 
     async def get_multiple_content(self, elements):
-        texts = []
+        texts = set()
 
         for elem in elements:
             text = await self.get_single_content(elem)
-            texts.append(text)
+            texts.add(text)
 
-        return texts
+        return list(texts)
