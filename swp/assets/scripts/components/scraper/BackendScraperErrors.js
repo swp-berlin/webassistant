@@ -82,12 +82,14 @@ const PublicationErrors = ({publicationID, errors}) => {
 const BackendScraperErrors = ({errors}) => {
     const publicationErrors = groupByPublication(errors);
     const entries = Object.entries(publicationErrors);
-    const [, globalErrors] = entries.shift();
+    const [, globalErrors] = entries.length && entries.shift();
 
     return (
         <div className="backend-errors mt-6 space-y-3">
             {globalErrors && <GlobalErrors errors={globalErrors} />}
-            {entries.length && entries.map(([id, errors]) => <PublicationErrors publicationID={id} errors={errors} />)}
+            {entries.length > 0 && entries.map(
+                ([id, errors]) => <PublicationErrors publicationID={id} errors={errors} />,
+            )}
         </div>
     );
 };
