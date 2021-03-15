@@ -94,4 +94,8 @@ const BackendScraperErrors = ({errors}) => {
     );
 };
 
+BackendScraperErrors.defaultProps = {
+    errors: [],
+};
+
 export default BackendScraperErrors;
