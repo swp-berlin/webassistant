@@ -32,7 +32,7 @@ const PublicationPreview = ({
                     {noTitle || (
                         <header className="flex space-x-4 mb-2">
                             <h3>{count ? getPublicationsLabel(count) : NoPublications}</h3>
-                            {downloadURL && <DownloadButton href={downloadURL} />}
+                            {count > 0 && downloadURL && <DownloadButton href={downloadURL} />}
                         </header>
                     )}
 
