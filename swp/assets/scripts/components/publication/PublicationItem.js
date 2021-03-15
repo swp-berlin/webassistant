@@ -15,9 +15,9 @@ const PDFNotFoundLabel = _('No PDF found');
 
 
 const Authors = ({authors, className}) => (
-    <span className={classNames('authors', {empty: authors.length === 0}, className)}>
+    <span className={classNames('authors', {empty: !authors?.length}, className)}>
         {`${By} ` }
-        {authors.length ? <CommaList items={authors} /> : UnknownLabel}
+        {authors?.length ? <CommaList items={authors} /> : UnknownLabel}
     </span>
 );
 
