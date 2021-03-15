@@ -23,7 +23,7 @@ const PublicationFieldError = ({className, name, error: {message, level}}) => (
 );
 
 const PublicationField = ({className, name, value, children}) => {
-    if (typeof value === 'object' && value.message) {
+    if (typeof value === 'object' && value?.message) {
         return <PublicationFieldError className={className} name={name} error={value} />;
     }
 
