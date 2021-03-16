@@ -16,7 +16,8 @@ REGISTER_OBSERVER = """
         window.observeListPromise = new Promise(resolve => {
             new MutationObserver((mutationList, observer) => {
                 mutationList.forEach(mutation => {
-                    resolve(Array.from(mutation.addedNodes));
+                    const nodes = Array.from(mutation.addedNodes).filter(node => node.nodeType === Node.ELEMENT_NODE);
+                    resolve(nodes);
                     observer.disconnect();
                 });
             }).observe(listElem, {childList: true});
