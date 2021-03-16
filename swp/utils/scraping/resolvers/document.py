@@ -1,5 +1,5 @@
 import pathlib
-from typing import Optional
+from typing import Optional, Union
 
 import pikepdf
 
@@ -17,8 +17,9 @@ class DocumentResolver(DataResolver):
         safe_key = kwargs.pop('key', '') or 'document'
         super().__init__(*args, key=safe_key, required=required, **kwargs)
 
-    async def _resolve(self, page: Page, fields: dict, errors: dict):
-        elem = await self.get_element(page)
+    async def _resolve(self, node: Union[Page, ElementHandle], fields: dict, errors: dict):
+        page: Page = node if isinstance(node, Page) else self.context.page
+        elem = await self.get_element(node)
 
         if not elem:
             raise ResolverError(_('No document for selector %(selector)s found.') % {'selector': self.selector})
@@ -42,9 +43,9 @@ class DocumentResolver(DataResolver):
         fields['pdf_url'] = download.url
         fields['pdf_pages'] = pdf_pages
 
-    async def get_element(self, page: Page) -> Optional[ElementHandle]:
+    async def get_element(self, node: ElementHandle) -> Optional[ElementHandle]:
         try:
-            elements = await page.query_selector_all(self.selector)
+            elements = await node.query_selector_all(self.selector)
         except PlaywrightError as err:
             raise ResolverError(str(err))
 
