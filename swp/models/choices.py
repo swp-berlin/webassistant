@@ -55,6 +55,7 @@ class ListResolverType(models.TextChoices):
     URL = ResolverType.URL
     AUTHORS = ResolverType.AUTHORS
     TAGS = ResolverType.TAGS
+    DOCUMENT = ResolverType.DOCUMENT
 
 
 class DataResolverKey(models.TextChoices):
