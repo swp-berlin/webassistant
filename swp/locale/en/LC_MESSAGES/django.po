@@ -408,6 +408,10 @@ msgid "Please go to the following page and choose a new password:"
 msgstr ""
 
 #, python-format
+msgid "Timeout while trying to iterate %(selector)s elements"
+msgstr ""
+
+#, python-format
 msgid "No elements matching %(selector)s found"
 msgstr ""
 
