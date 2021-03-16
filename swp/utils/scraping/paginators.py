@@ -69,6 +69,14 @@ class Paginator:
     async def query_list_items(self, page=None) -> Iterable[ElementHandle]:
         page = page or self.context.page
 
+        try:
+            # [SWP-144] Precautionary measure against dynamically loaded nodes
+            await page.wait_for_selector(self.selector, timeout=5000)
+        except TimeoutError as exc:
+            raise ResolverError(
+                _('Timeout while trying to iterate %(selector)s elements') % {'selector': self.selector}
+            ) from exc
+
         nodes = await page.query_selector_all(self.selector)
 
         if not nodes:
