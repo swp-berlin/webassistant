@@ -14,7 +14,7 @@ from swp.utils.scraping import Scraper as _Scraper
 from swp.scraper.types import ScraperType
 
 from .abstract import ActivatableModel, ActivatableQuerySet, UpdateQuerySet, LastModified
-from .choices import Interval
+from .choices import ErrorLevel, Interval
 from .fields import ChoiceField
 from .publication import Publication
 from .scrapererror import ScraperError
@@ -26,7 +26,8 @@ if TYPE_CHECKING:
 class ScraperQuerySet(ActivatableQuerySet, UpdateQuerySet):
 
     def annotate_error_count(self, to_attr='') -> ScraperQuerySet:
-        return self.annotate(**{to_attr or 'error_count': Count('errors')})
+        error_count = Count('errors', filter=models.Q(errors__level=ErrorLevel.ERROR))
+        return self.annotate(**{to_attr or 'error_count': error_count})
 
 
 class Scraper(ActivatableModel, LastModified):
@@ -78,7 +79,7 @@ class Scraper(ActivatableModel, LastModified):
 
     @cached_property
     def error_count(self) -> int:
-        return self.errors.count()
+        return self.errors.error_only().count()
 
     @cached_property
     def unique_field(self):
@@ -171,7 +172,7 @@ class Scraper(ActivatableModel, LastModified):
 
         field_error = ScraperError(
             scraper=self,
-            identifier=ScraperError.make_identifier(title, url),
+            identifier=ScraperError.normalize_identifier(title or url),
             message=message,
             field=field,
             code='missing',
