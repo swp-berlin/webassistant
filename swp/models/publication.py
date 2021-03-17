@@ -1,10 +1,17 @@
 from __future__ import annotations
-from typing import Optional
+
+import datetime
+from typing import Iterable, TYPE_CHECKING
 
 from django.db import models
+from django.template.defaultfilters import truncatechars
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.contrib.postgres.fields import ArrayField
+
+from .fields import LongURLField
+if TYPE_CHECKING:
+    from .thinktank import Thinktank
 
 
 class PublicationQuerySet(models.QuerySet):
@@ -41,8 +48,8 @@ class Publication(models.Model):
     authors = ArrayField(models.CharField(max_length=255), blank=True, null=True, verbose_name=_('authors'))  # [AU]
     publication_date = models.CharField(_('publication date'), max_length=255, blank=True, default='')  # [PY]
     last_access = models.DateTimeField(_('last access'), default=timezone.now, editable=False)  # [Y2]
-    url = models.URLField(_('URL'))  # [UR]
-    pdf_url = models.URLField(_('PDF URL'), blank=True)  # [L1]
+    url = LongURLField(_('URL'))  # [UR]
+    pdf_url = LongURLField(_('PDF URL'), blank=True)  # [L1]
     pdf_pages = models.PositiveIntegerField(_('number of pages'), default=0)  # [EP]
     tags = ArrayField(models.CharField(max_length=32), blank=True, null=True, verbose_name=_('tags'))  # [KW]
     created = models.DateTimeField(_('created'), default=timezone.now, editable=False)
@@ -56,7 +63,45 @@ class Publication(models.Model):
     def __str__(self) -> str:
         return self.title or f'{self.pk}'
 
-    @property
-    def year(self) -> Optional[int]:
-        # XXX This might become its own field later, in case the scraped articles do not provide full dates
-        return getattr(self.publication_date, 'year', None)
+    @classmethod
+    def normalize_title(cls, value: str) -> str:
+        value = str.strip(value or '')
+        max_length = cls._meta.get_field('title').max_length
+
+        return truncatechars(value, max_length) if value else ''
+
+    @classmethod
+    def normalize_subtitle(cls, value: str) -> str:
+        value = str.strip(value or '')
+        max_length = cls._meta.get_field('subtitle').max_length
+
+        return truncatechars(value, max_length) if value else ''
+
+    @classmethod
+    def normalize_author(cls, value: str) -> str:
+        value = str.strip(value or '')
+        max_length = cls._meta.get_field('authors').base_field.max_length
+
+        return truncatechars(value, max_length) if value else ''
+
+    @classmethod
+    def create(
+        cls,
+        thinktank: Thinktank, *,
+        title: str,
+        subtitle: str = '',
+        authors: Iterable[str] = (),
+        now: datetime.datetime = None,
+        **fields
+    ) -> Publication:
+        fields['title'] = cls.normalize_title(title)
+        fields['subtitle'] = cls.normalize_subtitle(subtitle)
+        fields['authors'] = [cls.normalize_author(author) for author in authors]
+
+        fields.setdefault('ris_type', 'UNPB' if 'pdf_url' in fields else 'ICOMM')
+
+        now = timezone.localtime(now)
+        fields.setdefault('created', now)
+        fields.setdefault('last_access', now)
+
+        return cls(thinktank=thinktank, **fields)

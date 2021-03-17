@@ -15,7 +15,7 @@ from swp.scraper.types import ScraperType
 
 from .abstract import ActivatableModel, ActivatableQuerySet, UpdateQuerySet, LastModified
 from .choices import ErrorLevel, Interval
-from .fields import ChoiceField
+from .fields import ChoiceField, LongURLField
 from .publication import Publication
 from .scrapererror import ScraperError
 
@@ -46,7 +46,7 @@ class Scraper(ActivatableModel, LastModified):
 
     data = models.JSONField(_('data'))
 
-    start_url = models.URLField(_('start URL'))
+    start_url = LongURLField(_('start URL'))
     checksum = models.CharField(_('checksum'), max_length=64, unique=True, blank=True, null=True)
 
     interval = models.PositiveIntegerField(_('interval'), choices=Interval.choices, default=Interval.DAILY)
@@ -106,13 +106,7 @@ class Scraper(ActivatableModel, LastModified):
             if not is_complete:
                 continue
 
-            publication = Publication(
-                thinktank=thinktank,
-                ris_type='UNPB' if 'pdf_url' in fields else 'ICOMM',
-                last_access=now,
-                created=now,
-                **fields
-            )
+            publication = Publication.create(thinktank=thinktank, now=now, **fields)
 
             try:
                 await self.save_publication(publication)
