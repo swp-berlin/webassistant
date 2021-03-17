@@ -1,8 +1,8 @@
-import {Link} from 'react-router-dom';
-
 import DateTime from 'components/DateTime';
 import {getLabel} from 'utils/choices';
 import _ from 'utils/i18n';
+
+import MonitorPublicationsLink from './MonitorPublicationsLink';
 
 
 const PublicationCountLabel = _('Publications overall:');
@@ -17,18 +17,18 @@ const MonitorInfo = ({id, publicationCount, newPublicationCount, lastSent, inter
         <div className="mb-1 sm:grid sm:grid-cols-5 sm:gap-4">
             <dt>{PublicationCountLabel}</dt>
             <dd className="sm:col-span-4">
-                <Link to={`/monitor/${id}/publications/`}>
+                <MonitorPublicationsLink id={id}>
                     {publicationCount}
-                </Link>
+                </MonitorPublicationsLink>
             </dd>
         </div>
 
         <div className="mb-1 sm:grid sm:grid-cols-5 sm:gap-4">
             <dt>{NewPublicationsLabel}</dt>
             <dd className="sm:col-span-4">
-                <Link to={`/monitor/${id}/publications/new/`}>
+                <MonitorPublicationsLink id={id} onlyNew>
                     {newPublicationCount}
-                </Link>
+                </MonitorPublicationsLink>
             </dd>
         </div>
 

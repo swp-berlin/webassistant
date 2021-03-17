@@ -3,6 +3,8 @@ import {Link} from 'react-router-dom';
 import DateTime from 'components/DateTime';
 import _ from 'utils/i18n';
 
+import MonitorPublicationsLink from './MonitorPublicationsLink';
+
 const DisabledLabel = _('disabled');
 
 const MonitorLink = ({id, children, ...props}) => (
@@ -16,14 +18,14 @@ const ThinktankRow = ({id, name, recipientCount, publicationCount, newPublicatio
         <td><MonitorLink id={id}>{name}</MonitorLink></td>
         <td className="text-right">{recipientCount}</td>
         <td className="text-right">
-            <Link to={`/monitor/${id}/publications/`}>
+            <MonitorPublicationsLink id={id}>
                 {publicationCount}
-            </Link>
+            </MonitorPublicationsLink>
         </td>
         <td className="text-right">
-            <Link to={`/monitor/${id}/publications/new/`}>
+            <MonitorPublicationsLink id={id} onlyNew>
                 {newPublicationCount}
-            </Link>
+            </MonitorPublicationsLink>
         </td>
         <td className="text-right">{isActive ? <DateTime value={lastSent} /> : DisabledLabel}</td>
     </tr>
