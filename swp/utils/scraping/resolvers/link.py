@@ -5,8 +5,9 @@ from django.utils.translation import gettext_lazy as _
 from playwright.async_api import ElementHandle, Error as PlaywrightError
 
 from ..browser import open_page
-from ..exceptions import ResolverError
+from ..exceptions import ErrorLevel, ResolverError
 from .base import IntermediateResolver, SelectorMixin, get_content
+from ..utils import get_error
 
 
 class LinkResolver(SelectorMixin, IntermediateResolver):
@@ -45,5 +46,8 @@ class LinkResolver(SelectorMixin, IntermediateResolver):
 
                 for resolver in self.resolvers:
                     await resolver.resolve(detail_page, fields, errors)
-        except PlaywrightError as err:
-            raise ResolverError(_('Failed to open %(href)s: %(error)s') % {'href': href, 'error': str(err)})
+        except Exception as err:
+            errors['link'] = get_error(
+                _('Failed to open %(href)s: %(error)s') % {'href': href, 'error': str(err)},
+                level=ErrorLevel.WARNING,
+            )
