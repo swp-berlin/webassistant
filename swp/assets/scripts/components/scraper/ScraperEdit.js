@@ -34,7 +34,7 @@ const ScraperEdit = ({id, thinktankID}) => {
 
     useBreadcrumb('/thinktank/', Thinktanks);
     useBreadcrumb(`/thinktank/${thinktankID}/`, thinktankLabel);
-    useBreadcrumb(endpoint, ScraperLabel);
+    useBreadcrumb(`/thinktank/${thinktankID}/scraper/${id}/`, ScraperLabel);
 
     return (
         <Result result={query}>
