@@ -266,6 +266,20 @@ msgstr "%s Scraper"
 msgid "Scraping Error"
 msgstr "Scraping-Fehler"
 
+msgid "Missing title and URL"
+msgstr "Fehlende Titel- und URL-Elemente"
+
+#, python-format
+msgid "Missing title for %s"
+msgstr "Fehlender Titel für %s"
+
+#, python-format
+msgid "Missing URL element for \"%s\""
+msgstr "Fehlendes URL-Element für „%s“"
+
+msgid "identifier"
+msgstr "Bezeichner"
+
 msgid "level"
 msgstr "Level"
 

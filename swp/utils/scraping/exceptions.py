@@ -2,8 +2,8 @@ from enum import Enum
 
 
 class ErrorLevel(Enum):
-    WARNING = 'Warning'
-    ERROR = 'Error'
+    WARNING = 'warning'
+    ERROR = 'error'
 
 
 class ScraperError(Exception):

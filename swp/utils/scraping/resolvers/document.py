@@ -1,5 +1,5 @@
 import pathlib
-from typing import Optional, Union
+from typing import Optional, Tuple, Union
 
 import pikepdf
 
@@ -7,7 +7,6 @@ from django.utils.translation import gettext_lazy as _
 
 from playwright.async_api import ElementHandle, Error as PlaywrightError, Page, TimeoutError
 
-from swp.utils.scraping.exceptions import ResolverError
 from swp.utils.scraping.resolvers.data import DataResolver
 
 
@@ -22,13 +21,13 @@ class DocumentResolver(DataResolver):
         elem = await self.get_element(node)
 
         if not elem:
-            raise ResolverError(_('No document for selector %(selector)s found.') % {'selector': self.selector})
+            raise self.make_error(_('No document for selector %(selector)s found.') % {'selector': self.selector})
 
         try:
             async with page.expect_download() as download_info:
                 await elem.click()
         except TimeoutError:
-            raise ResolverError(_('Timeout while trying to download the document at %(url)s' % {'url': page.url}))
+            raise self.make_error(_('Timeout while trying to download the document at %(url)s' % {'url': page.url}))
 
         download = await download_info.value
         file_path = await download.path()
@@ -47,19 +46,18 @@ class DocumentResolver(DataResolver):
         try:
             elements = await node.query_selector_all(self.selector)
         except PlaywrightError as err:
-            raise ResolverError(str(err))
+            raise self.make_error(str(err))
 
         if len(elements) > 1:
-            raise ResolverError(_('%(selector)s matches more than one document.') % {'selector': self.selector})
+            raise self.make_error(_('%(selector)s matches more than one document.') % {'selector': self.selector})
 
         return elements[0] if elements else None
 
-    @staticmethod
-    def get_meta(path):
+    def get_meta(self, path) -> Tuple[int, dict]:
         try:
             pdf = pikepdf.open(path)
         except pikepdf.PdfError as err:
-            raise ResolverError(_('Failed to open pdf: %(error)s') % {'error': str(err)})
+            raise self.make_error(_('Failed to open pdf: %(error)s') % {'error': str(err)})
 
         page_count = len(pdf.pages)
         meta = pdf.docinfo.as_dict()
