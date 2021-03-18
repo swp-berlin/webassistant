@@ -1,0 +1,18 @@
+{% load i18n %}{% autoescape off %}
+
+{% blocktrans trimmed %}
+{{ scraper }} encountered problems while running:
+{% endblocktrans %}
+
+{{ url }}
+
+{% blocktrans trimmed %}
+The following errors occured:
+{% endblocktrans %}
+
+{% for error in errors %}
+    * {% if error.source %}{{ error.source }}
+      {{ error.message }}{% else %}{{ error }}{% endif %}
+{% endfor %}
+
+{% endautoescape %}
