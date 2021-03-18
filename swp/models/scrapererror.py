@@ -1,12 +1,21 @@
+from __future__ import annotations
+
 from django.db import models
-from django.template.defaultfilters import truncatechars
 from django.utils import timezone
+from django.utils.text import Truncator
 from django.utils.translation import gettext_lazy as _
 
 from .choices import ErrorLevel
+from .fields import ChoiceField
 
 
 DEFAULT_ERROR = ''  # FIXME
+
+
+class ScraperErrorQuerySet(models.QuerySet):
+
+    def error_only(self) -> ScraperErrorQuerySet:
+        return self.filter(level=ErrorLevel.ERROR)
 
 
 class ScraperError(models.Model):
@@ -32,15 +41,18 @@ class ScraperError(models.Model):
 
     identifier = models.CharField(_('identifier'), max_length=255, blank=True)
     field = models.CharField(_('field'), max_length=50, blank=True)
-    level = models.CharField(
+
+    level = ChoiceField(
         _('level'),
-        max_length=ErrorLevel.max_length,
         choices=ErrorLevel.choices,
         default=ErrorLevel.ERROR,
     )
+
     code = models.CharField(_('error code'), max_length=8, default=DEFAULT_ERROR)
     message = models.TextField(_('message'))
     timestamp = models.DateTimeField(_('timestamp'), default=timezone.now, editable=False)
+
+    objects = ScraperErrorQuerySet.as_manager()
 
     class Meta:
         get_latest_by = 'timestamp'
@@ -51,9 +63,16 @@ class ScraperError(models.Model):
         return self.identifier or self.message
 
     @classmethod
-    def make_identifier(cls, title: str, url: str) -> str:
-        """ Choose publication identifier from given fields. """
-        identifier = title or url or ''
+    def normalize_identifier(cls, value: str) -> str:
+        value = str.strip(value or '')
         max_length = cls._meta.get_field('identifier').max_length
 
-        return truncatechars(identifier, max_length)
+        return Truncator(value).chars(max_length)
+
+    @property
+    def is_error(self) -> bool:
+        return self.level == ErrorLevel.ERROR
+
+    @property
+    def is_warning(self) -> bool:
+        return self.level == ErrorLevel.WARNING
