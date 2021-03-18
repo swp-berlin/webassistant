@@ -7,8 +7,6 @@ from playwright.async_api import async_playwright, Browser, Page
 
 from cosmogo.utils.tempdir import maketempdir
 
-PAGE_WAIT_UNTIL = 'networkidle'
-
 
 DEFAULT_PREFERENCES = {
     'plugins': {

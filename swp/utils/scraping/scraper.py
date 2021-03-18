@@ -3,7 +3,7 @@ from typing import Any, AsyncGenerator, Mapping, TypedDict
 from playwright.async_api import Error as PlaywrightError
 from sentry_sdk import capture_exception
 
-from .browser import open_browser, open_page, PAGE_WAIT_UNTIL
+from .browser import open_browser, open_page
 from .context import ScraperContext
 from .exceptions import ScraperError
 from .resolvers.base import create_resolver
@@ -32,7 +32,7 @@ class Scraper:
         try:
             async with open_browser() as browser:
                 async with open_page(browser) as page:
-                    await page.goto(self.url, wait_until=PAGE_WAIT_UNTIL)
+                    await page.goto(self.url)
 
                     context = ScraperContext(browser, page)
                     resolver = create_resolver(context, **resolver_config)
