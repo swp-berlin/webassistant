@@ -1,6 +1,7 @@
 import {Callout, Intent} from '@blueprintjs/core';
 import DateTime from 'components/DateTime';
 import ExternalLink from 'components/Navigation/ExternalLink';
+import {getPublicationFieldLabel} from 'components/publication/PublicationField';
 
 import _, {interpolate} from 'utils/i18n';
 
@@ -37,6 +38,7 @@ const GlobalErrors = ({errors}) => (
                         )}
 
                         <p className="whitespace-pre-line">
+                            {field && <strong>{`${getPublicationFieldLabel(field)}: `}</strong>}
                             {message}
                         </p>
                     </Callout>

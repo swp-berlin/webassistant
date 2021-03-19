@@ -1,9 +1,10 @@
 from __future__ import annotations
 
 import datetime
-from typing import Any, Iterable, Mapping, TYPE_CHECKING
+from typing import Any, Iterable, Mapping, Optional, TYPE_CHECKING
 
 from asgiref.sync import async_to_sync, sync_to_async
+from django.core.exceptions import NON_FIELD_ERRORS
 from django.db import models, transaction, IntegrityError
 from django.db.models.aggregates import Count
 from django.utils import timezone
@@ -106,7 +107,9 @@ class Scraper(ActivatableModel, LastModified):
             if not is_complete:
                 continue
 
-            publication = Publication.create(thinktank=thinktank, now=now, **fields)
+            publication = await self.build_publication(fields, errors, thinktank=thinktank, now=now)
+            if publication is None:
+                continue
 
             try:
                 await self.save_publication(publication)
@@ -133,6 +136,48 @@ class Scraper(ActivatableModel, LastModified):
                 ]
 
                 await self.save_errors(scraper_errors)
+
+    async def build_publication(
+        self,
+        fields: Mapping[str, Any],
+        errors: Mapping[str, Any], *,
+        thinktank: Thinktank,
+        now: datetime.datetime,
+    ) -> Optional[Publication]:
+        # NOTE Must be locally to avoid problems with auth forms importing get_user_model
+        from swp.forms import ScrapedPublicationForm
+
+        form = ScrapedPublicationForm(data={'thinktank': thinktank, **fields}, now=now)
+        if form.is_valid():
+            return form.save(commit=False)
+
+        identifier = ScraperError.normalize_identifier(
+            fields.get('title') or fields.get('url'),
+        )
+
+        validation_errors = []
+        for field, error_list in form.errors.items():
+            field_error = errors.get(field, {}).get('message', '')
+            for error in error_list.as_data():
+                if field_error and error.code in ['required', 'invalid']:
+                    message = field_error
+                else:
+                    message = '\n'.join(error.messages)
+
+                scraper_error = ScraperError(
+                    scraper=self,
+                    identifier=identifier,
+                    message=message,
+                    field=field if field != NON_FIELD_ERRORS else '',
+                    code=(error.code or 'invalid')[:8],
+                    timestamp=now,
+                )
+
+                validation_errors.append(scraper_error)
+
+        await self.save_errors(validation_errors)
+
+        return None
 
     async def check_scraped_fields(
         self,

@@ -6,7 +6,7 @@ import {getChoices} from 'utils/choices';
 
 const KeyChoices = getChoices('DataResolverKey');
 
-const getLabel = name => {
+export const getPublicationFieldLabel = name => {
     const choice = KeyChoices.find(choice => choice.value === name);
 
     if (choice) return choice.label;
@@ -17,7 +17,7 @@ const getLabel = name => {
 const PublicationFieldError = ({className, name, error: {message, level}}) => (
     <div className={cN('p-2 text-yellow-400 border-yellow-400 border-2', className)}>
         <Icon icon={level === 'warning' ? 'warning-sign' : 'error'} />
-        <span className="pl-2">{`${getLabel(name)}:`}</span>
+        <span className="pl-2">{`${getPublicationFieldLabel(name)}:`}</span>
         <span className="pl-2">{message}</span>
     </div>
 );
