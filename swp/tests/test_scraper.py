@@ -21,7 +21,7 @@ class ScraperTestCase(test.TestCase):
         cls.thinktank = Thinktank.objects.create(
             name='PIIE',
             url='https://example.org',
-            unique_field='url',
+            unique_fields=['url'],
             is_active=True,
             created=now,
         )
