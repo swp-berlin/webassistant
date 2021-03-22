@@ -1,0 +1,26 @@
+[
+{
+  "model": "sites.site",
+  "pk": 1,
+  "fields": {
+    "domain": "localhost:8000",
+    "name": "localhost"
+  }
+},
+{
+  "model": "sites.site",
+  "pk": 2,
+  "fields": {
+    "domain": "staging.swp.cosmoco.de",
+    "name": "staging"
+  }
+},
+{
+  "model": "sites.site",
+  "pk": 3,
+  "fields": {
+    "domain": "production.swp.cosmoco.de",
+    "name": "production"
+  }
+}
+]

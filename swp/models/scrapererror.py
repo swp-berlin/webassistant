@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from django.db import models
 from django.utils import timezone
+from django.utils.functional import cached_property
 from django.utils.text import Truncator
 from django.utils.translation import gettext_lazy as _
 
@@ -61,6 +62,13 @@ class ScraperError(models.Model):
 
     def __str__(self) -> str:
         return self.identifier or self.message
+
+    @cached_property
+    def source(self) -> str:
+        if self.publication_id:
+            return self.publication.title or self.publication.url
+
+        return self.identifier
 
     @classmethod
     def normalize_identifier(cls, value: str) -> str:

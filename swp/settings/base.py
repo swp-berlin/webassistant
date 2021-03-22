@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'django.contrib.sites',
     'django.contrib.staticfiles',
 ]
 
@@ -187,6 +188,7 @@ SHELL_PLUS_PRINT_SQL = env('SHELL_PLUS_PRINT_SQL', default=False, parser=truthy)
 SHELL_PLUS_POST_IMPORTS = [
     ('swp.models.choices', '*'),
     ('swp.tasks', '*'),
+    ('swp.utils.auth', '*'),
     ('swp.utils.ris', '*'),
 ]
 

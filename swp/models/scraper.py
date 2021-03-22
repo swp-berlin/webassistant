@@ -62,7 +62,7 @@ class Scraper(ActivatableModel, LastModified):
         verbose_name_plural = _('scrapers')
 
     def __str__(self) -> str:
-        return f'[{self.checksum}] {self.thinktank.name}'
+        return f'{self.name} {self.pk}'
 
     @cached_property
     def name(self) -> str:
