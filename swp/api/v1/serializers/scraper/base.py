@@ -1,7 +1,7 @@
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework.exceptions import ValidationError
-from rest_framework.fields import CharField, ChoiceField, IntegerField, JSONField
+from rest_framework.fields import CharField, ChoiceField, IntegerField
 from rest_framework.serializers import ModelSerializer, Serializer
 
 from cosmogo.utils.text import enumeration
@@ -9,12 +9,15 @@ from cosmogo.utils.text import enumeration
 from swp.models import Scraper
 from swp.models.choices import PaginatorType, ResolverType
 
-from .fields import ThinktankField, CSSSelectorField
-from .scrapererror import ScraperErrorSerializer
+from ..fields import ThinktankField, CSSSelectorField
+from ..scrapererror import ScraperErrorSerializer
 
 
 class ResolverConfigSerializer(Serializer):
     type = ChoiceField(choices=ResolverType.choices)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
     def get_serializer(self, type, *args, **kwargs):
         serializer_type = ResolverSerializers[type]
@@ -157,14 +160,6 @@ class ScraperSerializer(ModelSerializer):
                 keys.update(self.get_resolver_types(v))
 
         return keys
-
-
-class ScraperDraftSerializer(ModelSerializer):
-    data = JSONField(required=False)
-
-    class Meta:
-        model = Scraper
-        fields = ['start_url', 'type', 'interval', 'data']
 
 
 class ScraperListSerializer(ModelSerializer):
