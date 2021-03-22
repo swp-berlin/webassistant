@@ -210,7 +210,7 @@
       "name": "Peterson Institute for International Economics",
       "description": "The Peterson Institute for International Economics (PIIE) is an independent nonprofit, nonpartisan research organization dedicated to strengthening prosperity and human welfare in the global economy through expert analysis and practical policy solutions.",
       "url": "https://www.piie.com/",
-      "unique_field": "url",
+      "unique_fields": ["url"],
       "created": "2020-12-01T10:15:43.937Z"
     }
   },
@@ -222,7 +222,7 @@
       "name": "The Brookings Institution",
       "description": "The Brookings Institution is a nonprofit public policy organization based in Washington, DC. Our mission is to conduct in-depth research that leads to new ideas for solving problems facing society at the local, national and global level.",
       "url": "https://www.brookings.edu",
-      "unique_field": "url",
+      "unique_fields": ["url"],
       "created": "2020-12-02T08:57:26.561Z"
     }
   },
@@ -234,7 +234,7 @@
       "name": "German Institute for Global and Area Studies",
       "description": "Das German Institute for Global and Area Studies (GIGA) ist ein unabhängiges, sozialwissenschaftliches Forschungsinstitut mit Sitz in Hamburg. Es forscht zu politischen, sozialen und wirtschaftlichen Entwicklungen in Afrika, Asien, Lateinamerika und Nahost sowie zu globalen Fragen. Als Mitglied der Leibniz-Gemeinschaft folgt das Institut dem Leibniz-Grundsatz \"theoria cum praxi\": Wissenschaft zum Wohl und Nutzen des Menschen. Das GIGA betreibt das größte außeruniversitäre Informationszentrum für Area Studies und Comparative Area Studies in Deutschland.",
       "url": "https://www.giga-hamburg.de/",
-      "unique_field": "url",
+      "unique_fields": ["url"],
       "created": "2020-12-02T10:02:17.477Z"
     }
   }

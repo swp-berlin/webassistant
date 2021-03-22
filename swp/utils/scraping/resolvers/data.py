@@ -1,6 +1,8 @@
+from typing import List, Optional, Union
+
 from django.utils.translation import gettext_lazy as _
 
-from playwright.async_api import ElementHandle
+from playwright.async_api import ElementHandle, TimeoutError
 
 from ..exceptions import ErrorLevel, ResolverError
 from ..utils import get_error
@@ -14,9 +16,16 @@ class DataResolver(SelectorMixin, Resolver):
         self.required = required
         self.key = key
 
-    def make_error(self, message: str, **kwargs) -> ResolverError:
-        kwargs.setdefault('level', ErrorLevel.ERROR if self.required else ErrorLevel.WARNING)
-        return ResolverError(message, **kwargs)
+    async def get_element(self, node: ElementHandle) -> Union[Optional[ElementHandle], List[ElementHandle]]:
+        try:
+            # [SWP-144] Precautionary measure against dynamically loaded nodes
+            await node.wait_for_selector(self.selector, timeout=5000)
+        except TimeoutError as exc:
+            raise self.make_error(
+                _('Timeout while trying to iterate %(selector)s elements') % {'selector': self.selector}
+            ) from exc
+
+        return await super().get_element(node)
 
     async def resolve(self, node: ElementHandle, fields: dict, errors: dict):
         try:

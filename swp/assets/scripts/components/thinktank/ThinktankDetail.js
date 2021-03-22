@@ -33,12 +33,12 @@ const ScraperAddButton = ({id, ...props}) => (
     </Link>
 );
 
-const UniqueField = ({value}) => (
+const UniqueFields = ({values}) => (
     <span>
         {UniqueLabel}
         {Nbsp}
         <strong>
-            {value}
+            {values.join(' ')}
         </strong>
     </span>
 );
@@ -76,8 +76,8 @@ const ThinktankDetail = ({id, ...props}) => {
 
     return (
         <Result result={result}>
-            {({description, unique_field: uniqueField, publication_count: publicationCount, scrapers}) => (
-                <Page title={label} subtitle={<UniqueField value={uniqueField} />} actions={actions}>
+            {({description, unique_fields: uniqueFields, publication_count: publicationCount, scrapers}) => (
+                <Page title={label} subtitle={<UniqueFields values={uniqueFields} />} actions={actions}>
                     <Link to={`/thinktank/${id}/publications/`}>
                         {getPublicationsLabel(publicationCount)}
                     </Link>

@@ -60,14 +60,14 @@ class MonitorTestCase(test.TestCase):
             Thinktank(
                 name='PIIE',
                 url='https://www.piie.com/',
-                unique_field='url',
+                unique_fields=['url'],
                 is_active=True,
                 created=now,
             ),
             Thinktank(
                 name='Deactivated Thinktank',
                 url='https://example.net/',
-                unique_field='url',
+                unique_fields=['url'],
                 created=now,
             ),
         ])

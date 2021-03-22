@@ -1,6 +1,6 @@
 import {Button, Intent} from '@blueprintjs/core';
 import {useMutationForm} from 'components/Fetch';
-import {Select, TextArea, TextInput} from 'components/forms';
+import {MultiSelect, TextArea, TextInput} from 'components/forms';
 
 import _ from 'utils/i18n';
 import {CancelButton} from 'components/buttons';
@@ -15,7 +15,7 @@ const UniqueFieldLabel = _('Unique Field');
 const UniqueChoices = getChoices('UniqueKey');
 
 const DefaultValues = {
-    unique_field: UniqueChoices[0].value,
+    unique_fields: [UniqueChoices[0].value],
 };
 
 
@@ -48,13 +48,14 @@ const ThinktankForm = ({endpoint, method, backURL, successMessage, data, submitL
                 errors={errors}
                 required
             />
-            <Select
-                name="unique_field"
+            <MultiSelect
+                name="unique_fields"
                 label={UniqueFieldLabel}
                 choices={UniqueChoices}
                 control={control}
                 errors={errors}
                 required
+                fill
             />
             <TextArea
                 register={register({required: false})}
