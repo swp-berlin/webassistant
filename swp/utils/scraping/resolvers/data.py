@@ -2,7 +2,7 @@ from typing import List, Optional, Union
 
 from django.utils.translation import gettext_lazy as _
 
-from playwright.async_api import ElementHandle
+from playwright.async_api import ElementHandle, TimeoutError
 
 from ..exceptions import ErrorLevel, ResolverError
 from ..utils import get_error

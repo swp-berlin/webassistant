@@ -39,14 +39,14 @@ class ThinktankTestCase(test.TestCase):
             Thinktank(
                 name='PIIE',
                 url='https://www.piie.com/',
-                unique_field='T1-AB',
+                unique_fields=['url'],
                 created=now,
                 is_active=True,
             ),
             Thinktank(
                 name='China Development Institute',
                 url='http://en.cdi.org.cn/',
-                unique_field='url',
+                unique_fields=['url'],
                 created=now,
             ),
         ])
@@ -178,7 +178,7 @@ class ThinktankTestCase(test.TestCase):
         data = {
             'name': 'CosmoCode Thinktank',
             'url': 'https://cosmocode.de',
-            'unique_field': 'url',
+            'unique_fields': ['url'],
         }
 
         response = self.client.post('/api/thinktank/', data, 'application/json')
@@ -189,7 +189,7 @@ class ThinktankTestCase(test.TestCase):
         data = {
             'name': 'EDITED',
             'url': self.thinktank.url,
-            'unique_field': self.thinktank.unique_field,
+            'unique_fields': self.thinktank.unique_fields,
         }
 
         url = reverse('1:thinktank-detail', args=[self.thinktank.pk])

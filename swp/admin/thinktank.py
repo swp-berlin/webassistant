@@ -11,7 +11,7 @@ class ThinktankAdmin(ActivatableModelAdmin):
         'name',
         'description',
         'url',
-        'unique_field',
+        'unique_fields',
         'is_active',
         'created',
     ]

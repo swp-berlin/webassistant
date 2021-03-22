@@ -2,7 +2,7 @@ from argparse import ArgumentParser
 
 from django.core.management import BaseCommand
 
-from swp.models import Scraper
+from swp.tasks import run_scraper
 
 
 class Command(BaseCommand):
@@ -11,6 +11,4 @@ class Command(BaseCommand):
         parser.add_argument('pk', type=int)
 
     def handle(self, pk, **kwargs):
-        scraper = Scraper.objects.get(pk=pk)
-
-        scraper.scrape()
+        run_scraper.delay(pk, force=True)

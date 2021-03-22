@@ -34,20 +34,23 @@ class ListResolver(IntermediateResolver):
                 nodes.task_done()
 
     async def process_nodes(self, nodes: Queue, results: Queue):
-        try:
-            workers = [asyncio.create_task(self.worker(nodes, results)) for _ in range(4)]
+        workers = [asyncio.create_task(self.worker(nodes, results)) for _ in range(4)]
 
+        try:
             async for page in self.paginator.get_next_page():
+                if self.context.stopped:
+                    break
+
                 for node in page:
                     nodes.put_nowait(node)
 
                 await nodes.join()
-
+        finally:
             for worker in workers:
                 worker.cancel()
 
             await asyncio.gather(*workers, return_exceptions=True)
-        finally:
+
             results.put_nowait(None)
 
     async def resolve(self) -> [dict]:

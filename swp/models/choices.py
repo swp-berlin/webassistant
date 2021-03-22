@@ -71,7 +71,7 @@ class DataResolverKey(models.TextChoices):
 
 class UniqueKey(models.TextChoices):
     URL = 'url', _('URL')
-    NAME = 'name', _('Name')
+    TITLE = 'title', _('Title')
 
 
 class Comparator(models.TextChoices):

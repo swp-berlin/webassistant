@@ -11,3 +11,4 @@ if TYPE_CHECKING:
 class ScraperContext:
     browser: Browser
     page: Page
+    stopped: bool = False

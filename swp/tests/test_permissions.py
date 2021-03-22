@@ -54,7 +54,7 @@ class PermissionTestCase(test.TestCase):
         cls.thinktank = Thinktank.objects.create(
             name='PIIE',
             url='https://www.piie.com/',
-            unique_field='T1-AB',
+            unique_fields=['T1-AB'],
             created=now,
         )
 
