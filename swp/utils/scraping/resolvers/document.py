@@ -5,7 +5,7 @@ import pikepdf
 
 from django.utils.translation import gettext_lazy as _
 
-from playwright.async_api import ElementHandle, Error as PlaywrightError, Page, TimeoutError
+from playwright.async_api import ElementHandle, Page, TimeoutError
 
 from swp.utils.scraping.resolvers.data import DataResolver
 
@@ -14,7 +14,7 @@ class DocumentResolver(DataResolver):
 
     def __init__(self, *args, required: bool = False, **kwargs):
         safe_key = kwargs.pop('key', '') or 'document'
-        super().__init__(*args, key=safe_key, required=required, **kwargs)
+        super().__init__(*args, key=safe_key, required=required, multiple=True, **kwargs)
 
     async def _resolve(self, node: Union[Page, ElementHandle], fields: dict, errors: dict):
         page: Page = node if isinstance(node, Page) else self.context.page
@@ -43,10 +43,7 @@ class DocumentResolver(DataResolver):
         fields['pdf_pages'] = pdf_pages
 
     async def get_element(self, node: ElementHandle) -> Optional[ElementHandle]:
-        try:
-            elements = await node.query_selector_all(self.selector)
-        except PlaywrightError as err:
-            raise self.make_error(str(err))
+        elements = await super().get_element(node)
 
         if len(elements) > 1:
             raise self.make_error(_('%(selector)s matches more than one document.') % {'selector': self.selector})

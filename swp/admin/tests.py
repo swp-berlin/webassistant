@@ -28,7 +28,11 @@ class AdminTestCase(TestCase):
     @classmethod
     def setUpModels(cls, now):
         monitor = Monitor.objects.create(name='Test-Monitor', recipients=[cls.user.email])
-        thinktank = Thinktank.objects.create(name='Test-Thinktank', url='https://www.piie.com/', unique_field='T1-AB')
+        thinktank = Thinktank.objects.create(
+            name='Test-Thinktank',
+            url='https://www.piie.com/',
+            unique_fields=['T1-AB'],
+        )
         thinktank_filter = ThinktankFilter.objects.create(thinktank=thinktank, monitor=monitor)
         PublicationFilter.objects.create(
             thinktank_filter=thinktank_filter,

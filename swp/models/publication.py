@@ -48,6 +48,8 @@ class Publication(models.Model):
     tags = ArrayField(models.CharField(max_length=32), blank=True, null=True, verbose_name=_('tags'))  # [KW]
     created = models.DateTimeField(_('created'), default=timezone.now, editable=False)
 
+    hash = models.CharField(_('hash'), max_length=32, blank=True, null=True)
+
     objects = PublicationQuerySet.as_manager()
 
     class Meta:

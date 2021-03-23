@@ -422,6 +422,21 @@ msgid "Please go to the following page and choose a new password:"
 msgstr "Bitte gehen Sie zur folgenden Seite um ein neues Passwort zu setzen:"
 
 #, python-format
+msgid "<a href=\"%(url)s\">%(scraper)s</a> encountered the following problems:"
+msgstr "Bei der Ausführung von <a href=\"%(url)s\">%(scraper)s</a> sind die folgenden Fehler aufgetreten:"
+
+#, python-format
+msgid "%(scraper)s encountered problems while running:"
+msgstr "%(scraper)s konnte nicht fehlerfrei ausgeführt werden:"
+
+msgid "The following errors occured:"
+msgstr "Die folgenden Fehler sind aufgetreten:"
+
+#, python-format
+msgid "Error in %(scraper)s"
+msgstr "Fehler im %(scraper)s"
+
+#, python-format
 msgid "Timeout while trying to iterate %(selector)s elements"
 msgstr "Zeitüberschreitung beim Iterieren der %(selector)s Elemente"
 
@@ -476,3 +491,7 @@ msgstr "Der Link %(href)s führt auf eine externe Seite."
 #, python-format
 msgid "Failed to open %(href)s: %(error)s"
 msgstr "%(href)s konnte nicht geöffnet werden: %(error)s"
+
+#, python-format
+#~ msgid "Scraping error in %(thinktank)s"
+#~ msgstr "Scraping-Fehler in %(thinktank)s"

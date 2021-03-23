@@ -94,10 +94,10 @@ DJANGO_SETTINGS_MODULE=swp.settings.dev python manage.py compile-translations
 
 #### Fixtures
 
-You will probably want to install the predefined groups:
+You will probably want to install these predefined entities:
 
 ``` console
-python manage.py loaddata groups
+python manage.py loaddata groups sites
 ```
 
 Afterwards, you may load generic test accounts for development purposes:

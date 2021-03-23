@@ -23,6 +23,7 @@ class Result(TypedDict):
 
 
 class Scraper:
+    context = None
 
     def __init__(self, url: URL, *, download_path: str = None):
         self.url = url
@@ -34,8 +35,8 @@ class Scraper:
                 async with open_page(browser) as page:
                     await page.goto(self.url)
 
-                    context = ScraperContext(browser, page)
-                    resolver = create_resolver(context, **resolver_config)
+                    self.context = ScraperContext(browser, page)
+                    resolver = create_resolver(self.context, **resolver_config)
 
                     results = resolver.resolve()
 
@@ -47,3 +48,6 @@ class Scraper:
         except Exception as exc:
             capture_exception(exc)
             raise
+
+    def stop(self):
+        self.context.stopped = True

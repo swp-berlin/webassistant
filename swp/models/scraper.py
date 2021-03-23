@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import datetime
+import hashlib
+import json
 from typing import Any, Iterable, Mapping, Optional, TYPE_CHECKING
 
 from asgiref.sync import async_to_sync, sync_to_async
@@ -22,6 +24,11 @@ from .scrapererror import ScraperError
 
 if TYPE_CHECKING:
     from .thinktank import Thinktank
+
+
+def get_hash(fields: Mapping[str, Any]) -> str:
+    val = json.dumps(fields, sort_keys=True)
+    return hashlib.md5(val.encode('utf-8')).hexdigest()
 
 
 class ScraperQuerySet(ActivatableQuerySet, UpdateQuerySet):
@@ -63,7 +70,7 @@ class Scraper(ActivatableModel, LastModified):
         verbose_name_plural = _('scrapers')
 
     def __str__(self) -> str:
-        return f'[{self.checksum}] {self.thinktank.name}'
+        return f'{self.name} {self.pk}'
 
     @cached_property
     def name(self) -> str:
@@ -83,8 +90,8 @@ class Scraper(ActivatableModel, LastModified):
         return self.errors.error_only().count()
 
     @cached_property
-    def unique_field(self):
-        return self.thinktank.unique_field
+    def unique_fields(self):
+        return self.thinktank.unique_fields
 
     def scrape(self):
         scraper = _Scraper(self.start_url)
@@ -98,44 +105,53 @@ class Scraper(ActivatableModel, LastModified):
         config: Mapping[str, Any],
         thinktank: Thinktank,
     ):
-        async for result in scraper.scrape(config):
-            fields = result.get('fields')
-            errors = result.get('errors')
-            now = timezone.now()
+        results = scraper.scrape(config)
 
-            is_complete = await self.check_scraped_fields(fields, errors, now=now)
-            if not is_complete:
-                continue
+        try:
+            async for result in results:
+                fields = result.get('fields')
+                errors = result.get('errors')
+                now = timezone.now()
 
-            publication = await self.build_publication(fields, errors, thinktank=thinktank, now=now)
-            if publication is None:
-                continue
+                is_complete = await self.check_scraped_fields(fields, errors, now=now)
+                if not is_complete:
+                    continue
 
-            try:
-                await self.save_publication(publication)
-            except IntegrityError as exc:
-                publication_error = ScraperError(
-                    scraper=self,
-                    message=str(exc),
-                    code='database',  # TODO Define error codes for global classification
-                    timestamp=now,
-                )
+                publication = await self.build_publication(fields, errors, thinktank=thinktank, now=now)
+                if publication is None:
+                    continue
 
-                await self.save_error(publication_error)
-
-            if errors and publication.pk:
-                scraper_errors = [
-                    ScraperError(
+                try:
+                    await self.save_publication(publication)
+                except IntegrityError as exc:
+                    publication_error = ScraperError(
                         scraper=self,
-                        message=error.get('message') or _('Scraping Error'),
-                        publication_id=publication.pk,
-                        field=field,
-                        level=error.get('level'),
+                        message=str(exc),
+                        code='database',  # TODO Define error codes for global classification
                         timestamp=now,
-                    ) for field, error in errors.items()
-                ]
+                    )
 
-                await self.save_errors(scraper_errors)
+                    await self.save_error(publication_error)
+
+                if not publication.pk:
+                    # the publication is a duplicate, stop scraping
+                    scraper.stop()
+
+                if errors:
+                    scraper_errors = [
+                        ScraperError(
+                            scraper=self,
+                            message=error.get('message') or _('Scraping Error'),
+                            publication_id=publication.pk,
+                            field=field,
+                            level=error.get('level'),
+                            timestamp=now,
+                        ) for field, error in errors.items()
+                    ]
+
+                    await self.save_errors(scraper_errors)
+        finally:
+            await results.aclose()
 
     async def build_publication(
         self,
@@ -224,8 +240,9 @@ class Scraper(ActivatableModel, LastModified):
 
     @sync_to_async
     def save_publication(self, publication):
-        unique_filter = models.Q(**{self.unique_field: getattr(publication, self.unique_field)})
-        if not self.scraped_publications.filter(unique_filter).exists():
+        hash = get_hash({field: getattr(publication, field, '') for field in self.unique_fields})
+        if not self.scraped_publications.filter(hash=hash).exists():
+            publication.hash = hash
             publication.save()
             self.scraped_publications.add(publication)
 

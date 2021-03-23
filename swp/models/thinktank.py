@@ -3,6 +3,7 @@ from __future__ import annotations
 import datetime
 from typing import Optional
 
+from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.db.models.aggregates import Count, Max
 from django.utils import timezone
@@ -10,7 +11,13 @@ from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
 from .abstract import ActivatableModel, ActivatableQuerySet
+from .choices import UniqueKey
+from .fields import ChoiceField
 from .scraper import Scraper
+
+
+def get_default_unique_fields():
+    return [UniqueKey.URL.value]
 
 
 class ThinktankQuerySet(ActivatableQuerySet):
@@ -43,7 +50,11 @@ class Thinktank(ActivatableModel):
     name = models.CharField(_('name'), max_length=100)
     description = models.TextField(_('description'), blank=True)
     url = models.URLField(_('URL'), help_text=_('Link to homepage'))
-    unique_field = models.CharField(_('unique field'), max_length=50)
+    unique_fields = ArrayField(
+        verbose_name=_('unique fields'),
+        base_field=ChoiceField(choices=UniqueKey.choices),
+        default=get_default_unique_fields,
+    )
     created = models.DateTimeField(_('created'), default=timezone.now, editable=False)
 
     objects = ThinktankQuerySet.as_manager()

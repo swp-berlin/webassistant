@@ -422,6 +422,21 @@ msgid "Please go to the following page and choose a new password:"
 msgstr ""
 
 #, python-format
+msgid "<a href=\"%(url)s\">%(scraper)s</a> encountered the following problems:"
+msgstr ""
+
+#, python-format
+msgid "%(scraper)s encountered problems while running:"
+msgstr ""
+
+msgid "The following errors occured:"
+msgstr ""
+
+#, python-format
+msgid "Error in %(scraper)s"
+msgstr ""
+
+#, python-format
 msgid "Timeout while trying to iterate %(selector)s elements"
 msgstr ""
 
