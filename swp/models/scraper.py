@@ -163,9 +163,9 @@ class Scraper(ActivatableModel, LastModified):
         # NOTE Must be locally to avoid problems with auth forms importing get_user_model
         from swp.forms import ScrapedPublicationForm
 
-        form = ScrapedPublicationForm(data={'thinktank': thinktank, **fields}, now=now)
+        form = ScrapedPublicationForm(data=fields, now=now)
         if form.is_valid():
-            return form.save(commit=False)
+            return form.save(commit=False, thinktank=thinktank)
 
         identifier = ScraperError.normalize_identifier(
             fields.get('title') or fields.get('url'),
@@ -243,7 +243,7 @@ class Scraper(ActivatableModel, LastModified):
         hash = get_hash({field: getattr(publication, field, '') for field in self.unique_fields})
         if not self.scraped_publications.filter(hash=hash).exists():
             publication.hash = hash
-            publication.save()
+            publication.save(force_insert=True)
             self.scraped_publications.add(publication)
 
     @transaction.atomic

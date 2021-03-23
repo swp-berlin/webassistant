@@ -1,20 +1,34 @@
+from __future__ import annotations
+
 import datetime
 import functools
-from typing import Any, Mapping, Sequence
+from typing import Any, Mapping, Sequence, TYPE_CHECKING
 
+from django import forms
+from django.contrib.postgres.forms import SimpleArrayField
 from django.db import models
-from django.forms import ModelForm
 from django.utils import timezone
 from django.utils.text import Truncator
+from django.utils.translation import gettext_lazy as _
 
 from swp.models import Publication
+if TYPE_CHECKING:
+    from swp.models import Thinktank
 
 
-class ScrapedPublicationForm(ModelForm):
+class ScrapedPublicationForm(forms.ModelForm):
+
+    title = forms.CharField(label=_('title'))
+    subtitle = forms.CharField(label=_('subtitle'), required=False)
+    authors = SimpleArrayField(forms.CharField(required=False), label=_('authors'), required=False)
 
     class Meta:
         model = Publication
-        fields = '__all__'
+        exclude = [
+            'thinktank',
+            'created',
+            'last_access',
+        ]
 
     def __init__(self, *args, now: datetime.datetime = None, **kwargs):
         super().__init__(*args, **kwargs)
@@ -51,12 +65,6 @@ class ScrapedPublicationForm(ModelForm):
 
         return [clean(author) for author in items]
 
-    def clean_last_access(self) -> datetime.datetime:
-        return self.cleaned_data.get('last_access') or self.now
-
-    def clean_created(self) -> datetime.datetime:
-        return self.cleaned_data.get('created') or self.now
-
     def clean(self) -> Mapping[str, Any]:
         super().clean()
 
@@ -66,3 +74,11 @@ class ScrapedPublicationForm(ModelForm):
             self.cleaned_data['ris_type'] = 'UNPB' if pdf_url else 'ICOMM'
 
         return self.cleaned_data
+
+    def save(self, commit: bool = True, thinktank: Thinktank = None):
+        if thinktank is not None:
+            self.instance.thinktank = thinktank
+
+        self.instance.created = self.instance.last_access = self.now
+
+        return super().save(commit=commit)
