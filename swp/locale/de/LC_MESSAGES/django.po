@@ -29,6 +29,9 @@ msgstr "Ausgewählte %(verbose_name_plural)s deaktivieren"
 msgid "Personal info"
 msgstr "Persönliche Informationen"
 
+msgid "Notifications"
+msgstr "Benachrichtigungen"
+
 msgid "Permissions"
 msgstr "Berechtigungen"
 
