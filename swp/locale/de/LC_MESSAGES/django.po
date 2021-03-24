@@ -118,6 +118,12 @@ msgstr "Statisch"
 msgid "Document"
 msgstr "Dokument"
 
+msgid "DOI"
+msgstr "DOI"
+
+msgid "ISBN/ISSN"
+msgstr "ISBN/ISSN"
+
 msgid "Title"
 msgstr "Titel"
 
@@ -162,6 +168,9 @@ msgstr "Warnung"
 
 msgid "Error"
 msgstr "Fehler"
+
+msgid "Flexible ISBN or ISSN identifier"
+msgstr "Flexibler ISBN- oder ISSN-Bezeichner"
 
 msgid "name"
 msgstr "Name"

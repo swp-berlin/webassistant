@@ -6,7 +6,7 @@ from django.utils.translation import gettext_lazy as _
 from django.contrib.postgres.fields import ArrayField
 
 from .constants import MAX_TAG_LENGTH, MAX_TITLE_LENGTH
-from .fields import LongURLField
+from .fields import CombinedISBNField, LongURLField
 
 
 class PublicationQuerySet(models.QuerySet):
@@ -46,6 +46,8 @@ class Publication(models.Model):
     url = LongURLField(_('URL'))  # [UR]
     pdf_url = LongURLField(_('PDF URL'), blank=True)  # [L1]
     pdf_pages = models.PositiveIntegerField(_('number of pages'), default=0)  # [EP]
+    doi = models.CharField(_('DOI'), max_length=255, blank=True)  # [DO]
+    isbn = CombinedISBNField(_('ISBN/ISSN'), blank=True)  # [SN]
 
     tags = ArrayField(
         models.CharField(max_length=MAX_TAG_LENGTH),
@@ -55,7 +57,6 @@ class Publication(models.Model):
     )  # [KW]
 
     created = models.DateTimeField(_('created'), default=timezone.now, editable=False)
-
     hash = models.CharField(_('hash'), max_length=32, blank=True, null=True)
 
     objects = PublicationQuerySet.as_manager()

@@ -1,3 +1,4 @@
+from swp.utils.isbn import canonical_isbn, isbn_digits
 from .field import FieldResolver
 
 
@@ -29,3 +30,12 @@ class AuthorsResolver(FieldResolver):
 class TagsResolver(FieldResolver):
     key = 'tags'
     multiple = True
+
+
+class DOIResolver(FieldResolver):
+    key = 'doi'
+
+
+class ISBNResolver(FieldResolver):
+    key = 'isbn'
+    normalize = staticmethod(canonical_isbn)
