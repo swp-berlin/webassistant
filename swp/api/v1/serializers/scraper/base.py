@@ -16,9 +16,6 @@ from ..scrapererror import ScraperErrorSerializer
 class ResolverConfigSerializer(Serializer):
     type = ChoiceField(choices=ResolverType.choices)
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
     def get_serializer(self, type, *args, **kwargs):
         serializer_type = ResolverSerializers[type]
         return serializer_type(*args, **kwargs)
