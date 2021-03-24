@@ -5,7 +5,7 @@ from cosmogo.utils.testing import create_user
 
 from swp.models import Scraper, ScraperError, Thinktank, ErrorLevel
 from swp.tasks.scheduling import send_scraper_errors
-from swp.utils.auth import get_user_queryset, get_superuser_email_addresses
+from swp.utils.auth import get_user_queryset, get_superuser_email_addresses, get_error_recipient_email_addresses
 
 
 class ScraperTestCase(test.TestCase):
@@ -13,10 +13,10 @@ class ScraperTestCase(test.TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.now = now = timezone.localtime()
-        cls.user = create_user('user')
-        cls.superuser_1 = create_user('superuser-1', is_superuser=True)
+        cls.user = create_user('user', is_error_recipient=True)
+        cls.superuser_1 = create_user('superuser-1', is_superuser=True, is_error_recipient=True)
         cls.superuser_2 = create_user('superuser-2', is_superuser=True)
-        cls.inactive_superuser = create_user('inactive-superuser', is_superuser=True, is_active=False)
+        cls.inactive_superuser = create_user('inactive-superuser', is_superuser=True, is_active=False, is_error_recipient=True)
 
         cls.thinktank = Thinktank.objects.create(
             name='PIIE',
@@ -56,6 +56,10 @@ class ScraperTestCase(test.TestCase):
 
     def test_superuser_email_addresses(self):
         emails = get_superuser_email_addresses()
+        self.assertEqual(len(emails), 2)
+
+    def test_error_recipient_email_addresses(self):
+        emails = get_error_recipient_email_addresses()
         self.assertEqual(len(emails), 2)
 
     def test_scraper_error_count(self):

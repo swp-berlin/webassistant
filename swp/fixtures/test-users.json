@@ -9,6 +9,7 @@
     "last_name": "",
     "is_staff": true,
     "is_active": true,
+    "is_error_recipient": false,
     "date_joined": "2020-11-25T12:02:41.819Z",
     "email": "admin@localhost",
     "groups": [],
@@ -25,6 +26,7 @@
     "last_name": "",
     "is_staff": true,
     "is_active": true,
+    "is_error_recipient": false,
     "date_joined": "2020-12-03T17:23:15.157Z",
     "email": "swp-manager@localhost",
     "groups": [
@@ -45,6 +47,7 @@
     "last_name": "",
     "is_staff": true,
     "is_active": true,
+    "is_error_recipient": true,
     "date_joined": "2020-12-03T17:23:34.799Z",
     "email": "swp-editor@localhost",
     "groups": [

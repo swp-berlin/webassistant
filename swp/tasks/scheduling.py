@@ -1,7 +1,6 @@
 import datetime
-from typing import Iterable, Optional
+from typing import Optional
 
-from django.contrib.auth import get_user_model
 from django.core.mail import EmailMultiAlternatives, get_connection as get_mail_connection
 from django.db import models, transaction
 from django.utils.timezone import localtime
@@ -13,7 +12,7 @@ from cosmogo.utils.url import get_absolute_url
 from swp.celery import app
 from swp.db.expressions import MakeInterval
 from swp.models import Scraper
-from swp.utils.auth import get_superuser_email_addresses
+from swp.utils.auth import get_error_recipient_email_addresses
 
 
 @app.task(name='scraper.schedule')
@@ -83,7 +82,7 @@ def send_scraper_errors(scraper: Scraper, force: bool = False) -> Optional[int]:
     if not len(errors):
         return None
 
-    email_addresses = get_superuser_email_addresses()
+    email_addresses = get_error_recipient_email_addresses()
     if not email_addresses:
         return None
 

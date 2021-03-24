@@ -130,9 +130,6 @@ msgstr ""
 msgid "PDF URL"
 msgstr ""
 
-msgid "Name"
-msgstr ""
-
 msgid "Contains"
 msgstr ""
 
@@ -212,6 +209,9 @@ msgid "number of pages"
 msgstr ""
 
 msgid "tags"
+msgstr ""
+
+msgid "hash"
 msgstr ""
 
 msgid "publication"
@@ -301,13 +301,16 @@ msgstr ""
 msgid "Link to homepage"
 msgstr ""
 
-msgid "unique field"
+msgid "unique fields"
 msgstr ""
 
 msgid "think tanks"
 msgstr ""
 
 msgid "think tank filters"
+msgstr ""
+
+msgid "is error recipient"
 msgstr ""
 
 msgid "List with Links"

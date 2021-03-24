@@ -23,4 +23,6 @@ def get_user_email_addresses(is_active: Optional[bool] = True, **filter_kwargs) 
     return queryset.values_list(email_field, flat=True)
 
 
+get_error_recipient_email_addresses = partial(get_user_email_addresses, is_error_recipient=True)
+
 get_superuser_email_addresses = partial(get_user_email_addresses, is_superuser=True)
