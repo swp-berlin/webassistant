@@ -104,10 +104,10 @@ class ScraperTestCase(test.TestCase):
             ],
         }
 
-        form = ScrapedPublicationForm(data=fields, now=self.now)
+        form = ScrapedPublicationForm(data=fields)
         self.assertTrue(form.is_valid())
 
-        instance = form.save(commit=False)
+        instance = form.save(commit=False, now=self.now)
         self.assertLessEqual(len(instance.title), 1024)
         self.assertLessEqual(len(instance.subtitle), 1024)
         self.assertLessEqual(len(instance.authors[0]), 1024)
@@ -117,7 +117,7 @@ class ScraperTestCase(test.TestCase):
             'title': 'A title',
         }
 
-        form = ScrapedPublicationForm(data=fields, now=self.now)
+        form = ScrapedPublicationForm(data=fields)
         self.assertFalse(form.is_valid())
 
     def test_form_validation_missing_title(self):
@@ -125,7 +125,7 @@ class ScraperTestCase(test.TestCase):
             'url': 'https://example.org',
         }
 
-        form = ScrapedPublicationForm(data=fields, now=self.now)
+        form = ScrapedPublicationForm(data=fields)
         self.assertFalse(form.is_valid())
 
     def test_form_save_minimal(self):
@@ -134,10 +134,10 @@ class ScraperTestCase(test.TestCase):
             'title': 'A title',
         }
 
-        form = ScrapedPublicationForm(data=fields, now=self.now)
+        form = ScrapedPublicationForm(data=fields)
         self.assertTrue(form.is_valid())
 
-        instance = form.save(thinktank=self.thinktank)
+        instance = form.save(thinktank=self.thinktank, now=self.now)
         self.assertTrue(instance.pk)
         self.assertEqual(instance.ris_type, 'ICOMM')
         self.assertEqual(instance.thinktank, self.thinktank)
@@ -158,10 +158,10 @@ class ScraperTestCase(test.TestCase):
             'pdf_pages': 14,
         }
 
-        form = ScrapedPublicationForm(data=fields, now=self.now)
+        form = ScrapedPublicationForm(data=fields)
         self.assertTrue(form.is_valid())
 
-        instance = form.save(commit=False, thinktank=self.thinktank)
+        instance = form.save(commit=False, thinktank=self.thinktank, now=self.now)
         self.assertEqual(instance.ris_type, 'UNPB')
         self.assertEqual(instance.pdf_url, 'https://www.piie.com/sites/default/files/documents/pb21-4.pdf')
         self.assertEqual(instance.pdf_pages, 14)

@@ -163,9 +163,9 @@ class Scraper(ActivatableModel, LastModified):
         # NOTE Must be locally to avoid problems with auth forms importing get_user_model
         from swp.forms import ScrapedPublicationForm
 
-        form = ScrapedPublicationForm(data=fields, now=now)
+        form = ScrapedPublicationForm(data=fields)
         if form.is_valid():
-            return form.save(commit=False, thinktank=thinktank)
+            return form.save(commit=False, thinktank=thinktank, now=now)
 
         identifier = ScraperError.normalize_identifier(
             fields.get('title') or fields.get('url'),

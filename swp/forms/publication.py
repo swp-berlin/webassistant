@@ -30,10 +30,9 @@ class ScrapedPublicationForm(forms.ModelForm):
             'last_access',
         ]
 
-    def __init__(self, *args, now: datetime.datetime = None, **kwargs):
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.now = timezone.localtime(now)
         for field in ['scrapers', 'ris_type', 'pdf_pages']:
             self.fields[field].required = False
 
@@ -75,10 +74,10 @@ class ScrapedPublicationForm(forms.ModelForm):
 
         return self.cleaned_data
 
-    def save(self, commit: bool = True, thinktank: Thinktank = None):
+    def save(self, commit: bool = True, *, thinktank: Thinktank = None, now: datetime.datetime = None) -> Publication:
         if thinktank is not None:
             self.instance.thinktank = thinktank
 
-        self.instance.created = self.instance.last_access = self.now
+        self.instance.created = self.instance.last_access = timezone.localtime(now)
 
         return super().save(commit=commit)
