@@ -28,9 +28,11 @@ class UserAdmin(BaseUserAdmin):
         'last_name',
         'last_login',
         'is_staff',
+        'is_error_recipient',
         'is_active',
     ]
     list_filter = [
+        'is_error_recipient',
         'is_active',
         'last_login',
     ]

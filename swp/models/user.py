@@ -1,5 +1,7 @@
 from django.contrib.auth.models import AbstractUser, UserManager as DjangoUserManager
 from django.contrib.postgres.fields import CIEmailField
+from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 from cosmogo.utils.gettext import trans
 
@@ -24,6 +26,8 @@ class UserManager(DjangoUserManager):
 
 class User(AbstractUser):
     email = CIEmailField(trans('email address'), unique=True)
+
+    is_error_recipient = models.BooleanField(_('is error recipient'), default=False)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ()

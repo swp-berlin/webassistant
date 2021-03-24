@@ -130,9 +130,6 @@ msgstr "Tags"
 msgid "PDF URL"
 msgstr "PDF URL"
 
-msgid "Name"
-msgstr "Name"
-
 msgid "Contains"
 msgstr "Beinhaltet"
 
@@ -213,6 +210,9 @@ msgstr "Seitenzahl"
 
 msgid "tags"
 msgstr "Tags"
+
+msgid "hash"
+msgstr "Hash"
 
 msgid "publication"
 msgstr "Publikation"
@@ -301,14 +301,17 @@ msgstr "Scraping-Fehler"
 msgid "Link to homepage"
 msgstr "Link zur Homepage"
 
-msgid "unique field"
-msgstr "eindeutiges Feld"
+msgid "unique fields"
+msgstr "eindeutige Felder"
 
 msgid "think tanks"
 msgstr "Thinktanks"
 
 msgid "think tank filters"
 msgstr "Thinktank-Filter"
+
+msgid "is error recipient"
+msgstr "erhält Fehlermeldungen"
 
 msgid "List with Links"
 msgstr "Liste mit Links"
