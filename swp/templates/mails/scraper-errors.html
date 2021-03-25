@@ -10,7 +10,15 @@
 {% for error in errors %}
     <li>
         {% if error.source %}
-            <h4>{{ error.source }}</h4>
+            <h4>
+                {% if error.url %}
+                    <a href="{{ error.url }}">
+                        {{ error.source }}
+                    </a>
+                {% else %}
+                    {{ error.source }}
+                {% endif %}
+            </h4>
             <p>{{ error.message }}</p>
         {% else %}
             {{ error.message }}
