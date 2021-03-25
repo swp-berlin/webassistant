@@ -3,7 +3,6 @@ from __future__ import annotations
 from django.db import models
 from django.utils import timezone
 from django.utils.functional import cached_property
-from django.utils.text import Truncator
 from django.utils.translation import gettext_lazy as _
 
 from .choices import ErrorLevel
@@ -41,7 +40,6 @@ class ScraperError(models.Model):
         verbose_name=_('publication'),
     )
 
-    identifier = models.CharField(_('identifier'), max_length=255, blank=True)
     title = models.CharField(_('title'), max_length=MAX_TITLE_LENGTH, blank=True)
     url = LongURLField(_('url'), blank=True)
     field = models.CharField(_('field'), max_length=50, blank=True)
