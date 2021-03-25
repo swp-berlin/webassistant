@@ -16,6 +16,7 @@ class ScraperErrorAdmin(admin.ModelAdmin):
         'field',
         'timestamp',
     ]
+    raw_id_fields = ['scraper', 'publication']
     readonly_fields = ['timestamp']
     list_display = [
         'scraper',
