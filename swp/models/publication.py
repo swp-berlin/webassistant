@@ -1,10 +1,11 @@
 from __future__ import annotations
-from typing import Optional
 
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.contrib.postgres.fields import ArrayField
+
+from .fields import LongURLField
 
 
 class PublicationQuerySet(models.QuerySet):
@@ -41,8 +42,8 @@ class Publication(models.Model):
     authors = ArrayField(models.CharField(max_length=255), blank=True, null=True, verbose_name=_('authors'))  # [AU]
     publication_date = models.CharField(_('publication date'), max_length=255, blank=True, default='')  # [PY]
     last_access = models.DateTimeField(_('last access'), default=timezone.now, editable=False)  # [Y2]
-    url = models.URLField(_('URL'))  # [UR]
-    pdf_url = models.URLField(_('PDF URL'), blank=True)  # [L1]
+    url = LongURLField(_('URL'))  # [UR]
+    pdf_url = LongURLField(_('PDF URL'), blank=True)  # [L1]
     pdf_pages = models.PositiveIntegerField(_('number of pages'), default=0)  # [EP]
     tags = ArrayField(models.CharField(max_length=32), blank=True, null=True, verbose_name=_('tags'))  # [KW]
     created = models.DateTimeField(_('created'), default=timezone.now, editable=False)
@@ -57,8 +58,3 @@ class Publication(models.Model):
 
     def __str__(self) -> str:
         return self.title or f'{self.pk}'
-
-    @property
-    def year(self) -> Optional[int]:
-        # XXX This might become its own field later, in case the scraped articles do not provide full dates
-        return getattr(self.publication_date, 'year', None)
