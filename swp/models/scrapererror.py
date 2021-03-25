@@ -7,7 +7,8 @@ from django.utils.text import Truncator
 from django.utils.translation import gettext_lazy as _
 
 from .choices import ErrorLevel
-from .fields import ChoiceField
+from .constants import MAX_TITLE_LENGTH
+from .fields import ChoiceField, LongURLField
 
 
 DEFAULT_ERROR = ''  # FIXME
@@ -41,6 +42,8 @@ class ScraperError(models.Model):
     )
 
     identifier = models.CharField(_('identifier'), max_length=255, blank=True)
+    title = models.CharField(_('title'), max_length=MAX_TITLE_LENGTH, blank=True)
+    url = LongURLField(_('url'), blank=True)
     field = models.CharField(_('field'), max_length=50, blank=True)
 
     level = ChoiceField(
@@ -69,13 +72,6 @@ class ScraperError(models.Model):
             return self.publication.title or self.publication.url
 
         return self.identifier
-
-    @classmethod
-    def normalize_identifier(cls, value: str) -> str:
-        value = str.strip(value or '')
-        max_length = cls._meta.get_field('identifier').max_length
-
-        return Truncator(value).chars(max_length)
 
     @property
     def is_error(self) -> bool:
