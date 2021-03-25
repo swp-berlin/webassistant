@@ -9,6 +9,8 @@ class ScraperErrorAdmin(admin.ModelAdmin):
     fields = [
         'scraper',
         'publication',
+        'title',
+        'url',
         'message',
         'code',
         'field',

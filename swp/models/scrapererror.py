@@ -62,14 +62,14 @@ class ScraperError(models.Model):
         verbose_name_plural = _('scraping errors')
 
     def __str__(self) -> str:
-        return self.identifier or self.message
+        return self.source or self.message
 
     @cached_property
     def source(self) -> str:
         if self.publication_id:
             return self.publication.title or self.publication.url
 
-        return self.identifier
+        return self.title or self.url
 
     @property
     def is_error(self) -> bool:
