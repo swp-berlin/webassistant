@@ -5,6 +5,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.contrib.postgres.fields import ArrayField
 
+from .constants import MAX_TAG_LENGTH, MAX_TITLE_LENGTH
 from .fields import LongURLField
 
 
@@ -36,7 +37,7 @@ class Publication(models.Model):
     )
 
     ris_type = models.CharField(_('reference type'), max_length=7, default='ICOMM')  # [TY]
-    title = models.CharField(_('title'), max_length=255)  # [T1]
+    title = models.CharField(_('title'), max_length=MAX_TITLE_LENGTH)  # [T1]
     subtitle = models.CharField(_('subtitle'), max_length=255, blank=True)  # [T2]
     abstract = models.TextField(_('abstract'), blank=True)  # [AB]
     authors = ArrayField(models.CharField(max_length=255), blank=True, null=True, verbose_name=_('authors'))  # [AU]
@@ -45,7 +46,14 @@ class Publication(models.Model):
     url = LongURLField(_('URL'))  # [UR]
     pdf_url = LongURLField(_('PDF URL'), blank=True)  # [L1]
     pdf_pages = models.PositiveIntegerField(_('number of pages'), default=0)  # [EP]
-    tags = ArrayField(models.CharField(max_length=32), blank=True, null=True, verbose_name=_('tags'))  # [KW]
+
+    tags = ArrayField(
+        models.CharField(max_length=MAX_TAG_LENGTH),
+        blank=True,
+        null=True,
+        verbose_name=_('tags'),
+    )  # [KW]
+
     created = models.DateTimeField(_('created'), default=timezone.now, editable=False)
 
     hash = models.CharField(_('hash'), max_length=32, blank=True, null=True)
