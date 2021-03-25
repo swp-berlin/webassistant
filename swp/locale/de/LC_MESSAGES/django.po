@@ -60,6 +60,15 @@ msgstr "Monitor"
 msgid "Think Tank Filter"
 msgstr "Thinktank-Filter"
 
+msgid "title"
+msgstr "Titel"
+
+msgid "subtitle"
+msgstr "Untertitel"
+
+msgid "authors"
+msgstr "Autoren"
+
 #, python-format
 msgid "Missing %s permission"
 msgstr "Fehlende Berechtigung %s"
@@ -190,17 +199,8 @@ msgstr "Scrapers"
 msgid "reference type"
 msgstr "Referenztyp"
 
-msgid "title"
-msgstr "Titel"
-
-msgid "subtitle"
-msgstr "Untertitel"
-
 msgid "abstract"
 msgstr "Abstract"
-
-msgid "authors"
-msgstr "Autoren"
 
 msgid "publication date"
 msgstr "Veröffentlichungsdatum"
@@ -443,10 +443,6 @@ msgid "Error in %(scraper)s"
 msgstr "Fehler im %(scraper)s"
 
 #, python-format
-msgid "Timeout while trying to iterate %(selector)s elements"
-msgstr "Zeitüberschreitung beim Iterieren der %(selector)s Elemente"
-
-#, python-format
 msgid "No elements matching %(selector)s found"
 msgstr "Keine Elemente, die auf %(selector)s zutreffen, gefunden"
 
@@ -497,7 +493,3 @@ msgstr "Der Link %(href)s führt auf eine externe Seite."
 #, python-format
 msgid "Failed to open %(href)s: %(error)s"
 msgstr "%(href)s konnte nicht geöffnet werden: %(error)s"
-
-#, python-format
-#~ msgid "Scraping error in %(thinktank)s"
-#~ msgstr "Scraping-Fehler in %(thinktank)s"

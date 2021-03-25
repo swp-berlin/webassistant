@@ -22,7 +22,7 @@ class DataResolver(SelectorMixin, Resolver):
             await node.wait_for_selector(self.selector, timeout=5000)
         except TimeoutError as exc:
             raise self.make_error(
-                _('Timeout while trying to iterate %(selector)s elements') % {'selector': self.selector}
+                _('No element matches %(selector)s') % {'selector': self.selector},
             ) from exc
 
         return await super().get_element(node)
