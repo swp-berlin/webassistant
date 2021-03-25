@@ -65,6 +65,14 @@ class ScraperError(models.Model):
         return self.source or self.message
 
     @cached_property
+    def scraped_title(self) -> str:
+        return self.publication.title if self.publication_id else self.title
+
+    @cached_property
+    def scraped_url(self) -> str:
+        return self.publication.url if self.publication_id else self.url
+
+    @cached_property
     def source(self) -> str:
         if self.publication_id:
             return self.publication.title or self.publication.url

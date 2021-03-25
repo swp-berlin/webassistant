@@ -11,8 +11,8 @@
     <li>
         {% if error.source %}
             <h4>
-                {% if error.url %}
-                    <a href="{{ error.url }}">
+                {% if error.scraped_url %}
+                    <a href="{{ error.scraped_url }}">
                         {{ error.source }}
                     </a>
                 {% else %}
