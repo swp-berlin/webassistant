@@ -75,7 +75,7 @@ class Paginator:
             await page.wait_for_selector(self.selector, timeout=5000)
         except TimeoutError as exc:
             raise ResolverError(
-                _('Timeout while trying to iterate %(selector)s elements') % {'selector': self.selector}
+                _('No elements matching %(selector)s found') % {'selector': self.selector}
             ) from exc
 
         nodes = await page.query_selector_all(self.selector)

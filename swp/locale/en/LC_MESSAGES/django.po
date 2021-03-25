@@ -60,6 +60,15 @@ msgstr ""
 msgid "Think Tank Filter"
 msgstr ""
 
+msgid "title"
+msgstr ""
+
+msgid "subtitle"
+msgstr ""
+
+msgid "authors"
+msgstr ""
+
 #, python-format
 msgid "Missing %s permission"
 msgstr ""
@@ -190,16 +199,7 @@ msgstr ""
 msgid "reference type"
 msgstr ""
 
-msgid "title"
-msgstr ""
-
-msgid "subtitle"
-msgstr ""
-
 msgid "abstract"
-msgstr ""
-
-msgid "authors"
 msgstr ""
 
 msgid "publication date"
@@ -440,10 +440,6 @@ msgstr ""
 
 #, python-format
 msgid "Error in %(scraper)s"
-msgstr ""
-
-#, python-format
-msgid "Timeout while trying to iterate %(selector)s elements"
 msgstr ""
 
 #, python-format
