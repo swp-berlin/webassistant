@@ -9,11 +9,14 @@ class ScraperErrorAdmin(admin.ModelAdmin):
     fields = [
         'scraper',
         'publication',
+        'title',
+        'url',
         'message',
         'code',
         'field',
         'timestamp',
     ]
+    raw_id_fields = ['scraper', 'publication']
     readonly_fields = ['timestamp']
     list_display = [
         'scraper',

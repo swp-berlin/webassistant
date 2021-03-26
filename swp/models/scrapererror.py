@@ -3,11 +3,11 @@ from __future__ import annotations
 from django.db import models
 from django.utils import timezone
 from django.utils.functional import cached_property
-from django.utils.text import Truncator
 from django.utils.translation import gettext_lazy as _
 
 from .choices import ErrorLevel
-from .fields import ChoiceField
+from .constants import MAX_TITLE_LENGTH
+from .fields import ChoiceField, LongURLField
 
 
 DEFAULT_ERROR = ''  # FIXME
@@ -40,7 +40,8 @@ class ScraperError(models.Model):
         verbose_name=_('publication'),
     )
 
-    identifier = models.CharField(_('identifier'), max_length=255, blank=True)
+    title = models.CharField(_('title'), max_length=MAX_TITLE_LENGTH, blank=True)
+    url = LongURLField(_('url'), blank=True)
     field = models.CharField(_('field'), max_length=50, blank=True)
 
     level = ChoiceField(
@@ -61,21 +62,22 @@ class ScraperError(models.Model):
         verbose_name_plural = _('scraping errors')
 
     def __str__(self) -> str:
-        return self.identifier or self.message
+        return self.source or self.message
+
+    @cached_property
+    def scraped_title(self) -> str:
+        return self.publication.title if self.publication_id else self.title
+
+    @cached_property
+    def scraped_url(self) -> str:
+        return self.publication.url if self.publication_id else self.url
 
     @cached_property
     def source(self) -> str:
         if self.publication_id:
             return self.publication.title or self.publication.url
 
-        return self.identifier
-
-    @classmethod
-    def normalize_identifier(cls, value: str) -> str:
-        value = str.strip(value or '')
-        max_length = cls._meta.get_field('identifier').max_length
-
-        return Truncator(value).chars(max_length)
+        return self.title or self.url
 
     @property
     def is_error(self) -> bool:

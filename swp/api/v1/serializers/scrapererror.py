@@ -12,8 +12,9 @@ class ScraperErrorSerializer(serializers.ModelSerializer):
         fields = [
             'id',
             'scraper',
-            'identifier',
             'publication',
+            'title',
+            'url',
             'code',
             'level',
             'message',

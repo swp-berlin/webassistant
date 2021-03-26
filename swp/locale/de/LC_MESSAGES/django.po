@@ -280,8 +280,8 @@ msgstr "Fehlender Titel für %s"
 msgid "Missing URL element for \"%s\""
 msgstr "Fehlendes URL-Element für „%s“"
 
-msgid "identifier"
-msgstr "Bezeichner"
+msgid "url"
+msgstr "URL"
 
 msgid "level"
 msgstr "Level"

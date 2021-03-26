@@ -280,7 +280,7 @@ msgstr ""
 msgid "Missing URL element for \"%s\""
 msgstr ""
 
-msgid "identifier"
+msgid "url"
 msgstr ""
 
 msgid "level"

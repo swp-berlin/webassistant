@@ -41,14 +41,14 @@ class ScraperTestCase(test.TestCase):
         cls.scraper_errors = ScraperError.objects.bulk_create([
             ScraperError(
                 scraper=cls.scraper,
-                identifier='A Warning',
+                title='A Warning',
                 message='Let this be a warning',
                 level=ErrorLevel.WARNING,
                 timestamp=now,
             ),
             ScraperError(
                 scraper=cls.scraper,
-                identifier='An Error',
+                title='An Error',
                 message='Let this be an error',
                 level=ErrorLevel.ERROR,
                 timestamp=now,
@@ -220,3 +220,31 @@ class ScraperTestCase(test.TestCase):
 
             error = self.scraper.errors.error_only().first()
             self.assertEqual(error.code, 'missing')
+
+    def test_scrape_with_error_identifier(self):
+        result = {
+            'fields': {
+                'title': 'A title',
+                'url': 'https://example.org',
+                'tags': [
+                    'overflow-' * 1000 + 'end',
+                ]
+            },
+            'errors': {},
+        }
+
+        async def agen(*args):
+            yield result
+
+        with mock.patch.object(_Scraper, 'scrape', agen):
+            self.scraper.errors.all().delete()
+
+            self.scraper.scrape()
+
+            self.assertEqual(self.scraper.error_count, 1)
+            self.assertEqual(self.scraper.scraped_publications.count(), 0)
+
+            error = self.scraper.errors.error_only().first()
+            self.assertEqual(error.code, 'item_inv')
+            self.assertEqual(error.title, 'A title')
+            self.assertEqual(error.url, 'https://example.org')

@@ -11,8 +11,9 @@ The following errors occured:
 {% endblocktrans %}
 
 {% for error in errors %}
-    * {% if error.source %}{{ error.source }}
-      {{ error.message }}{% else %}{{ error }}{% endif %}
+    * {% if error.scraped_title %}{{ error.scraped_title }}
+      {% endif %}{% if error.scraped_url %}{{ error.scraped_url }}
+      {% endif %}{{ error.message }}
 {% endfor %}
 
 {% endautoescape %}

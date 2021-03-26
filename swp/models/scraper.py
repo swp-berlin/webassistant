@@ -18,6 +18,7 @@ from swp.scraper.types import ScraperType
 
 from .abstract import ActivatableModel, ActivatableQuerySet, UpdateQuerySet, LastModified
 from .choices import ErrorLevel, Interval
+from .constants import MAX_TITLE_LENGTH, MAX_URL_LENGTH
 from .fields import ChoiceField, LongURLField
 from .publication import Publication
 from .scrapererror import ScraperError
@@ -167,9 +168,9 @@ class Scraper(ActivatableModel, LastModified):
         if form.is_valid():
             return form.save(commit=False, thinktank=thinktank, now=now)
 
-        identifier = ScraperError.normalize_identifier(
-            fields.get('title') or fields.get('url'),
-        )
+        #: [SWP-155] Split publication identifier into ``title`` and ``url``
+        title = form.truncate(fields.get('title', ''), MAX_TITLE_LENGTH)
+        url = fields.get('url', '')[:MAX_URL_LENGTH]
 
         validation_errors = []
         for field, error_list in form.errors.items():
@@ -182,7 +183,8 @@ class Scraper(ActivatableModel, LastModified):
 
                 scraper_error = ScraperError(
                     scraper=self,
-                    identifier=identifier,
+                    title=title,
+                    url=url,
                     message=message,
                     field=field if field != NON_FIELD_ERRORS else '',
                     code=(error.code or 'invalid')[:8],
@@ -206,8 +208,8 @@ class Scraper(ActivatableModel, LastModified):
 
         :return: ``True`` if publication is complete, otherwise ``False``.
         """
-        title = fields.get('title')
-        url = fields.get('url')
+        title = fields.get('title') or ''
+        url = fields.get('url') or ''
 
         if title and url:
             return True
@@ -227,7 +229,8 @@ class Scraper(ActivatableModel, LastModified):
 
         field_error = ScraperError(
             scraper=self,
-            identifier=ScraperError.normalize_identifier(title or url),
+            title=title[:MAX_TITLE_LENGTH],
+            url=url[:MAX_URL_LENGTH],
             message=message,
             field=field,
             code='missing',
