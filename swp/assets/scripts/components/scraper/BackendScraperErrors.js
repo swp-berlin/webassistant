@@ -34,7 +34,7 @@ const GlobalErrors = ({errors}) => (
                 <li className="scraper-error" data-id={id} data-field={field} data-code={code}>
                     <Callout
                         intent={Intent.DANGER}
-                        title={url.length ? <ExternalLink to={url}>{title}</ExternalLink> : title}
+                        title={url ? <ExternalLink to={url}>{title}</ExternalLink> : title}
                     >
                         {timestamp && (
                             <p><small className="text-gray-400"><DateTime value={timestamp} /></small></p>

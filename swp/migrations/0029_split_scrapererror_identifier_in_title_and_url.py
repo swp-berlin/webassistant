@@ -53,4 +53,8 @@ class Migration(migrations.Migration):
             split_identifier,
             reverse_code=merge_identifier,
         ),
+        migrations.RemoveField(
+            model_name='scrapererror',
+            name='identifier',
+        ),
     ]
