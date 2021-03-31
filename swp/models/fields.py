@@ -1,7 +1,9 @@
 from django.core.exceptions import ImproperlyConfigured
 from django.db.models import CharField, URLField
+from django.utils.translation import gettext_lazy as _
 
-from .constants import MAX_URL_LENGTH
+from swp.utils.isbn import canonical_isbn, normalize_isbn
+from .constants import MAX_COMBINED_ISBN_LENGTH, MAX_URL_LENGTH
 
 
 class ChoiceField(CharField):
@@ -25,3 +27,39 @@ class LongURLField(URLField):
             raise ImproperlyConfigured('Long URL field must have a length of at least %d' % MAX_URL_LENGTH)
 
         super().__init__(verbose_name, max_length=max_length, **kwargs)
+
+
+class CombinedISBNField(CharField):
+    description = _('Flexible ISBN or ISSN identifier')
+
+    def __init__(self, verbose_name: str = None, *, max_length: int = None, canonical: bool = False, **kwargs):
+        max_length = max_length or MAX_COMBINED_ISBN_LENGTH
+        super().__init__(verbose_name, max_length=max_length, **kwargs)
+
+        self.canonical = canonical
+
+    def deconstruct(self):
+        name, path, args, kwargs = super().deconstruct()
+        if not self.canonical:
+            kwargs.pop('canonical', None)
+
+        return name, path, args, kwargs
+
+    def formfield(self, **kwargs):
+        defaults = {
+            'min_length': 8,
+        }
+
+        defaults.update(kwargs)
+        return super().formfield(**defaults)
+
+    def clean_value(self, value: str) -> str:
+        return (canonical_isbn if self.canonical else normalize_isbn)(value)
+
+    def pre_save(self, model_instance, add):
+        value = getattr(model_instance, self.attname)
+
+        cleaned_value = self.clean_value(value)
+        setattr(model_instance, self.attname, cleaned_value)
+
+        return super().pre_save(model_instance, add)

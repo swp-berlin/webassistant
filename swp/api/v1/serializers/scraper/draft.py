@@ -66,6 +66,8 @@ ResolverDraftSerializers = {
     ResolverType.PUBLICATION_DATE: FieldResolverDraftSerializer,
     ResolverType.URL: FieldResolverDraftSerializer,
     ResolverType.AUTHORS: FieldResolverDraftSerializer,
+    ResolverType.DOI: FieldResolverDraftSerializer,
+    ResolverType.ISBN: FieldResolverDraftSerializer,
     ResolverType.TAGS: FieldResolverDraftSerializer,
 }
 

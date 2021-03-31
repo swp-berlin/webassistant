@@ -24,6 +24,8 @@ class PublicationSerializer(ModelSerializer):
             'url',
             'pdf_url',
             'pdf_pages',
+            'doi',
+            'isbn',
             'tags',
             *read_only_fields,
         ]

@@ -94,6 +94,8 @@ ResolverSerializers = {
     ResolverType.PUBLICATION_DATE: FieldResolverSerializer,
     ResolverType.URL: FieldResolverSerializer,
     ResolverType.AUTHORS: FieldResolverSerializer,
+    ResolverType.DOI: FieldResolverSerializer,
+    ResolverType.ISBN: FieldResolverSerializer,
     ResolverType.TAGS: FieldResolverSerializer,
 }
 

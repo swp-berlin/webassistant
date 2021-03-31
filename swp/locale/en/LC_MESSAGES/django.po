@@ -118,6 +118,12 @@ msgstr ""
 msgid "Document"
 msgstr ""
 
+msgid "DOI"
+msgstr ""
+
+msgid "ISBN/ISSN"
+msgstr ""
+
 msgid "Title"
 msgstr ""
 
@@ -161,6 +167,9 @@ msgid "Warning"
 msgstr ""
 
 msgid "Error"
+msgstr ""
+
+msgid "Flexible ISBN or ISSN identifier"
 msgstr ""
 
 msgid "name"

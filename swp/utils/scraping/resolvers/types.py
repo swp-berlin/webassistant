@@ -14,6 +14,8 @@ from .swp import (
     URLResolver,
     AuthorsResolver,
     TagsResolver,
+    DOIResolver,
+    ISBNResolver,
 )
 
 
@@ -31,6 +33,8 @@ class ResolverType(Enum):
     Publication_Date = PublicationDateResolver
     URL = URLResolver
     Authors = AuthorsResolver
+    DOI = DOIResolver
+    ISBN = ISBNResolver
     Tags = TagsResolver
 
     def create(self, context: dict, **config):

@@ -15,6 +15,8 @@ const PublicationList = ({items, className, ...props}) => (
                     authors={publication.authors}
                     abstract={publication.abstract}
                     publicationDate={publication.publication_date}
+                    doi={publication.doi}
+                    isbn={publication.isbn}
                     url={publication.url}
                     pdfURL={publication.pdf_url}
                     pdfPages={publication.pdf_pages}

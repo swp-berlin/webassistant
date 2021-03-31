@@ -31,6 +31,8 @@ FULL_RIS_DATA = b"""TY  - ICOMM
 TI  - Already accessed publication
 PY  - 2021
 UR  - https://example.org
+DO  - 10.1000/182
+SN  - 978-3-16-148410-0
 ER  - \nTY  - ICOMM
 TI  - Impact of COVID-19 lockdowns on individual mobility and the importance of socioeconomic factors
 PY  - 2020-11
@@ -89,6 +91,8 @@ class MonitorTestCase(test.TestCase):
                 title='Already accessed publication',
                 publication_date='2021',
                 url='https://example.org',
+                isbn='978-3-16-148410-0',
+                doi='10.1000/182',
                 last_access=now - ONE_HOUR,
                 created=now,
             ),

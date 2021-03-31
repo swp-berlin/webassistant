@@ -234,6 +234,10 @@ msgid "unknown"
 msgstr "unbekannt"
 
 #, javascript-format
+msgid "ISBN: %s"
+msgstr "ISBN: %s"
+
+#, javascript-format
 msgid "%s pages"
 msgstr "%s Seiten"
 
