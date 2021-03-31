@@ -33,7 +33,7 @@ class ThinktankSerializer(ModelSerializer):
             'name',
             'description',
             'url',
-            'unique_field',
+            'unique_fields',
             'is_active',
             *read_only_fields,
         ]
@@ -72,6 +72,6 @@ class ThinktankListSerializer(ModelSerializer):
             'id',
             'name',
             'url',
-            'unique_field',
+            'unique_fields',
             *read_only_fields,
         ]

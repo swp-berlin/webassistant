@@ -209,7 +209,13 @@ msgstr ""
 msgid "New Publications"
 msgstr ""
 
+msgid "disabled"
+msgstr ""
+
 msgid "Recipients"
+msgstr ""
+
+msgid "Last Run"
 msgstr ""
 
 msgid "Recipients must be valid email addresses: %(addresses)s"
@@ -225,6 +231,10 @@ msgid "Download .RIS"
 msgstr ""
 
 msgid "unknown"
+msgstr ""
+
+#, javascript-format
+msgid "ISBN: %s"
 msgstr ""
 
 #, javascript-format
@@ -348,13 +358,7 @@ msgstr ""
 msgid "You have to deactivate the scraper in order to edit it."
 msgstr ""
 
-msgid "disabled"
-msgstr ""
-
 msgid "URL"
-msgstr ""
-
-msgid "Last Run"
 msgstr ""
 
 msgid "Errors"

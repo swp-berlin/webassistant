@@ -29,6 +29,9 @@ msgstr ""
 msgid "Personal info"
 msgstr ""
 
+msgid "Notifications"
+msgstr ""
+
 msgid "Permissions"
 msgstr ""
 
@@ -55,6 +58,15 @@ msgid "Monitor"
 msgstr ""
 
 msgid "Think Tank Filter"
+msgstr ""
+
+msgid "title"
+msgstr ""
+
+msgid "subtitle"
+msgstr ""
+
+msgid "authors"
 msgstr ""
 
 #, python-format
@@ -106,6 +118,12 @@ msgstr ""
 msgid "Document"
 msgstr ""
 
+msgid "DOI"
+msgstr ""
+
+msgid "ISBN/ISSN"
+msgstr ""
+
 msgid "Title"
 msgstr ""
 
@@ -130,9 +148,6 @@ msgstr ""
 msgid "PDF URL"
 msgstr ""
 
-msgid "Name"
-msgstr ""
-
 msgid "Contains"
 msgstr ""
 
@@ -152,6 +167,9 @@ msgid "Warning"
 msgstr ""
 
 msgid "Error"
+msgstr ""
+
+msgid "Flexible ISBN or ISSN identifier"
 msgstr ""
 
 msgid "name"
@@ -190,16 +208,7 @@ msgstr ""
 msgid "reference type"
 msgstr ""
 
-msgid "title"
-msgstr ""
-
-msgid "subtitle"
-msgstr ""
-
 msgid "abstract"
-msgstr ""
-
-msgid "authors"
 msgstr ""
 
 msgid "publication date"
@@ -212,6 +221,9 @@ msgid "number of pages"
 msgstr ""
 
 msgid "tags"
+msgstr ""
+
+msgid "hash"
 msgstr ""
 
 msgid "publication"
@@ -266,6 +278,20 @@ msgstr ""
 msgid "Scraping Error"
 msgstr ""
 
+msgid "Missing title and URL"
+msgstr ""
+
+#, python-format
+msgid "Missing title for %s"
+msgstr ""
+
+#, python-format
+msgid "Missing URL element for \"%s\""
+msgstr ""
+
+msgid "url"
+msgstr ""
+
 msgid "level"
 msgstr ""
 
@@ -287,13 +313,16 @@ msgstr ""
 msgid "Link to homepage"
 msgstr ""
 
-msgid "unique field"
+msgid "unique fields"
 msgstr ""
 
 msgid "think tanks"
 msgstr ""
 
 msgid "think tank filters"
+msgstr ""
+
+msgid "is error recipient"
 msgstr ""
 
 msgid "List with Links"
@@ -405,6 +434,21 @@ msgid "Click here to choose a new password"
 msgstr ""
 
 msgid "Please go to the following page and choose a new password:"
+msgstr ""
+
+#, python-format
+msgid "<a href=\"%(url)s\">%(scraper)s</a> encountered the following problems:"
+msgstr ""
+
+#, python-format
+msgid "%(scraper)s encountered problems while running:"
+msgstr ""
+
+msgid "The following errors occured:"
+msgstr ""
+
+#, python-format
+msgid "Error in %(scraper)s"
 msgstr ""
 
 #, python-format

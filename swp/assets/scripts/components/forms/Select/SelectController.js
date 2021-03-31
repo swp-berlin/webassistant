@@ -4,18 +4,10 @@ import {MenuItem} from '@blueprintjs/core';
 
 import _ from 'utils/i18n';
 
+import ItemRenderer from './ItemRenderer';
+
 
 const NoResultsLabel = _('No Results');
-
-const DefaultItemRenderer = (item, {handleClick, modifiers: {active, disabled}}) => (
-    <MenuItem
-        key={item.value}
-        text={item.label}
-        onClick={handleClick}
-        active={active}
-        disabled={disabled}
-    />
-);
 
 // eslint-disable-next-line no-unused-vars
 const SelectController = forwardRef((props, ref) => {
@@ -52,7 +44,7 @@ const SelectController = forwardRef((props, ref) => {
 });
 
 SelectController.defaultProps = {
-    itemRenderer: DefaultItemRenderer,
+    itemRenderer: ItemRenderer,
     itemsEqual: 'value',
 };
 

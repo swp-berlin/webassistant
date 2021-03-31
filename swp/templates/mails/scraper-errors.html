@@ -1,0 +1,28 @@
+{% load i18n %}
+
+<p>
+    {% blocktrans trimmed %}
+        <a href="{{ url }}">{{ scraper }}</a> encountered the following problems:
+    {% endblocktrans %}
+</p>
+
+<ul>
+{% for error in errors %}
+    <li>
+        {% if error.source %}
+            <h4>
+                {% if error.scraped_url %}
+                    <a href="{{ error.scraped_url }}">
+                        {{ error.source }}
+                    </a>
+                {% else %}
+                    {{ error.source }}
+                {% endif %}
+            </h4>
+            <p>{{ error.message }}</p>
+        {% else %}
+            {{ error.message }}
+        {% endif %}
+    </li>
+{% endfor %}
+</ul>

@@ -6,7 +6,7 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework.fields import CharField, SerializerMethodField
 from rest_framework.serializers import Serializer
 
-from swp.api.v1.serializers.scraper import ResolverConfigSerializer
+from swp.api.v1.serializers.scraper.base import ResolverConfigSerializer
 from swp.tasks.scraper import preview_scraper
 if TYPE_CHECKING:
     from celery.result import AsyncResult

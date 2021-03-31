@@ -50,6 +50,8 @@ const Forms = {
     Publication_Date: FieldResolverForm,
     URL: FieldResolverForm,
     Authors: FieldResolverForm,
+    DOI: FieldResolverForm,
+    ISBN: FieldResolverForm,
     Tags: FieldResolverForm,
 };
 

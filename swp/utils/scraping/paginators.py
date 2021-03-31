@@ -16,7 +16,8 @@ REGISTER_OBSERVER = """
         window.observeListPromise = new Promise(resolve => {
             new MutationObserver((mutationList, observer) => {
                 mutationList.forEach(mutation => {
-                    resolve(Array.from(mutation.addedNodes));
+                    const nodes = Array.from(mutation.addedNodes).filter(node => node.nodeType === Node.ELEMENT_NODE);
+                    resolve(nodes);
                     observer.disconnect();
                 });
             }).observe(listElem, {childList: true});
@@ -68,6 +69,14 @@ class Paginator:
 
     async def query_list_items(self, page=None) -> Iterable[ElementHandle]:
         page = page or self.context.page
+
+        try:
+            # [SWP-144] Precautionary measure against dynamically loaded nodes
+            await page.wait_for_selector(self.selector, timeout=5000)
+        except TimeoutError as exc:
+            raise ResolverError(
+                _('No elements matching %(selector)s found') % {'selector': self.selector}
+            ) from exc
 
         nodes = await page.query_selector_all(self.selector)
 

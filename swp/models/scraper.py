@@ -1,9 +1,12 @@
 from __future__ import annotations
 
 import datetime
-from typing import Any, Iterable, Mapping, TYPE_CHECKING
+import hashlib
+import json
+from typing import Any, Iterable, Mapping, Optional, TYPE_CHECKING
 
 from asgiref.sync import async_to_sync, sync_to_async
+from django.core.exceptions import NON_FIELD_ERRORS
 from django.db import models, transaction, IntegrityError
 from django.db.models.aggregates import Count
 from django.utils import timezone
@@ -14,8 +17,9 @@ from swp.utils.scraping import Scraper as _Scraper
 from swp.scraper.types import ScraperType
 
 from .abstract import ActivatableModel, ActivatableQuerySet, UpdateQuerySet, LastModified
-from .choices import Interval
-from .fields import ChoiceField
+from .choices import ErrorLevel, Interval
+from .constants import MAX_TITLE_LENGTH, MAX_URL_LENGTH
+from .fields import ChoiceField, LongURLField
 from .publication import Publication
 from .scrapererror import ScraperError
 
@@ -23,10 +27,16 @@ if TYPE_CHECKING:
     from .thinktank import Thinktank
 
 
+def get_hash(fields: Mapping[str, Any]) -> str:
+    val = json.dumps(fields, sort_keys=True)
+    return hashlib.md5(val.encode('utf-8')).hexdigest()
+
+
 class ScraperQuerySet(ActivatableQuerySet, UpdateQuerySet):
 
     def annotate_error_count(self, to_attr='') -> ScraperQuerySet:
-        return self.annotate(**{to_attr or 'error_count': Count('errors')})
+        error_count = Count('errors', filter=models.Q(errors__level=ErrorLevel.ERROR))
+        return self.annotate(**{to_attr or 'error_count': error_count})
 
 
 class Scraper(ActivatableModel, LastModified):
@@ -45,7 +55,7 @@ class Scraper(ActivatableModel, LastModified):
 
     data = models.JSONField(_('data'))
 
-    start_url = models.URLField(_('start URL'))
+    start_url = LongURLField(_('start URL'))
     checksum = models.CharField(_('checksum'), max_length=64, unique=True, blank=True, null=True)
 
     interval = models.PositiveIntegerField(_('interval'), choices=Interval.choices, default=Interval.DAILY)
@@ -61,7 +71,7 @@ class Scraper(ActivatableModel, LastModified):
         verbose_name_plural = _('scrapers')
 
     def __str__(self) -> str:
-        return f'[{self.checksum}] {self.thinktank.name}'
+        return f'{self.name} {self.pk}'
 
     @cached_property
     def name(self) -> str:
@@ -78,11 +88,11 @@ class Scraper(ActivatableModel, LastModified):
 
     @cached_property
     def error_count(self) -> int:
-        return self.errors.count()
+        return self.errors.error_only().count()
 
     @cached_property
-    def unique_field(self):
-        return self.thinktank.unique_field
+    def unique_fields(self):
+        return self.thinktank.unique_fields
 
     def scrape(self):
         scraper = _Scraper(self.start_url)
@@ -96,49 +106,147 @@ class Scraper(ActivatableModel, LastModified):
         config: Mapping[str, Any],
         thinktank: Thinktank,
     ):
-        async for result in scraper.scrape(config):
-            fields = result.get('fields')
-            errors = result.get('errors')
+        results = scraper.scrape(config)
 
-            now = timezone.now()
-            publication = Publication(
-                thinktank=thinktank,
-                ris_type='UNPB' if 'pdf_url' in fields else 'ICOMM',
-                last_access=now,
-                created=now,
-                **fields
-            )
+        try:
+            async for result in results:
+                fields = result.get('fields')
+                errors = result.get('errors')
+                now = timezone.now()
 
-            try:
-                await self.save_publication(publication)
-            except IntegrityError as exc:
-                publication_error = ScraperError(
+                is_complete = await self.check_scraped_fields(fields, errors, now=now)
+                if not is_complete:
+                    continue
+
+                publication = await self.build_publication(fields, errors, thinktank=thinktank, now=now)
+                if publication is None:
+                    continue
+
+                try:
+                    await self.save_publication(publication)
+                except IntegrityError as exc:
+                    publication_error = ScraperError(
+                        scraper=self,
+                        message=str(exc),
+                        code='database',  # TODO Define error codes for global classification
+                        timestamp=now,
+                    )
+
+                    await self.save_error(publication_error)
+
+                if not publication.pk:
+                    # the publication is a duplicate, stop scraping
+                    scraper.stop()
+
+                if errors:
+                    scraper_errors = [
+                        ScraperError(
+                            scraper=self,
+                            message=error.get('message') or _('Scraping Error'),
+                            publication_id=publication.pk,
+                            field=field,
+                            level=error.get('level'),
+                            timestamp=now,
+                        ) for field, error in errors.items()
+                    ]
+
+                    await self.save_errors(scraper_errors)
+        finally:
+            await results.aclose()
+
+    async def build_publication(
+        self,
+        fields: Mapping[str, Any],
+        errors: Mapping[str, Any], *,
+        thinktank: Thinktank,
+        now: datetime.datetime,
+    ) -> Optional[Publication]:
+        # NOTE Must be locally to avoid problems with auth forms importing get_user_model
+        from swp.forms import ScrapedPublicationForm
+
+        form = ScrapedPublicationForm(data=fields)
+        if form.is_valid():
+            return form.save(commit=False, thinktank=thinktank, now=now)
+
+        #: [SWP-155] Split publication identifier into ``title`` and ``url``
+        title = form.truncate(fields.get('title', ''), MAX_TITLE_LENGTH)
+        url = fields.get('url', '')[:MAX_URL_LENGTH]
+
+        validation_errors = []
+        for field, error_list in form.errors.items():
+            field_error = errors.get(field, {}).get('message', '')
+            for error in error_list.as_data():
+                if field_error and error.code in ['required', 'invalid']:
+                    message = field_error
+                else:
+                    message = '\n'.join(error.messages)
+
+                scraper_error = ScraperError(
                     scraper=self,
-                    message=str(exc),
-                    code='database',  # TODO Define error codes for global classification
+                    title=title,
+                    url=url,
+                    message=message,
+                    field=field if field != NON_FIELD_ERRORS else '',
+                    code=(error.code or 'invalid')[:8],
                     timestamp=now,
                 )
 
-                await self.save_error(publication_error)
+                validation_errors.append(scraper_error)
 
-            if errors and publication.pk:
-                scraper_errors = [
-                    ScraperError(
-                        scraper=self,
-                        message=error.get('message') or _('Scraping Error'),
-                        publication_id=publication.pk,
-                        field=field,
-                        timestamp=now,
-                    ) for field, error in errors.items()
-                ]
+        await self.save_errors(validation_errors)
 
-                await self.save_errors(scraper_errors)
+        return None
+
+    async def check_scraped_fields(
+        self,
+        fields: Mapping[str, Any],
+        errors: Mapping[str, Any], *,
+        now: datetime.datetime,
+    ) -> bool:
+        """
+        Validate scraped publication data for missing fields.
+
+        :return: ``True`` if publication is complete, otherwise ``False``.
+        """
+        title = fields.get('title') or ''
+        url = fields.get('url') or ''
+
+        if title and url:
+            return True
+
+        if not title and not url:
+            message = _('Missing title and URL')
+            field = ''
+        elif not title:
+            error_message = errors.get('title', {}).get('message', '')
+            message = error_message or _('Missing title for %s') % url
+            field = 'title'
+        elif not url:
+            error_message = errors.get('url', {}).get('message', '')
+            message = error_message or _('Missing URL element for "%s"') % title
+
+            field = 'url'
+
+        field_error = ScraperError(
+            scraper=self,
+            title=title[:MAX_TITLE_LENGTH],
+            url=url[:MAX_URL_LENGTH],
+            message=message,
+            field=field,
+            code='missing',
+            timestamp=now,
+        )
+
+        await self.save_error(field_error)
+
+        return False
 
     @sync_to_async
     def save_publication(self, publication):
-        unique_filter = models.Q(**{self.unique_field: getattr(publication, self.unique_field)})
-        if not self.scraped_publications.filter(unique_filter).exists():
-            publication.save()
+        hash = get_hash({field: getattr(publication, field, '') for field in self.unique_fields})
+        if not self.scraped_publications.filter(hash=hash).exists():
+            publication.hash = hash
+            publication.save(force_insert=True)
             self.scraped_publications.add(publication)
 
     @transaction.atomic

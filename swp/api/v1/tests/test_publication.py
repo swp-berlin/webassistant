@@ -30,13 +30,13 @@ class PublicationTestCase(test.TestCase):
             Thinktank(
                 name='PIIE',
                 url='https://www.piie.com/',
-                unique_field='T1-AB',
+                unique_fields=['T1-AB'],
                 created=now,
             ),
             Thinktank(
                 name='China Development Institute',
                 url='http://en.cdi.org.cn/',
-                unique_field='url',
+                unique_fields=['url'],
                 created=now,
                 is_active=True,
             ),

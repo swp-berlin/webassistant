@@ -8,6 +8,7 @@ from django.utils import timezone
 from cosmogo.utils.testing import login, request
 
 from swp.models import Publication, Scraper, Thinktank, User
+from swp.models.choices import ErrorLevel
 from swp.scraper.types import ScraperType
 
 FIELDS = (
@@ -39,14 +40,14 @@ class ThinktankTestCase(test.TestCase):
             Thinktank(
                 name='PIIE',
                 url='https://www.piie.com/',
-                unique_field='T1-AB',
+                unique_fields=['url'],
                 created=now,
                 is_active=True,
             ),
             Thinktank(
                 name='China Development Institute',
                 url='http://en.cdi.org.cn/',
-                unique_field='url',
+                unique_fields=['url'],
                 created=now,
             ),
         ])
@@ -86,7 +87,7 @@ class ThinktankTestCase(test.TestCase):
 
         cls.scraper: Scraper = cls.scrapers[0]
         cls.scraper.errors.create(code='E-0001', message='Test Error')
-        cls.scraper.errors.create(code='E-0002', message='Test Error')
+        cls.scraper.errors.create(code='W-0002', message='Test Warning', level=ErrorLevel.WARNING)
 
         cls.publications = Publication.objects.bulk_create([
             Publication(
@@ -171,14 +172,14 @@ class ThinktankTestCase(test.TestCase):
         response = request(self, '1:thinktank-list')
 
         item = self.get_result(response.data, self.thinktank.pk)
-        self.assertEqual(item['last_error_count'], 2)
-        self.assertEqual(self.thinktank.last_error_count, 2)
+        self.assertEqual(item['last_error_count'], 1)
+        self.assertEqual(self.thinktank.last_error_count, 1)
 
     def test_create(self):
         data = {
             'name': 'CosmoCode Thinktank',
             'url': 'https://cosmocode.de',
-            'unique_field': 'url',
+            'unique_fields': ['url'],
         }
 
         response = self.client.post('/api/thinktank/', data, 'application/json')
@@ -189,7 +190,7 @@ class ThinktankTestCase(test.TestCase):
         data = {
             'name': 'EDITED',
             'url': self.thinktank.url,
-            'unique_field': self.thinktank.unique_field,
+            'unique_fields': self.thinktank.unique_fields,
         }
 
         url = reverse('1:thinktank-detail', args=[self.thinktank.pk])
@@ -226,4 +227,4 @@ class ThinktankTestCase(test.TestCase):
         last_run = datetime.datetime.fromisoformat(scrapers[0]['last_run'])
         self.assertEqual(last_run, self.scraper.last_run)
         self.assertEqual(scrapers[0]['is_active'], True)
-        self.assertEqual(scrapers[0]['error_count'], 2)
+        self.assertEqual(scrapers[0]['error_count'], 1)

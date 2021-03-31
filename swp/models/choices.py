@@ -35,6 +35,8 @@ class ResolverType(models.TextChoices):
     STATIC = 'Static', _('Static')
 
     DOCUMENT = 'Document', _('Document')
+    DOI = 'DOI', _('DOI')
+    ISBN = 'ISBN', _('ISBN/ISSN')
 
     TITLE = 'Title', _('Title')
     SUBTITLE = 'Subtitle', _('Subtitle')
@@ -55,6 +57,9 @@ class ListResolverType(models.TextChoices):
     URL = ResolverType.URL
     AUTHORS = ResolverType.AUTHORS
     TAGS = ResolverType.TAGS
+    DOCUMENT = ResolverType.DOCUMENT
+    DOI = ResolverType.DOI
+    ISBN = ResolverType.ISBN
 
 
 class DataResolverKey(models.TextChoices):
@@ -65,12 +70,14 @@ class DataResolverKey(models.TextChoices):
     PUBLICATION_DATE = 'publication_date', _('Publication Date')
     URL = 'url', _('URL')
     PDF_URL = 'pdf_url', _('PDF URL')
+    DOI = 'doi', _('DOI')
+    ISBN = 'isbn', _('ISBN/ISSN')
     TAGS = 'tags', _('Tags')
 
 
 class UniqueKey(models.TextChoices):
     URL = 'url', _('URL')
-    NAME = 'name', _('Name')
+    TITLE = 'title', _('Title')
 
 
 class Comparator(models.TextChoices):

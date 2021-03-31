@@ -11,6 +11,7 @@ class UserAdmin(BaseUserAdmin):
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
         (_('Personal info'), {'fields': ('first_name', 'last_name')}),
+        (_('Notifications'), {'fields': ('is_error_recipient',)}),
         (_('Permissions'), {
             'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions'),
         }),
@@ -31,6 +32,7 @@ class UserAdmin(BaseUserAdmin):
         'is_active',
     ]
     list_filter = [
+        'is_error_recipient',
         'is_active',
         'last_login',
     ]

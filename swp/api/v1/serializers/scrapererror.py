@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from swp.models import ScraperError, publication
+from swp.models import ScraperError
 from .fields import PublicationField
 
 
@@ -13,6 +13,8 @@ class ScraperErrorSerializer(serializers.ModelSerializer):
             'id',
             'scraper',
             'publication',
+            'title',
+            'url',
             'code',
             'level',
             'message',

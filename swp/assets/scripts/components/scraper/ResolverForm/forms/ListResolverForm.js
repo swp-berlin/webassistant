@@ -47,6 +47,7 @@ const ListResolverForm = ({form, prefix, level, readOnly}) => {
                 choices={PaginatorTypes}
                 errors={errors}
                 disabled={readOnly}
+                defaultValue={PaginatorTypes[0].value}
             />
             <SelectorField
                 register={register}

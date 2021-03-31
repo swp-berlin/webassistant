@@ -29,6 +29,9 @@ msgstr "Ausgewählte %(verbose_name_plural)s deaktivieren"
 msgid "Personal info"
 msgstr "Persönliche Informationen"
 
+msgid "Notifications"
+msgstr "Benachrichtigungen"
+
 msgid "Permissions"
 msgstr "Berechtigungen"
 
@@ -56,6 +59,15 @@ msgstr "Monitor"
 
 msgid "Think Tank Filter"
 msgstr "Thinktank-Filter"
+
+msgid "title"
+msgstr "Titel"
+
+msgid "subtitle"
+msgstr "Untertitel"
+
+msgid "authors"
+msgstr "Autoren"
 
 #, python-format
 msgid "Missing %s permission"
@@ -106,6 +118,12 @@ msgstr "Statisch"
 msgid "Document"
 msgstr "Dokument"
 
+msgid "DOI"
+msgstr "DOI"
+
+msgid "ISBN/ISSN"
+msgstr "ISBN/ISSN"
+
 msgid "Title"
 msgstr "Titel"
 
@@ -130,9 +148,6 @@ msgstr "Tags"
 msgid "PDF URL"
 msgstr "PDF URL"
 
-msgid "Name"
-msgstr "Name"
-
 msgid "Contains"
 msgstr "Beinhaltet"
 
@@ -153,6 +168,9 @@ msgstr "Warnung"
 
 msgid "Error"
 msgstr "Fehler"
+
+msgid "Flexible ISBN or ISSN identifier"
+msgstr "Flexibler ISBN- oder ISSN-Bezeichner"
 
 msgid "name"
 msgstr "Name"
@@ -190,17 +208,8 @@ msgstr "Scrapers"
 msgid "reference type"
 msgstr "Referenztyp"
 
-msgid "title"
-msgstr "Titel"
-
-msgid "subtitle"
-msgstr "Untertitel"
-
 msgid "abstract"
 msgstr "Abstract"
-
-msgid "authors"
-msgstr "Autoren"
 
 msgid "publication date"
 msgstr "Veröffentlichungsdatum"
@@ -213,6 +222,9 @@ msgstr "Seitenzahl"
 
 msgid "tags"
 msgstr "Tags"
+
+msgid "hash"
+msgstr "Hash"
 
 msgid "publication"
 msgstr "Publikation"
@@ -266,6 +278,20 @@ msgstr "%s Scraper"
 msgid "Scraping Error"
 msgstr "Scraping-Fehler"
 
+msgid "Missing title and URL"
+msgstr "Fehlende Titel- und URL-Elemente"
+
+#, python-format
+msgid "Missing title for %s"
+msgstr "Fehlender Titel für %s"
+
+#, python-format
+msgid "Missing URL element for \"%s\""
+msgstr "Fehlendes URL-Element für „%s“"
+
+msgid "url"
+msgstr "URL"
+
 msgid "level"
 msgstr "Level"
 
@@ -287,14 +313,17 @@ msgstr "Scraping-Fehler"
 msgid "Link to homepage"
 msgstr "Link zur Homepage"
 
-msgid "unique field"
-msgstr "eindeutiges Feld"
+msgid "unique fields"
+msgstr "eindeutige Felder"
 
 msgid "think tanks"
 msgstr "Thinktanks"
 
 msgid "think tank filters"
 msgstr "Thinktank-Filter"
+
+msgid "is error recipient"
+msgstr "erhält Fehlermeldungen"
 
 msgid "List with Links"
 msgstr "Liste mit Links"
@@ -406,6 +435,21 @@ msgstr "Klicken Sie hier, um Ihr Passwort zurückzusetzen"
 
 msgid "Please go to the following page and choose a new password:"
 msgstr "Bitte gehen Sie zur folgenden Seite um ein neues Passwort zu setzen:"
+
+#, python-format
+msgid "<a href=\"%(url)s\">%(scraper)s</a> encountered the following problems:"
+msgstr "Bei der Ausführung von <a href=\"%(url)s\">%(scraper)s</a> sind die folgenden Fehler aufgetreten:"
+
+#, python-format
+msgid "%(scraper)s encountered problems while running:"
+msgstr "%(scraper)s konnte nicht fehlerfrei ausgeführt werden:"
+
+msgid "The following errors occured:"
+msgstr "Die folgenden Fehler sind aufgetreten:"
+
+#, python-format
+msgid "Error in %(scraper)s"
+msgstr "Fehler im %(scraper)s"
 
 #, python-format
 msgid "No elements matching %(selector)s found"

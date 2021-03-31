@@ -1,6 +1,7 @@
 import {Callout, Intent} from '@blueprintjs/core';
 import DateTime from 'components/DateTime';
 import ExternalLink from 'components/Navigation/ExternalLink';
+import {getPublicationFieldLabel} from 'components/publication/PublicationField';
 
 import _, {interpolate} from 'utils/i18n';
 
@@ -10,13 +11,17 @@ const FieldLabel = _('Field: %s');
 const CodeLabel = _('Code: %s');
 
 const groupByPublication = errors => (
-    errors.reduce((results, {id, publication, message, field, code, level, timestamp}) => {
+    errors.reduce((results, {id, publication, title, url, message, field, code, level, timestamp}) => {
+        if (level !== 'error') {
+            return results;
+        }
+
         const position = publication?.id || 0;
         if (!results[position]) {
             results[position] = [];
         }
 
-        results[position].push({id, publication, message, field, code, level, timestamp});
+        results[position].push({id, publication, title, url, message, field, code, level, timestamp});
         return results;
     }, {})
 );
@@ -25,10 +30,20 @@ const groupByPublication = errors => (
 const GlobalErrors = ({errors}) => (
     <section className="global-errors mb-6">
         <ul className="list-none pl-0 space-y-2">
-            {errors.map(({id, message, code}) => (
-                <li className="scraper-error" data-id={id}>
-                    <Callout intent={Intent.DANGER} title={code}>
-                        <p>{message}</p>
+            {errors.map(({id, title, url, message, field, code, timestamp}) => (
+                <li className="scraper-error" data-id={id} data-field={field} data-code={code}>
+                    <Callout
+                        intent={Intent.DANGER}
+                        title={url ? <ExternalLink to={url}>{title}</ExternalLink> : title}
+                    >
+                        {timestamp && (
+                            <p><small className="text-gray-400"><DateTime value={timestamp} /></small></p>
+                        )}
+
+                        <p className="whitespace-pre-line">
+                            {field && <strong>{`${getPublicationFieldLabel(field)}: `}</strong>}
+                            {message}
+                        </p>
                     </Callout>
                 </li>
             ))}
@@ -92,6 +107,10 @@ const BackendScraperErrors = ({errors}) => {
             )}
         </div>
     );
+};
+
+BackendScraperErrors.defaultProps = {
+    errors: [],
 };
 
 export default BackendScraperErrors;

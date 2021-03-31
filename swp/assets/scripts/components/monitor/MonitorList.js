@@ -22,7 +22,7 @@ const MonitorAddButton = ({...props}) => (
 );
 
 const MonitorList = () => {
-    useBreadcrumb('/thinktank/', MonitorsLabel);
+    useBreadcrumb('/monitor/', MonitorsLabel);
 
     return (
         <Page title={MonitorsLabel} actions={<MonitorAddButton />}>

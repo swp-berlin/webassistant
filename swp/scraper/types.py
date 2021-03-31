@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from swp.models.choices import DataResolverKey, ResolverType
+from swp.models.choices import ResolverType
 
 
 @dataclass

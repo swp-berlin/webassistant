@@ -1,4 +1,5 @@
 from .base import *
+from .base import env
 
 from cosmogo.utils.settings import debug_toolbar, django_extensions
 
@@ -10,7 +11,8 @@ SECRET_KEY = 'this-is-not-a-secret-key'
 
 ALLOWED_HOSTS = '*'
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = env('EMAIL_BACKEND', 'django.core.mail.backends.console.EmailBackend')
+EMAIL_PORT = env('EMAIL_PORT', 1025, parser=int)
 
 [
     INSTALLED_APPS,

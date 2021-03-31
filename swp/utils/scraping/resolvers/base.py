@@ -1,11 +1,10 @@
-from typing import Iterable, Mapping, Optional
+from typing import Iterable, List, Mapping, Optional, Union
 
 from playwright.async_api import ElementHandle, Error as PlaywrightError
 
 import swp.utils.scraping.resolvers.types as types
-
 from swp.utils.scraping.context import ScraperContext
-from swp.utils.scraping.exceptions import ResolverError
+from swp.utils.scraping.exceptions import ErrorLevel, ResolverError
 from swp.utils.scraping.selectors import Selector
 
 
@@ -28,6 +27,10 @@ class Resolver:
     async def resolve(self, *args, **kwargs):
         raise NotImplementedError
 
+    def make_error(self, message: str, **kwargs) -> ResolverError:
+        kwargs.setdefault('level', ErrorLevel.ERROR if getattr(self, 'required', False) else ErrorLevel.WARNING)
+        return ResolverError(message, **kwargs)
+
 
 class SelectorMixin:
 
@@ -36,7 +39,7 @@ class SelectorMixin:
         self.selector = selector
         self.multiple = multiple
 
-    async def get_element(self, node: ElementHandle) -> Optional[ElementHandle]:
+    async def get_element(self, node: ElementHandle) -> Union[Optional[ElementHandle], List[ElementHandle]]:
         try:
             if self.multiple:
                 elem = await node.query_selector_all(self.selector)
