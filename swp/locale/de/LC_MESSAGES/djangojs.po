@@ -322,6 +322,9 @@ msgstr "Paginierungsselektor"
 msgid "Max Pages"
 msgstr "Maximale Seitenzahl"
 
+msgid "Cookie Banner Selector"
+msgstr "Cookie-Banner-Selektor"
+
 msgid "Please enter a valid css selector"
 msgstr "Bitte geben Sie einen gültigen Selektor ein"
 
