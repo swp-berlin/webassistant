@@ -175,12 +175,13 @@ class PublicationTestCase(test.TestCase):
             'values': ['foo', 'bar'],
         }
 
-        thinktank = ThinktankFactory.create(
-            publications=[{'title': 'foo'}, {'title': 'bar'}, {'title': 'foo bar'}, {'title': 'baz'}]
-        )
-
         monitor = MonitorFactory.create(
-            thinktank_filters=[{'thinktank': thinktank, 'publication_filters': [filter_with_multiple_values]}]
+            thinktank_filters=[{
+                'thinktank__publications': [
+                    {'title': 'foo'}, {'title': 'bar'}, {'title': 'foo bar'}, {'title': 'baz'}
+                ],
+                'publication_filters': [filter_with_multiple_values],
+            }]
         )
 
         response = request(self, f'{self.list_url}?monitor={monitor.pk}')
