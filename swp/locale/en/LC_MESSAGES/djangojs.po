@@ -322,6 +322,9 @@ msgstr ""
 msgid "Max Pages"
 msgstr ""
 
+msgid "Cookie Banner Selector"
+msgstr ""
+
 msgid "Please enter a valid css selector"
 msgstr ""
 

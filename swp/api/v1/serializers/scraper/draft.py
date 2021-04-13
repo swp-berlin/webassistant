@@ -22,6 +22,7 @@ class PaginatorDraftSerializer(Serializer):
 
 class ListResolverDraftSerializer(Serializer):
     selector = CSSSelectorField(allow_blank=True)
+    cookie_banner_selector = CSSSelectorField(allow_blank=True, default='')
     paginator = PaginatorDraftSerializer()
     resolvers = ResolverConfigDraftSerializer(many=True)
 
