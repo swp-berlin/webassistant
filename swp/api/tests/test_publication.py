@@ -60,7 +60,7 @@ class PublicationTestCase(test.TestCase):
                 thinktank_filter=cls.thinktank_filters[0],
                 field='title',
                 comparator='contains',
-                values=['COVID-19'],
+                values=['COVID-20'],
             ),
             PublicationFilter(
                 thinktank_filter=cls.thinktank_filters[1],
