@@ -38,7 +38,7 @@ class AdminTestCase(TestCase):
             thinktank_filter=thinktank_filter,
             field=DataResolverKey.TITLE,
             comparator=Comparator.STARTS_WITH,
-            value='Taming',
+            values=['Taming'],
         )
 
         scraper = Scraper.objects.create(

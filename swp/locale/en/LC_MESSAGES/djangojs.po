@@ -130,7 +130,7 @@ msgstr ""
 msgid "No Results"
 msgstr ""
 
-msgid "by"
+msgid "At least one item is required"
 msgstr ""
 
 msgid "and"
@@ -228,6 +228,9 @@ msgid "New"
 msgstr ""
 
 msgid "Download .RIS"
+msgstr ""
+
+msgid "by"
 msgstr ""
 
 msgid "unknown"
@@ -426,6 +429,9 @@ msgid "Filter on Field"
 msgstr ""
 
 msgid "Comparator"
+msgstr ""
+
+msgid "Values"
 msgstr ""
 
 msgid "Remove Filter"

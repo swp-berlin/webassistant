@@ -3,7 +3,7 @@ from rest_framework.serializers import ModelSerializer, Serializer
 
 from swp.models import Scraper
 from swp.models.choices import PaginatorType, ResolverType
-from swp.api.v1.serializers.scraper import base
+from swp.api.serializers.scraper import base
 from ..fields import CSSSelectorField
 
 

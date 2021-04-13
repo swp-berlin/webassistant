@@ -38,3 +38,6 @@ class Router(DefaultRouter):
             self.urlpatterns.append(
                 path(f'{prefix}{self.trailing_slash}', viewset.as_view(), name=basename)
             )
+
+
+default_router = Router()

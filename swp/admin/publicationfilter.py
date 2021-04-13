@@ -9,5 +9,5 @@ class PublicationFilterAdmin(admin.ModelAdmin):
         'thinktank_filter',
         'field',
         'comparator',
-        'value',
+        'values',
     ]

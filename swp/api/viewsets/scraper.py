@@ -6,10 +6,10 @@ from rest_framework.viewsets import ModelViewSet
 from swp.models import Scraper
 
 from ..serializers import ScraperSerializer, ScraperDraftSerializer
-from ..router import router
+from ..router import default_router
 
 
-@router.register('scraper', basename='scraper')
+@default_router.register('scraper', basename='scraper')
 class ScraperViewSet(ModelViewSet):
     queryset = Scraper.objects.select_related('thinktank').prefetch_related(
         'errors',

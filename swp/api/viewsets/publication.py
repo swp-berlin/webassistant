@@ -4,8 +4,8 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework import viewsets
 from rest_framework.pagination import PageNumberPagination
 
-from swp.api.v1.router import router
-from swp.api.v1.serializers import PublicationSerializer
+from swp.api.router import default_router
+from swp.api.serializers import PublicationSerializer
 from swp.models import Monitor, Publication, ThinktankFilter
 
 
@@ -48,7 +48,7 @@ class PublicationFilter(FilterSet):
         ]
 
 
-@router.register('publication', basename='publication')
+@default_router.register('publication', basename='publication')
 class PublicationViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Publication.objects.all()
     filterset_class = PublicationFilter
