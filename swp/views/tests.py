@@ -6,7 +6,7 @@ from django.utils.crypto import get_random_string
 
 from cosmogo.utils.testing import create_user, login, request
 
-from swp.api.v1.serializers import UserSerializer
+from swp.api.serializers import UserSerializer
 from swp.models import User
 from swp.views.auth import PasswordResetConfirmView
 from swp.tests.test_permissions import EDITOR_PERMS, MANAGER_PERMS

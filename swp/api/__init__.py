@@ -1,1 +1,2 @@
-from .v1 import router as v1
+from .router import default_router
+from .viewsets import *

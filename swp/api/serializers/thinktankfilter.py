@@ -1,8 +1,8 @@
 from django.db import transaction
 from rest_framework import serializers
 
-from swp.api.v1.serializers.fields import MonitorField
-from swp.api.v1.serializers.publicationfilter import PublicationFilterSerializer
+from swp.api.serializers.fields import MonitorField
+from swp.api.serializers.publicationfilter import PublicationFilterSerializer
 from swp.models import Publication, PublicationFilter, ThinktankFilter
 from swp.models.publicationfilter import as_query
 from swp.models.thinktankfilter import as_query as as_thinktank_filter_query

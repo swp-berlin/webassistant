@@ -8,7 +8,7 @@ from django.utils import timezone
 from cosmogo.utils.testing import create_user, login, request
 
 from swp.models import Monitor, Publication, PublicationFilter, Thinktank, ThinktankFilter
-
+from swp.utils.testing import MonitorFactory, ThinktankFactory
 
 ONE_HOUR = datetime.timedelta(hours=1)
 
@@ -53,19 +53,19 @@ class PublicationTestCase(test.TestCase):
                 thinktank_filter=cls.thinktank_filters[0],
                 field='title',
                 comparator='contains',
-                value='COVID-19',
+                values=['COVID-19'],
             ),
             PublicationFilter(
                 thinktank_filter=cls.thinktank_filters[0],
                 field='title',
                 comparator='contains',
-                value='COVID-20',
+                values=['COVID-19'],
             ),
             PublicationFilter(
                 thinktank_filter=cls.thinktank_filters[1],
                 field='title',
                 comparator='starts_with',
-                value='Annual Report',
+                values=['Annual Report'],
             ),
         ])
 
@@ -166,3 +166,18 @@ class PublicationTestCase(test.TestCase):
 
         response = request(self, f'{self.list_url}?{query_string}')
         self.assertEqual(response.data['count'], 0)
+
+    def test_multiple_filters(self):
+        filter_with_multiple_values = {'field': 'title', 'comparator': 'contains', 'values': ['foo', 'bar']}
+
+        thinktank = ThinktankFactory.create(
+            publications=[{'title': 'foo'}, {'title': 'bar'}, {'title': 'foo bar'}, {'title': 'baz'}]
+        )
+
+        monitor = MonitorFactory.create(
+            thinktank_filters=[{'thinktank': thinktank, 'publication_filters': [filter_with_multiple_values]}]
+        )
+
+        response = request(self, f'{self.list_url}?monitor={monitor.pk}')
+        self.assertEqual(response.data['count'], 3)
+        self.assertEqual({'foo', 'bar', 'foo bar'}, set([result['title'] for result in response.data['results']]))
