@@ -28,7 +28,7 @@ const ThinktankFilterForm = ({endpoint, method, backURL, successMessage, data, s
     const handlePreview = useCallback(publications => setPreview(publications), []);
 
     return (
-        <form className="my-4 w-full max-w-screen-md" {...props} onSubmit={onSubmit}>
+        <form className="my-4 w-full max-w-screen-md" onSubmit={onSubmit} {...props}>
             <ThinktankSelect form={form} />
 
             <PublicationFiltersForm form={form} />
