@@ -8,6 +8,7 @@ from django.utils import timezone
 from cosmogo.utils.testing import create_user, login, request
 
 from swp.models import Monitor, Publication, PublicationFilter, Thinktank, ThinktankFilter
+from swp.models.choices import Comparator, DataResolverKey
 from swp.utils.testing import MonitorFactory, ThinktankFactory
 
 ONE_HOUR = datetime.timedelta(hours=1)
@@ -168,7 +169,11 @@ class PublicationTestCase(test.TestCase):
         self.assertEqual(response.data['count'], 0)
 
     def test_multiple_filters(self):
-        filter_with_multiple_values = {'field': 'title', 'comparator': 'contains', 'values': ['foo', 'bar']}
+        filter_with_multiple_values = {
+            'field': DataResolverKey.TITLE.value,
+            'comparator': Comparator.CONTAINS.value,
+            'values': ['foo', 'bar'],
+        }
 
         thinktank = ThinktankFactory.create(
             publications=[{'title': 'foo'}, {'title': 'bar'}, {'title': 'foo bar'}, {'title': 'baz'}]
