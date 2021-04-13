@@ -61,7 +61,7 @@ class ThinktankFilterSerializer(serializers.ModelSerializer):
             as_query(
                 publication_filter.get('field'),
                 publication_filter.get('comparator'),
-                publication_filter.get('value'),
+                publication_filter.get('values'),
             )
             for publication_filter in publication_filters
         ]

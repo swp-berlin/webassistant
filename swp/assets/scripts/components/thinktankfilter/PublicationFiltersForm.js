@@ -12,7 +12,7 @@ const AddFilterLabel = _('Add Filter');
 const EmptyThinktankFilter = {
     field: null,
     comparator: null,
-    value: '',
+    values: [],
 };
 
 const PublicationFiltersForm = ({form}) => {
@@ -28,15 +28,18 @@ const PublicationFiltersForm = ({form}) => {
     return (
         <div className="my-8">
             <h4 className="mb-4">Filters</h4>
-            {publicationFilers.map((filter, index) => (
-                <PublicationFilterForm
-                    key={filter.fieldID}
-                    form={form}
-                    index={index}
-                    data={filter}
-                    onRemove={handleRemove}
-                />
-            ))}
+            <div className="grid grid-cols-12 space-x-4 items-center">
+                {publicationFilers.map((filter, index) => (
+                    <PublicationFilterForm
+                        key={filter.fieldID}
+                        form={form}
+                        index={index}
+                        data={filter}
+                        onRemove={handleRemove}
+                    />
+                ))}
+            </div>
+
             <Button minimal onClick={handleAdd} icon="plus" text={AddFilterLabel} />
         </div>
     );

@@ -241,7 +241,7 @@ msgstr ""
 msgid "comparator"
 msgstr ""
 
-msgid "value"
+msgid "values"
 msgstr ""
 
 msgid "publication filter"
