@@ -94,3 +94,18 @@ class PaginatorType(models.TextChoices):
 class ErrorLevel(CodeChoices):
     WARNING = 'warning', _('Warning')
     ERROR = 'error', _('Error')
+
+
+class FilterField(models.TextChoices):
+    TEXT = 'text', _('Text')
+
+    TITLE = DataResolverKey.TITLE
+    SUBTITLE = DataResolverKey.SUBTITLE
+    ABSTRACT = DataResolverKey.ABSTRACT
+    AUTHORS = DataResolverKey.AUTHORS
+    PUBLICATION_DATE = DataResolverKey.PUBLICATION_DATE
+    URL = DataResolverKey.URL
+    PDF_URL = DataResolverKey.PDF_URL
+    DOI = DataResolverKey.DOI
+    ISBN = DataResolverKey.ISBN
+    TAGS = DataResolverKey.TAGS

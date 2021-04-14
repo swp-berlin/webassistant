@@ -5,11 +5,25 @@ from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from swp.models.choices import Comparator, DataResolverKey
+from swp.models.choices import Comparator, FilterField
 from swp.models.fields import ChoiceField
 
 
+TEXT_FIELDS = [
+    FilterField.TITLE,
+    FilterField.SUBTITLE,
+    FilterField.ABSTRACT,
+]
+
+
 def as_query(field, comparator, values):
+    if field == FilterField.TEXT:
+        return reduce(
+            operator.or_,
+            [as_query(text_field, comparator, values) for text_field in TEXT_FIELDS],
+            models.Q(),
+        )
+
     key = f'{field}__{PublicationFilter.FILTERS[comparator]}'
 
     return reduce(
@@ -34,7 +48,7 @@ class PublicationFilter(models.Model):
 
     )
 
-    field = ChoiceField(_('field'), choices=DataResolverKey.choices)
+    field = ChoiceField(_('field'), choices=FilterField.choices)
     comparator = ChoiceField(_('comparator'), choices=Comparator.choices)
     values = ArrayField(
         verbose_name=_('values'),
