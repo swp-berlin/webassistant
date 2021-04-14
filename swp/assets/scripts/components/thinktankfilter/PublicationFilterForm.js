@@ -11,7 +11,7 @@ const ComparatorLabel = _('Comparator');
 const ValuesLabel = _('Values');
 const RemoveFilterTitle = _('Remove Filter');
 
-const FieldChoices = getChoices('DataResolverKey');
+const FieldChoices = getChoices('FilterField');
 const ComparatorChoices = getChoices('Comparator');
 
 
@@ -50,6 +50,7 @@ const PublicationFilterForm = ({form: {register, control, errors}, index, data, 
                 errors={errors}
                 defaultValue={data.values}
                 required
+                addOnBlur
             />
             <Button
                 className="mt-2 col-span-1"

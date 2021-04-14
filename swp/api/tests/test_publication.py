@@ -8,8 +8,8 @@ from django.utils import timezone
 from cosmogo.utils.testing import create_user, login, request
 
 from swp.models import Monitor, Publication, PublicationFilter, Thinktank, ThinktankFilter
-from swp.models.choices import Comparator, DataResolverKey
-from swp.utils.testing import MonitorFactory, ThinktankFactory
+from swp.models.choices import Comparator, FilterField
+from swp.utils.testing import MonitorFactory
 
 ONE_HOUR = datetime.timedelta(hours=1)
 
@@ -170,7 +170,7 @@ class PublicationTestCase(test.TestCase):
 
     def test_multiple_filters(self):
         filter_with_multiple_values = {
-            'field': DataResolverKey.TITLE.value,
+            'field': FilterField.TITLE.value,
             'comparator': Comparator.CONTAINS.value,
             'values': ['foo', 'bar'],
         }
@@ -187,3 +187,30 @@ class PublicationTestCase(test.TestCase):
         response = request(self, f'{self.list_url}?monitor={monitor.pk}')
         self.assertEqual(response.data['count'], 3)
         self.assertEqual({'foo', 'bar', 'foo bar'}, set([result['title'] for result in response.data['results']]))
+
+    def test_text_filter_field(self):
+        text_filter = {
+            'field': FilterField.TEXT.value,
+            'comparator': Comparator.CONTAINS.value,
+            'values': ['text_filter_value_1', 'text_filter_value_2'],
+        }
+
+        monitor = MonitorFactory.create(
+            thinktank_filters=[{
+                'thinktank__publications': [
+                    {FilterField.TITLE: 'text_filter_value_1'},
+                    {FilterField.ABSTRACT: 'text_filter_value_1'},
+                    {FilterField.SUBTITLE: 'text_filter_value_2'},
+                    {FilterField.AUTHORS: ['FOO']},
+                    {},
+                ],
+                'publication_filters': [text_filter],
+            }]
+        )
+
+        response = request(self, f'{self.list_url}?monitor={monitor.pk}')
+
+        self.assertEqual(response.data['count'], 3)
+        self.assertEqual(response.data['results'][0][FilterField.SUBTITLE.value], 'text_filter_value_2')
+        self.assertEqual(response.data['results'][1][FilterField.ABSTRACT.value], 'text_filter_value_1')
+        self.assertEqual(response.data['results'][2][FilterField.TITLE.value], 'text_filter_value_1')
