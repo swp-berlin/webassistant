@@ -5,6 +5,7 @@ from typing import ContextManager
 
 from playwright.async_api import async_playwright, Browser, Page
 
+from django.conf import settings
 from cosmogo.utils.tempdir import maketempdir
 
 
@@ -32,7 +33,7 @@ def tempoary_user_dir():
 async def open_browser(*args, **kwargs) -> ContextManager[Browser]:
     kwargs.setdefault('accept_downloads', True)
 
-    if kwargs.pop('debug', False):
+    if kwargs.pop('debug', settings.PLAYWRIGHT_DEBUG):
         kwargs.setdefault('headless', False)
         kwargs.setdefault('slow_mo', 100)
         kwargs.setdefault('devtools', True)
