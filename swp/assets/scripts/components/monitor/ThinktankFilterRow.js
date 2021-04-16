@@ -3,15 +3,13 @@ import {Link} from 'react-router-dom';
 import MonitorPublicationsLink from './MonitorPublicationsLink';
 
 
-const PublicationFilterItem = ({id, field, comparator, value}) => (
+const PublicationFilterItem = ({id, field, comparator, values}) => (
     <span className="publication-filter" data-id={id}>
         <span className="field">{field}</span>
         {' '}
         <span className="comparator">{comparator}</span>
         {' '}
-        <q className="value">
-            {value}
-        </q>
+        {values.map(value => `"${value}"`).join(', ')}
     </span>
 );
 
