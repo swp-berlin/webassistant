@@ -13,6 +13,7 @@ const ItemSelectorLabel = _('Item Selector');
 const PaginatorTypeLabel = _('Paginator Type');
 const PaginationButtonSelectorLabel = _('Pagination Button Selector');
 const MaxPagesLabel = _('Max Pages');
+const CookieBannerSelectorLabel = _('Cookie Banner Selector');
 
 const PaginatorTypes = getChoices('PaginatorType');
 
@@ -64,6 +65,13 @@ const ListResolverForm = ({form, prefix, level, readOnly}) => {
                 defaultValue="1"
                 min={1}
                 fill
+                readOnly={readOnly}
+            />
+            <SelectorField
+                register={register}
+                name={`${prefix}.cookie_banner_selector`}
+                label={CookieBannerSelectorLabel}
+                errors={errors}
                 readOnly={readOnly}
             />
         </ResolverListForm>

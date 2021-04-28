@@ -23,6 +23,9 @@ class DocumentResolver(DataResolver):
         if not elem:
             raise self.make_error(_('No document for selector %(selector)s found.') % {'selector': self.selector})
 
+        # [SWP-137] Playwright does not handle downloads in new tabs (#1967)
+        await elem.evaluate('node => node.removeAttribute("target")')
+
         try:
             async with page.expect_download() as download_info:
                 await elem.click()

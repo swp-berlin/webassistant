@@ -50,6 +50,7 @@ class PaginatorSerializer(Serializer):
 
 class ListResolverSerializer(Serializer):
     selector = CSSSelectorField()
+    cookie_banner_selector = CSSSelectorField(allow_blank=True, default='')
     paginator = PaginatorSerializer()
     resolvers = ResolverConfigSerializer(many=True)
 

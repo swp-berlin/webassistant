@@ -3,12 +3,12 @@ from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from swp.api.v1.router import router
-from swp.api.v1.serializers import ScraperDraftSerializer, ThinktankSerializer, ThinktankListSerializer
+from swp.api.router import default_router
+from swp.api.serializers import ScraperDraftSerializer, ThinktankSerializer, ThinktankListSerializer
 from swp.models import Scraper, Thinktank
 
 
-@router.register('thinktank', basename='thinktank')
+@default_router.register('thinktank', basename='thinktank')
 class ThinktankViewSet(viewsets.ModelViewSet):
     queryset = Thinktank.objects.annotate_last_run().annotate_counts()
     filterset_fields = ['is_active']

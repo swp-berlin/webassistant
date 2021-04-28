@@ -1,5 +1,6 @@
 import asyncio
 from asyncio import Queue
+from typing import AsyncGenerator
 
 from playwright.async_api import ElementHandle
 
@@ -13,10 +14,12 @@ class ListResolver(IntermediateResolver):
     """
 
     def __init__(self, context, *args, selector: str, paginator: dict = None,
+                 cookie_banner_selector: str = '',
                  **kwargs):
         super().__init__(context, *args, **kwargs)
 
         self.paginator = self.create_paginator(context, item_selector=selector, **paginator)
+        self.cookie_banner_selector = cookie_banner_selector
 
     @staticmethod
     def create_paginator(context, *, type: str = 'Page', **paginator):
@@ -53,9 +56,12 @@ class ListResolver(IntermediateResolver):
 
             results.put_nowait(None)
 
-    async def resolve(self) -> [dict]:
+    async def resolve(self) -> AsyncGenerator[dict, None]:
         nodes = Queue()
         results = Queue()
+
+        if self.cookie_banner_selector:
+            await self.context.page.click(self.cookie_banner_selector)
 
         process = asyncio.create_task(self.process_nodes(nodes, results))
 

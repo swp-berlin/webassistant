@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from swp.api.v1.serializers.thinktankfilter import ThinktankFilterSerializer
+from swp.api.serializers.thinktankfilter import ThinktankFilterSerializer
 from swp.models import Monitor
 
 from .fields import RecipientsField

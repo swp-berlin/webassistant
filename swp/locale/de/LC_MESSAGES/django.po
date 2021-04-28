@@ -241,8 +241,8 @@ msgstr "Feld"
 msgid "comparator"
 msgstr "Vergleichsoperator"
 
-msgid "value"
-msgstr "Wert"
+msgid "values"
+msgstr "Werte"
 
 msgid "publication filter"
 msgstr "Publikationsfilter"

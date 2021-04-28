@@ -130,7 +130,7 @@ msgstr ""
 msgid "No Results"
 msgstr ""
 
-msgid "by"
+msgid "At least one item is required"
 msgstr ""
 
 msgid "and"
@@ -230,6 +230,9 @@ msgstr ""
 msgid "Download .RIS"
 msgstr ""
 
+msgid "by"
+msgstr ""
+
 msgid "unknown"
 msgstr ""
 
@@ -320,6 +323,9 @@ msgid "Pagination Button Selector"
 msgstr ""
 
 msgid "Max Pages"
+msgstr ""
+
+msgid "Cookie Banner Selector"
 msgstr ""
 
 msgid "Please enter a valid css selector"
@@ -423,6 +429,9 @@ msgid "Filter on Field"
 msgstr ""
 
 msgid "Comparator"
+msgstr ""
+
+msgid "Values"
 msgstr ""
 
 msgid "Remove Filter"

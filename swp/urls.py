@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.urls import include, path
 
 from swp.views import *
-from swp.api import v1
+from swp.api import default_router as v1
 
 react = SWPView.as_view()
 

@@ -7,5 +7,5 @@ class PublicationFilterSerializer(ModelSerializer):
 
     class Meta:
         model = PublicationFilter
-        fields = ['id', 'thinktank_filter', 'field', 'comparator', 'value']
+        fields = ['id', 'thinktank_filter', 'field', 'comparator', 'values']
         read_only_fields = ['thinktank_filter']

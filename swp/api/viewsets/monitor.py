@@ -3,10 +3,10 @@ from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from swp.api.v1 import router
-from swp.api.v1.filters import UpdatePublicationCountFilter
-from swp.api.v1.serializers import ThinktankFilterSerializer
-from swp.api.v1.serializers.monitor import MonitorSerializer
+from swp.api import default_router
+from swp.api.filters import UpdatePublicationCountFilter
+from swp.api.serializers import ThinktankFilterSerializer
+from swp.api.serializers.monitor import MonitorSerializer
 from swp.models import Monitor
 
 
@@ -18,7 +18,7 @@ class MonitorFilterSet(FilterSet):
         fields = ['update_publications']
 
 
-@router.register('monitor', basename='monitor')
+@default_router.register('monitor', basename='monitor')
 class MonitorViewSet(viewsets.ModelViewSet):
     queryset = Monitor.objects.prefetch_related('thinktank_filters__publication_filters')
     serializer_class = MonitorSerializer

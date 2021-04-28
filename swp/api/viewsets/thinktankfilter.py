@@ -3,10 +3,10 @@ from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from swp.api.v1 import router
-from swp.api.v1.filters import UpdatePublicationCountFilter
-from swp.api.v1.serializers import PublicationSerializer
-from swp.api.v1.serializers.thinktankfilter import ThinktankFilterSerializer
+from swp.api import default_router
+from swp.api.filters import UpdatePublicationCountFilter
+from swp.api.serializers import PublicationSerializer
+from swp.api.serializers.thinktankfilter import ThinktankFilterSerializer
 from swp.models import ThinktankFilter
 
 
@@ -18,7 +18,7 @@ class ThinktankFilterFilterSet(FilterSet):
         fields = ['update_publications']
 
 
-@router.register('thinktankfilter', basename='thinktankfilter')
+@default_router.register('thinktankfilter', basename='thinktankfilter')
 class ThinktankFilterViewSet(viewsets.ModelViewSet):
     queryset = ThinktankFilter.objects.prefetch_related('publication_filters')
     serializer_class = ThinktankFilterSerializer

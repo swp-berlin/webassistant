@@ -4,6 +4,7 @@ import TextInput from './TextInput';
 import NumericInput from './NumericInput';
 import {Select, MultiSelect, Suggest} from './Select';
 import TextArea from './TextArea';
+import TagInput from './TagInput';
 
 export {
     Checkbox,
@@ -14,4 +15,5 @@ export {
     Suggest,
     Select,
     MultiSelect,
+    TagInput,
 };

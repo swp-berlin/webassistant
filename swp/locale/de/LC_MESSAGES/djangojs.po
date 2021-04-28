@@ -130,8 +130,8 @@ msgstr "(erfordert)"
 msgid "No Results"
 msgstr "Keine Ergebnisse"
 
-msgid "by"
-msgstr "von"
+msgid "At least one item is required"
+msgstr "Es muss mindestens ein Wert eingegeben werden"
 
 msgid "and"
 msgstr "und"
@@ -230,6 +230,9 @@ msgstr "Neu"
 msgid "Download .RIS"
 msgstr ".RIS herunterladen"
 
+msgid "by"
+msgstr "von"
+
 msgid "unknown"
 msgstr "unbekannt"
 
@@ -321,6 +324,9 @@ msgstr "Paginierungsselektor"
 
 msgid "Max Pages"
 msgstr "Maximale Seitenzahl"
+
+msgid "Cookie Banner Selector"
+msgstr "Cookie-Banner-Selektor"
 
 msgid "Please enter a valid css selector"
 msgstr "Bitte geben Sie einen gültigen Selektor ein"
@@ -424,6 +430,9 @@ msgstr "Filter nach Feld"
 
 msgid "Comparator"
 msgstr "Vergleichsoperator"
+
+msgid "Values"
+msgstr "Werte"
 
 msgid "Remove Filter"
 msgstr "Filter entfernen"
