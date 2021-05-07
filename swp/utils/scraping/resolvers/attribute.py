@@ -1,7 +1,7 @@
 from django.utils.translation import gettext_lazy as _
+from playwright.async_api import ElementHandle
 
 from ..exceptions import ResolverError
-from .base import get_content
 from .data import DataResolver
 
 
@@ -11,8 +11,8 @@ class AttributeResolver(DataResolver):
         super().__init__(*args, **kwargs)
         self.attribute = attribute
 
-    async def get_single_content(self, element):
-        value = await get_content(element, self.attribute)
+    async def get_single_content(self, element: ElementHandle):
+        value = await element.get_attribute(self.attribute)
 
         if not value:
             raise ResolverError(
@@ -22,4 +22,4 @@ class AttributeResolver(DataResolver):
                 }
             )
 
-        return await get_content(element, self.attribute)
+        return value
