@@ -12,7 +12,11 @@ class AttributeResolver(DataResolver):
         self.attribute = attribute
 
     async def get_single_content(self, element: ElementHandle):
-        value = await element.get_attribute(self.attribute)
+        if self.attribute == 'href':
+            href_property = await element.get_property(self.attribute)
+            value = await href_property.json_value()
+        else:
+            value = await element.get_attribute(self.attribute)
 
         if not value:
             raise ResolverError(
