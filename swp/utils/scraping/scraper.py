@@ -25,9 +25,10 @@ class Result(TypedDict):
 class Scraper:
     context = None
 
-    def __init__(self, url: URL, *, download_path: str = None):
+    def __init__(self, url: URL, *, download_path: str = None, full_scan: bool = False):
         self.url = url
         self.download_path = download_path
+        self.full_scan = full_scan
 
     async def scrape(self, resolver_config: Mapping[str, Any]) -> AsyncGenerator[Result, None]:
         try:
@@ -50,4 +51,5 @@ class Scraper:
             raise
 
     def stop(self):
-        self.context.stopped = True
+        if not self.full_scan:
+            self.context.stopped = True
