@@ -13,6 +13,7 @@ class StaticResolver(Resolver):
 
     async def resolve(self, node: ElementHandle, fields: dict, errors: dict):
         if self.multiple:
-            fields.setdefault(self.key, []).append(self.value)
+            values = fields.get(self.key) or []
+            fields[self.key] = [*values, self.value]
         else:
             fields[self.key] = self.value
