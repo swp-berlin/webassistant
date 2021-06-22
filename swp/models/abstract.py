@@ -132,8 +132,11 @@ class LastModified(models.Model):
     class Meta:
         abstract = True
 
-    def update(self, *, using=None, **values):
-        update_fields = {*values, 'last_modified'}
+    def update(self, *, using=None, modified: bool = True, **values):
+        update_fields = {*values}
+
+        if modified:
+            update_fields.add('last_modified')
 
         for field, value in values.items():
             setattr(self, field, value)

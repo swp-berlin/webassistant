@@ -169,6 +169,9 @@ msgstr "Warnung"
 msgid "Error"
 msgstr "Fehler"
 
+msgid "Text"
+msgstr "Text"
+
 msgid "Flexible ISBN or ISSN identifier"
 msgstr "Flexibler ISBN- oder ISSN-Bezeichner"
 
@@ -450,6 +453,9 @@ msgstr "Die folgenden Fehler sind aufgetreten:"
 #, python-format
 msgid "Error in %(scraper)s"
 msgstr "Fehler im %(scraper)s"
+
+msgid "Scraping protection prevents page access"
+msgstr "Diese Seite sperrt Scraper und Bots aktiv aus und kann daher nicht automatisch abgerufen werden"
 
 #, python-format
 msgid "No elements matching %(selector)s found"

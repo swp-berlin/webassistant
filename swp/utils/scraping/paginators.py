@@ -8,7 +8,7 @@ from playwright.async_api import ElementHandle, Page, TimeoutError
 from django.utils.translation import gettext_lazy as _
 
 from swp.utils.scraping.context import ScraperContext
-from swp.utils.scraping.exceptions import ResolverError
+from swp.utils.scraping.exceptions import CloudflareError, ResolverError
 from swp.utils.scraping.resolvers.base import get_content
 
 REGISTER_OBSERVER = """
@@ -52,6 +52,10 @@ async def wait_for_nodes(page, list_element: ElementHandle):
     yield asyncio.create_task(get_nodes_from_result(page))
 
 
+def is_cloudflare_protected_page(title: str) -> bool:
+    return 'cloudflare' in title.lower()
+
+
 class Paginator:
 
     def __init__(self, context: ScraperContext, *, list_selector: str, button_selector: str, item_selector: str = None,
@@ -74,6 +78,9 @@ class Paginator:
             # [SWP-144] Precautionary measure against dynamically loaded nodes
             await page.wait_for_selector(self.selector, timeout=5000)
         except TimeoutError as exc:
+            if is_cloudflare_protected_page(await page.title()):
+                raise CloudflareError()
+
             raise ResolverError(
                 _('No elements matching %(selector)s found') % {'selector': self.selector}
             ) from exc

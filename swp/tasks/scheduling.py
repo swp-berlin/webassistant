@@ -64,7 +64,7 @@ def run_scraper(scraper, now=None, using=None, force=False, silent=False):
         scraper.errors.create(message=f'{error}')
         capture_exception(error)
     finally:
-        scraper.update(last_run=localtime(None), is_running=False)
+        scraper.update(last_run=localtime(None), is_running=False, modified=False)
         if not silent:
             send_scraper_errors(scraper=scraper, force=force)
 

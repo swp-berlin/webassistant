@@ -94,8 +94,15 @@ class Scraper(ActivatableModel, LastModified):
     def unique_fields(self):
         return self.thinktank.unique_fields
 
+    @property
+    def full_scan(self) -> bool:
+        if not self.last_run:
+            return True
+
+        return self.last_modified > self.last_run
+
     def scrape(self):
-        scraper = _Scraper(self.start_url)
+        scraper = _Scraper(self.start_url, full_scan=self.full_scan)
 
         self.async_scrape(scraper, self.data, self.thinktank)
 
