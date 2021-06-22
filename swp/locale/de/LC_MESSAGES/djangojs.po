@@ -133,6 +133,9 @@ msgstr "Keine Ergebnisse"
 msgid "At least one item is required"
 msgstr "Es muss mindestens ein Wert eingegeben werden"
 
+msgid "by"
+msgstr "von"
+
 msgid "and"
 msgstr "und"
 
@@ -229,9 +232,6 @@ msgstr "Neu"
 
 msgid "Download .RIS"
 msgstr ".RIS herunterladen"
-
-msgid "by"
-msgstr "von"
 
 msgid "unknown"
 msgstr "unbekannt"

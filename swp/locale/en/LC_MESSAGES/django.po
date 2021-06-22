@@ -169,6 +169,9 @@ msgstr ""
 msgid "Error"
 msgstr ""
 
+msgid "Text"
+msgstr ""
+
 msgid "Flexible ISBN or ISSN identifier"
 msgstr ""
 
@@ -449,6 +452,9 @@ msgstr ""
 
 #, python-format
 msgid "Error in %(scraper)s"
+msgstr ""
+
+msgid "Scraping protection prevents page access"
 msgstr ""
 
 #, python-format
