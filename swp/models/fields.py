@@ -1,4 +1,5 @@
 from django.core.exceptions import ImproperlyConfigured
+from django.core.validators import RegexValidator
 from django.db.models import CharField, URLField
 from django.utils.translation import gettext_lazy as _
 
@@ -63,3 +64,16 @@ class CombinedISBNField(CharField):
         setattr(model_instance, self.attname, cleaned_value)
 
         return super().pre_save(model_instance, add)
+
+
+class ZoteroKeyValidator(RegexValidator):
+    regex = r'[a-zA-Z0-9]+/(users|groups)/\d+(/w+)*/?'
+
+
+class ZoteroKeyField(CharField):
+
+    def __init__(self, *args, **kwargs):
+        kwargs.setdefault('max_length', 255)
+        super().__init__(*args, **kwargs)
+
+        self.validators.append(ZoteroKeyValidator())
