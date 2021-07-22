@@ -193,6 +193,7 @@ SHELL_PLUS_POST_IMPORTS = [
     ('swp.utils.auth', '*'),
     ('swp.utils.isbn', '*'),
     ('swp.utils.ris', '*'),
+    ('swp.utils.zotero', '*'),
 ]
 
 # <editor-fold desc="REST API">
@@ -205,3 +206,17 @@ REST_FRAMEWORK = {
 }
 
 # </editor-fold>
+
+# <editor-fold desc="Zotero">
+
+ZOTERO_API_BASE_URL = 'https://api.zotero.org'
+ZOTERO_API_VERSION = 3
+
+#: Maximum items per API request
+ZOTERO_API_MAX_ITEMS = 50
+
+#: Timeout in seconds for each API request
+ZOTERO_API_TIMEOUT = 30
+
+# </editor-fold>
+

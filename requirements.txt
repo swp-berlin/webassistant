@@ -11,5 +11,6 @@ polib==1.1.0
 psycopg2==2.8.6
 python-dotenv==0.15.0
 redis==3.5.3
+requests==2.25.1
 sentry-sdk==0.19.5
 uWSGI==2.0.19.1
