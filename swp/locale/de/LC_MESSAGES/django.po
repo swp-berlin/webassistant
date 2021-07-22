@@ -184,6 +184,9 @@ msgstr "Beschreibung"
 msgid "recipients"
 msgstr "Empfänger"
 
+msgid "Zotero keys"
+msgstr "Zotero-Keys"
+
 msgid "interval"
 msgstr "Intervall"
 

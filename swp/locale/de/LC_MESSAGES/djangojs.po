@@ -230,6 +230,12 @@ msgstr "Filter"
 msgid "New"
 msgstr "Neu"
 
+msgid "Zotero Keys"
+msgstr "Zotero-Keys"
+
+msgid "The following keys are invalid: %(keys)s"
+msgstr "Die folgenden Schlüssel sind ungültig: %(keys)s"
+
 msgid "Download .RIS"
 msgstr ".RIS herunterladen"
 
