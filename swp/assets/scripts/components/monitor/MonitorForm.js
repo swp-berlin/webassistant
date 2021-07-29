@@ -7,6 +7,7 @@ import _ from 'utils/i18n';
 import {CancelButton} from 'components/buttons';
 
 import RecipientField from './RecipientField';
+import ZoteroKeysField from './ZoteroKeysField';
 
 
 const NameLabel = _('Name');
@@ -25,6 +26,7 @@ const getDefaultValues = data => {
     return {
         ...data,
         recipients: data.recipients.join('\n'),
+        zotero_keys: data.zotero_keys.join('\n'),
     };
 };
 
@@ -67,6 +69,7 @@ const MonitorForm = ({endpoint, method, backURL, successMessage, data, submitLab
                 required
             />
             <RecipientField register={register} errors={errors} />
+            <ZoteroKeysField register={register} errors={errors} />
             <div className="flex justify-between">
                 <CancelButton to={backURL} />
 
