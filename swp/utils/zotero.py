@@ -70,7 +70,7 @@ def get_zotero_publication_data(publication: Publication) -> Mapping[str, Any]:
         'edition': '',
         'place': '',
         'publisher': '',
-        'date': format_datetime(publication.publication_date),
+        'date': publication.publication_date,  # NOTE This is not a `datetime.datetime` object
         'numPages': publication.pdf_pages,
         'language': '',
         'ISBN': publication.isbn,
