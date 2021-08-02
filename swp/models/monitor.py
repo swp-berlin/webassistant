@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import datetime
 import operator
+from collections import defaultdict
 from functools import reduce
 from typing import Iterable, Tuple
 
@@ -153,3 +154,26 @@ class Monitor(ActivatableModel):
     @property
     def is_zotero(self) -> bool:
         return bool(self.zotero_keys)
+
+    def get_zotero_publication_keys(self) -> Tuple[str, str, Iterable[str]]:
+        collections = defaultdict(set)
+        paths = {}
+
+        for key in self.zotero_keys:
+            api_key, sep, path = key.partition('/')
+            path = f'{sep}{path}'
+
+            if '/collections/' in path:
+                parts = path.split('/')
+                assert parts[3] == 'collections', 'Invalid Zotero key format'
+
+                prefix = '/'.join(parts[:3])
+                collection_id = parts[4]
+                collections[api_key].add(collection_id)
+
+                # We only post to items so adjust the API here to reflect that
+                path = f'{prefix}/items'
+
+            paths[api_key] = path
+
+            yield api_key, paths[api_key], list(collections[api_key])
