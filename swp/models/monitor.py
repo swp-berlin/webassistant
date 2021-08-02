@@ -155,7 +155,7 @@ class Monitor(ActivatableModel):
     def is_zotero(self) -> bool:
         return bool(self.zotero_keys)
 
-    def get_zotero_publication_keys(self) -> Tuple[str, str, Iterable[str]]:
+    def get_zotero_publication_keys(self) -> Iterable[Tuple[str, str, Iterable[str]]]:
         collections = defaultdict(set)
         paths = {}
 
@@ -176,4 +176,6 @@ class Monitor(ActivatableModel):
 
             paths[api_key] = path
 
-            yield api_key, paths[api_key], list(collections[api_key])
+        return [
+            (api_key, path, list(collections[api_key])) for api_key, path in paths.items()
+        ]

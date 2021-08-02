@@ -44,6 +44,9 @@ AU  - Dr. Dyslexia
 ER  - \n"""
 
 
+ZOTERO_COLLECTIONS = set(['94BRCEET', 'BGPHMEX2'])
+
+
 class MonitorTestCase(test.TestCase):
     model = Monitor
 
@@ -54,6 +57,12 @@ class MonitorTestCase(test.TestCase):
         cls.monitor = Monitor.objects.create(
             name='PIIE Monitor',
             recipients=['test-1@localhost', 'test-2@localhost'],
+            zotero_keys=[
+                'W9IOwvQPucFzh9J0BmZFNv82/users/8278883/items',
+                'W9IOwvQPucFzh9J0BmZFNv82/users/8278883/collections/BGPHMEX2',
+                'W9IOwvQPucFzh9J0BmZFNv82/users/8278883/collections/94BRCEET',
+                'W9IOwvQPucFzh9J0BmZFNv82/users/8278883/collections/94BRCEET/items'
+            ],
             is_active=True,
             created=now,
         )
@@ -223,9 +232,23 @@ class MonitorTestCase(test.TestCase):
         self.assertEqual(data, b'')
 
     def test_send_monitor_publications(self):
-        count = send_monitor_publications(self.monitor, now=self.now)
-        self.assertEqual(len(mail.outbox), 2)
-        self.assertEqual(count, 2)
+        with mock.patch('swp.tasks.monitor.post_zotero_publication.delay') as post_zotero_publication:
+            count = send_monitor_publications(self.monitor, now=self.now)
+            self.assertEqual(len(mail.outbox), 2)
+            self.assertEqual(count, 2)
+
+            call_args = post_zotero_publication.call_args[0]
+            self.assertIsInstance(call_args[0], list)
+            self.assertEqual(call_args[1], 'W9IOwvQPucFzh9J0BmZFNv82')
+            self.assertEqual(call_args[2], '/users/8278883/items')
+
+            api_item = call_args[0][1]
+            self.assertIsInstance(api_item, dict)
+            self.assertSetEqual(set(api_item['collections']), ZOTERO_COLLECTIONS)
+
+            attachment_item = call_args[0][2]
+            self.assertEqual(attachment_item['itemType'], 'attachment')
+            self.assertEqual(attachment_item['parentItem'], api_item['key'])
 
         self.assertEqual(mail.outbox[0].to, ['test-1@localhost'])
         self.assertTrue('PIIE Monitor' in mail.outbox[0].subject)
@@ -316,3 +339,12 @@ class MonitorTestCase(test.TestCase):
 
             call_args = dispatch_task.call_args[1]
             self.assertEqual(call_args['eta'], self.now)
+
+    def test_monitor_zotero_keys(self):
+        self.assertTrue(self.monitor.is_zotero)
+
+    def test_monitor_zotero_publication_keys(self):
+        api_key, path, collections = self.monitor.get_zotero_publication_keys()[0]
+        self.assertEqual(api_key, 'W9IOwvQPucFzh9J0BmZFNv82')
+        self.assertEqual(path, '/users/8278883/items')
+        self.assertSetEqual(set(collections), ZOTERO_COLLECTIONS)
