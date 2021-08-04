@@ -268,7 +268,8 @@ class MonitorTestCase(test.TestCase):
         self.model.objects.filter(pk=self.monitor.pk).update(last_sent=self.now)
         monitor = self.model.objects.get(pk=self.monitor.pk)
 
-        count = send_monitor_publications(monitor, now=self.now)
+        with mock.patch('swp.tasks.monitor.post_zotero_publication.apply_async'):
+            count = send_monitor_publications(monitor, now=self.now)
 
         self.assertEqual(len(mail.outbox), 2)
         self.assertEqual(count, 2)
@@ -278,7 +279,8 @@ class MonitorTestCase(test.TestCase):
         self.assertEqual(mail.outbox[1].attachments[0][1], NEW_RIS_DATA)
 
     def test_new_monitor_publications(self):
-        count = monitor_new_publications(self.monitor.pk, now=self.now)
+        with mock.patch('swp.tasks.monitor.post_zotero_publication.apply_async'):
+            count = monitor_new_publications(self.monitor.pk, now=self.now)
 
         self.assertEqual(len(mail.outbox), 2)
         self.assertEqual(count, 2)
@@ -289,7 +291,8 @@ class MonitorTestCase(test.TestCase):
     def test_only_new_monitor_publications(self):
         self.model.objects.filter(pk=self.monitor.pk).update(last_sent=self.now)
 
-        count = monitor_new_publications(self.monitor.pk, now=self.now)
+        with mock.patch('swp.tasks.monitor.post_zotero_publication.apply_async'):
+            count = monitor_new_publications(self.monitor.pk, now=self.now)
 
         self.assertEqual(len(mail.outbox), 2)
         self.assertEqual(count, 2)
@@ -333,7 +336,8 @@ class MonitorTestCase(test.TestCase):
             'swp.tasks.monitor.monitor_new_publications.apply_async',
             side_effect=lambda args, kwargs, **options: monitor_new_publications(*args, **kwargs)
         ) as dispatch_task:
-            count = schedule_monitors(now=self.now)
+            with mock.patch('swp.tasks.monitor.post_zotero_publication.apply_async'):
+                count = schedule_monitors(now=self.now)
 
             self.assertEqual(count, 1)
             self.assertTrue(dispatch_task.called)
