@@ -52,7 +52,7 @@ class Publication(models.Model):
     tags = ArrayField(
         models.CharField(max_length=MAX_TAG_LENGTH),
         blank=True,
-        null=True,
+        default=list,
         verbose_name=_('tags'),
     )  # [KW]
 

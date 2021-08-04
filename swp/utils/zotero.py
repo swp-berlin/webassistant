@@ -50,7 +50,7 @@ def get_zotero_attachment_data(publication: Publication) -> Mapping[str, Any]:
     }
 
 
-def get_zotero_publication_data(publication: Publication) -> Mapping[str, Any]:
+def get_zotero_publication_data(publication: Publication, collections: Iterable[str] = ()) -> Mapping[str, Any]:
     authors = publication.authors or []
     creators = [get_zotero_author_data(author) for author in authors]
     title = f'{publication.title}: {publication.subtitle}' if publication.subtitle else publication.title
@@ -86,15 +86,16 @@ def get_zotero_publication_data(publication: Publication) -> Mapping[str, Any]:
         'tags': [
             {'tag': tag} for tag in publication.tags
         ],
-        'collections': [],
+        'collections': list(collections),
         'relations': {}
     }
 
 
-def get_zotero_data(publications: Iterable[Publication]) -> List[Mapping[str, Any]]:
+def get_zotero_data(publications: Iterable[Publication], collections: Iterable[str] = ()) -> List[Mapping[str, Any]]:
     data = []
     for publication in publications:
-        data.append(get_zotero_publication_data(publication))
+        publication_data = get_zotero_publication_data(publication, collections)
+        data.append(publication_data)
         if publication.pdf_url:
             data.append(get_zotero_attachment_data(publication))
 
