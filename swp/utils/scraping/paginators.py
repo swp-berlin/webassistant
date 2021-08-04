@@ -15,11 +15,11 @@ REGISTER_OBSERVER = """
     listElem => {
         window.observeListPromise = new Promise(resolve => {
             new MutationObserver((mutationList, observer) => {
-                mutationList.forEach(mutation => {
-                    const nodes = Array.from(mutation.addedNodes).filter(node => node.nodeType === Node.ELEMENT_NODE);
-                    resolve(nodes);
-                    observer.disconnect();
-                });
+                const nodes = mutationList.flatMap(
+                    mutation => Array.from(mutation.addedNodes).filter(node => node.nodeType === Node.ELEMENT_NODE)
+                );
+                resolve(nodes);
+                observer.disconnect();
             }).observe(listElem, {childList: true});
         });
     }
