@@ -36,3 +36,7 @@ LOGGING['loggers'] = {
 SILENCED_SYSTEM_CHECKS = [
     'swp.W001',
 ]
+
+# We set the redis port to an unassigned port so we
+# detect asynchronous task calls that aren't mocked.
+CELERY_BROKER_URL = CELERY_RESULT_BACKEND = redis(port=1234)
