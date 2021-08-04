@@ -11,6 +11,7 @@ class MonitorAdmin(ActivatableModelAdmin):
         'name',
         'description',
         'recipients',
+        'zotero_keys',
         'interval',
         'last_sent',
         'is_active',
@@ -29,3 +30,9 @@ class MonitorAdmin(ActivatableModelAdmin):
         'last_sent',
         'created',
     ]
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj, **kwargs)
+        form.base_fields['zotero_keys'].widget.attrs['size'] = 100
+
+        return form

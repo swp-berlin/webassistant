@@ -1,15 +1,19 @@
 import datetime
-from typing import Iterable, Optional
+from typing import Iterable, List, Optional
 
+from django.conf import settings
 from django.core.mail import EmailMultiAlternatives, get_connection as get_mail_connection
 from django.db import transaction
 from django.utils import timezone
 
+from sentry_sdk import capture_message
 from cosmogo.utils.mail import render_mail
+from cosmogo.utils.requests import TimeOutSession
 
 from swp.celery import app
 from swp.models import Monitor, Publication
 from swp.utils.ris import generate_ris_attachment
+from swp.utils.zotero import get_zotero_data, build_zotero_api_url, get_zotero_api_headers
 
 
 @app.task(name='monitor.schedule')
@@ -73,6 +77,40 @@ def make_monitor_publication_messages(
     ]
 
 
+def send_monitor_publications_to_zotero(monitor: Monitor, publications: Iterable[Publication]):
+    data = get_zotero_data(publications)
+    for key in monitor.zotero_keys:
+        api_key, sep, path = key.partition('/')
+        path = f'{sep}{path}'
+
+        n = settings.ZOTERO_API_MAX_ITEMS
+        for items in [data[i:i + n] for i in range(0, len(data), n)]:
+            post_zotero_publication.delay(
+                items,
+                api_key,
+                path,
+            )
+
+
+@app.task(ignore_result=True)
+def post_zotero_publication(data: List[dict], api_key: str, path: str):
+    url = build_zotero_api_url(path)
+    headers = get_zotero_api_headers(api_key)
+    session = TimeOutSession(settings.ZOTERO_API_TIMEOUT)
+
+    ok, response = session.json('POST', url, json=data, headers=headers)
+    if ok is None:
+        capture_message(f'Zotero API failed with {response}', level='error')
+    elif not ok:
+        capture_message(f'Zotero API failed with status {response.status_code}', level='error')
+    elif response:
+        failure = response.get('failure')
+        if failure:
+            capture_message(f'Zotero API failed with {failure}')
+
+    return response
+
+
 def send_monitor_publications(
     monitor: Monitor, *,
     now: datetime.datetime = None,
@@ -85,6 +123,9 @@ def send_monitor_publications(
 
     messages = make_monitor_publication_messages(monitor, publications, **kwargs)
     num_sent = get_mail_connection().send_messages(messages)
+
+    if monitor.is_zotero:
+        send_monitor_publications_to_zotero(monitor, publications)
 
     monitor.last_sent = timezone.localtime(now)
     monitor.save(update_fields=['last_sent'])

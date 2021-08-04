@@ -15,6 +15,7 @@ from django.contrib.postgres.fields import ArrayField
 from swp.db.expressions import MakeInterval
 from swp.utils.ris import generate_ris_data, RIS_MEDIA_TYPE
 from .publication import Publication
+from .fields import ZoteroKeyField
 from .abstract import ActivatableModel, ActivatableQuerySet
 from .choices import Interval
 
@@ -67,6 +68,14 @@ class Monitor(ActivatableModel):
     name = models.CharField(_('name'), max_length=100)
     description = models.TextField(_('description'), blank=True)
     recipients = ArrayField(models.EmailField(), blank=True, verbose_name=_('recipients'))
+    zotero_keys = ArrayField(
+        ZoteroKeyField(),
+        blank=True,
+        default=list,
+        verbose_name=_('Zotero keys'),
+        help_text='{API_KEY}/(users|groups)/{USER_OR_GROUP_ID}/(items|collections|...)',
+    )
+
     interval = models.PositiveIntegerField(_('interval'), choices=Interval.choices, default=Interval.DAILY)
     last_sent = models.DateTimeField(_('last sent'), blank=True, null=True)
     created = models.DateTimeField(_('created'), default=timezone.now, editable=False)
@@ -140,3 +149,7 @@ class Monitor(ActivatableModel):
     def generate_ris_data(self, exclude_sent: bool = False) -> bytes:
         publications = self.get_publications(exclude_sent=exclude_sent)
         return generate_ris_data(publications)
+
+    @property
+    def is_zotero(self) -> bool:
+        return bool(self.zotero_keys)
