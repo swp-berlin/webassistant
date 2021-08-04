@@ -12,15 +12,20 @@ from swp.utils.scraping.exceptions import CloudflareError, ResolverError
 from swp.utils.scraping.resolvers.base import get_content
 
 REGISTER_OBSERVER = """
-    listElem => {
+    (listElem, itemSelector) => {
         window.observeListPromise = new Promise(resolve => {
+            const oldNodes = new Set(listElem.querySelectorAll(itemSelector));
             new MutationObserver((mutationList, observer) => {
-                const nodes = mutationList.flatMap(
-                    mutation => Array.from(mutation.addedNodes).filter(node => node.nodeType === Node.ELEMENT_NODE)
-                );
-                resolve(nodes);
-                observer.disconnect();
-            }).observe(listElem, {childList: true});
+                const currentNodes = new Set(listElem.querySelectorAll(itemSelector));
+
+                let newNodes = new Set(currentNodes);
+                oldNodes.forEach(node => newNodes.delete(node));
+
+                if (newNodes.size) {
+                    resolve(Array.from(newNodes));
+                    observer.disconnect();
+                }
+            }).observe(listElem, {childList: true, subtree: true});
         });
     }
 """
@@ -47,8 +52,8 @@ async def get_nodes_from_result(page: Page):
 
 
 @asynccontextmanager
-async def wait_for_nodes(page, list_element: ElementHandle):
-    await list_element.evaluate(REGISTER_OBSERVER)
+async def wait_for_nodes(page: Page, list_element: ElementHandle, item_selector: str):
+    await list_element.evaluate(REGISTER_OBSERVER, [item_selector])
     yield asyncio.create_task(get_nodes_from_result(page))
 
 
@@ -118,7 +123,7 @@ class EndlessPaginator(Paginator):
 
             list_element = await self.context.page.query_selector(self.list_selector)
 
-            async with wait_for_nodes(self.context.page, list_element) as get_nodes:
+            async with wait_for_nodes(self.context.page, list_element, self.item_selector) as get_nodes:
                 await next_page_link.click()
 
                 try:
