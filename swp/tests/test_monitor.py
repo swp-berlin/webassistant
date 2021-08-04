@@ -44,6 +44,9 @@ AU  - Dr. Dyslexia
 ER  - \n"""
 
 
+ZOTERO_COLLECTIONS = {'94BRCEET', 'BGPHMEX2'}
+
+
 class MonitorTestCase(test.TestCase):
     model = Monitor
 
@@ -54,11 +57,17 @@ class MonitorTestCase(test.TestCase):
         cls.monitor = Monitor.objects.create(
             name='PIIE Monitor',
             recipients=['test-1@localhost', 'test-2@localhost'],
+            zotero_keys=[
+                'W9IOwvQPucFzh9J0BmZFNv82/users/8278883/items',
+                'W9IOwvQPucFzh9J0BmZFNv82/users/8278883/collections/BGPHMEX2',
+                'W9IOwvQPucFzh9J0BmZFNv82/users/8278883/collections/94BRCEET',
+                'W9IOwvQPucFzh9J0BmZFNv82/users/8278883/collections/94BRCEET/items'
+            ],
             is_active=True,
             created=now,
         )
 
-        cls.thinktanks = Thinktank.objects.bulk_create([
+        cls.thinktanks = thinktanks = Thinktank.objects.bulk_create([
             Thinktank(
                 name='PIIE',
                 url='https://www.piie.com/',
@@ -74,9 +83,11 @@ class MonitorTestCase(test.TestCase):
             ),
         ])
 
+        thinktank, *thinktanks = thinktanks
+
         cls.publications = Publication.objects.bulk_create([
             Publication(
-                thinktank=cls.thinktanks[0],
+                thinktank=thinktank,
                 title='Impact of COVID-19 lockdowns on individual mobility and the importance of socioeconomic factors',
                 authors=['A. L. Phabet', 'Dr. Dyslexia'],
                 publication_date='2020-11',
@@ -87,7 +98,7 @@ class MonitorTestCase(test.TestCase):
                 created=now,
             ),
             Publication(
-                thinktank=cls.thinktanks[0],
+                thinktank=thinktank,
                 title='Already accessed publication',
                 publication_date='2021',
                 url='https://example.org',
@@ -101,7 +112,7 @@ class MonitorTestCase(test.TestCase):
         cls.scrapers = Scraper.objects.bulk_create([
             Scraper(
                 type=ScraperType.LIST_WITH_LINK_AND_DOC.value,
-                thinktank=cls.thinktanks[0],
+                thinktank=thinktank,
                 data={
                     "type": "List",
                     "selector": ".node--publication",
@@ -223,9 +234,23 @@ class MonitorTestCase(test.TestCase):
         self.assertEqual(data, b'')
 
     def test_send_monitor_publications(self):
-        count = send_monitor_publications(self.monitor, now=self.now)
-        self.assertEqual(len(mail.outbox), 2)
-        self.assertEqual(count, 2)
+        with mock.patch('swp.tasks.monitor.post_zotero_publication.delay') as post_zotero_publication:
+            count = send_monitor_publications(self.monitor, now=self.now)
+            self.assertEqual(len(mail.outbox), 2)
+            self.assertEqual(count, 2)
+
+            call_args = post_zotero_publication.call_args[0]
+            self.assertIsInstance(call_args[0], list)
+            self.assertEqual(call_args[1], 'W9IOwvQPucFzh9J0BmZFNv82')
+            self.assertEqual(call_args[2], '/users/8278883/items')
+
+            api_item = call_args[0][1]
+            self.assertIsInstance(api_item, dict)
+            self.assertSetEqual(set(api_item['collections']), ZOTERO_COLLECTIONS)
+
+            attachment_item = call_args[0][2]
+            self.assertEqual(attachment_item['itemType'], 'attachment')
+            self.assertEqual(attachment_item['parentItem'], api_item['key'])
 
         self.assertEqual(mail.outbox[0].to, ['test-1@localhost'])
         self.assertTrue('PIIE Monitor' in mail.outbox[0].subject)
@@ -243,7 +268,8 @@ class MonitorTestCase(test.TestCase):
         self.model.objects.filter(pk=self.monitor.pk).update(last_sent=self.now)
         monitor = self.model.objects.get(pk=self.monitor.pk)
 
-        count = send_monitor_publications(monitor, now=self.now)
+        with mock.patch('swp.tasks.monitor.post_zotero_publication.apply_async'):
+            count = send_monitor_publications(monitor, now=self.now)
 
         self.assertEqual(len(mail.outbox), 2)
         self.assertEqual(count, 2)
@@ -253,7 +279,8 @@ class MonitorTestCase(test.TestCase):
         self.assertEqual(mail.outbox[1].attachments[0][1], NEW_RIS_DATA)
 
     def test_new_monitor_publications(self):
-        count = monitor_new_publications(self.monitor.pk, now=self.now)
+        with mock.patch('swp.tasks.monitor.post_zotero_publication.apply_async'):
+            count = monitor_new_publications(self.monitor.pk, now=self.now)
 
         self.assertEqual(len(mail.outbox), 2)
         self.assertEqual(count, 2)
@@ -264,7 +291,8 @@ class MonitorTestCase(test.TestCase):
     def test_only_new_monitor_publications(self):
         self.model.objects.filter(pk=self.monitor.pk).update(last_sent=self.now)
 
-        count = monitor_new_publications(self.monitor.pk, now=self.now)
+        with mock.patch('swp.tasks.monitor.post_zotero_publication.apply_async'):
+            count = monitor_new_publications(self.monitor.pk, now=self.now)
 
         self.assertEqual(len(mail.outbox), 2)
         self.assertEqual(count, 2)
@@ -308,7 +336,8 @@ class MonitorTestCase(test.TestCase):
             'swp.tasks.monitor.monitor_new_publications.apply_async',
             side_effect=lambda args, kwargs, **options: monitor_new_publications(*args, **kwargs)
         ) as dispatch_task:
-            count = schedule_monitors(now=self.now)
+            with mock.patch('swp.tasks.monitor.post_zotero_publication.apply_async'):
+                count = schedule_monitors(now=self.now)
 
             self.assertEqual(count, 1)
             self.assertTrue(dispatch_task.called)
@@ -316,3 +345,12 @@ class MonitorTestCase(test.TestCase):
 
             call_args = dispatch_task.call_args[1]
             self.assertEqual(call_args['eta'], self.now)
+
+    def test_monitor_zotero_keys(self):
+        self.assertTrue(self.monitor.is_zotero)
+
+    def test_monitor_zotero_publication_keys(self):
+        api_key, path, collections = self.monitor.get_zotero_publication_keys()[0]
+        self.assertEqual(api_key, 'W9IOwvQPucFzh9J0BmZFNv82')
+        self.assertEqual(path, '/users/8278883/items')
+        self.assertSetEqual(set(collections), ZOTERO_COLLECTIONS)

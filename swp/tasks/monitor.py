@@ -78,11 +78,8 @@ def make_monitor_publication_messages(
 
 
 def send_monitor_publications_to_zotero(monitor: Monitor, publications: Iterable[Publication]):
-    data = get_zotero_data(publications)
-    for key in monitor.zotero_keys:
-        api_key, sep, path = key.partition('/')
-        path = f'{sep}{path}'
-
+    for api_key, path, collections in monitor.get_zotero_publication_keys():
+        data = get_zotero_data(publications, collections)
         n = settings.ZOTERO_API_MAX_ITEMS
         for items in [data[i:i + n] for i in range(0, len(data), n)]:
             post_zotero_publication.delay(
