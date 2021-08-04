@@ -44,7 +44,7 @@ AU  - Dr. Dyslexia
 ER  - \n"""
 
 
-ZOTERO_COLLECTIONS = set(['94BRCEET', 'BGPHMEX2'])
+ZOTERO_COLLECTIONS = {'94BRCEET', 'BGPHMEX2'}
 
 
 class MonitorTestCase(test.TestCase):
@@ -67,7 +67,7 @@ class MonitorTestCase(test.TestCase):
             created=now,
         )
 
-        cls.thinktanks = Thinktank.objects.bulk_create([
+        cls.thinktanks = thinktanks = Thinktank.objects.bulk_create([
             Thinktank(
                 name='PIIE',
                 url='https://www.piie.com/',
@@ -83,9 +83,11 @@ class MonitorTestCase(test.TestCase):
             ),
         ])
 
+        thinktank, *thinktanks = thinktanks
+
         cls.publications = Publication.objects.bulk_create([
             Publication(
-                thinktank=cls.thinktanks[0],
+                thinktank=thinktank,
                 title='Impact of COVID-19 lockdowns on individual mobility and the importance of socioeconomic factors',
                 authors=['A. L. Phabet', 'Dr. Dyslexia'],
                 publication_date='2020-11',
@@ -96,7 +98,7 @@ class MonitorTestCase(test.TestCase):
                 created=now,
             ),
             Publication(
-                thinktank=cls.thinktanks[0],
+                thinktank=thinktank,
                 title='Already accessed publication',
                 publication_date='2021',
                 url='https://example.org',
@@ -110,7 +112,7 @@ class MonitorTestCase(test.TestCase):
         cls.scrapers = Scraper.objects.bulk_create([
             Scraper(
                 type=ScraperType.LIST_WITH_LINK_AND_DOC.value,
-                thinktank=cls.thinktanks[0],
+                thinktank=thinktank,
                 data={
                     "type": "List",
                     "selector": ".node--publication",
