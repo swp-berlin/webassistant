@@ -34,11 +34,6 @@ class DocumentResolver(DataResolver):
 
         download = await download_info.value
         file_path = await download.path()
-        suffix = pathlib.Path(download.url).suffix.lower()
-
-        # TODO currently only supports pdf files
-        if suffix != '.pdf':
-            return None
 
         pdf_pages, meta = self.get_meta(file_path)
 
