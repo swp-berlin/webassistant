@@ -81,7 +81,7 @@ class Paginator:
 
         try:
             # [SWP-144] Precautionary measure against dynamically loaded nodes
-            await page.wait_for_selector(self.selector, timeout=5000)
+            await page.wait_for_selector(self.selector, state='attached', timeout=5000)
         except TimeoutError as exc:
             if is_cloudflare_protected_page(await page.title()):
                 raise CloudflareError()
