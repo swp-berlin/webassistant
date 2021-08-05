@@ -28,7 +28,9 @@ class DocumentResolver(DataResolver):
 
         try:
             async with page.expect_download() as download_info:
-                await elem.click()
+                # we dispatch a programmatic click, not an emulated mouse click
+                # because we also want elements to be clicked that are not visible (e.g. width of 0 or display: none)
+                await elem.dispatch_event("click")
         except TimeoutError:
             raise self.make_error(_('Timeout while trying to download the document at %(url)s' % {'url': page.url}))
 

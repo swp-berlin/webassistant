@@ -19,7 +19,7 @@ class DataResolver(SelectorMixin, Resolver):
     async def get_element(self, node: ElementHandle) -> Union[Optional[ElementHandle], List[ElementHandle]]:
         try:
             # [SWP-144] Precautionary measure against dynamically loaded nodes
-            await node.wait_for_selector(self.selector, timeout=5000)
+            await node.wait_for_selector(self.selector, state='attached', timeout=5000)
         except TimeoutError as exc:
             raise self.make_error(
                 _('No element matches %(selector)s') % {'selector': self.selector},
