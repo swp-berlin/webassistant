@@ -15,6 +15,8 @@ DEFAULT_PREFERENCES = {
     }
 }
 
+DEFAULT_USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36'
+
 
 @contextmanager
 def tempoary_user_dir():
@@ -40,7 +42,12 @@ async def open_browser(*args, **kwargs) -> ContextManager[Browser]:
 
     async with async_playwright() as playwright:
         with tempoary_user_dir() as user_dir:
-            browser = await playwright.chromium.launch_persistent_context(user_dir, *args, **kwargs)
+            browser = await playwright.chromium.launch_persistent_context(
+                user_dir,
+                *args,
+                user_agent=DEFAULT_USER_AGENT,
+                **kwargs
+            )
 
             try:
                 yield browser
