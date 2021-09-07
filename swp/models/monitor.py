@@ -168,9 +168,11 @@ class Monitor(ActivatableModel):
             if '/collections/' in path:
                 parts = path.split('/')
                 if parts[3] != 'collections':
-                    capture_message(f'Invalid Zotero collection key: {key}', level='error')
+                    message = f'Invalid Zotero collection key: {key}'
+                    capture_message(message, level='error')
                     if fail_silently:
                         continue
+                    raise ValueError(message)
 
                 prefix = '/'.join(parts[:3])
                 collection_id = parts[4]
