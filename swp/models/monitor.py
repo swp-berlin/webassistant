@@ -76,7 +76,7 @@ class Monitor(ActivatableModel):
         blank=True,
         default=list,
         verbose_name=_('Zotero keys'),
-        help_text='{API_KEY}/(users|groups)/{USER_OR_GROUP_ID}/(items|collections|...)',
+        help_text='{API_KEY}/(users|groups)/{USER_OR_GROUP_ID}/[collections/{COLLECTION_ID}/]items',
     )
 
     interval = models.PositiveIntegerField(_('interval'), choices=Interval.choices, default=Interval.DAILY)
