@@ -23,12 +23,12 @@ const getLabel = (id, {loading, result: {data}}) => {
     return data.name;
 };
 
-const MonitorAdd = ({id, ...props}) => {
+const MonitorEdit = ({id, ...props}) => {
     const endpoint = `/monitor/${id}/`;
     const result = useQuery(endpoint);
 
     useMonitorsBreadcrumb();
-    useBreadcrumb(`${endpoint}/edit/`, getLabel(id, result));
+    useBreadcrumb(endpoint, getLabel(id, result));
 
     return (
         <Result result={result}>
@@ -49,4 +49,4 @@ const MonitorAdd = ({id, ...props}) => {
     );
 };
 
-export default MonitorAdd;
+export default MonitorEdit;
