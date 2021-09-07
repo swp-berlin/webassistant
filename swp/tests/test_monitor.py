@@ -3,6 +3,7 @@ from unittest import mock
 
 from django import test
 from django.core import mail
+from django.core.exceptions import ValidationError
 from django.utils import timezone
 
 from swp.models import Monitor, Publication, Scraper, Thinktank
@@ -44,7 +45,12 @@ AU  - Dr. Dyslexia
 ER  - \n"""
 
 
-ZOTERO_COLLECTIONS = {'94BRCEET', 'BGPHMEX2'}
+ZOTERO_COLLECTIONS = {'92BRC33T', 'BFGHEX22'}
+
+# Random secret key for Zotero API access
+ZOTERO_API_KEY = 'HM91didFKOzWFghIr8yfv6N5'
+# Invalid combined Zotero key (for a group's collection)
+BAD_ZOTERO_KEY = f'{ZOTERO_API_KEY}/groups/1234567/group-name/collections/CID6789V'
 
 
 class MonitorTestCase(test.TestCase):
@@ -58,10 +64,9 @@ class MonitorTestCase(test.TestCase):
             name='PIIE Monitor',
             recipients=['test-1@localhost', 'test-2@localhost'],
             zotero_keys=[
-                'W9IOwvQPucFzh9J0BmZFNv82/users/8278883/items',
-                'W9IOwvQPucFzh9J0BmZFNv82/users/8278883/collections/BGPHMEX2',
-                'W9IOwvQPucFzh9J0BmZFNv82/users/8278883/collections/94BRCEET',
-                'W9IOwvQPucFzh9J0BmZFNv82/users/8278883/collections/94BRCEET/items'
+                'W9IOwvQPucFnh9J0BmZFNv92/users/1111111/items',
+                'W9IOwvQPucFnh9J0BmZFNv92/users/1111111/collections/92BRC33T/items',
+                'W9IOwvQPucFnh9J0BmZFNv92/users/1111111/collections/BFGHEX22/items/',
             ],
             is_active=True,
             created=now,
@@ -241,8 +246,8 @@ class MonitorTestCase(test.TestCase):
 
             call_args = post_zotero_publication.call_args[0]
             self.assertIsInstance(call_args[0], list)
-            self.assertEqual(call_args[1], 'W9IOwvQPucFzh9J0BmZFNv82')
-            self.assertEqual(call_args[2], '/users/8278883/items')
+            self.assertEqual(call_args[1], 'W9IOwvQPucFnh9J0BmZFNv92')
+            self.assertEqual(call_args[2], '/users/1111111/items')
 
             api_item = call_args[0][1]
             self.assertIsInstance(api_item, dict)
@@ -351,6 +356,22 @@ class MonitorTestCase(test.TestCase):
 
     def test_monitor_zotero_publication_keys(self):
         api_key, path, collections = self.monitor.get_zotero_publication_keys()[0]
-        self.assertEqual(api_key, 'W9IOwvQPucFzh9J0BmZFNv82')
-        self.assertEqual(path, '/users/8278883/items')
+        self.assertEqual(api_key, 'W9IOwvQPucFnh9J0BmZFNv92')
+        self.assertEqual(path, '/users/1111111/items')
         self.assertSetEqual(set(collections), ZOTERO_COLLECTIONS)
+
+    def test_invalid_monitor_publication_keys(self):
+        self.model.objects.filter(pk=self.monitor.pk).update(zotero_keys=[BAD_ZOTERO_KEY])
+
+        monitor = self.model.objects.get(pk=self.monitor.pk)
+
+        with self.assertRaises(ValidationError):
+            monitor.full_clean()
+
+        with self.assertRaises(ValueError):
+            monitor.get_zotero_publication_keys()
+
+        with mock.patch('swp.models.monitor.capture_message') as capture_message:
+            empty_keys = monitor.get_zotero_publication_keys(fail_silently=True)
+            self.assertListEqual(empty_keys, [])
+            self.assertTrue(capture_message.called)
