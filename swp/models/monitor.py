@@ -13,8 +13,10 @@ from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 from django.contrib.postgres.fields import ArrayField
 
+from sentry_sdk import capture_message
+
 from swp.db.expressions import MakeInterval
-from swp.utils.ris import generate_ris_data, RIS_MEDIA_TYPE
+from swp.utils.ris import generate_ris_data
 from .publication import Publication
 from .fields import ZoteroKeyField
 from .abstract import ActivatableModel, ActivatableQuerySet
@@ -155,7 +157,7 @@ class Monitor(ActivatableModel):
     def is_zotero(self) -> bool:
         return bool(self.zotero_keys)
 
-    def get_zotero_publication_keys(self) -> Iterable[Tuple[str, str, Iterable[str]]]:
+    def get_zotero_publication_keys(self, fail_silently: bool = False) -> Iterable[Tuple[str, str, Iterable[str]]]:
         collections = defaultdict(set)
         paths = {}
 
@@ -165,7 +167,10 @@ class Monitor(ActivatableModel):
 
             if '/collections/' in path:
                 parts = path.split('/')
-                assert parts[3] == 'collections', 'Invalid Zotero key format'
+                if parts[3] != 'collections':
+                    capture_message(f'Invalid Zotero collection key: {key}', level='error')
+                    if fail_silently:
+                        continue
 
                 prefix = '/'.join(parts[:3])
                 collection_id = parts[4]

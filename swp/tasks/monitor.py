@@ -78,7 +78,8 @@ def make_monitor_publication_messages(
 
 
 def send_monitor_publications_to_zotero(monitor: Monitor, publications: Iterable[Publication]):
-    for api_key, path, collections in monitor.get_zotero_publication_keys():
+    publication_keys = monitor.get_zotero_publication_keys(fail_silently=True)
+    for api_key, path, collections in publication_keys:
         data = get_zotero_data(publications, collections)
         n = settings.ZOTERO_API_MAX_ITEMS
         for items in [data[i:i + n] for i in range(0, len(data), n)]:
