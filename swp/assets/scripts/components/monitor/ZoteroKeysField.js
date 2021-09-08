@@ -3,7 +3,7 @@ import {isZoteroKey} from 'utils/validation';
 import _, {interpolate} from 'utils/i18n';
 
 const Label = _('Zotero Keys');
-const HelpText = '{API_KEY}/(users|groups)/{USER_OR_GROUP_ID}/(items|collections|...)';
+const HelpText = '{API_KEY}/(users|groups)/{USER_OR_GROUP_ID}/[collections/{COLLECTION_ID}/]items';
 const InvalidKeysError = _('The following keys are invalid: %(keys)s');
 
 const toKeyArray = value => value.trim().split('\n').filter(e => e.length);

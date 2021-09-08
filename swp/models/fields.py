@@ -67,7 +67,7 @@ class CombinedISBNField(CharField):
 
 
 class ZoteroKeyValidator(RegexValidator):
-    regex = r'[a-zA-Z0-9]+/(users|groups)/\d+(/w+)*/?'
+    regex = r'[a-zA-Z0-9]+/(users|groups)/\d+(/collections/[A-Z0-9])?/items/?'
 
 
 class ZoteroKeyField(CharField):

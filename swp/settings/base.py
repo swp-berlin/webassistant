@@ -190,6 +190,7 @@ SHELL_PLUS_POST_IMPORTS = [
     ('swp.forms', '*'),
     ('swp.models.choices', '*'),
     ('swp.tasks', '*'),
+    ('swp.tasks.monitor', '*'),
     ('swp.utils.auth', '*'),
     ('swp.utils.isbn', '*'),
     ('swp.utils.ris', '*'),

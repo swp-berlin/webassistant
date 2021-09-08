@@ -15,6 +15,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='monitor',
             name='zotero_keys',
-            field=django.contrib.postgres.fields.ArrayField(base_field=ZoteroKeyField(), blank=True, default=list, help_text='{API_KEY}/(users|groups)/{USER_OR_GROUP_ID}/(items|collections|...)', size=None, verbose_name='Zotero keys'),
+            field=django.contrib.postgres.fields.ArrayField(base_field=ZoteroKeyField(), blank=True, default=list, help_text='{API_KEY}/(users|groups)/{USER_OR_GROUP_ID}/[collections/{COLLECTION_ID}/]items', size=None, verbose_name='Zotero keys'),
         ),
     ]

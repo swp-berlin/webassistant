@@ -8,6 +8,6 @@ export const isEmail = value => {
     return input.reportValidity();
 };
 
-export const isZoteroKey = value => (
-    /[a-zA-Z0-9]+\/(users|groups)\/\d+(\/w+)*\/?/.test(value)
-);
+const ZoteroKeyRegex = /[a-zA-Z0-9]+\/(users|groups)\/\d+(\/collections\/[A-Z0-9]+)?\/items\/?/;
+
+export const isZoteroKey = value => ZoteroKeyRegex.test(value);
