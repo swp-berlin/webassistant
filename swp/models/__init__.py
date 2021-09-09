@@ -1,3 +1,4 @@
+from .lookups import *
 from .abstract import ActivatableModel
 from .choices import ErrorLevel, Interval
 from .monitor import Monitor
