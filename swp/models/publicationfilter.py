@@ -28,7 +28,7 @@ class ArrayLookup(PatternLookup):
         db_type = self.lhs.output_field.db_type(connection=connection)
         lhs_sql = connection.ops.field_cast_sql(db_type, field_internal_type) % lhs_sql
 
-        return 'SELECT * FROM UNNEST(%s) t WHERE UPPER(t)' % lhs_sql, list(params)
+        return 'SELECT 1 FROM UNNEST(%s) t WHERE UPPER(t)' % lhs_sql, list(params)
 
 
 @ArrayField.register_lookup
