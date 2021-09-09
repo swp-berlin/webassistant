@@ -5,7 +5,7 @@ from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.db.models import Field
-from django.db.models.lookups import IStartsWith, IEndsWith, IContains, PatternLookup
+from django.db.models.lookups import IStartsWith, IEndsWith, IContains, PatternLookup, BuiltinLookup
 
 from swp.models.choices import Comparator, FilterField
 from swp.models.fields import ChoiceField
@@ -20,7 +20,7 @@ TEXT_FIELDS = [
 
 class ArrayLookup(PatternLookup):
     def process_lhs(self, compiler, connection, lhs=None):
-        lhs_sql, params = super().process_lhs(compiler, connection, lhs)
+        lhs_sql, params = super(BuiltinLookup, self).process_lhs(compiler, connection, lhs)
         field_internal_type = self.lhs.output_field.get_internal_type()
         db_type = self.lhs.output_field.db_type(connection=connection)
         lhs_sql = connection.ops.field_cast_sql(db_type, field_internal_type) % lhs_sql
@@ -33,28 +33,23 @@ class ArrayLookup(PatternLookup):
 
         return '%s)' % rhs, params
 
-    def get_rhs_op(self, connection, rhs):
-        return connection.operators[super().lookup_name] % rhs
 
-
-@Field.register_lookup
+@ArrayField.register_lookup
 class ArrayIStartsWith(ArrayLookup, IStartsWith):
-    lookup_name = 'array_istartswith'
+    pass
 
 
-@Field.register_lookup
+@ArrayField.register_lookup
 class ArrayIEndsWith(ArrayLookup, IEndsWith):
-    lookup_name = 'array_iendswith'
+    pass
 
 
-@Field.register_lookup
+@ArrayField.register_lookup
 class ArrayIStartswith(ArrayLookup, IContains):
-    lookup_name = 'array_icontains'
+    pass
 
 
 def as_query(field, comparator, values):
-    array_prefix = 'array_' if field == FilterField.TAGS else ''
-
     if field == FilterField.TEXT:
         return reduce(
             operator.or_,
@@ -62,7 +57,7 @@ def as_query(field, comparator, values):
             models.Q(),
         )
 
-    key = f'{field}__{array_prefix}{PublicationFilter.FILTERS[comparator]}'
+    key = f'{field}__{PublicationFilter.FILTERS[comparator]}'
 
     return reduce(
         operator.or_,
