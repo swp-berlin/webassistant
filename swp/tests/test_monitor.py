@@ -354,6 +354,10 @@ class MonitorTestCase(test.TestCase):
     def test_monitor_zotero_keys(self):
         self.assertTrue(self.monitor.is_zotero)
 
+    def test_monitor_zotero_publication_key_validation(self):
+        monitor = self.model.objects.get(pk=self.monitor.pk)
+        monitor.full_clean()
+
     def test_monitor_zotero_publication_keys(self):
         api_key, path, collections = self.monitor.get_zotero_publication_keys()[0]
         self.assertEqual(api_key, 'W9IOwvQPucFnh9J0BmZFNv92')
