@@ -56,7 +56,7 @@ def get_zotero_publication_data(publication: Publication, collections: Iterable[
     title = f'{publication.title}: {publication.subtitle}' if publication.subtitle else publication.title
     object_key = get_zotero_object_key(publication)
 
-    return {
+    data = {
         'key': object_key,  # Local key required for attachments
         'version': 0,  # Must be set when using `key`
         'itemType': 'book',
@@ -71,7 +71,6 @@ def get_zotero_publication_data(publication: Publication, collections: Iterable[
         'place': '',
         'publisher': '',
         'date': publication.publication_date,  # NOTE This is not a `datetime.datetime` object
-        'numPages': publication.pdf_pages,
         'language': '',
         'ISBN': publication.isbn,
         'shortTitle': publication.title if publication.subtitle else '',
@@ -89,6 +88,11 @@ def get_zotero_publication_data(publication: Publication, collections: Iterable[
         'collections': list(collections),
         'relations': {}
     }
+
+    if publication.pdf_pages:
+        data['numPages'] = publication.pdf_pages
+
+    return data
 
 
 def get_zotero_data(publications: Iterable[Publication], collections: Iterable[str] = ()) -> List[Mapping[str, Any]]:
