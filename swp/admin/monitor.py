@@ -1,12 +1,33 @@
+from django import forms
 from django.contrib import admin
 
 from swp.models import Monitor
 from .abstract import ActivatableModelAdmin
 
 
+class MonitorAdminForm(forms.ModelForm):
+
+    class Meta:
+        model = Monitor
+        fields = [
+            'name',
+            'description',
+            'recipients',
+            'zotero_keys',
+            'interval',
+            'is_active',
+        ]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields['zotero_keys'].widget.attrs['size'] = 100
+
+
 @admin.register(Monitor)
 class MonitorAdmin(ActivatableModelAdmin):
     date_hierarchy = 'created'
+    form = MonitorAdminForm
     fields = [
         'name',
         'description',
@@ -30,9 +51,3 @@ class MonitorAdmin(ActivatableModelAdmin):
         'last_sent',
         'created',
     ]
-
-    def get_form(self, request, obj=None, **kwargs):
-        form = super().get_form(request, obj, **kwargs)
-        form.base_fields['zotero_keys'].widget.attrs['size'] = 100
-
-        return form
