@@ -4,7 +4,13 @@ from .base import *
 
 ENVIRONMENT = env('ENVIRONMENT', 'production')
 
-configure_sentry('https://3710c408a1494bc6b43038ed20acfed5@sentry.cosmocode.de/48', ENVIRONMENT, RELEASE, celery=True)
+configure_sentry(
+    'https://3710c408a1494bc6b43038ed20acfed5@sentry.cosmocode.de/48',
+    ENVIRONMENT,
+    RELEASE,
+    celery=True,
+    send_default_pii=True,
+)
 
 ALLOWED_HOSTS = ['production.swp.cosmoco.de', 'production.swp.cosmocode.de', 'webscraper.swp-berlin.org']
 
