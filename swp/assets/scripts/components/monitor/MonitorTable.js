@@ -17,7 +17,7 @@ const LastRunLabel = _('Last Run');
 
 
 const MonitorRows = ({monitors}) => (
-    [...monitors].sort((a, b) => a.name.localeCompare(b.name)).map(monitor => (
+    monitors.map(monitor => (
         <MonitorRow
             key={monitor.id}
             id={monitor.id}
