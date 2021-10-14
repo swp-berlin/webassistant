@@ -18,7 +18,7 @@ const ActiveTotalLabel = _('active / total');
 
 
 const ThinktankRows = ({items}) => (
-    items.map(thinktank => (
+    [...items].sort((a, b) => a.name.localeCompare(b.name)).map(thinktank => (
         <ThinktankRow
             key={thinktank.id}
             id={thinktank.id}
