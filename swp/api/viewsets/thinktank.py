@@ -10,7 +10,7 @@ from swp.models import Scraper, Thinktank
 
 @default_router.register('thinktank', basename='thinktank')
 class ThinktankViewSet(viewsets.ModelViewSet):
-    queryset = Thinktank.objects.annotate_last_run().annotate_counts()
+    queryset = Thinktank.objects.annotate_last_run().annotate_counts().order_by('name')
     filterset_fields = ['is_active']
     serializer_class = ThinktankSerializer
     list_serializer_class = ThinktankListSerializer

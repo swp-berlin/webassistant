@@ -1,3 +1,4 @@
+from django.db.models import Prefetch
 from django_filters.rest_framework import FilterSet
 from rest_framework import viewsets
 from rest_framework.decorators import action
@@ -7,7 +8,7 @@ from swp.api import default_router
 from swp.api.filters import UpdatePublicationCountFilter
 from swp.api.serializers import ThinktankFilterSerializer
 from swp.api.serializers.monitor import MonitorSerializer
-from swp.models import Monitor
+from swp.models import Monitor, ThinktankFilter
 
 
 class MonitorFilterSet(FilterSet):
@@ -20,7 +21,16 @@ class MonitorFilterSet(FilterSet):
 
 @default_router.register('monitor', basename='monitor')
 class MonitorViewSet(viewsets.ModelViewSet):
-    queryset = Monitor.objects.prefetch_related('thinktank_filters__publication_filters')
+    queryset = Monitor.objects.prefetch_related(
+        Prefetch(
+            'thinktank_filters',
+            queryset=ThinktankFilter.objects.select_related(
+                'thinktank',
+            ).prefetch_related(
+                'publication_filters',
+            ).order_by('thinktank__name')
+        ),
+    ).order_by('name')
     serializer_class = MonitorSerializer
     filterset_class = MonitorFilterSet
 
