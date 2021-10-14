@@ -12,7 +12,7 @@ const NewPublicationCountLabel = _('New');
 
 
 const FilterRows = ({monitorID, items}) => (
-    [...items].sort((a, b) => a.name.localeCompare(b.name)).map(
+    items.map(
         ({id, name, filters, publication_count: publicationCount, new_publication_count: newPublicationCount}) => (
             <ThinktankFilterRow
                 key={id}
