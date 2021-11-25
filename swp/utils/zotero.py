@@ -2,7 +2,7 @@ import datetime
 from typing import Any, Iterable, List, Mapping, Optional
 from django.conf import settings
 
-from swp.models import Publication
+from swp.models import Publication, ZoteroTransfer
 
 
 def get_zotero_author_data(author):
@@ -19,6 +19,7 @@ OBJECT_KEY_ALPHABET = 'ABCDEFGHIJKLMNPQRSTUVWXYZ23456789'
 def encode_object_key(value: int, *, initial: str = '') -> str:
     assert isinstance(value, int), 'Value must be an integer'
     assert value >= 0, 'Value must be greater zero'
+    assert value < (33**7 + 17)  # algorithm is not collision-safe beginning with this number
     assert not initial or len(initial) >= 8, 'Initial block must be 8 characters long'
 
     encoded = initial or 'SWPZTAPI'
@@ -50,7 +51,8 @@ def get_zotero_attachment_data(publication: Publication) -> Mapping[str, Any]:
     }
 
 
-def get_zotero_publication_data(publication: Publication, collections: Iterable[str] = ()) -> Mapping[str, Any]:
+def get_zotero_publication_data(transfer: ZoteroTransfer) -> Mapping[str, Any]:
+    publication = transfer.publication
     authors = publication.authors or []
     creators = [get_zotero_author_data(author) for author in authors]
     title = f'{publication.title}: {publication.subtitle}' if publication.subtitle else publication.title
@@ -58,7 +60,7 @@ def get_zotero_publication_data(publication: Publication, collections: Iterable[
 
     data = {
         'key': object_key,  # Local key required for attachments
-        'version': 0,  # Must be set when using `key`
+        'version': transfer.version or 0,  # Must be set when using `key`
         'itemType': 'book',
         'title': title,
         'creators': creators,
@@ -85,7 +87,7 @@ def get_zotero_publication_data(publication: Publication, collections: Iterable[
         'tags': [
             {'tag': tag} for tag in publication.tags
         ],
-        'collections': list(collections),
+        'collections': transfer.collection_keys,
         'relations': {}
     }
 
@@ -95,13 +97,13 @@ def get_zotero_publication_data(publication: Publication, collections: Iterable[
     return data
 
 
-def get_zotero_data(publications: Iterable[Publication], collections: Iterable[str] = ()) -> List[Mapping[str, Any]]:
+def get_zotero_data(transfers: Iterable[ZoteroTransfer], is_update: bool = False) -> List[Mapping[str, Any]]:
     data = []
-    for publication in publications:
-        publication_data = get_zotero_publication_data(publication, collections)
+    for transfer in transfers:
+        publication_data = get_zotero_publication_data(transfer)
         data.append(publication_data)
-        if publication.pdf_url:
-            data.append(get_zotero_attachment_data(publication))
+        if not is_update and transfer.publication.pdf_url:
+            data.append(get_zotero_attachment_data(transfer.publication))
 
     return data
 
