@@ -20,7 +20,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('api_key', models.CharField(max_length=255, verbose_name='api key')),
                 ('path', models.CharField(max_length=255, verbose_name='path')),
-                ('collection_keys', django.contrib.postgres.fields.ArrayField(base_field=swp.models.fields.ZoteroObjectKeyField(max_length=8), blank=True, default=list, size=None, verbose_name='collection key')),
+                ('collection_keys', django.contrib.postgres.fields.ArrayField(base_field=swp.models.fields.ZoteroObjectKeyField(max_length=8), blank=True, default=list, size=None, verbose_name='collection keys')),
                 ('version', models.IntegerField(default=0, editable=False, verbose_name='version')),
                 ('created', models.DateTimeField(default=django.utils.timezone.now, editable=False, verbose_name='created')),
                 ('updated', models.DateTimeField(auto_now=True, verbose_name='updated')),
@@ -29,7 +29,7 @@ class Migration(migrations.Migration):
             ],
             options={
                 'verbose_name': 'zotero transfer',
-                'verbose_name_plural': 'zotero transfer',
+                'verbose_name_plural': 'zotero transfers',
                 'unique_together': {('publication', 'api_key', 'path')},
             },
         ),

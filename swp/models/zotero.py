@@ -18,7 +18,7 @@ class ZoteroTransfer(models.Model):
     path = models.CharField(_('path'), max_length=255)
     collection_keys = ArrayField(
         ZoteroObjectKeyField(),
-        verbose_name=_('collection key'),
+        verbose_name=_('collection keys'),
         blank=True,
         default=list,
     )
@@ -32,7 +32,7 @@ class ZoteroTransfer(models.Model):
     class Meta:
         unique_together = ['publication', 'api_key', 'path']
         verbose_name = _('zotero transfer')
-        verbose_name_plural = _('zotero transfer')
+        verbose_name_plural = _('zotero transfers')
 
     def __str__(self):
         return f'[{self.created}] {self.api_key}/{self.path} - {self.collection_keys}'

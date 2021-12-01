@@ -346,7 +346,7 @@ msgstr ""
 msgid "path"
 msgstr ""
 
-msgid "collection key"
+msgid "collection keys"
 msgstr ""
 
 msgid "version"
@@ -359,6 +359,9 @@ msgid "transferred"
 msgstr ""
 
 msgid "zotero transfer"
+msgstr ""
+
+msgid "zotero transfers"
 msgstr ""
 
 msgid "List with Links"

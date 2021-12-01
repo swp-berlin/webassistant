@@ -346,8 +346,8 @@ msgstr ""
 msgid "path"
 msgstr "pfad"
 
-msgid "collection key"
-msgstr ""
+msgid "collection keys"
+msgstr "collection keys"
 
 msgid "version"
 msgstr "version"
@@ -360,6 +360,9 @@ msgstr "übertragen"
 
 msgid "zotero transfer"
 msgstr "zotero transfer"
+
+msgid "zotero transfers"
+msgstr "zotero transfers"
 
 msgid "List with Links"
 msgstr "Liste mit Links"
