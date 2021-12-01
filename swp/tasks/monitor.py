@@ -193,6 +193,17 @@ def post_zotero_publication(data: List[dict], api_key: str, path: str, transfers
             capture_message(f'Zotero items have already been transferred', level='error')
 
 
+@app.task(name='monitor.zotero')
+def send_all_monitor_publications_to_zotero():
+    monitors = Monitor.objects.filter(
+        is_active=True,
+        zotero_keys__len__gt=0,
+    )
+
+    for monitor in monitors:
+        send_publications_to_zotero.delay(monitor.pk)
+
+
 def send_monitor_publications(
     monitor: Monitor, *,
     now: datetime.datetime = None,

@@ -168,6 +168,10 @@ CELERY_BEAT_SCHEDULE = {
         'task': 'monitor.schedule',
         'schedule': crontab(hour='*', minute=0),
     },
+    'monitor.zotero': {
+        'task': 'monitor.zotero',
+        'schedule': 60 * 60 * 2,  # every 2 hours
+    },
     'scraper.schedule': {
         'task': 'scraper.schedule',
         'schedule': crontab(hour='*', minute=0),
