@@ -273,7 +273,7 @@ class MonitorTestCase(test.TestCase):
         self.model.objects.filter(pk=self.monitor.pk).update(last_sent=self.now)
         monitor = self.model.objects.get(pk=self.monitor.pk)
 
-        with mock.patch('swp.tasks.monitor.post_zotero_publication.apply_async'):
+        with mock.patch('swp.tasks.monitor.post_zotero_publication'):
             count = send_monitor_publications(monitor, now=self.now)
 
         self.assertEqual(len(mail.outbox), 2)
@@ -284,7 +284,7 @@ class MonitorTestCase(test.TestCase):
         self.assertEqual(mail.outbox[1].attachments[0][1], NEW_RIS_DATA)
 
     def test_new_monitor_publications(self):
-        with mock.patch('swp.tasks.monitor.post_zotero_publication.apply_async'):
+        with mock.patch('swp.tasks.monitor.post_zotero_publication'):
             count = monitor_new_publications(self.monitor.pk, now=self.now)
 
         self.assertEqual(len(mail.outbox), 2)
@@ -296,7 +296,7 @@ class MonitorTestCase(test.TestCase):
     def test_only_new_monitor_publications(self):
         self.model.objects.filter(pk=self.monitor.pk).update(last_sent=self.now)
 
-        with mock.patch('swp.tasks.monitor.post_zotero_publication.apply_async'):
+        with mock.patch('swp.tasks.monitor.post_zotero_publication'):
             count = monitor_new_publications(self.monitor.pk, now=self.now)
 
         self.assertEqual(len(mail.outbox), 2)
@@ -341,7 +341,7 @@ class MonitorTestCase(test.TestCase):
             'swp.tasks.monitor.monitor_new_publications.apply_async',
             side_effect=lambda args, kwargs, **options: monitor_new_publications(*args, **kwargs)
         ) as dispatch_task:
-            with mock.patch('swp.tasks.monitor.post_zotero_publication.apply_async'):
+            with mock.patch('swp.tasks.monitor.post_zotero_publication'):
                 count = schedule_monitors(now=self.now)
 
             self.assertEqual(count, 1)
