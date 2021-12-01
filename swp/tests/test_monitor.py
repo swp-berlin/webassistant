@@ -239,7 +239,7 @@ class MonitorTestCase(test.TestCase):
         self.assertEqual(data, b'')
 
     def test_send_monitor_publications(self):
-        with mock.patch('swp.tasks.monitor.post_zotero_publication.delay') as post_zotero_publication:
+        with mock.patch('swp.tasks.monitor.post_zotero_publication') as post_zotero_publication:
             count = send_monitor_publications(self.monitor, now=self.now)
             self.assertEqual(len(mail.outbox), 2)
             self.assertEqual(count, 2)

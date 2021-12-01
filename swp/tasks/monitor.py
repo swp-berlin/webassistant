@@ -1,7 +1,7 @@
 import datetime
 from itertools import groupby
 from operator import attrgetter
-from typing import Iterable, List, Optional
+from typing import Iterable, List, Optional, Union
 
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives, get_connection as get_mail_connection
@@ -136,62 +136,61 @@ def send_transfers(transfers: [ZoteroTransfer], is_update: bool = False):
         data = get_zotero_data(group, is_update=is_update)
 
         for items in chunked(data, settings.ZOTERO_API_MAX_ITEMS):
-            ok, response = post_zotero_publication(items, api_key, path)
-            now = timezone.now()
-
-            if ok is None:
-                capture_message(f'Zotero API failed with {response}', level='error')
-                continue
-            elif not ok:
-                capture_message(f'Zotero API failed with status {response.status_code}', level='error')
-                continue
-
-            successful: dict = response.get('successful')
-            successful_transfers = []
-
-            for item in successful.values():
-                key = item.get('key')
-                version = item.get('version')
-                transfer = transfers_by_zotero_key.get(key)
-
-                if transfer:
-                    # the key might also belong to an attachment
-                    transfer.last_transferred = now
-                    transfer.version = version
-                    successful_transfers.append(transfer)
-
-            ZoteroTransfer.objects.bulk_update(successful_transfers, fields=['last_transferred', 'version'])
-
-            unchanged: dict = response.get('unchanged')
-            failed: dict = response.get('failed')
-
-            if failed:
-                with push_scope() as scope:
-                    scope.set_extra('failed_items', [{**value, 'item': items[int(idx)]} for idx, value in failed.items()])
-                    capture_message(f'Failed to transfer Zotero items', level='error')
-
-            if unchanged:
-                # this shouldn't happen and indicates a mismatch of our data and the zotero data
-                with push_scope() as scope:
-                    scope.set_extra('unchanged_items', [items[int(idx)] for idx in unchanged.keys()])
-                    capture_message(f'Zotero items have already been transferred', level='error')
+            post_zotero_publication(items, api_key, path, transfers_by_zotero_key)
 
 
 @app.task(ignore_result=True)
-def send_publications_to_zotero(monitor_id: int):
-    monitor = Monitor.objects.get(pk=monitor_id)
+def send_publications_to_zotero(monitor: Union[int, Monitor]):
+    if isinstance(monitor, int):
+        monitor = Monitor.objects.get(pk=monitor)
 
     schedule_zotero_transfers(monitor)
     send_zotero_transfers(monitor)
 
 
-@app.task(ignore_result=True)
-def post_zotero_publication(data: List[dict], api_key: str, path: str, method: str = 'POST'):
+def post_zotero_publication(data: List[dict], api_key: str, path: str, transfers: dict):
     url = build_zotero_api_url(path)
     headers = get_zotero_api_headers(api_key)
     session = TimeOutSession(settings.ZOTERO_API_TIMEOUT)
 
-    return session.json(method, url, json=data, headers=headers)
+    ok, response = session.json('POST', url, json=data, headers=headers)
+
+    now = timezone.now()
+
+    if ok is None:
+        capture_message(f'Zotero API failed with {response}', level='error')
+    elif not ok:
+        capture_message(f'Zotero API failed with status {response.status_code}', level='error')
+
+    successful: dict = response.get('successful')
+    successful_transfers = []
+
+    for item in successful.values():
+        key = item.get('key')
+        version = item.get('version')
+        transfer = transfers.get(key)
+
+        if transfer:
+            # the key might also belong to an attachment
+            transfer.last_transferred = now
+            transfer.version = version
+            successful_transfers.append(transfer)
+
+    ZoteroTransfer.objects.bulk_update(successful_transfers, fields=['last_transferred', 'version'])
+
+    unchanged: dict = response.get('unchanged')
+    failed: dict = response.get('failed')
+
+    if failed:
+        with push_scope() as scope:
+            scope.set_extra('failed_items', [{**value, 'item': data[int(idx)]} for idx, value in failed.items()])
+            capture_message(f'Failed to transfer Zotero items', level='error')
+
+    if unchanged:
+        # this shouldn't happen and indicates a mismatch of our data and the zotero data
+        with push_scope() as scope:
+            scope.set_extra('unchanged_items', [data[int(idx)] for idx in unchanged.keys()])
+            capture_message(f'Zotero items have already been transferred', level='error')
 
 
 def send_monitor_publications(
@@ -208,7 +207,7 @@ def send_monitor_publications(
     num_sent = get_mail_connection().send_messages(messages)
 
     if monitor.is_zotero:
-        send_publications_to_zotero(monitor.pk)
+        send_publications_to_zotero(monitor)
 
     monitor.last_sent = timezone.localtime(now)
     monitor.save(update_fields=['last_sent'])
