@@ -26,6 +26,15 @@ msgstr "%(count)d %(name)s erfolgreich deaktiviert"
 msgid "Deactivate selected %(verbose_name_plural)s"
 msgstr "Ausgewählte %(verbose_name_plural)s deaktivieren"
 
+#, python-format
+msgid "Publications for %d monitor will be transferred to zotero"
+msgid_plural "Publications for %d monitors will be transferred to zotero"
+msgstr[0] "Publikationen für %d Monitor werden zu zotero übertragen"
+msgstr[1] "Publikationen für %d Monitore werden zu zotero übertragen"
+
+msgid "Send publications for selected monitors to zotero"
+msgstr "Sende Publikationen für ausgewählte Monitore zu zotero"
+
 msgid "Personal info"
 msgstr "Persönliche Informationen"
 
@@ -330,6 +339,27 @@ msgstr "Thinktank-Filter"
 
 msgid "is error recipient"
 msgstr "erhält Fehlermeldungen"
+
+msgid "api key"
+msgstr ""
+
+msgid "path"
+msgstr "pfad"
+
+msgid "collection key"
+msgstr ""
+
+msgid "version"
+msgstr "version"
+
+msgid "updated"
+msgstr "geändert"
+
+msgid "transferred"
+msgstr "übertragen"
+
+msgid "zotero transfer"
+msgstr "zotero transfer"
 
 msgid "List with Links"
 msgstr "Liste mit Links"

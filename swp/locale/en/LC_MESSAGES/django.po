@@ -26,6 +26,15 @@ msgstr ""
 msgid "Deactivate selected %(verbose_name_plural)s"
 msgstr ""
 
+#, python-format
+msgid "Publications for %d monitor will be transferred to zotero"
+msgid_plural "Publications for %d monitors will be transferred to zotero"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Send publications for selected monitors to zotero"
+msgstr ""
+
 msgid "Personal info"
 msgstr ""
 
@@ -329,6 +338,27 @@ msgid "think tank filters"
 msgstr ""
 
 msgid "is error recipient"
+msgstr ""
+
+msgid "api key"
+msgstr ""
+
+msgid "path"
+msgstr ""
+
+msgid "collection key"
+msgstr ""
+
+msgid "version"
+msgstr ""
+
+msgid "updated"
+msgstr ""
+
+msgid "transferred"
+msgstr ""
+
+msgid "zotero transfer"
 msgstr ""
 
 msgid "List with Links"

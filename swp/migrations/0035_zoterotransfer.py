@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
             name='ZoteroTransfer',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('api_key', models.CharField(max_length=255, verbose_name='api_key')),
+                ('api_key', models.CharField(max_length=255, verbose_name='api key')),
                 ('path', models.CharField(max_length=255, verbose_name='path')),
                 ('collection_keys', django.contrib.postgres.fields.ArrayField(base_field=swp.models.fields.ZoteroObjectKeyField(max_length=8), blank=True, default=list, size=None, verbose_name='collection key')),
                 ('version', models.IntegerField(default=0, editable=False, verbose_name='version')),

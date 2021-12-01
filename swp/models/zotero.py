@@ -14,7 +14,7 @@ class ZoteroTransfer(models.Model):
         on_delete=models.CASCADE,
     )
 
-    api_key = models.CharField(_('api_key'), max_length=255)
+    api_key = models.CharField(_('api key'), max_length=255)
     path = models.CharField(_('path'), max_length=255)
     collection_keys = ArrayField(
         ZoteroObjectKeyField(),

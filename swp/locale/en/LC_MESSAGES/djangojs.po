@@ -133,9 +133,6 @@ msgstr ""
 msgid "At least one item is required"
 msgstr ""
 
-msgid "by"
-msgstr ""
-
 msgid "and"
 msgstr ""
 
@@ -237,6 +234,9 @@ msgid "The following keys are invalid: %(keys)s"
 msgstr ""
 
 msgid "Download .RIS"
+msgstr ""
+
+msgid "by"
 msgstr ""
 
 msgid "unknown"
