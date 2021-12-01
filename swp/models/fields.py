@@ -109,8 +109,8 @@ class ZoteroObjectKeyValidator(RegexValidator):
 
 
 class ZoteroObjectKeyField(CharField):
+    default_validators = [ZoteroObjectKeyValidator()]
 
     def __init__(self, *args, **kwargs):
         kwargs.setdefault('max_length', 8)
         super().__init__(*args, **kwargs)
-        self.validators.append(ZoteroObjectKeyValidator())
