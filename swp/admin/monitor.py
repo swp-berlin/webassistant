@@ -57,7 +57,7 @@ class MonitorAdmin(ActivatableModelAdmin):
 
     def send_to_zotero(self, request, queryset):
         for monitor in queryset:
-            send_publications_to_zotero(monitor.pk)
+            send_publications_to_zotero.delay(monitor.pk)
 
         monitor_count = len(queryset)
 
