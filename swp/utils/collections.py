@@ -1,7 +1,7 @@
-from typing import Generator
+from typing import Iterator, List
 
 
-def chunked(lst: list, n: int) -> Generator[list, None, None]:
+def chunked(lst: list, n: int) -> Iterator[List[dict]]:
     if n < 1:
         raise ValueError('chunk size must be greater than 0')
 
