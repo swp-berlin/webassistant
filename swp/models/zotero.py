@@ -26,7 +26,7 @@ class ZoteroTransfer(models.Model):
     version = models.IntegerField(_('version'), default=0, editable=False)
 
     created = models.DateTimeField(_('created'), default=timezone.now, editable=False)
-    updated = models.DateTimeField(_('updated'), auto_now=True, editable=False)
+    updated = models.DateTimeField(_('updated'), default=timezone.now, editable=False)
     last_transferred = models.DateTimeField(_('transferred'), null=True, blank=True)
 
     class Meta:

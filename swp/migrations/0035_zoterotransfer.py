@@ -23,7 +23,7 @@ class Migration(migrations.Migration):
                 ('collection_keys', django.contrib.postgres.fields.ArrayField(base_field=swp.models.fields.ZoteroObjectKeyField(max_length=8), blank=True, default=list, size=None, verbose_name='collection keys')),
                 ('version', models.IntegerField(default=0, editable=False, verbose_name='version')),
                 ('created', models.DateTimeField(default=django.utils.timezone.now, editable=False, verbose_name='created')),
-                ('updated', models.DateTimeField(auto_now=True, verbose_name='updated')),
+                ('updated', models.DateTimeField(default=django.utils.timezone.now, editable=False, verbose_name='updated')),
                 ('last_transferred', models.DateTimeField(blank=True, null=True, verbose_name='transferred')),
                 ('publication', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='zotero_transfers', to='swp.publication', verbose_name='publication')),
             ],
