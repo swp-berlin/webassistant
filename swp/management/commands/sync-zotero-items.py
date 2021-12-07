@@ -4,7 +4,7 @@ from itertools import chain
 
 from django.conf import settings
 from django.core.management import BaseCommand
-from django.db import transaction
+from django.db import transaction, IntegrityError
 from django.utils import timezone
 
 from cosmogo.utils.requests import TimeOutSession
@@ -20,7 +20,12 @@ MAX_ITEMS_PER_REQUEST = 100
 
 
 def get_publication_id(key: str):
-    id_base_33 = PUB_ID_BASE33.match(key).group('base_33')
+    match = PUB_ID_BASE33.match(key)
+
+    if not match:
+        return None
+
+    id_base_33 = match.group('base_33')
     length = len(id_base_33)
 
     pub_id = 0
@@ -63,7 +68,22 @@ class Command(BaseCommand):
 
                     for item in response.json():
                         zotero_key = item.get('key')
+
+                        if not zotero_key:
+                            self.stderr.write(
+                                f'API_KEY: {api_key}, PATH: {path}. '
+                                f'Item doesn\'t contain zotero key: {item}'
+                            )
+                            continue
+
                         publication_id = get_publication_id(zotero_key)
+
+                        if not publication_id:
+                            self.stderr.write(
+                                f'API_KEY: {api_key}, PATH: {path}. '
+                                f'Item with key {zotero_key} doesn\'t match pattern'
+                            )
+                            continue
 
                         data = item.get('data')
 
@@ -72,18 +92,25 @@ class Command(BaseCommand):
                         date_added = data.get('dateAdded')
                         date_modified = data.get('dateModified')
 
-                        transfer, obj_created = ZoteroTransfer.objects.update_or_create(
-                            publication_id=publication_id,
-                            api_key=api_key,
-                            path=path,
-                            defaults=dict(
-                                collection_keys=collection_keys,
-                                version=version,
-                                created=date_added,
-                                updated=date_modified,
-                                last_transferred=now,
+                        try:
+                            transfer, obj_created = ZoteroTransfer.objects.update_or_create(
+                                publication_id=publication_id,
+                                api_key=api_key,
+                                path=path,
+                                defaults=dict(
+                                    collection_keys=collection_keys,
+                                    version=version,
+                                    created=date_added,
+                                    updated=date_modified,
+                                    last_transferred=now,
+                                )
                             )
-                        )
+                        except IntegrityError as err:
+                            self.stderr.write(
+                                f'API_KEY: {api_key}, PATH: {path}. '
+                                f'Zotero Transfer couldn\'t be created. Error: {err}'
+                            )
+                            continue
 
                         if obj_created:
                             created += 1
