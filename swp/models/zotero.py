@@ -16,6 +16,8 @@ class ZoteroTransfer(models.Model):
 
     api_key = models.CharField(_('api key'), max_length=255)
     path = models.CharField(_('path'), max_length=255)
+    key = ZoteroObjectKeyField(_('key'), null=True, blank=True)
+    attachment_key = ZoteroObjectKeyField(_('attachment key'), null=True, blank=True)
     collection_keys = ArrayField(
         ZoteroObjectKeyField(),
         verbose_name=_('collection keys'),

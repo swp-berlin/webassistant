@@ -9,7 +9,7 @@ from django.utils import timezone
 
 from cosmogo.utils.requests import TimeOutSession
 
-from swp.models import Monitor, ZoteroTransfer
+from swp.models import Monitor, ZoteroTransfer, Publication
 from swp.utils.zotero import build_zotero_api_url, get_zotero_api_headers, OBJECT_KEY_ALPHABET
 
 
@@ -32,6 +32,10 @@ def get_publication_id(key: str):
 
     for idx, val in enumerate(id_base_33):
         pub_id += OBJECT_KEY_ALPHABET.index(val) * 33**(length - idx - 1)
+
+    if pub_id > 2147483647:
+        # max value for primary key field
+        return None
 
     return pub_id
 
@@ -60,6 +64,8 @@ class Command(BaseCommand):
 
                 session = TimeOutSession(settings.ZOTERO_API_TIMEOUT)
 
+                attachments = self.get_attachments(api_key, path)
+
                 while url:
                     response = session.request('GET', url, headers=headers)
 
@@ -87,17 +93,26 @@ class Command(BaseCommand):
 
                         data = item.get('data')
 
+                        title = data.get('title')
                         collection_keys = data.get('collections')
                         version = data.get('version')
                         date_added = data.get('dateAdded')
                         date_modified = data.get('dateModified')
 
                         try:
+                            publication = Publication.objects.get(pk=publication_id)
+
+                            if publication.title != title:
+                                # Caution! This might not be our publication. We will ignore it.
+                                continue
+
                             transfer, obj_created = ZoteroTransfer.objects.update_or_create(
-                                publication_id=publication_id,
+                                publication=publication,
                                 api_key=api_key,
                                 path=path,
+                                key=zotero_key,
                                 defaults=dict(
+                                    attachment_key=attachments.get(zotero_key),
                                     collection_keys=collection_keys,
                                     version=version,
                                     created=date_added,
@@ -111,6 +126,8 @@ class Command(BaseCommand):
                                 f'Zotero Transfer couldn\'t be created. Error: {err}'
                             )
                             continue
+                        except Publication.DoesNotExist:
+                            continue
 
                         if obj_created:
                             created += 1
@@ -119,3 +136,26 @@ class Command(BaseCommand):
 
             self.stdout.write(f'{created} transfers have been created')
             self.stdout.write(f'{updated} transfers have been updated')
+
+    def get_attachments(self, api_key: str, path: str) -> dict:
+        attachments = {}
+
+        url = f'{build_zotero_api_url(path)}?itemType=attachment&limit={MAX_ITEMS_PER_REQUEST}'
+        headers = get_zotero_api_headers(api_key)
+
+        session = TimeOutSession(settings.ZOTERO_API_TIMEOUT)
+
+        while url:
+            response = session.request('GET', url, headers=headers)
+
+            next = response.links.get('next')
+            url = next and next.get('url')
+
+            for item in response.json():
+                attachment_key = item.get('key')
+                data = item.get('data')
+                publication_key = data.get('parentItem')
+
+                attachments[publication_key] = attachment_key
+
+        return attachments

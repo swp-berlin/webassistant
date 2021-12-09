@@ -1,8 +1,8 @@
 import datetime
-from typing import Any, Iterable, List, Mapping, Optional
+from typing import Any, Mapping, Optional
 from django.conf import settings
 
-from swp.models import Publication, ZoteroTransfer
+from swp.models import  ZoteroTransfer
 
 
 def get_zotero_author_data(author):
@@ -40,14 +40,12 @@ def format_datetime(dt: Optional[datetime.datetime]) -> Optional[str]:
     return dt.isoformat(timespec='seconds') if dt else None
 
 
-def get_zotero_attachment_data(publication: Publication) -> Mapping[str, Any]:
-    object_key = get_zotero_object_key(publication)
-
+def get_zotero_attachment_data(transfer: ZoteroTransfer) -> Mapping[str, Any]:
     return {
-        'parentItem': object_key,
+        'parentItem': transfer.key,
         'itemType': 'attachment',
         'linkMode': 'linked_url',
-        'url': publication.pdf_url,
+        'url': transfer.publication.pdf_url,
     }
 
 
@@ -56,11 +54,8 @@ def get_zotero_publication_data(transfer: ZoteroTransfer) -> Mapping[str, Any]:
     authors = publication.authors or []
     creators = [get_zotero_author_data(author) for author in authors]
     title = f'{publication.title}: {publication.subtitle}' if publication.subtitle else publication.title
-    object_key = get_zotero_object_key(publication)
 
     data = {
-        'key': object_key,  # Local key required for attachments
-        'version': transfer.version or 0,  # Must be set when using `key`
         'itemType': 'book',
         'title': title,
         'creators': creators,
@@ -94,16 +89,9 @@ def get_zotero_publication_data(transfer: ZoteroTransfer) -> Mapping[str, Any]:
     if publication.pdf_pages:
         data['numPages'] = publication.pdf_pages
 
-    return data
-
-
-def get_zotero_data(transfers: Iterable[ZoteroTransfer], is_update: bool = False) -> List[Mapping[str, Any]]:
-    data = []
-    for transfer in transfers:
-        publication_data = get_zotero_publication_data(transfer)
-        data.append(publication_data)
-        if not is_update and transfer.publication.pdf_url:
-            data.append(get_zotero_attachment_data(transfer.publication))
+    if transfer.key:
+        data['key'] = transfer.key
+        data['version'] = transfer.version
 
     return data
 
