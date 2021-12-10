@@ -1,13 +1,12 @@
 import datetime
-from itertools import groupby
-from operator import attrgetter
-from typing import Iterable, List, Optional, Union
+from typing import Iterable, List, Optional, Union, Mapping, Any
 
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives, get_connection as get_mail_connection
 from django.db import transaction
 from django.db.models import F, Q
 from django.utils import timezone
+from django.utils.dateparse import parse_datetime
 
 from sentry_sdk import capture_message, push_scope
 from cosmogo.utils.mail import render_mail
@@ -16,9 +15,13 @@ from cosmogo.utils.requests import TimeOutSession
 from swp.celery import app
 from swp.models import Monitor, Publication
 from swp.models.zotero import ZoteroTransfer
-from swp.utils.collections import chunked
 from swp.utils.ris import generate_ris_attachment
-from swp.utils.zotero import get_zotero_data, build_zotero_api_url, get_zotero_api_headers, get_zotero_object_key
+from swp.utils.zotero import (
+    build_zotero_api_url,
+    get_zotero_api_headers,
+    get_zotero_attachment_data,
+    get_zotero_publication_data,
+)
 
 
 @app.task(name='monitor.schedule')
@@ -115,28 +118,13 @@ def schedule_zotero_transfers(monitor: Monitor):
 
 
 def send_zotero_transfers(monitor: Monitor):
-    transfers = ZoteroTransfer.objects.filter(publication__in=monitor.publications)
+    transfers = ZoteroTransfer.objects.filter(
+        Q(last_transferred=None) | Q(last_transferred__lt=F('updated')),
+        publication__in=monitor.publications
+    )
 
-    new_transfers = transfers.filter(last_transferred=None)
-    outdated_transfers = transfers.filter(last_transferred__lt=F('updated'))
-
-    send_transfers(new_transfers)
-    send_transfers(outdated_transfers, is_update=True)
-
-
-def send_transfers(transfers: [ZoteroTransfer], is_update: bool = False):
-    transfers_by_zotero_key = {
-        get_zotero_object_key(transfer.publication): transfer
-        for transfer in transfers
-    }
-
-    transfers_by_credentials = groupby(transfers, key=attrgetter('api_key', 'path'))
-
-    for (api_key, path), group in transfers_by_credentials:
-        data = get_zotero_data(group, is_update=is_update)
-
-        for items in chunked(data, settings.ZOTERO_API_MAX_ITEMS):
-            post_zotero_publication(items, api_key, path, transfers_by_zotero_key)
+    for transfer in transfers:
+        transfer_publication.delay(transfer.pk, transfer.updated)
 
 
 @app.task(ignore_result=True)
@@ -148,49 +136,103 @@ def send_publications_to_zotero(monitor: Union[int, Monitor]):
     send_zotero_transfers(monitor)
 
 
-def post_zotero_publication(data: List[dict], api_key: str, path: str, transfers: dict):
+def post_zotero_items(data: List[dict], api_key: str, path: str) -> Optional[dict]:
     url = build_zotero_api_url(path)
     headers = get_zotero_api_headers(api_key)
     session = TimeOutSession(settings.ZOTERO_API_TIMEOUT)
 
     ok, response = session.json('POST', url, json=data, headers=headers)
 
-    now = timezone.now()
-
     if ok is None:
         capture_message(f'Zotero API failed with {response}', level='error')
+        return None
     elif not ok:
         capture_message(f'Zotero API failed with status {response.status_code}', level='error')
+        return None
 
-    successful: dict = response.get('successful')
-    successful_transfers = []
+    return response
 
-    for item in successful.values():
-        key = item.get('key')
-        version = item.get('version')
-        transfer = transfers.get(key)
 
-        if transfer:
-            # the key might also belong to an attachment
-            transfer.last_transferred = now
-            transfer.version = version
-            successful_transfers.append(transfer)
+@app.task(name='transfer_publication')
+def transfer_publication(transfer: Union[ZoteroTransfer, int], scheduled: Union[str, datetime.datetime]):
+    with transaction.atomic():
+        if isinstance(transfer, int):
+            transfer = ZoteroTransfer.objects.select_for_update().get(pk=transfer)
 
-    ZoteroTransfer.objects.bulk_update(successful_transfers, fields=['last_transferred', 'version'])
+        if isinstance(scheduled, str):
+            scheduled = parse_datetime(scheduled)
 
-    unchanged: dict = response.get('unchanged')
-    failed: dict = response.get('failed')
+        if transfer.updated > scheduled:
+            # transfer has been updated in the meantime
+            # another task will transfer this
+            return
 
-    if failed:
-        with push_scope() as scope:
-            scope.set_extra('failed_items', [{**value, 'item': data[int(idx)]} for idx, value in failed.items()])
-            capture_message(f'Failed to transfer Zotero items', level='error')
+        post_transfer(transfer)
 
-    if unchanged:
-        # this shouldn't happen and indicates a mismatch of our data and the zotero data
-        with push_scope() as scope:
-            scope.set_extra('unchanged_items', [data[int(idx)] for idx in unchanged.keys()])
-            capture_message(f'Zotero items have already been transferred', level='error')
+
+def post_transfer(transfer: ZoteroTransfer):
+    item = get_zotero_publication_data(transfer)
+
+    obj = post_zotero_item(item, transfer.api_key, transfer.path)
+
+    if not obj:
+        return
+
+    object_key = obj.get('key')
+    version = obj.get('version')
+
+    transfer.key = object_key
+    transfer.version = version
+
+    if transfer.publication.pdf_url and not transfer.attachment_key:
+        # attachment has not been transferred yet for this publication
+        post_transfer_attachment(transfer)
+
+    transfer.last_transferred = timezone.now()
+
+    transfer.save(update_fields=['key', 'attachment_key', 'version', 'last_transferred'])
+
+
+def post_transfer_attachment(transfer: ZoteroTransfer):
+    item = get_zotero_attachment_data(transfer)
+
+    obj = post_zotero_item(item, transfer.api_key, transfer.path)
+
+    if not obj:
+        return
+
+    object_key = obj.get('key')
+
+    transfer.attachment_key = object_key
+
+
+def post_zotero_item(item: Mapping[str, Any], api_key: str, path: str):
+    url = build_zotero_api_url(path)
+
+    headers = get_zotero_api_headers(api_key)
+    session = TimeOutSession(settings.ZOTERO_API_TIMEOUT)
+
+    ok, response = session.json('POST', url, json=[item], headers=headers)
+
+    with push_scope() as scope:
+        scope.set_extra('item', item)
+        scope.set_extra('url', url)
+        scope.set_extra('response', response)
+
+        if ok is None:
+            capture_message(f'Zotero API failed with {response}', level='error')
+            return None
+        elif not ok:
+            capture_message(f'Zotero API failed with status {response.status_code}', level='error')
+            return None
+
+        successful: dict = response.get('successful')
+
+        if not successful:
+            capture_message(f'Zotero API failed to transfer items', level='error')
+            return None
+
+    return successful.get('0')
 
 
 @app.task(name='monitor.zotero')
