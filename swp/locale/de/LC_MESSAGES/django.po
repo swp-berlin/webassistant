@@ -346,6 +346,12 @@ msgstr ""
 msgid "path"
 msgstr "pfad"
 
+msgid "key"
+msgstr ""
+
+msgid "attachment key"
+msgstr ""
+
 msgid "collection keys"
 msgstr "collection keys"
 
