@@ -9,6 +9,7 @@ from swp.api.filters import UpdatePublicationCountFilter
 from swp.api.serializers import ThinktankFilterSerializer
 from swp.api.serializers.monitor import MonitorSerializer
 from swp.models import Monitor, ThinktankFilter
+from swp.tasks.monitor import send_publications_to_zotero
 
 
 class MonitorFilterSet(FilterSet):
@@ -52,3 +53,11 @@ class MonitorViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['post'], url_name='add-filter', url_path='add-filter')
     def add_filter(self, request, **kwargs):
         return self.related_filter_action(request)
+
+    @action(detail=True, methods=['post'], url_name='transfer-to-zotero', url_path='transfer-to-zotero')
+    def transfer_to_zotero(self, request, **kwargs):
+        monitor = self.get_object()
+
+        send_publications_to_zotero.delay(monitor.pk)
+
+        return Response({'success': True}, status=200)
