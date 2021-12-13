@@ -10,7 +10,6 @@ class MonitorSerializer(serializers.ModelSerializer):
     recipient_count = serializers.IntegerField(read_only=True)
     publication_count = serializers.IntegerField(read_only=True)
     new_publication_count = serializers.IntegerField(read_only=True)
-    transferred_count = serializers.IntegerField(read_only=True)
 
     recipients = RecipientsField()
     filters = ThinktankFilterSerializer(source='thinktank_filters', many=True, read_only=True)
@@ -26,10 +25,20 @@ class MonitorSerializer(serializers.ModelSerializer):
             'recipient_count',
             'publication_count',
             'new_publication_count',
-            'transferred_count',
             'created',
             'recipients',
             'zotero_keys',
             'filters',
             'is_active',
+        ]
+
+
+class MonitorDetailSerializer(MonitorSerializer):
+    transferred_count = serializers.IntegerField(read_only=True)
+
+    class Meta:
+        model = Monitor
+        fields = [
+            *MonitorSerializer.Meta.fields,
+            'transferred_count',
         ]

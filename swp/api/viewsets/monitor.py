@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from swp.api import default_router
 from swp.api.filters import UpdatePublicationCountFilter
 from swp.api.serializers import ThinktankFilterSerializer
-from swp.api.serializers.monitor import MonitorSerializer
+from swp.api.serializers.monitor import MonitorSerializer, MonitorDetailSerializer
 from swp.models import Monitor, ThinktankFilter
 from swp.tasks.monitor import send_publications_to_zotero
 
@@ -36,6 +36,8 @@ class MonitorViewSet(viewsets.ModelViewSet):
     filterset_class = MonitorFilterSet
 
     def get_serializer_class(self):
+        if self.action == 'retrieve':
+            return MonitorDetailSerializer
         if self.action == 'add_filter':
             return ThinktankFilterSerializer
 
