@@ -133,9 +133,6 @@ msgstr "Keine Ergebnisse"
 msgid "At least one item is required"
 msgstr "Es muss mindestens ein Wert eingegeben werden"
 
-msgid "by"
-msgstr "von"
-
 msgid "and"
 msgstr "und"
 
@@ -144,12 +141,6 @@ msgstr "oder"
 
 msgid "nor"
 msgstr "noch"
-
-msgid "Monitor has been activated"
-msgstr "Monitor erfolgreich aktiviert"
-
-msgid "Monitor has been deactivated"
-msgstr "Monitor erfolgreich deaktiviert"
 
 msgid "New Monitor"
 msgstr "Neuer Monitor"
@@ -160,33 +151,17 @@ msgstr "Anlegen"
 msgid "Successfully created monitor"
 msgstr "Monitor erfolgreich angelegt"
 
+msgid "Monitor has been activated"
+msgstr "Monitor erfolgreich aktiviert"
+
+msgid "Monitor has been deactivated"
+msgstr "Monitor erfolgreich deaktiviert"
+
 msgid "Edit"
 msgstr "Bearbeiten"
 
 msgid "Add Thinktank"
 msgstr "Thinktank hinzufügen"
-
-msgid "Edit Monitor"
-msgstr "Monitor bearbeiten"
-
-#, javascript-format
-msgid "Monitor %s"
-msgstr "Monitor %s"
-
-msgid "Save"
-msgstr "Speichern"
-
-msgid "Successfully changed monitor"
-msgstr "Änderungen am Monitor erfolgreich gespeichert"
-
-msgid "Name"
-msgstr "Name"
-
-msgid "Description"
-msgstr "Beschreibung"
-
-msgid "Interval"
-msgstr "Intervall"
 
 msgid "Publications overall:"
 msgstr "Publikationen gesamt:"
@@ -203,11 +178,48 @@ msgstr "Intervall:"
 msgid "Recipients:"
 msgstr "Empfänger:"
 
-msgid "Monitors"
-msgstr "Monitore"
+msgid "Transferred to Zotero"
+msgstr ""
+
+msgid "Name"
+msgstr "Name"
+
+msgid "Filter"
+msgstr "Filter"
 
 msgid "Publications"
 msgstr "Publikationen"
+
+msgid "New"
+msgstr "Neu"
+
+msgid "Sync with Zotero"
+msgstr "Mit Zotero synchronisieren"
+
+msgid "Transfer to Zotero started. This might take a couple of minutes."
+msgstr "Übertragung zu Zotero gestartet. Dies kann ein paar Minuten in Anspruch nehmen."
+
+msgid "Edit Monitor"
+msgstr "Monitor bearbeiten"
+
+#, javascript-format
+msgid "Monitor %s"
+msgstr "Monitor %s"
+
+msgid "Save"
+msgstr "Speichern"
+
+msgid "Successfully changed monitor"
+msgstr "Änderungen am Monitor erfolgreich gespeichert"
+
+msgid "Description"
+msgstr "Beschreibung"
+
+msgid "Interval"
+msgstr "Intervall"
+
+msgid "Monitors"
+msgstr "Monitore"
 
 msgid "New Publications"
 msgstr "Neue Publikationen"
@@ -224,12 +236,6 @@ msgstr "Letzter Durchlauf"
 msgid "Recipients must be valid email addresses: %(addresses)s"
 msgstr "Empfänger müssen gültige E-Mail-Adressen sein: %(addresses)s"
 
-msgid "Filter"
-msgstr "Filter"
-
-msgid "New"
-msgstr "Neu"
-
 msgid "Zotero Keys"
 msgstr "Zotero-Keys"
 
@@ -238,6 +244,9 @@ msgstr "Die folgenden Schlüssel sind ungültig: %(keys)s"
 
 msgid "Download .RIS"
 msgstr ".RIS herunterladen"
+
+msgid "by"
+msgstr "von"
 
 msgid "unknown"
 msgstr "unbekannt"

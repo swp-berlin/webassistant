@@ -1,3 +1,4 @@
+import {useCallback} from 'react';
 import {Link} from 'react-router-dom';
 
 import _ from 'utils/i18n';
@@ -5,13 +6,14 @@ import {Result} from 'components/Fetch';
 import {useBreadcrumb} from 'components/Navigation';
 import TableActions from 'components/tables/TableActions';
 import Page from 'components/Page';
+import {getMonitorLabel} from 'components/monitor/helper';
+import {useMonitorsBreadcrumb} from 'components/monitor/MonitorList';
 import {useUpdatePublicationsQuery} from 'hooks/publications';
 
-import {getMonitorLabel} from './helper';
 import MonitorActivationButton from './MonitorActivationButton';
 import MonitorInfo from './MonitorInfo';
-import {useMonitorsBreadcrumb} from './MonitorList';
 import ThinktankFilterTable from './ThinktankFilterTable';
+import TransferToZoteroButton from './TransferToZoteroButton';
 
 
 const EditLabel = _('Edit');
@@ -32,6 +34,8 @@ const AddThinktankFilterButton = ({id}) => (
 const MonitorDetail = ({id}) => {
     const endpoint = `/monitor/${id}/`;
     const result = useUpdatePublicationsQuery(endpoint);
+    const refetchMonitor = result.fetch;
+    const handleToggleActive = useCallback(() => refetchMonitor(), [refetchMonitor]);
 
     useMonitorsBreadcrumb();
     useBreadcrumb(endpoint, getMonitorLabel(id, result));
@@ -40,6 +44,7 @@ const MonitorDetail = ({id}) => {
         <Result result={result}>
             {({publication_count: publicationCount,
                 new_publication_count: newPublicationCount,
+                transferred_count: transferredCount,
                 last_sent: lastSent,
                 recipient_count: recipientCount,
                 is_active: isActive,
@@ -54,6 +59,7 @@ const MonitorDetail = ({id}) => {
                         <MonitorActivationButton
                             endpoint={endpoint}
                             defaultIsActive={isActive}
+                            onToggle={handleToggleActive}
                         />
                     )}
                 >
@@ -66,6 +72,7 @@ const MonitorDetail = ({id}) => {
                         className="my-4"
                         publicationCount={publicationCount}
                         newPublicationCount={newPublicationCount}
+                        transferredCount={transferredCount}
                         lastSent={lastSent}
                         interval={interval}
                         recipientCount={recipientCount}
@@ -74,6 +81,7 @@ const MonitorDetail = ({id}) => {
                     <TableActions>
                         <EditButton id={id} />
                         <AddThinktankFilterButton id={id} />
+                        <TransferToZoteroButton id={id} disabled={!isActive} />
                     </TableActions>
 
                     <ThinktankFilterTable items={filters} monitorID={id} />

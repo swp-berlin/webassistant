@@ -1,8 +1,8 @@
 import datetime
-from typing import Any, Iterable, List, Mapping, Optional
+from typing import Any, Mapping, Optional
 from django.conf import settings
 
-from swp.models import Publication
+from swp.models import  ZoteroTransfer
 
 
 def get_zotero_author_data(author):
@@ -19,6 +19,7 @@ OBJECT_KEY_ALPHABET = 'ABCDEFGHIJKLMNPQRSTUVWXYZ23456789'
 def encode_object_key(value: int, *, initial: str = '') -> str:
     assert isinstance(value, int), 'Value must be an integer'
     assert value >= 0, 'Value must be greater zero'
+    assert value < (33**7 + 17)  # algorithm is not collision-safe beginning with this number
     assert not initial or len(initial) >= 8, 'Initial block must be 8 characters long'
 
     encoded = initial or 'SWPZTAPI'
@@ -39,26 +40,22 @@ def format_datetime(dt: Optional[datetime.datetime]) -> Optional[str]:
     return dt.isoformat(timespec='seconds') if dt else None
 
 
-def get_zotero_attachment_data(publication: Publication) -> Mapping[str, Any]:
-    object_key = get_zotero_object_key(publication)
-
+def get_zotero_attachment_data(transfer: ZoteroTransfer) -> Mapping[str, Any]:
     return {
-        'parentItem': object_key,
+        'parentItem': transfer.key,
         'itemType': 'attachment',
         'linkMode': 'linked_url',
-        'url': publication.pdf_url,
+        'url': transfer.publication.pdf_url,
     }
 
 
-def get_zotero_publication_data(publication: Publication, collections: Iterable[str] = ()) -> Mapping[str, Any]:
+def get_zotero_publication_data(transfer: ZoteroTransfer) -> Mapping[str, Any]:
+    publication = transfer.publication
     authors = publication.authors or []
     creators = [get_zotero_author_data(author) for author in authors]
     title = f'{publication.title}: {publication.subtitle}' if publication.subtitle else publication.title
-    object_key = get_zotero_object_key(publication)
 
     data = {
-        'key': object_key,  # Local key required for attachments
-        'version': 0,  # Must be set when using `key`
         'itemType': 'book',
         'title': title,
         'creators': creators,
@@ -85,23 +82,16 @@ def get_zotero_publication_data(publication: Publication, collections: Iterable[
         'tags': [
             {'tag': tag} for tag in publication.tags
         ],
-        'collections': list(collections),
+        'collections': transfer.collection_keys,
         'relations': {}
     }
 
     if publication.pdf_pages:
         data['numPages'] = publication.pdf_pages
 
-    return data
-
-
-def get_zotero_data(publications: Iterable[Publication], collections: Iterable[str] = ()) -> List[Mapping[str, Any]]:
-    data = []
-    for publication in publications:
-        publication_data = get_zotero_publication_data(publication, collections)
-        data.append(publication_data)
-        if publication.pdf_url:
-            data.append(get_zotero_attachment_data(publication))
+    if transfer.key:
+        data['key'] = transfer.key
+        data['version'] = transfer.version
 
     return data
 

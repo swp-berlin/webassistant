@@ -33,7 +33,7 @@ const ActivationButton = props => {
     const [handleSubmit, mutationResult] = useMutationResult(
         endpoint,
         {
-            handleSuccess: ({is_active: isActive}) => ({
+            handleSuccess: ({is_active: isActive}) => onToggle(isActive) && ({
                 intent: 'success',
                 message: isActive ? activatedMessage : deactivatedMessage,
             }),

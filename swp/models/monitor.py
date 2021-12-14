@@ -4,9 +4,10 @@ import datetime
 import operator
 from collections import defaultdict
 from functools import reduce
-from typing import Iterable, Tuple
+from typing import Iterable, Tuple, Collection
 
 from django.db import models
+from django.db.models import FilteredRelation, Count
 from django.db.models.expressions import Case, ExpressionWrapper, F, When
 from django.utils import timezone
 from django.utils.functional import cached_property
@@ -18,7 +19,7 @@ from sentry_sdk import capture_message
 from swp.db.expressions import MakeInterval
 from swp.utils.ris import generate_ris_data
 from .publication import Publication
-from .fields import ZoteroKeyField
+from .fields import ZoteroKeyField, ZOTERO_URI_PATTERN
 from .abstract import ActivatableModel, ActivatableQuerySet
 from .choices import Interval
 
@@ -157,32 +158,60 @@ class Monitor(ActivatableModel):
     def is_zotero(self) -> bool:
         return bool(self.zotero_keys)
 
-    def get_zotero_publication_keys(self, fail_silently: bool = False) -> Iterable[Tuple[str, str, Iterable[str]]]:
+    def get_zotero_publication_keys(self, fail_silently: bool = False) -> Collection[Tuple[str, str, Iterable[str]]]:
         collections = defaultdict(set)
         paths = {}
 
         for key in self.zotero_keys:
-            api_key, sep, path = key.partition('/')
-            path = f'{sep}{path}'
+            try:
+                api_key, path, collection_id = self.get_zotero_info(key)
+            except ValueError as err:
+                if fail_silently:
+                    continue
 
-            if '/collections/' in path:
-                parts = path.split('/')
-                if parts[3] != 'collections':
-                    message = f'Invalid Zotero collection key: {key}'
-                    capture_message(message, level='error')
-                    if fail_silently:
-                        continue
-                    raise ValueError(message)
-
-                prefix = '/'.join(parts[:3])
-                collection_id = parts[4]
-                collections[api_key].add(collection_id)
-
-                # We only post to items so adjust the API here to reflect that
-                path = f'{prefix}/items'
+                raise err
 
             paths[api_key] = path
 
-        return [
-            (api_key, path, list(collections[api_key])) for api_key, path in paths.items()
-        ]
+            if collection_id:
+                collections[api_key].add(collection_id)
+
+        return [(api_key, path, list(collections[api_key])) for api_key, path in paths.items()]
+
+    @staticmethod
+    def get_zotero_info(zotero_key: str) -> Tuple[str, str, str]:
+        match = ZOTERO_URI_PATTERN.match(zotero_key)
+
+        if not match:
+            message = f'Invalid Zotero key: {zotero_key}'
+            capture_message(message, level='error')
+            raise ValueError(message)
+
+        user_or_group_path = match.group('path')
+        path = f'{user_or_group_path}/items'
+
+        return match.group('api_key'), path, match.group('collection_id')
+
+    @property
+    def transferred_count(self) -> int:
+        zotero_infos = self.get_zotero_publication_keys()
+
+        transferred_condition = reduce(
+            operator.or_,
+            [
+                models.Q(**{
+                    'zotero_transfers__api_key': api_key,
+                    'zotero_transfers__path': path,
+                    'zotero_transfers__collection_keys__contains': collections,
+                })
+                for (api_key, path, collections) in zotero_infos
+            ],
+            models.Q(),
+        )
+
+        return self.get_publications().filter(
+            transferred_condition,
+            zotero_transfers__last_transferred__gte=F('zotero_transfers__updated')
+        ).annotate(transfers_completed_count=Count('zotero_transfers')).filter(
+            transfers_completed_count=len(zotero_infos),
+        ).count()

@@ -7,8 +7,9 @@ from rest_framework.response import Response
 from swp.api import default_router
 from swp.api.filters import UpdatePublicationCountFilter
 from swp.api.serializers import ThinktankFilterSerializer
-from swp.api.serializers.monitor import MonitorSerializer
+from swp.api.serializers.monitor import MonitorSerializer, MonitorDetailSerializer
 from swp.models import Monitor, ThinktankFilter
+from swp.tasks.monitor import send_publications_to_zotero
 
 
 class MonitorFilterSet(FilterSet):
@@ -35,6 +36,8 @@ class MonitorViewSet(viewsets.ModelViewSet):
     filterset_class = MonitorFilterSet
 
     def get_serializer_class(self):
+        if self.action == 'retrieve':
+            return MonitorDetailSerializer
         if self.action == 'add_filter':
             return ThinktankFilterSerializer
 
@@ -52,3 +55,14 @@ class MonitorViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['post'], url_name='add-filter', url_path='add-filter')
     def add_filter(self, request, **kwargs):
         return self.related_filter_action(request)
+
+    @action(detail=True, methods=['post'], url_name='transfer-to-zotero', url_path='transfer-to-zotero')
+    def transfer_to_zotero(self, request, **kwargs):
+        monitor = self.get_object()
+
+        if not monitor.is_active:
+            return Response({'success': False, 'message': 'Monitor needs to be active to sync to Zotero'}, status=400)
+
+        send_publications_to_zotero.delay(monitor.pk)
+
+        return Response({'success': True}, status=200)

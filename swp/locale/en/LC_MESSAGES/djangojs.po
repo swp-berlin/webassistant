@@ -133,9 +133,6 @@ msgstr ""
 msgid "At least one item is required"
 msgstr ""
 
-msgid "by"
-msgstr ""
-
 msgid "and"
 msgstr ""
 
@@ -143,12 +140,6 @@ msgid "or"
 msgstr ""
 
 msgid "nor"
-msgstr ""
-
-msgid "Monitor has been activated"
-msgstr ""
-
-msgid "Monitor has been deactivated"
 msgstr ""
 
 msgid "New Monitor"
@@ -160,32 +151,16 @@ msgstr ""
 msgid "Successfully created monitor"
 msgstr ""
 
+msgid "Monitor has been activated"
+msgstr ""
+
+msgid "Monitor has been deactivated"
+msgstr ""
+
 msgid "Edit"
 msgstr ""
 
 msgid "Add Thinktank"
-msgstr ""
-
-msgid "Edit Monitor"
-msgstr ""
-
-#, javascript-format
-msgid "Monitor %s"
-msgstr ""
-
-msgid "Save"
-msgstr ""
-
-msgid "Successfully changed monitor"
-msgstr ""
-
-msgid "Name"
-msgstr ""
-
-msgid "Description"
-msgstr ""
-
-msgid "Interval"
 msgstr ""
 
 msgid "Publications overall:"
@@ -203,10 +178,47 @@ msgstr ""
 msgid "Recipients:"
 msgstr ""
 
-msgid "Monitors"
+msgid "Transferred to Zotero"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "Filter"
 msgstr ""
 
 msgid "Publications"
+msgstr ""
+
+msgid "New"
+msgstr ""
+
+msgid "Sync with Zotero"
+msgstr ""
+
+msgid "Transfer to Zotero started. This might take a couple of minutes."
+msgstr ""
+
+msgid "Edit Monitor"
+msgstr ""
+
+#, javascript-format
+msgid "Monitor %s"
+msgstr ""
+
+msgid "Save"
+msgstr ""
+
+msgid "Successfully changed monitor"
+msgstr ""
+
+msgid "Description"
+msgstr ""
+
+msgid "Interval"
+msgstr ""
+
+msgid "Monitors"
 msgstr ""
 
 msgid "New Publications"
@@ -224,12 +236,6 @@ msgstr ""
 msgid "Recipients must be valid email addresses: %(addresses)s"
 msgstr ""
 
-msgid "Filter"
-msgstr ""
-
-msgid "New"
-msgstr ""
-
 msgid "Zotero Keys"
 msgstr ""
 
@@ -237,6 +243,9 @@ msgid "The following keys are invalid: %(keys)s"
 msgstr ""
 
 msgid "Download .RIS"
+msgstr ""
+
+msgid "by"
 msgstr ""
 
 msgid "unknown"

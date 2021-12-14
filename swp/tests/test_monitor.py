@@ -1,18 +1,21 @@
 import datetime
 from unittest import mock
+from unittest.mock import call
 
 from django import test
 from django.core import mail
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 
-from swp.models import Monitor, Publication, Scraper, Thinktank
+from swp.models import Monitor, Publication, Scraper, Thinktank, ZoteroTransfer
 from swp.scraper.types import ScraperType
 from swp.tasks.monitor import (
     monitor_new_publications,
     send_monitor_publications,
-    schedule_monitors,
+    schedule_monitors, schedule_zotero_transfers, transfer_publication,
 )
+from swp.utils.zotero import get_zotero_publication_data, get_zotero_attachment_data
+
 
 ONE_HOUR = datetime.timedelta(hours=1)
 ONE_DAY = datetime.timedelta(days=1)
@@ -239,23 +242,19 @@ class MonitorTestCase(test.TestCase):
         self.assertEqual(data, b'')
 
     def test_send_monitor_publications(self):
-        with mock.patch('swp.tasks.monitor.post_zotero_publication.delay') as post_zotero_publication:
+        with mock.patch('swp.tasks.monitor.transfer_publication.delay') as transfer_publication:
             count = send_monitor_publications(self.monitor, now=self.now)
+
+            transfers = ZoteroTransfer.objects.all()
+
             self.assertEqual(len(mail.outbox), 2)
+            self.assertEqual(len(transfers), 2)
             self.assertEqual(count, 2)
 
-            call_args = post_zotero_publication.call_args[0]
-            self.assertIsInstance(call_args[0], list)
-            self.assertEqual(call_args[1], 'W9IOwvQPucFnh9J0BmZFNv92')
-            self.assertEqual(call_args[2], '/users/1111111/items')
-
-            api_item = call_args[0][1]
-            self.assertIsInstance(api_item, dict)
-            self.assertSetEqual(set(api_item['collections']), ZOTERO_COLLECTIONS)
-
-            attachment_item = call_args[0][2]
-            self.assertEqual(attachment_item['itemType'], 'attachment')
-            self.assertEqual(attachment_item['parentItem'], api_item['key'])
+            self.assertEqual(
+                transfer_publication.call_args_list,
+                [call(transfer.pk, transfer.updated) for transfer in transfers]
+            )
 
         self.assertEqual(mail.outbox[0].to, ['test-1@localhost'])
         self.assertTrue('PIIE Monitor' in mail.outbox[0].subject)
@@ -269,11 +268,46 @@ class MonitorTestCase(test.TestCase):
         monitor = self.model.objects.get(pk=self.monitor.pk)
         self.assertEqual(monitor.last_sent, self.now)
 
+    def test_transfer_publication(self):
+        schedule_zotero_transfers(self.monitor)
+
+        transfers = ZoteroTransfer.objects.all()
+
+        with mock.patch('swp.tasks.monitor.post_zotero_item') as post_zotero_item:
+            post_zotero_item.side_effect = [
+                {'key': 'AAAAAAAA', 'version': 1},
+                {'key': 'BBBBBBBB', 'version': 2},
+                {'key': 'CCCCCCCC', 'version': 3},
+            ]
+
+            call_args_list = [
+                call(get_zotero_publication_data(transfers[0]), 'W9IOwvQPucFnh9J0BmZFNv92', '/users/1111111/items'),
+                call(get_zotero_publication_data(transfers[1]), 'W9IOwvQPucFnh9J0BmZFNv92', '/users/1111111/items'),
+                call(
+                    {**get_zotero_attachment_data(transfers[1]), 'parentItem': 'BBBBBBBB'},
+                    'W9IOwvQPucFnh9J0BmZFNv92',
+                    '/users/1111111/items',
+                ),
+            ]
+
+            for transfer in transfers:
+                transfer_publication(transfer.pk, transfer.updated)
+
+            self.assertListEqual(post_zotero_item.call_args_list, call_args_list)
+
+            self.assertListEqual(
+                list(ZoteroTransfer.objects.values('key', 'attachment_key', 'version')),
+                [
+                    {'key': 'AAAAAAAA', 'attachment_key': None, 'version': 1},
+                    {'key': 'BBBBBBBB', 'attachment_key': 'CCCCCCCC', 'version': 2},
+                ],
+            )
+
     def test_send_only_new_monitor_publications(self):
         self.model.objects.filter(pk=self.monitor.pk).update(last_sent=self.now)
         monitor = self.model.objects.get(pk=self.monitor.pk)
 
-        with mock.patch('swp.tasks.monitor.post_zotero_publication.apply_async'):
+        with mock.patch('swp.tasks.monitor.send_publications_to_zotero'):
             count = send_monitor_publications(monitor, now=self.now)
 
         self.assertEqual(len(mail.outbox), 2)
@@ -284,7 +318,7 @@ class MonitorTestCase(test.TestCase):
         self.assertEqual(mail.outbox[1].attachments[0][1], NEW_RIS_DATA)
 
     def test_new_monitor_publications(self):
-        with mock.patch('swp.tasks.monitor.post_zotero_publication.apply_async'):
+        with mock.patch('swp.tasks.monitor.send_publications_to_zotero'):
             count = monitor_new_publications(self.monitor.pk, now=self.now)
 
         self.assertEqual(len(mail.outbox), 2)
@@ -296,7 +330,7 @@ class MonitorTestCase(test.TestCase):
     def test_only_new_monitor_publications(self):
         self.model.objects.filter(pk=self.monitor.pk).update(last_sent=self.now)
 
-        with mock.patch('swp.tasks.monitor.post_zotero_publication.apply_async'):
+        with mock.patch('swp.tasks.monitor.send_publications_to_zotero'):
             count = monitor_new_publications(self.monitor.pk, now=self.now)
 
         self.assertEqual(len(mail.outbox), 2)
@@ -341,7 +375,7 @@ class MonitorTestCase(test.TestCase):
             'swp.tasks.monitor.monitor_new_publications.apply_async',
             side_effect=lambda args, kwargs, **options: monitor_new_publications(*args, **kwargs)
         ) as dispatch_task:
-            with mock.patch('swp.tasks.monitor.post_zotero_publication.apply_async'):
+            with mock.patch('swp.tasks.monitor.send_publications_to_zotero'):
                 count = schedule_monitors(now=self.now)
 
             self.assertEqual(count, 1)

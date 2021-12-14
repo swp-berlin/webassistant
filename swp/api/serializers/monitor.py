@@ -31,3 +31,14 @@ class MonitorSerializer(serializers.ModelSerializer):
             'filters',
             'is_active',
         ]
+
+
+class MonitorDetailSerializer(MonitorSerializer):
+    transferred_count = serializers.IntegerField(read_only=True)
+
+    class Meta:
+        model = Monitor
+        fields = [
+            *MonitorSerializer.Meta.fields,
+            'transferred_count',
+        ]
