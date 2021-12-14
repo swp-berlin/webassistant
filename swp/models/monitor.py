@@ -159,8 +159,8 @@ class Monitor(ActivatableModel):
         return bool(self.zotero_keys)
 
     def get_zotero_publication_keys(self, fail_silently: bool = False) -> Collection[Tuple[str, str, Iterable[str]]]:
+        api_key_path_combinations = set()
         collections = defaultdict(set)
-        paths = {}
 
         for key in self.zotero_keys:
             try:
@@ -171,12 +171,12 @@ class Monitor(ActivatableModel):
 
                 raise err
 
-            paths[api_key] = path
+            api_key_path_combinations.add((api_key, path))
 
             if collection_id:
-                collections[api_key].add(collection_id)
+                collections[(api_key, path)].add(collection_id)
 
-        return [(api_key, path, list(collections[api_key])) for api_key, path in paths.items()]
+        return [(api_key, path, list(collections[(api_key, path)])) for api_key, path in api_key_path_combinations]
 
     @staticmethod
     def get_zotero_info(zotero_key: str) -> Tuple[str, str, str]:

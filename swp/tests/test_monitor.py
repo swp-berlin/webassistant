@@ -282,12 +282,12 @@ class MonitorTestCase(test.TestCase):
 
             call_args_list = [
                 call(get_zotero_publication_data(transfers[0]), 'W9IOwvQPucFnh9J0BmZFNv92', '/users/1111111/items'),
-                call(get_zotero_publication_data(transfers[1]), 'W9IOwvQPucFnh9J0BmZFNv92', '/users/1111111/items'),
                 call(
-                    {**get_zotero_attachment_data(transfers[1]), 'parentItem': 'BBBBBBBB'},
+                    {**get_zotero_attachment_data(transfers[0]), 'parentItem': 'AAAAAAAA'},
                     'W9IOwvQPucFnh9J0BmZFNv92',
                     '/users/1111111/items',
                 ),
+                call(get_zotero_publication_data(transfers[1]), 'W9IOwvQPucFnh9J0BmZFNv92', '/users/1111111/items'),
             ]
 
             for transfer in transfers:
@@ -298,8 +298,8 @@ class MonitorTestCase(test.TestCase):
             self.assertListEqual(
                 list(ZoteroTransfer.objects.values('key', 'attachment_key', 'version')),
                 [
-                    {'key': 'AAAAAAAA', 'attachment_key': None, 'version': 1},
-                    {'key': 'BBBBBBBB', 'attachment_key': 'CCCCCCCC', 'version': 2},
+                    {'key': 'AAAAAAAA', 'attachment_key': 'BBBBBBBB', 'version': 1},
+                    {'key': 'CCCCCCCC', 'attachment_key': None, 'version': 3},
                 ],
             )
 
