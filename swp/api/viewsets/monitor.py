@@ -60,6 +60,9 @@ class MonitorViewSet(viewsets.ModelViewSet):
     def transfer_to_zotero(self, request, **kwargs):
         monitor = self.get_object()
 
+        if not monitor.is_active:
+            return Response({'success': False, 'message': 'Monitor needs to be active to sync to Zotero'}, status=400)
+
         send_publications_to_zotero.delay(monitor.pk)
 
         return Response({'success': True}, status=200)
