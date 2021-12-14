@@ -4,9 +4,10 @@ import datetime
 import operator
 from collections import defaultdict
 from functools import reduce
-from typing import Iterable, Tuple
+from typing import Iterable, Tuple, Collection
 
 from django.db import models
+from django.db.models import FilteredRelation, Count
 from django.db.models.expressions import Case, ExpressionWrapper, F, When
 from django.utils import timezone
 from django.utils.functional import cached_property
@@ -157,7 +158,7 @@ class Monitor(ActivatableModel):
     def is_zotero(self) -> bool:
         return bool(self.zotero_keys)
 
-    def get_zotero_publication_keys(self, fail_silently: bool = False) -> Iterable[Tuple[str, str, Iterable[str]]]:
+    def get_zotero_publication_keys(self, fail_silently: bool = False) -> Collection[Tuple[str, str, Iterable[str]]]:
         collections = defaultdict(set)
         paths = {}
 
@@ -190,3 +191,27 @@ class Monitor(ActivatableModel):
         path = f'{user_or_group_path}/items'
 
         return match.group('api_key'), path, match.group('collection_id')
+
+    @property
+    def transferred_count(self) -> int:
+        zotero_infos = self.get_zotero_publication_keys()
+
+        transferred_condition = reduce(
+            operator.or_,
+            [
+                models.Q(**{
+                    'zotero_transfers__api_key': api_key,
+                    'zotero_transfers__path': path,
+                    'zotero_transfers__collection_keys__contains': collections,
+                })
+                for (api_key, path, collections) in zotero_infos
+            ],
+            models.Q(),
+        )
+
+        return self.get_publications().filter(
+            transferred_condition,
+            zotero_transfers__last_transferred__gte=F('zotero_transfers__updated')
+        ).annotate(transfers_completed_count=Count('zotero_transfers')).filter(
+            transfers_completed_count=len(zotero_infos),
+        ).count()

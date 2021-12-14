@@ -110,8 +110,8 @@ class Command(BaseCommand):
                                 publication=publication,
                                 api_key=api_key,
                                 path=path,
-                                key=zotero_key,
                                 defaults=dict(
+                                    key=zotero_key,
                                     attachment_key=attachments.get(zotero_key),
                                     collection_keys=collection_keys,
                                     version=version,

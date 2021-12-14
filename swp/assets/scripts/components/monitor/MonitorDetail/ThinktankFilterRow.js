@@ -1,6 +1,6 @@
 import {Link} from 'react-router-dom';
 
-import MonitorPublicationsLink from './MonitorPublicationsLink';
+import MonitorPublicationsLink from 'components/monitor/MonitorPublicationsLink';
 
 
 const PublicationFilterItem = ({id, field, comparator, values}) => (
