@@ -1,3 +1,4 @@
+import {useCallback} from 'react';
 import {Link} from 'react-router-dom';
 
 import _ from 'utils/i18n';
@@ -33,6 +34,8 @@ const AddThinktankFilterButton = ({id}) => (
 const MonitorDetail = ({id}) => {
     const endpoint = `/monitor/${id}/`;
     const result = useUpdatePublicationsQuery(endpoint);
+    const refetchMonitor = result.fetch;
+    const handleToggleActive = useCallback(() => refetchMonitor(), [refetchMonitor]);
 
     useMonitorsBreadcrumb();
     useBreadcrumb(endpoint, getMonitorLabel(id, result));
@@ -56,6 +59,7 @@ const MonitorDetail = ({id}) => {
                         <MonitorActivationButton
                             endpoint={endpoint}
                             defaultIsActive={isActive}
+                            onToggle={handleToggleActive}
                         />
                     )}
                 >
@@ -77,7 +81,7 @@ const MonitorDetail = ({id}) => {
                     <TableActions>
                         <EditButton id={id} />
                         <AddThinktankFilterButton id={id} />
-                        <TransferToZoteroButton id={id} />
+                        <TransferToZoteroButton id={id} disabled={!isActive} />
                     </TableActions>
 
                     <ThinktankFilterTable items={filters} monitorID={id} />
