@@ -89,8 +89,13 @@ def schedule_zotero_transfers(monitor: Monitor):
     now = timezone.now()
     publication_keys = monitor.get_zotero_publication_keys()
 
+    publications = monitor.get_publications()
+
     for api_key, path, collections in publication_keys:
         to_update = []
+
+        publication_ids = {p.pk for p in publications}
+
         existing = ZoteroTransfer.objects.filter(
             publication__in=monitor.publications,
             api_key=api_key,
@@ -98,6 +103,7 @@ def schedule_zotero_transfers(monitor: Monitor):
         )
 
         for transfer in existing:
+            publication_ids.remove(transfer.publication_id)
             if set(collections) - set(transfer.collection_keys):
                 transfer.collection_keys = list(set(transfer.collection_keys) | set(collections))
                 transfer.updated = now
@@ -105,15 +111,13 @@ def schedule_zotero_transfers(monitor: Monitor):
 
         ZoteroTransfer.objects.bulk_update(to_update, fields=['collection_keys', 'updated'])
 
-        to_create = monitor.publications.filter(zotero_transfers=None)
-
         ZoteroTransfer.objects.bulk_create([
             ZoteroTransfer(
-                publication=publication,
+                publication_id=publication_id,
                 api_key=api_key,
                 path=path,
                 collection_keys=collections,
-            ) for publication in to_create
+            ) for publication_id in publication_ids
         ])
 
 
