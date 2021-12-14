@@ -164,14 +164,17 @@ CELERY_BEAT_SCHEDULE = {
         'task': 'monitoring',
         'schedule': crontab(minute='*'),
     },
-    'monitor.schedule': {
-        'task': 'monitor.schedule',
-        'schedule': crontab(hour='*', minute=0),
-    },
-    'monitor.zotero': {
-        'task': 'monitor.zotero',
-        'schedule': 60 * 60 * 2,  # every 2 hours
-    },
+    # TEMPORARILY DISABLED so it doesn't interfere with the zotero import
+    # that has be done manually once after deployment
+    # uncomment these lines in another deployment after the importer did run
+    # 'monitor.schedule': {
+    #     'task': 'monitor.schedule',
+    #     'schedule': crontab(hour='*', minute=0),
+    # },
+    # 'monitor.zotero': {
+    #     'task': 'monitor.zotero',
+    #     'schedule': 60 * 60 * 2,  # every 2 hours
+    # },
     'scraper.schedule': {
         'task': 'scraper.schedule',
         'schedule': crontab(hour='*', minute=0),
