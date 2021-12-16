@@ -93,7 +93,7 @@ class Command(BaseCommand):
 
                         data = item.get('data')
 
-                        title = data.get('title')
+                        item_url = data.get('url')
                         collection_keys = data.get('collections')
                         version = data.get('version')
                         date_added = data.get('dateAdded')
@@ -102,7 +102,7 @@ class Command(BaseCommand):
                         try:
                             publication = Publication.objects.get(pk=publication_id)
 
-                            if publication.title != title:
+                            if publication.url != item_url:
                                 # Caution! This might not be our publication. We will ignore it.
                                 continue
 
