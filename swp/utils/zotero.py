@@ -2,7 +2,7 @@ import datetime
 from typing import Any, Mapping, Optional
 from django.conf import settings
 
-from swp.models import  ZoteroTransfer
+from swp.models import ZoteroTransfer
 
 
 def get_zotero_author_data(author):
