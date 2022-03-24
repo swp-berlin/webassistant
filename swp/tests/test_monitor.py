@@ -23,7 +23,7 @@ ONE_DAY = datetime.timedelta(days=1)
 
 NEW_RIS_DATA = b"""TY  - ICOMM
 TI  - Impact of COVID-19 lockdowns on individual mobility and the importance of socioeconomic factors
-PY  - 2020-11
+Y3  - 2020-11
 PB  - PIIE
 UR  - https://piie.com/publications/policy-briefs/impact-covid-19-lockdowns-individual-mobility-and-importance
 L1  - https://www.piie.com/system/files/documents/pb20-14.pdf
@@ -34,14 +34,14 @@ ER  - \n"""
 
 FULL_RIS_DATA = b"""TY  - ICOMM
 TI  - Already accessed publication
-PY  - 2021
+Y3  - 2021
 PB  - PIIE
 UR  - https://example.org
 DO  - 10.1000/182
 SN  - 978-3-16-148410-0
 ER  - \nTY  - ICOMM
 TI  - Impact of COVID-19 lockdowns on individual mobility and the importance of socioeconomic factors
-PY  - 2020-11
+Y3  - 2020-11
 PB  - PIIE
 UR  - https://piie.com/publications/policy-briefs/impact-covid-19-lockdowns-individual-mobility-and-importance
 L1  - https://www.piie.com/system/files/documents/pb20-14.pdf
