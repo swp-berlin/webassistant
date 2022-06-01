@@ -20,7 +20,7 @@ def update_publication_count(model, pk, *, now=None, using=None):
     with transaction.atomic(using):
         obj = model.objects.select_for_update(nowait=True).get(pk=pk)
 
-        if obj.last_publication_count_update > deadline:
+        if obj.last_publication_count_update and obj.last_publication_count_update > deadline:
             return False
 
         return obj.update_publication_count(now=now)
