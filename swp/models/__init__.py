@@ -3,6 +3,7 @@ from .abstract import ActivatableModel
 from .choices import ErrorLevel, Interval
 from .monitor import Monitor
 from .publication import Publication
+from .publicationcount import PublicationCount
 from .publicationfilter import PublicationFilter
 from .scraper import Scraper
 from .scrapererror import ScraperError
@@ -17,6 +18,7 @@ __all__ = [
     'Interval',
     'Monitor',
     'Publication',
+    'PublicationCount',
     'PublicationFilter',
     'Scraper',
     'ScraperError',
