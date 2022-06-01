@@ -16,7 +16,16 @@ class ThinktankFilterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ThinktankFilter
-        fields = ['id', 'name', 'monitor', 'thinktank', 'filters', 'publication_count', 'new_publication_count']
+        fields = [
+            'id',
+            'name',
+            'monitor',
+            'thinktank',
+            'filters',
+            'publication_count',
+            'new_publication_count',
+            'last_publication_count_update',
+        ]
 
     @transaction.atomic
     def create(self, validated_data):
