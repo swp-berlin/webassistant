@@ -44,6 +44,7 @@ const MonitorDetail = ({id}) => {
         <Result result={result}>
             {({publication_count: publicationCount,
                 new_publication_count: newPublicationCount,
+                last_publication_count_update: lastPublicationCountUpdate,
                 transferred_count: transferredCount,
                 last_sent: lastSent,
                 recipient_count: recipientCount,
@@ -72,6 +73,7 @@ const MonitorDetail = ({id}) => {
                         className="my-4"
                         publicationCount={publicationCount}
                         newPublicationCount={newPublicationCount}
+                        lastPublicationCountUpdate={lastPublicationCountUpdate}
                         transferredCount={transferredCount}
                         lastSent={lastSent}
                         interval={interval}

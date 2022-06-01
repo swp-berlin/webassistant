@@ -25,6 +25,7 @@ class MonitorSerializer(serializers.ModelSerializer):
             'recipient_count',
             'publication_count',
             'new_publication_count',
+            'last_publication_count_update',
             'created',
             'recipients',
             'zotero_keys',

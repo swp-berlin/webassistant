@@ -7,13 +7,23 @@ import MonitorPublicationsLink from 'components/monitor/MonitorPublicationsLink'
 
 const PublicationCountLabel = _('Publications overall:');
 const NewPublicationsLabel = _('Publications since last email:');
+const LastPublicationCountUpdateLabel = _('Last update of publication count:');
 const LastSentLabel = _('Email sent:');
 const IntervalLabel = _('Interval:');
 const RecipientsLabel = _('Recipients:');
 const TransferredToZoteroLabel = _('Transferred to Zotero');
 
 const MonitorInfo = props => {
-    const {id, publicationCount, newPublicationCount, lastSent, interval, recipientCount, transferredCount} = props;
+    const {
+        id,
+        publicationCount,
+        newPublicationCount,
+        lastPublicationCountUpdate,
+        lastSent,
+        interval,
+        recipientCount,
+        transferredCount,
+    } = props;
 
     return (
         <dl {...props}>
@@ -32,6 +42,13 @@ const MonitorInfo = props => {
                     <MonitorPublicationsLink id={id} onlyNew>
                         {newPublicationCount}
                     </MonitorPublicationsLink>
+                </dd>
+            </div>
+
+            <div className="mb-1 sm:grid sm:grid-cols-5 sm:gap-4">
+                <dt>{LastPublicationCountUpdateLabel}</dt>
+                <dd className="sm:col-span-4">
+                    {lastPublicationCountUpdate ? (new Date(lastPublicationCountUpdate).toLocaleString()) : '-'}
                 </dd>
             </div>
 

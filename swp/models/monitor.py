@@ -7,7 +7,7 @@ from functools import reduce
 from typing import Iterable, Tuple, Collection
 
 from django.db import models
-from django.db.models import FilteredRelation, Count
+from django.db.models import Count
 from django.db.models.expressions import Case, ExpressionWrapper, F, When
 from django.utils import timezone
 from django.utils.functional import cached_property
@@ -22,6 +22,7 @@ from .publication import Publication
 from .fields import ZoteroKeyField, ZOTERO_URI_PATTERN
 from .abstract import ActivatableModel, ActivatableQuerySet
 from .choices import Interval
+from .publicationcount import PublicationCount
 
 
 class MonitorQuerySet(ActivatableQuerySet):
@@ -64,7 +65,7 @@ class MonitorManager(models.Manager.from_queryset(MonitorQuerySet, 'BaseMonitorM
     use_in_migrations = True
 
 
-class Monitor(ActivatableModel):
+class Monitor(PublicationCount, ActivatableModel):
     """
     Monitoring profile for a topic of interest.
     """
@@ -83,9 +84,6 @@ class Monitor(ActivatableModel):
     interval = models.PositiveIntegerField(_('interval'), choices=Interval.choices, default=Interval.DAILY)
     last_sent = models.DateTimeField(_('last sent'), blank=True, null=True)
     created = models.DateTimeField(_('created'), default=timezone.now, editable=False)
-
-    publication_count = models.PositiveIntegerField(_('publication count'), default=0, editable=False)
-    new_publication_count = models.PositiveIntegerField(_('new publication count'), default=0, editable=False)
 
     objects = MonitorManager()
 
@@ -123,23 +121,14 @@ class Monitor(ActivatableModel):
     def new_publications(self) -> Iterable[Publication]:
         return self.get_publications(exclude_sent=True)
 
-    def update_publication_count(self, commit: bool = True) -> Tuple[int, int]:
-        publications = Publication.objects.active().filter(self.as_query)
+    def update_publication_count(self, commit: bool = True, now=None) -> Tuple[int, int]:
+        now = timezone.localtime(now)
+        counts = self.get_publication_counts(self.last_sent, commit=commit, now=now)
 
-        self.publication_count = publications.count()
+        for thinktank_filter in self.thinktank_filters.all():
+            thinktank_filter.update_publication_count(last_sent=self.last_sent, commit=commit, now=now)
 
-        if self.last_sent:
-            self.new_publication_count = publications.filter(last_access__gte=self.last_sent).count()
-        else:
-            self.new_publication_count = self.publication_count
-
-        for filter in self.thinktank_filters.all():
-            filter.update_publication_count(last_sent=self.last_sent)
-
-        if commit:
-            self.save(update_fields=['publication_count', 'new_publication_count'])
-
-        return self.publication_count, self.new_publication_count
+        return counts
 
     @cached_property
     def next_run(self) -> datetime.datetime:
