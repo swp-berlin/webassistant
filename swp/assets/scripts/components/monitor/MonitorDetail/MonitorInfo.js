@@ -48,7 +48,7 @@ const MonitorInfo = props => {
             <div className="mb-1 sm:grid sm:grid-cols-5 sm:gap-4">
                 <dt>{LastPublicationCountUpdateLabel}</dt>
                 <dd className="sm:col-span-4">
-                    {lastPublicationCountUpdate ? (new Date(lastPublicationCountUpdate).toLocaleDateString()) : '-'}
+                    {lastPublicationCountUpdate ? (new Date(lastPublicationCountUpdate).toLocaleString()) : '-'}
                 </dd>
             </div>
 
