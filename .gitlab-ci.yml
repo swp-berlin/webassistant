@@ -81,3 +81,4 @@ deploy_staging:
     - always_on
   only:
     - master
+    - staging
