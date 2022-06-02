@@ -1,27 +1,19 @@
+from celery.canvas import group
 from django.db.models import Prefetch
-from django_filters.rest_framework import FilterSet
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from swp.api import default_router
-from swp.api.filters import UpdatePublicationCountFilter
 from swp.api.serializers import ThinktankFilterSerializer
 from swp.api.serializers.monitor import MonitorSerializer, MonitorDetailSerializer
 from swp.models import Monitor, ThinktankFilter
-from swp.tasks.monitor import send_publications_to_zotero
-
-
-class MonitorFilterSet(FilterSet):
-    update_publications = UpdatePublicationCountFilter()
-
-    class Meta:
-        model = Monitor
-        fields = ['update_publications']
+from swp.tasks import send_publications_to_zotero, update_publication_count
 
 
 @default_router.register('monitor', basename='monitor')
 class MonitorViewSet(viewsets.ModelViewSet):
+    serializer_class = MonitorSerializer
     queryset = Monitor.objects.prefetch_related(
         Prefetch(
             'thinktank_filters',
@@ -32,8 +24,6 @@ class MonitorViewSet(viewsets.ModelViewSet):
             ).order_by('thinktank__name')
         ),
     ).order_by('name')
-    serializer_class = MonitorSerializer
-    filterset_class = MonitorFilterSet
 
     def get_serializer_class(self):
         if self.action == 'retrieve':
@@ -51,6 +41,20 @@ class MonitorViewSet(viewsets.ModelViewSet):
         serializer.save(monitor=monitor)
 
         return Response(serializer.data, status=status)
+
+    def get_serializer(self, instance=None, *, many=None, **kwargs):
+        if self.action == 'list':
+            group(update_publication_count.s(pk=obj.pk) for obj in instance).delay(model=Monitor._meta.label)
+        elif self.action == 'retrieve':
+            update_publication_count.delay(Monitor._meta.label, instance.pk)
+        elif self.action == 'update_publication_count':
+            instance.update_publication_count(now=self.request.now)
+
+        return super(MonitorViewSet, self).get_serializer(instance, many=many, **kwargs)
+
+    @action(detail=True, methods=['post'], url_name='update-publication-count', url_path='update-publication-count')
+    def update_publication_count(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
 
     @action(detail=True, methods=['post'], url_name='add-filter', url_path='add-filter')
     def add_filter(self, request, **kwargs):

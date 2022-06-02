@@ -26,7 +26,7 @@ const MonitorList = () => {
 
     return (
         <Page title={MonitorsLabel} actions={<MonitorAddButton />}>
-            <MonitorTable endpoint="monitor" />
+            <MonitorTable />
         </Page>
     );
 };

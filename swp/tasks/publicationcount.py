@@ -8,7 +8,7 @@ from swp.celery import app
 from swp.models.publicationcount import PublicationCount
 
 
-@app.task(name='publication-count.update', autoretry_for=[DatabaseError], retry_backoff=120)
+@app.task(name='publication-count.update', autoretry_for=[DatabaseError], retry_backoff=10)
 def update_publication_count(model, pk, *, now=None, using=None):
     model = apps.get_model(model)
 

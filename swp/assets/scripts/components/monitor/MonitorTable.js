@@ -1,10 +1,12 @@
 import {HTMLTable} from '@blueprintjs/core';
 
-import {useFetchHandler} from 'hooks/table';
 import _ from 'utils/i18n';
+
+import {useFetchHandler} from 'hooks/table';
+import {useQuery} from 'hooks/query';
+
 import {Result} from 'components/Fetch';
 import {EmptyRow} from 'components/tables';
-import {useUpdatePublicationsQuery} from 'hooks/publications';
 
 import MonitorRow from './MonitorRow';
 
@@ -31,10 +33,10 @@ const MonitorRows = ({monitors}) => (
     ))
 );
 
-const ThinktankTable = ({endpoint, ...props}) => {
+const MonitorTable = props => {
     const handler = useFetchHandler(5);
     const params = {ordering: 'name'};
-    const query = useUpdatePublicationsQuery(endpoint || 'monitor', params);
+    const query = useQuery('monitor', params);
 
     return (
         <HTMLTable className="thinktank-table w-full table-fixed my-4" bordered {...props}>
@@ -58,4 +60,4 @@ const ThinktankTable = ({endpoint, ...props}) => {
     );
 };
 
-export default ThinktankTable;
+export default MonitorTable;

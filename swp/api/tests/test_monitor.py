@@ -1,3 +1,5 @@
+from unittest import mock
+
 from django import test
 from django.utils import timezone
 from cosmogo.utils.testing import create_user, login, request
@@ -44,7 +46,10 @@ class MonitorViewSetTestCase(test.TestCase):
         login(self)
 
     def test_detail(self):
-        response = request(self, '1:monitor-detail', args=[self.monitor.pk])
+        with mock.patch('swp.tasks.update_publication_count.delay') as delay:
+            response = request(self, '1:monitor-detail', args=[self.monitor.pk])
+
+        self.assertTrue(delay.called)
         self.assertEqual(response.data['name'], self.monitor.name)
         self.assertEqual(response.data['description'], self.monitor.description)
         self.assertEqual(response.data['last_sent'], self.monitor.last_sent)
@@ -56,5 +61,8 @@ class MonitorViewSetTestCase(test.TestCase):
         self.assertEqual(len(response.data['filters']), self.monitor.thinktank_filters.count())
 
     def test_list(self):
-        response = request(self, '1:monitor-list')
+        with mock.patch('celery.canvas.group.delay') as delay:
+            response = request(self, '1:monitor-list')
+
+        self.assertTrue(delay.called)
         self.assertEqual(len(response.data), len(self.monitors))

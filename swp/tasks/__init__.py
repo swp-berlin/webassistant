@@ -1,4 +1,9 @@
-from .monitor import monitor_new_publications, schedule_monitors, send_all_monitor_publications_to_zotero
+from .monitor import (
+    monitor_new_publications,
+    schedule_monitors,
+    send_all_monitor_publications_to_zotero,
+    send_publications_to_zotero,
+)
 from .publicationcount import update_publication_count
 from .scraper import preview_scraper
 from .scheduling import run_scraper, schedule_scrapers
@@ -10,5 +15,6 @@ __all__ = [
     'schedule_monitors',
     'schedule_scrapers',
     'send_all_monitor_publications_to_zotero',
+    'send_publications_to_zotero',
     'update_publication_count',
 ]

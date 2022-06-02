@@ -1,9 +1,10 @@
-import DateTime from 'components/DateTime';
-import {getLabel} from 'utils/choices';
 import _ from 'utils/i18n';
+import {getLabel} from 'utils/choices';
 
+import DateTime from 'components/DateTime';
 import MonitorPublicationsLink from 'components/monitor/MonitorPublicationsLink';
 
+import UpdatePublicationCount from './UpdatePublicationCount';
 
 const PublicationCountLabel = _('Publications overall:');
 const NewPublicationsLabel = _('Publications since last email:');
@@ -23,6 +24,7 @@ const MonitorInfo = props => {
         interval,
         recipientCount,
         transferredCount,
+        onMonitorUpdate,
     } = props;
 
     return (
@@ -48,7 +50,9 @@ const MonitorInfo = props => {
             <div className="mb-1 sm:grid sm:grid-cols-5 sm:gap-4">
                 <dt>{LastPublicationCountUpdateLabel}</dt>
                 <dd className="sm:col-span-4">
-                    {lastPublicationCountUpdate ? (new Date(lastPublicationCountUpdate).toLocaleString()) : '-'}
+                    <UpdatePublicationCount id={id} onMonitorUpdate={onMonitorUpdate}>
+                        <DateTime value={lastPublicationCountUpdate} />
+                    </UpdatePublicationCount>
                 </dd>
             </div>
 
