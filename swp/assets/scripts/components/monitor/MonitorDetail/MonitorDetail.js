@@ -2,13 +2,15 @@ import {useCallback} from 'react';
 import {Link} from 'react-router-dom';
 
 import _ from 'utils/i18n';
+
+import {useQuery} from 'hooks/query';
+
 import {Result} from 'components/Fetch';
 import {useBreadcrumb} from 'components/Navigation';
 import TableActions from 'components/tables/TableActions';
 import Page from 'components/Page';
 import {getMonitorLabel} from 'components/monitor/helper';
 import {useMonitorsBreadcrumb} from 'components/monitor/MonitorList';
-import {useUpdatePublicationsQuery} from 'hooks/publications';
 
 import MonitorActivationButton from './MonitorActivationButton';
 import MonitorInfo from './MonitorInfo';
@@ -33,9 +35,9 @@ const AddThinktankFilterButton = ({id}) => (
 
 const MonitorDetail = ({id}) => {
     const endpoint = `/monitor/${id}/`;
-    const result = useUpdatePublicationsQuery(endpoint);
+    const result = useQuery(endpoint);
     const refetchMonitor = result.fetch;
-    const handleToggleActive = useCallback(() => refetchMonitor(), [refetchMonitor]);
+    const handleMonitorUpdate = useCallback(() => refetchMonitor(), [refetchMonitor]);
 
     useMonitorsBreadcrumb();
     useBreadcrumb(endpoint, getMonitorLabel(id, result));
@@ -60,7 +62,7 @@ const MonitorDetail = ({id}) => {
                         <MonitorActivationButton
                             endpoint={endpoint}
                             defaultIsActive={isActive}
-                            onToggle={handleToggleActive}
+                            onToggle={handleMonitorUpdate}
                         />
                     )}
                 >
@@ -78,6 +80,7 @@ const MonitorDetail = ({id}) => {
                         lastSent={lastSent}
                         interval={interval}
                         recipientCount={recipientCount}
+                        onMonitorUpdate={handleMonitorUpdate}
                     />
 
                     <TableActions>
