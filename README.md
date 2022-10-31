@@ -19,6 +19,8 @@ Below is a short description on how to set up the project to run it locally.
 
 * Postgres
 
+* Elasticsearch 8.4.3
+
 
 ### Code Setup
 
@@ -75,6 +77,28 @@ To generate a superuser account use:
 
 ``` console
 DJANGO_SETTINGS_MODULE=swp.settings.dev python manage.py createsuperuser
+```
+
+
+### Elasticsearch Setup
+
+Start the elasticsearch server:
+
+```console
+docker run -d --name elasticsearch -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" elasticsearch:8.4.3
+```
+
+To obtain the elastic user password, run the following command and set the `ELASTICSEARCH_PASSWORD` variable in your
+`.env` file:
+
+``` console
+docker exec -it elasticsearch bin/elasticsearch-reset-password -u elastic
+```
+
+To initially create and build indices, run the following:
+
+``` console
+DJANGO_SETTINGS_MODULE=swp.settings.dev python manage.py search_index --rebuild
 ```
 
 
