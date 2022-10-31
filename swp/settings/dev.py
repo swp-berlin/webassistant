@@ -1,7 +1,6 @@
 from .base import *
-from .base import env
 
-from swp.utils.settings import debug_toolbar, django_extensions
+from swp.utils.settings import env, debug_toolbar, django_extensions
 
 ENVIRONMENT = 'develop'
 

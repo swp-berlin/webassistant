@@ -1,19 +1,29 @@
 import os
 
-from .confirmation import TRUE_FALSE
+from .confirmation import TRUTHY
 from .git import get_commit
 
 
-def env(key, default=None, parser=str):
+def env(key, default=None, parser=None):
     value = os.environ.get(key)
 
     if value is None:
         return default
 
+    if parser is None:
+        if default is None:
+            parser = str
+        else:
+            parser = type(default)
+
+    if parser is bool:
+        return truthy(value, default)
+
     return parser(value)
 
 
-truthy = TRUE_FALSE.get
+def truthy(value, default=False):
+    return TRUTHY.get(value, default)
 
 
 def debug_toolbar(apps, middleware, active=True, **config):
@@ -121,3 +131,27 @@ def redis(**kwargs):
         defaults[name] = env(variable, default, parser)
 
     return 'redis://%(host)s:%(port)s/%(db)s' % defaults
+
+
+def elasticsearch(*, debug=False, prefix='ELASTICSEARCH'):
+    def get(var, default=None):
+        return env(f'{prefix}_{var}', default)
+
+    username = get('USERNAME', 'elastic')
+    password = get('PASSWORD')
+    hostname = get('HOSTNAME', 'localhost')
+    port = get('PORT', 9200)
+    certs = get('CA_CERTS')
+    verify_certs = get('VERIFY_CERTS', not debug)
+
+    if verify_certs is False:
+        from urllib3 import disable_warnings
+        from urllib3.exceptions import InsecureRequestWarning
+
+        disable_warnings(InsecureRequestWarning)
+
+    return {
+        'hosts': f'https://{username}:{password}@{hostname}:{port}',
+        'ca_certs': certs,
+        'verify_certs': verify_certs,
+    }

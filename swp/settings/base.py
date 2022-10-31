@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 
 from pathlib import Path
 
-from swp.utils.settings import env, get_git_commit, password_validators, truthy, redis
+from swp.utils.settings import env, get_git_commit, password_validators, redis, elasticsearch
 from swp.utils.translation import trans
 
 from django.urls import reverse_lazy
@@ -18,9 +18,9 @@ RELEASE = get_git_commit(BASE_DIR)
 
 SECRET_KEY = env('SECRET_KEY')
 
-DEBUG = env('DEBUG', False, parser=truthy)
+DEBUG = env('DEBUG', False)
 
-SITE_ID = env('SITE_ID', 1, parser=int)
+SITE_ID = env('SITE_ID', 1)
 
 BASE_URL = 'http://localhost:8000'
 
@@ -41,8 +41,9 @@ INSTALLED_APPS = [
     'swp',
 
     # Extensions
-    'rest_framework',
+    'django_elasticsearch_dsl',
     'django_filters',
+    'rest_framework',
 
     # Admin
     'swp.apps.AdminConfig',
@@ -185,10 +186,14 @@ CELERY_TASK_ROUTES = {
     },
 }
 
-DEBUG_TOOLBAR = False
-PLAYWRIGHT_DEBUG = env('PLAYWRIGHT_DEBUG', default=False, parser=truthy)
+ELASTICSEARCH_DSL = {
+    'default': elasticsearch(debug=DEBUG),
+}
 
-SHELL_PLUS_PRINT_SQL = env('SHELL_PLUS_PRINT_SQL', default=False, parser=truthy)
+DEBUG_TOOLBAR = False
+PLAYWRIGHT_DEBUG = env('PLAYWRIGHT_DEBUG', False)
+
+SHELL_PLUS_PRINT_SQL = env('SHELL_PLUS_PRINT_SQL', False)
 SHELL_PLUS_POST_IMPORTS = [
     ('swp.forms', '*'),
     ('swp.models.choices', '*'),
@@ -226,4 +231,3 @@ ZOTERO_API_MAX_ITEMS = 50
 ZOTERO_API_TIMEOUT = 30
 
 # </editor-fold>
-
