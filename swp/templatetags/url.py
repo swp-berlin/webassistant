@@ -1,8 +1,8 @@
 from django import template
 from django.contrib.staticfiles.storage import staticfiles_storage
 
-from cosmogo.utils.url import get_absolute_url
 from swp.utils.translation import get_language
+from swp.utils.url import get_absolute_url
 
 register = template.Library()
 

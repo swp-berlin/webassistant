@@ -3,8 +3,8 @@ from dotenv import load_dotenv
 
 from pathlib import Path
 
-from cosmogo.utils.gettext import trans
-from cosmogo.utils.settings import env, get_git_commit, password_validators, truthy, redis
+from swp.utils.settings import env, get_git_commit, password_validators, truthy, redis
+from swp.utils.translation import trans
 
 from django.urls import reverse_lazy
 
@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'swp',
 
     # Extensions
-    'cosmogo',
     'rest_framework',
     'django_filters',
 
@@ -65,7 +64,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'cosmogo.middleware.now',
+    'swp.middleware.now',
 ]
 
 ROOT_URLCONF = 'swp.urls'
@@ -119,7 +118,7 @@ TIME_ZONE = 'Europe/Berlin'
 
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'static'
-STATICFILES_STORAGE = 'cosmogo.storage.webpack.WebPackStorage'
+STATICFILES_STORAGE = 'swp.storage.webpack.WebPackStorage'
 
 MEDIA_ROOT = BASE_DIR / 'media'
 

@@ -4,13 +4,13 @@ from django import test
 from django.core import mail
 from django.utils import timezone
 
-from cosmogo.utils.testing import create_user
 
 from swp.forms.publication import ScrapedPublicationForm
 from swp.models import ErrorLevel, Publication, Scraper, ScraperError, Thinktank
 from swp.tasks.scheduling import send_scraper_errors
 from swp.utils.auth import get_user_queryset, get_superuser_email_addresses, get_error_recipient_email_addresses
 from swp.utils.scraping.scraper import Scraper as _Scraper
+from swp.utils.testing import create_user
 
 
 class ScraperTestCase(test.TestCase):

@@ -7,12 +7,12 @@ from django.utils.timezone import localtime
 
 from sentry_sdk import capture_exception
 
-from cosmogo.utils.mail import render_mail
-from cosmogo.utils.url import get_absolute_url
 from swp.celery import app
 from swp.db.expressions import MakeInterval
 from swp.models import Scraper
 from swp.utils.auth import get_error_recipient_email_addresses
+from swp.utils.mail import render_mail
+from swp.utils.url import get_absolute_url
 
 
 @app.task(name='scraper.schedule')

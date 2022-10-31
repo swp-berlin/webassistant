@@ -1,7 +1,7 @@
 from .base import *
 from .base import env
 
-from cosmogo.utils.settings import debug_toolbar, django_extensions
+from swp.utils.settings import debug_toolbar, django_extensions
 
 ENVIRONMENT = 'develop'
 

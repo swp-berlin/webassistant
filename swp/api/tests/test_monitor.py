@@ -2,9 +2,9 @@ from unittest import mock
 
 from django import test
 from django.utils import timezone
-from cosmogo.utils.testing import create_user, login, request
 
 from swp.models import Monitor, Thinktank, ThinktankFilter
+from swp.utils.testing import create_user, login, request
 
 
 class MonitorViewSetTestCase(test.TestCase):

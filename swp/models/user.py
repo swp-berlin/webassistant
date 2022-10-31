@@ -3,7 +3,7 @@ from django.contrib.postgres.fields import CIEmailField
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from cosmogo.utils.gettext import trans
+from swp.utils.translation import trans
 
 
 class UserManager(DjangoUserManager):

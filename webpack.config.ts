@@ -9,7 +9,7 @@ import * as webpack from 'webpack';
 const ESLintPlugin = require('eslint-webpack-plugin');
 
 // @ts-ignore
-import * as AssetsMapWriterPlugin from './cosmogo/assets/assets-map-writer-plugin';
+import * as AssetsMapWriterPlugin from './swp/assets/assets-map-writer-plugin';
 
 const extractCss = new MiniCssExtractPlugin({
     filename: 'css/[name].[chunkhash].css',  /* the path is relative to the output path */

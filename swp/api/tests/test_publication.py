@@ -5,7 +5,7 @@ from django import test
 from django.urls import reverse
 from django.utils import timezone
 
-from cosmogo.utils.testing import create_user, login, request
+from swp.utils.testing import create_user, login, request
 
 from swp.models import Monitor, Publication, PublicationFilter, Thinktank, ThinktankFilter
 from swp.models.choices import Comparator, FilterField
