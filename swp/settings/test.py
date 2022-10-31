@@ -22,7 +22,7 @@ PASSWORD_HASHERS = [
     'django.contrib.auth.hashers.UnsaltedMD5PasswordHasher',
 ]
 
-TEST_RUNNER = 'cosmogo.test.runner.CosmoCodeTestRunner'
+TEST_RUNNER = 'swp.test.runner.CosmoCodeTestRunner'
 
 MEDIA_ROOT = TEST_DATA_DIR / 'media'
 

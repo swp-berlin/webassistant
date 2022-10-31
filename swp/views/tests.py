@@ -4,7 +4,7 @@ from django.core import mail
 from django.urls import reverse
 from django.utils.crypto import get_random_string
 
-from cosmogo.utils.testing import create_user, login, request
+from swp.utils.testing import create_user, login, request
 
 from swp.api.serializers import UserSerializer
 from swp.models import User

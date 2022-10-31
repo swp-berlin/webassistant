@@ -1,4 +1,4 @@
-from cosmogo.utils.settings import configure_sentry
+from swp.utils.settings import configure_sentry
 
 from .base import *
 

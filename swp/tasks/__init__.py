@@ -4,12 +4,14 @@ from .monitor import (
     send_all_monitor_publications_to_zotero,
     send_publications_to_zotero,
 )
+from monitoring import monitoring
 from .publicationcount import update_publication_count
 from .scraper import preview_scraper
 from .scheduling import run_scraper, schedule_scrapers
 
 __all__ = [
     'monitor_new_publications',
+    'monitoring',
     'preview_scraper',
     'run_scraper',
     'schedule_monitors',

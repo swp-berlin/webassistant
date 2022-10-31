@@ -3,7 +3,6 @@ from django.contrib.auth.models import Group
 from django.test import TestCase
 from django.utils import timezone
 
-from cosmogo.utils.testing import login, request, admin_url
 
 from swp.models import (
     Monitor,
@@ -16,7 +15,7 @@ from swp.models import (
 )
 from swp.models.choices import Comparator, DataResolverKey
 from swp.scraper.types import ScraperType
-from swp.utils.testing import create_superuser
+from swp.utils.testing import create_superuser, login, request, admin_url
 
 
 class AdminTestCase(TestCase):

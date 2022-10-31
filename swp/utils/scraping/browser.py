@@ -6,7 +6,8 @@ from typing import ContextManager
 from playwright.async_api import async_playwright, Browser, Page
 
 from django.conf import settings
-from cosmogo.utils.tempdir import maketempdir
+
+from swp.utils.tempdir import maketempdir
 
 
 DEFAULT_PREFERENCES = {

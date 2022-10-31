@@ -1,7 +1,7 @@
 from django.core.management import CommandError
 from django.test import TestCase
 
-from cosmogo.utils.testing import call_command
+from swp.utils.testing import call_command
 
 
 class MigrationTestCase(TestCase):

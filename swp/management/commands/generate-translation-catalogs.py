@@ -28,10 +28,7 @@ class JavaScriptCatalogExtension(JavaScriptCatalog):
 
 
 class Command(BaseCommand):
-    packages = [
-        'swp',
-        'cosmogo',
-    ]
+    packages = ['swp']
 
     def add_arguments(self, parser):
         parser.add_argument('--directory', dest='directory', default=settings.BASE_DIR / 'swp' / 'assets' / 'i18n')
