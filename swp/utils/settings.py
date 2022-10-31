@@ -1,6 +1,7 @@
 import os
 
 from .confirmation import TRUE_FALSE
+from .git import get_commit
 
 
 def env(key, default=None, parser=str):
