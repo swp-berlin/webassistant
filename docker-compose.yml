@@ -45,5 +45,17 @@ services:
       - db
       - redis
 
+  frontend:
+    image: node:14
+    working_dir: /app/
+    entrypoint: [ '/bin/sh', '-c' ]
+    command:
+      - |
+        npx npm install
+        npx browserslist@latest --update-db
+        npm run watch
+    volumes:
+      - .:/app
+
 volumes:
   pg-data:
