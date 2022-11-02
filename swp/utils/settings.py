@@ -139,6 +139,7 @@ def elasticsearch(*, debug=False, prefix='ELASTICSEARCH'):
 
     username = get('USERNAME', 'elastic')
     password = get('PASSWORD')
+    scheme = get('SCHEME', 'https')
     hostname = get('HOSTNAME', 'localhost')
     port = get('PORT', 9200)
     certs = get('CA_CERTS')
@@ -151,7 +152,7 @@ def elasticsearch(*, debug=False, prefix='ELASTICSEARCH'):
         disable_warnings(InsecureRequestWarning)
 
     return {
-        'hosts': f'https://{username}:{password}@{hostname}:{port}',
+        'hosts': f'{scheme}://{username}:{password}@{hostname}:{port}',
         'ca_certs': certs,
         'verify_certs': verify_certs,
     }
