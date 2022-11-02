@@ -1,0 +1,49 @@
+version: '3.9'
+
+services:
+  swp:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - celery
+#      - chrome
+    stop_signal: SIGINT
+  db:
+    image: postgres:13
+    restart: always
+    environment:
+      - POSTGRES_DB=swp
+      - POSTGRES_USER=swp
+      - POSTGRES_PASSWORD=swp
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+  redis:
+    image: redis:4
+  celery:
+    build: .
+    command: celery -A swp worker -B -Q celery,scraper -l DEBUG --purge
+    environment:
+      - DJANGO_SETTINGS_MODULE=swp.settings.dev
+      - DEBUG=pw:*
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+      - redis
+#  chrome:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile.chrome
+#    command: node chrome.mjs
+#    restart: on-failure
+#    ipc: host
+#    user: pwuser
+#    security_opt:
+#      - seccomp:seccomp_profile.json
