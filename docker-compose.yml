@@ -45,6 +45,22 @@ services:
       - db
       - redis
 
+  bootstrap:
+    image: swp
+    volumes:
+      - .:/app
+    environment:
+      - DATABASE_HOST=db
+      - DJANGO_SETTINGS_MODULE=swp.settings.dev
+    depends_on:
+      - db
+    entrypoint: [ '/bin/sh', '-c' ]
+    command:
+      - |
+        python manage.py migrate
+        python manage.py generate-schemes
+        python managy.py compile-translations
+
   frontend:
     image: node:14
     working_dir: /app/
