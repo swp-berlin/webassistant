@@ -1,6 +1,5 @@
 version: '3.9'
 
-
 services:
   swp:
     image: swp
@@ -11,10 +10,17 @@ services:
     ports:
       - "8000:8000"
     environment:
+      - DJANGO_SETTINGS_MODULE=swp.settings.dev
+      - ENVIRONMENT=develop
       - DATABASE_HOST=db
+      - REDIS_HOST=redis
+      - ELASTICSEARCH_HOSTNAME=elasticsearch
+      - ELASTICSEARCH_PASSWORD=elastic
+      - ELASTICSEARCH_VERIFY_CERTS=off
     depends_on:
       - db
-      - celery
+      - redis
+      - elasticsearch
     stop_signal: SIGINT
 
   db:
@@ -32,28 +38,46 @@ services:
   redis:
     image: redis:4
 
+  elasticsearch:
+    image: elasticsearch:8.4.3
+    environment:
+      - discovery.type=single-node
+      - ELASTIC_PASSWORD=elastic
+
   celery:
     image: swp
     command: celery -A swp worker -B -Q celery,scraper -l DEBUG --purge
     environment:
+      - DJANGO_SETTINGS_MODULE=swp.settings.dev
+      - ENVIRONMENT=develop
       - DATABASE_HOST=db
       - REDIS_HOST=redis
-      - DJANGO_SETTINGS_MODULE=swp.settings.dev
+      - ELASTICSEARCH_HOSTNAME=elasticsearch
+      - ELASTICSEARCH_PASSWORD=elastic
+      - ELASTICSEARCH_VERIFY_CERTS=off
     volumes:
       - .:/app
     depends_on:
       - db
       - redis
+      - elasticsearch
 
   bootstrap:
     image: swp
     volumes:
       - .:/app
     environment:
-      - DATABASE_HOST=db
       - DJANGO_SETTINGS_MODULE=swp.settings.dev
+      - ENVIRONMENT=develop
+      - DATABASE_HOST=db
+      - REDIS_HOST=redis
+      - ELASTICSEARCH_HOSTNAME=elasticsearch
+      - ELASTICSEARCH_PASSWORD=elastic
+      - ELASTICSEARCH_VERIFY_CERTS=off
     depends_on:
       - db
+      - redis
+      - elasticsearch
     entrypoint: [ '/bin/sh', '-c' ]
     command:
       - |
