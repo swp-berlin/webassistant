@@ -1,5 +1,9 @@
-from django.core.management import BaseCommand
+import os
+import polib
 
+from django.core.management import BaseCommand, call_command
+
+from swp.utils.path import cd
 from swp.utils.translation import GetTextCommandMixin
 
 

@@ -6,13 +6,13 @@ from swp.utils.translation import GetTextCommandMixin
 
 
 class Command(GetTextCommandMixin, CompileMessagesCommand):
-    APPLICATION = 'swp'
-
     """
     This command eases the process of compiling translations
     for a project by avoid compiling message files in the
     virtualenv directory.
     """
+
+    APPLICATION = 'swp'
 
     def add_arguments(self, parser):
         super().add_arguments(parser)
