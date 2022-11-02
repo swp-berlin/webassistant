@@ -2,7 +2,7 @@ FROM python:3.9
 
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED 1
-ENV PLAYWRIGHT_BROWSERS_PATH=/app/ms-playwright/
+ENV PLAYWRIGHT_BROWSERS_PATH=/ms-playwright/
 
 WORKDIR /app
 
@@ -26,6 +26,4 @@ RUN --mount=type=cache,target=/var/cache/apt apt-get update  \
 
 COPY requirements.txt /app
 RUN --mount=type=cache,target=/root/.cache pip install --upgrade pip && pip install -r requirements.txt
-RUN PLAYWRIGHT_BROWSERS_PATH=/app/ms-playwright/ playwright install chromium
-
-COPY . /app
+RUN playwright install chromium
