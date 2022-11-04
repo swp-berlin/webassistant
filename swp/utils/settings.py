@@ -143,15 +143,11 @@ def elasticsearch(*, debug=False, prefix='ELASTICSEARCH'):
     port = get('PORT', 9200)
     certs = get('CA_CERTS')
     verify_certs = get('VERIFY_CERTS', not debug)
-
-    if verify_certs is False:
-        from urllib3 import disable_warnings
-        from urllib3.exceptions import InsecureRequestWarning
-
-        disable_warnings(InsecureRequestWarning)
+    ssl_show_warn = get('SSL_SHOW_WARN', verify_certs)
 
     return {
         'hosts': f'{scheme}://{username}:{password}@{hostname}:{port}',
         'ca_certs': certs,
         'verify_certs': verify_certs,
+        'ssl_show_warn': ssl_show_warn,
     }
