@@ -22,10 +22,16 @@ ANALYZERS = {
 
 LANGUAGES = [*ANALYZERS]
 
+TRANSLATION_FIELDS = [
+    'title',
+    'subtitle',
+    'abstract',
+]
+
 
 class TranslationField(fields.ObjectField):
 
-    def __init__(self):
+    def __init__(self, attr=None, **kwargs):
         properties = {
             'default': fields.TextField(analyzer='default'),
         }
@@ -33,7 +39,7 @@ class TranslationField(fields.ObjectField):
         for language, analyzer in ANALYZERS.items():
             properties[language] = fields.TextField(analyzer=analyzer)
 
-        super(TranslationField, self).__init__(properties=properties)
+        super(TranslationField, self).__init__(attr, properties=properties, **kwargs)
 
     def get_value_from_instance(self, instance, field_value_to_ignore=None):
         return {
@@ -49,7 +55,7 @@ class PublicationIndex(Index):
     def create(self, using=None, **kwargs):
         result = Index.create(self, using=using, **kwargs)
 
-        self.add_language_detection('title', 'subtitle', 'abstract')
+        self.add_language_detection(*TRANSLATION_FIELDS)
 
         return result
 
@@ -110,13 +116,13 @@ PublicationIndex = PublicationIndex(name='publications')
 
 @PublicationIndex.document
 class PublicationDocument(Document):
-    title = TranslationField()
-    subtitle = TranslationField()
-    abstract = TranslationField()
 
     class Django:
         model = Publication
         fields = [
+            'title',
+            'subtitle',
+            'abstract',
             'ris_type',
             'authors',
             'publication_date',
@@ -133,6 +139,9 @@ class PublicationDocument(Document):
 
     @classmethod
     def to_field(cls, field_name, model_field):
+        if field_name in TRANSLATION_FIELDS:
+            return TranslationField(attr=field_name)
+
         if isinstance(model_field, ArrayField):
             base_field = Document.to_field(field_name, model_field.base_field)
 
