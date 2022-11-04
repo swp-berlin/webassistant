@@ -35,6 +35,7 @@ test:
     - apt update && apt install -y gettext
     - pip install -U pip coverage
     - pip install -Ur requirements.txt
+    - python manage.py search_index --create
   script:
     - python manage.py generate-schemes
     - coverage run manage.py test --noinput
