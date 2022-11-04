@@ -121,14 +121,13 @@ REDIS_DEFAULTS = {
 }
 
 
-def redis(**kwargs):
+def redis(*, prefix='REDIS', **kwargs):
     defaults = dict(REDIS_DEFAULTS, **kwargs)
 
     for name in list(defaults):
         default = defaults.get(name)
-        parser = type(default)
-        variable = str.upper(f'REDIS_{name}')
-        defaults[name] = env(variable, default, parser)
+        variable = str.upper(f'{prefix}_{name}')
+        defaults[name] = env(variable, default)
 
     return 'redis://%(host)s:%(port)s/%(db)s' % defaults
 
