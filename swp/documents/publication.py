@@ -5,7 +5,7 @@ from elasticsearch.client.ingest import IngestClient
 
 from swp.models import Publication
 
-from .fields import ANALYZERS, FieldMixin
+from .fields import ANALYZERS, FieldMixin, get_translation_fields
 
 LANGUAGES = [*ANALYZERS]
 
@@ -108,3 +108,7 @@ class PublicationDocument(FieldMixin, Document):
         kwargs.setdefault('pipeline', 'language-detection')
 
         return super(PublicationDocument, self).update(*args, **kwargs)
+
+    @classmethod
+    def get_search_fields(cls, language):
+        return [*get_translation_fields(language, cls.TRANSLATION_FIELDS), 'authors', 'isbn', 'tags']

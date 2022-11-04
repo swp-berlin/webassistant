@@ -40,6 +40,16 @@ class TranslationField(fields.ObjectField):
         }
 
 
+def get_translation_fields(language, field_names):
+    languages = [*ANALYZERS, 'default']
+
+    if language in languages:
+        languages.remove(language)
+        languages.insert(0, language)
+
+    return [f'{field}.{language}' for field in field_names for language in languages]
+
+
 class FieldMixin:
     TRANSLATION_FIELDS: List[str] = []
 
