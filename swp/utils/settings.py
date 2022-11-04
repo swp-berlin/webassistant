@@ -12,7 +12,7 @@ def env(key, default=None, parser=None):
 
     if parser is None:
         if default is None:
-            parser = str
+            return value
         else:
             parser = type(default)
 
