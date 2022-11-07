@@ -27,28 +27,28 @@ jobs:
           --health-retries 5
         ports:
           - 5432:5432
-      elasticsearch:
-        image: elasticsearch:8.4.3
-        env:
-          ELASTIC_PASSWORD: elastic
-        ports:
-          - 9200/tcp
-        options: >-
-          -e="discovery.type=single-node"
-          --health-cmd="curl http://localhost:9200/_cluster/health"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=10
     env:
       DJANGO_SETTINGS_MODULE: swp.settings.test
       ENVIRONMENT: test
       SECRET_KEY: this-is-not-a-secret-key
       DATABASE_HOST: postgres
-      ELASTICSEARCH_HOSTNAME: elasticsearch
+      ELASTICSEARCH_HOSTNAME: es1
       ELASTICSEARCH_PORT: 9200
       ELASTICSEARCH_PASSWORD: elastic
       ELASTICSEARCH_VERIFY_CERTS: f
     steps:
+    - name: Configure sysctl limits
+      run: |
+        sudo swapoff -a
+        sudo sysctl -w vm.swappiness=1
+        sudo sysctl -w fs.file-max=262144
+        sudo sysctl -w vm.max_map_count=262144
+    - name: Runs Elasticsearch
+      uses: elastic/elastic-github-actions/elasticsearch@master
+      with:
+        stack-version: 8.4.3
+      env:
+        elasticsearch_password: elastic
     - uses: actions/checkout@v3
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v3
