@@ -93,6 +93,6 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: npm install
-    - run: pwd; ls -lah; ls -lah swp/*; ls -lah swp/assets/* || true
+    - run: pwd; ls -lah; ls -lah swp/*; ls -lah /home/runner/work/webmonitor/webmonitor/swp/assets/schemes || true
     - run: npm run eslint
     - run: npm run stylelint
