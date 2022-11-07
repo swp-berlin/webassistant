@@ -40,3 +40,7 @@ class User(AbstractUser):
     @property
     def username(self):
         return self.email
+
+    @property
+    def can_research(self):
+        return self.has_perm(f'{self._meta.app_label}.can_research')
