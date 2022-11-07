@@ -19,6 +19,8 @@ dump.rdb
 *.mo
 /static
 /test-data
+/data
+/ms-playwright
 
 # Database
 *.psql

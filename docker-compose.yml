@@ -1,0 +1,101 @@
+version: '3.9'
+
+services:
+  swp:
+    image: swp
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    environment:
+      - DJANGO_SETTINGS_MODULE=swp.settings.dev
+      - ENVIRONMENT=develop
+      - DATABASE_HOST=db
+      - REDIS_HOST=redis
+      - ELASTICSEARCH_HOSTNAME=elasticsearch
+      - ELASTICSEARCH_PASSWORD=elastic
+      - ELASTICSEARCH_VERIFY_CERTS=off
+    depends_on:
+      - db
+      - redis
+      - elasticsearch
+    stop_signal: SIGINT
+
+  db:
+    image: postgres:13
+    restart: always
+    environment:
+      - POSTGRES_DB=swp
+      - POSTGRES_USER=swp
+      - POSTGRES_PASSWORD=swp
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:4
+
+  elasticsearch:
+    image: elasticsearch:8.4.3
+    environment:
+      - discovery.type=single-node
+      - ELASTIC_PASSWORD=elastic
+
+  celery:
+    image: swp
+    command: celery -A swp worker -B -Q celery,scraper -l DEBUG --purge
+    environment:
+      - DJANGO_SETTINGS_MODULE=swp.settings.dev
+      - ENVIRONMENT=develop
+      - DATABASE_HOST=db
+      - REDIS_HOST=redis
+      - ELASTICSEARCH_HOSTNAME=elasticsearch
+      - ELASTICSEARCH_PASSWORD=elastic
+      - ELASTICSEARCH_VERIFY_CERTS=off
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+      - redis
+      - elasticsearch
+
+  bootstrap:
+    image: swp
+    volumes:
+      - .:/app
+    environment:
+      - DJANGO_SETTINGS_MODULE=swp.settings.dev
+      - ENVIRONMENT=develop
+      - DATABASE_HOST=db
+      - REDIS_HOST=redis
+      - ELASTICSEARCH_HOSTNAME=elasticsearch
+      - ELASTICSEARCH_PASSWORD=elastic
+      - ELASTICSEARCH_VERIFY_CERTS=off
+    depends_on:
+      - db
+      - redis
+      - elasticsearch
+    entrypoint: [ '/bin/sh', '-c' ]
+    command:
+      - |
+        python manage.py migrate
+        python manage.py generate-schemes
+        python managy.py compile-translations
+
+  frontend:
+    image: node:14
+    working_dir: /app/
+    entrypoint: [ '/bin/sh', '-c' ]
+    command:
+      - |
+        npx npm install
+        npx browserslist@latest --update-db
+        npm run watch
+    volumes:
+      - .:/app
+
+volumes:
+  pg-data:
