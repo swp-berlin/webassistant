@@ -1,0 +1,69 @@
+name: Django CI
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 4
+      matrix:
+        python-version: [3.8]
+    services:
+      postgres:
+        image: postgres:11
+        env:
+          POSTGRES_DB: swp
+          POSTGRES_USER: swp
+          POSTGRES_PASSWORD: swp
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+      elasticsearch:
+        image: elasticsearch:8.4.3
+        env:
+          ELASTIC_PASSWORD: elastic
+        ports:
+          - 9200/tcp
+        options: >-
+          -e="discovery.type=single-node"
+          --health-cmd="curl http://localhost:9200/_cluster/health"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+    env:
+      DJANGO_SETTINGS_MODULE: swp.settings.test
+      ENVIRONMENT: test
+      SECRET_KEY: this-is-not-a-secret-key
+      DATABASE_HOST: postgres
+      ELASTICSEARCH_HOSTNAME: elasticsearch
+      ELASTICSEARCH_PORT: 9200
+      ELASTICSEARCH_PASSWORD: elastic
+      ELASTICSEARCH_VERIFY_CERTS: f
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v3
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install Dependencies
+      run: |
+        apt-get upddate && apt-get -y install gettext
+        python -m pip install --upgrade pip coverage
+        pip install -r requirements.txt
+    - name: Create Index
+      run: |
+        python manage.py search_index --create
+    - name: Run Tests
+      run: |
+         python manage.py generate-schemes
+         coverage run manage.py test --noinput
+         coverage report
