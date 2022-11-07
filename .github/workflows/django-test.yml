@@ -49,6 +49,10 @@ jobs:
         stack-version: 8.4.3
       env:
         elasticsearch_password: elastic
+    - uses: actions/setup-python@v2
+      with:
+        python-version: '3.8'
+        cache: 'pip'
     - uses: actions/checkout@v3
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v3
