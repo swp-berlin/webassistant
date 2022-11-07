@@ -32,7 +32,7 @@ jobs:
       ENVIRONMENT: test
       SECRET_KEY: this-is-not-a-secret-key
       DATABASE_HOST: postgres
-      ELASTICSEARCH_HOSTNAME: es1
+      ELASTICSEARCH_HOSTNAME: localhost
       ELASTICSEARCH_PORT: 9200
       ELASTICSEARCH_PASSWORD: elastic
       ELASTICSEARCH_VERIFY_CERTS: f
