@@ -80,7 +80,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [10.x, 12.x, 14.x, 16.x, 18.x]
+        node-version: [10.x, 12.x, 14.x]
     steps:
     - uses: actions/checkout@v3
     - name: Use Node.js ${{ matrix.node-version }}
@@ -93,6 +93,5 @@ jobs:
       with:
         name: swp-schemes
         path: swp/assets/schemes
-    - run: pwd; ls -lah; ls -lah swp/*; ls -lah /home/runner/work/webmonitor/webmonitor/swp/assets/schemes || true
     - run: npm run eslint
     - run: npm run stylelint
