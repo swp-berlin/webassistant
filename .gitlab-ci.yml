@@ -12,20 +12,30 @@ test:
   image: python:3.8
   variables:
     DJANGO_SETTINGS_MODULE: swp.settings.test
-    POSTGRES_DB: swp
-    POSTGRES_USER: swp
-    POSTGRES_PASSWORD: swp
-    DATABASE_HOST: postgres
+    ENVIRONMENT: test
     SECRET_KEY: this-is-not-a-secret-key
+    DATABASE_HOST: postgres
+    ELASTICSEARCH_HOSTNAME: elasticsearch
+    ELASTICSEARCH_PORT: 9200
+    ELASTICSEARCH_PASSWORD: elastic
+    ELASTICSEARCH_VERIFY_CERTS: f
   tags:
     - docker
   services:
     - name: postgres:11
-      alias: postgres
+      variables:
+        POSTGRES_DB: swp
+        POSTGRES_USER: swp
+        POSTGRES_PASSWORD: swp
+    - name: elasticsearch:8.4.3
+      variables:
+        discovery.type: single-node
+        ELASTIC_PASSWORD: elastic
   before_script:
     - apt update && apt install -y gettext
     - pip install -U pip coverage
     - pip install -Ur requirements.txt
+    - python manage.py search_index --create
   script:
     - python manage.py generate-schemes
     - coverage run manage.py test --noinput
