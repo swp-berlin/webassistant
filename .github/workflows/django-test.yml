@@ -82,10 +82,6 @@ jobs:
       matrix:
         node-version: [10.x, 12.x, 14.x, 16.x, 18.x]
     steps:
-    - uses: actions/download-artifact@master
-      with:
-        name: swp-schemes
-        path: swp/assets/schemes
     - uses: actions/checkout@v3
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
@@ -93,6 +89,10 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: npm install
+    - uses: actions/download-artifact@master
+      with:
+        name: swp-schemes
+        path: swp/assets/schemes
     - run: pwd; ls -lah; ls -lah swp/*; ls -lah /home/runner/work/webmonitor/webmonitor/swp/assets/schemes || true
     - run: npm run eslint
     - run: npm run stylelint
