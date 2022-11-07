@@ -5,7 +5,7 @@ name: Node.js CI
 
 on:
   workflow_run:
-    workflows: ["tests"]
+    workflows: ["Django CI"]
     branches: [master]
     types:
       - completed
