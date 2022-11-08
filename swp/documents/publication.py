@@ -1,4 +1,4 @@
-from django_elasticsearch_dsl import Document
+from django_elasticsearch_dsl import Document, fields
 from django_elasticsearch_dsl.indices import Index
 
 from elasticsearch.client.ingest import IngestClient
@@ -103,6 +103,15 @@ class PublicationDocument(FieldMixin, Document):
             'created',
             'hash',
         ]
+
+    @classmethod
+    def to_field(cls, field_name, model_field):
+        if field_name == 'tags':
+            base_field = fields.KeywordField(attr=field_name)
+
+            return fields.ListField(base_field)
+
+        return FieldMixin.to_field(field_name, model_field)
 
     def update(self, *args, **kwargs):
         kwargs.setdefault('pipeline', 'language-detection')

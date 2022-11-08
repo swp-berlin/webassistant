@@ -64,6 +64,9 @@ class Publication(models.Model):
     class Meta:
         verbose_name = _('publication')
         verbose_name_plural = _('publications')
+        permissions = [
+            ('can_research', 'Can use research interface'),
+        ]
 
     def __str__(self) -> str:
         return self.title or f'{self.pk}'
