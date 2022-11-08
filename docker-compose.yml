@@ -43,6 +43,7 @@ services:
     environment:
       - discovery.type=single-node
       - ELASTIC_PASSWORD=elastic
+      - "ES_JAVA_OPTS=-Xms750m -Xmx750m"
 
   celery:
     image: swp
@@ -83,12 +84,14 @@ services:
       - |
         python manage.py migrate
         python manage.py generate-schemes
-        python managy.py compile-translations
+        python manage.py compile-translations
 
   frontend:
     image: node:14
     working_dir: /app/
     entrypoint: [ '/bin/sh', '-c' ]
+    depends_on:
+      - bootstrap
     command:
       - |
         npx npm install
