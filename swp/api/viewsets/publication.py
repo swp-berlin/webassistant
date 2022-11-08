@@ -4,7 +4,7 @@ from django.db import models
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 
-from elasticsearch_dsl import Q
+from elasticsearch_dsl import Q, A
 
 from rest_framework import viewsets
 from rest_framework.decorators import action
@@ -12,7 +12,7 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import BasePermission, IsAuthenticated
 
 from swp.api.router import default_router
-from swp.api.serializers import PublicationSerializer, ResearchSerializer
+from swp.api.serializers import PublicationSerializer, ResearchSerializer, TagSerializer
 from swp.documents import PublicationDocument
 from swp.models import Monitor, Publication, ThinktankFilter
 from swp.utils.translation import get_language
@@ -27,6 +27,25 @@ class CanResearch(BasePermission):
 class PublicationPagination(PageNumberPagination):
     page_size = 10
     page_size_query_param = 'page_size'
+
+
+class ResearchPagination(PublicationPagination):
+
+    def __init__(self):
+        self.tags = None
+
+    def paginate_queryset(self, queryset, request, view=None):
+        page = super(ResearchPagination, self).paginate_queryset(queryset, request, view=view)
+        response = queryset.execute(ignore_cache=False)
+        self.tags = response.aggregations['tags'].buckets
+
+        return page
+
+    def get_paginated_response(self, data):
+        response = super(ResearchPagination, self).get_paginated_response(data)
+        response.data['tags'] = TagSerializer(self.tags, many=True).data
+
+        return response
 
 
 class MonitorFilter(filters.ModelChoiceFilter):
@@ -67,12 +86,16 @@ class ResearchFilter(filters.FilterSet):
     start_date = filters.DateFilter(label=_('Start Date'), required=False)
     end_date = filters.DateFilter(label=_('End Date'), required=False)
     query = filters.CharFilter(label=_('Query'), required=True)
+    tag = filters.CharFilter(label=_('Tag'), required=False)
 
     def filter_queryset(self, queryset, *, using=None):
         data = self.form.cleaned_data
         query = self.get_search_query(**data)
+        search = PublicationDocument.search(using=using).query(query)
 
-        return PublicationDocument.search(using=using).query(query).source(False)
+        search.aggs.bucket('tags', A('terms', field='tags'))
+
+        return search.source(False)
 
     @staticmethod
     def get_result_queryset(search):
@@ -87,7 +110,7 @@ class ResearchFilter(filters.FilterSet):
             '-score',
         )
 
-    def get_search_query(self, query, start_date=None, end_date=None):
+    def get_search_query(self, query, start_date=None, end_date=None, tag=None):
         language = get_language(request=self.request)
         fields = PublicationDocument.get_search_fields(language)
         query = Q('simple_query_string', query=query, fields=fields)
@@ -102,6 +125,9 @@ class ResearchFilter(filters.FilterSet):
                 created['lte'] = end_date
 
             query &= Q('range', created=created)
+
+        if tag:
+            query &= Q('match', tags=tag)
 
         return query
 
@@ -118,6 +144,7 @@ class PublicationViewSet(viewsets.ReadOnlyModelViewSet):
         detail=False,
         ordering=None,
         filterset_class=ResearchFilter,
+        pagination_class=ResearchPagination,
         serializer_class=ResearchSerializer,
         permission_classes=[IsAuthenticated & CanResearch],
     )
