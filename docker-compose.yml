@@ -85,6 +85,7 @@ services:
         python manage.py migrate
         python manage.py generate-schemes
         python manage.py compile-translations
+        python manage.py loaddata groups
 
   frontend:
     image: node:14
