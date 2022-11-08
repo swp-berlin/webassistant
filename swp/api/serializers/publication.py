@@ -1,3 +1,4 @@
+from rest_framework import fields
 from rest_framework.serializers import ModelSerializer
 
 from swp.models import Publication
@@ -29,3 +30,10 @@ class PublicationSerializer(ModelSerializer):
             'tags',
             *read_only_fields,
         ]
+
+
+class ResearchSerializer(PublicationSerializer):
+    score = fields.FloatField(read_only=True)
+
+    class Meta(PublicationSerializer.Meta):
+        fields = [*PublicationSerializer.Meta.fields, 'score']
