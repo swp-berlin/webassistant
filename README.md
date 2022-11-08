@@ -1,169 +1,36 @@
 # SWP Webmonitor Backend
 
-The main documentation on concepts and general usage can be found in the wiki
-at https://swp.wiki.cosmocode.de/
+
+## Development setup
+
+This repository comes with a Docker Compose setup that should help to set up the requirements to run the project locally. The following containers will be started
+
+  * `swp` The main Django application, including Playwright and a headless Chrome browser. Restarts when code is changed.
+  * `db` The PostgreSQL database, exposed to port `5432` in case you want to access it directly
+  * `redis` The Redis message broker
+  * `elasticsearch` A single node ElasticSearch instance
+  * `celery` The Celery task queue
+  * `bootstrap` Runs one-off tasks like updating translations, running database migrations etc.
+  * `frontend` Runs nmp and webpack in watch mode to automatically rebuild the frontend when code is changed.
+
+Please note that the Docker Compose setup is not recommended to be used for a live deployment, yet!
 
 
-## Setup
+### Getting started
 
-Below is a short description on how to set up the project to run it locally.
+Build the docker image (this needs to be redone whenever major dependencies change)
 
+    docker compose build --no-cache
 
-### Requirements
+With the image built, Docker Compose can be used to start the services. 
 
-* Python 3.8
-  - with virtualenv
+    docker compose up
 
-* nodejs 14.15 (LTS)
-  * with npm 6
+Once the containers are running, you should create a superuser:
 
-* Postgres
+    docker compose exec swp python manage.py createsuperuser
 
-* Elasticsearch 8.4.3
-
-
-### Code Setup
-
-``` console
-git clone git@gitlab.cosmocode.de:swp/swp.git
-```
-
-After cloning the repository, make sure to install the submodules as well.
-
-``` console
-git submodule update --init
-```
-
-The application should be setup within a Python virtual environment. Be sure to
-use Python 3! Activate the environment and set up the dependencies.
-
-``` console
-python3 -m venv env
-source env/bin activate
-pip install -r requirements.txt
-```
-
-Frontend code needs dependencies as well. Those are installed with npm:
-
-``` console
-npx npm install
-```
-
-Frontend assets are compiled with webpack. Use the watch task for development:
-
-``` console
-npm run watch
-```
-
-### Database Setup
-
-Create a Postgres database. By default the database is named `swp`
-
-``` console
-su - postgres  # not needed on macOS when postgres is installed with brew
-createuser -s -P swp
-Enter password for new role: swp
-Enter it again: swp
-createdb -O swp swp
-```
-
-Initialize the database:
-
-``` console
-DJANGO_SETTINGS_MODULE=swp.settings.dev python manage.py migrate
-```
-
-To generate a superuser account use:
-
-``` console
-DJANGO_SETTINGS_MODULE=swp.settings.dev python manage.py createsuperuser
-```
-
-
-### Elasticsearch Setup
-
-Start the elasticsearch server:
-
-```console
-docker run -d --name elasticsearch -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" elasticsearch:8.4.3
-```
-
-To obtain the elastic user password, run the following command and set the `ELASTICSEARCH_PASSWORD` variable in your
-`.env` file:
-
-``` console
-docker exec -it elasticsearch bin/elasticsearch-reset-password -u elastic
-```
-
-To initially create and build indices, run the following:
-
-``` console
-DJANGO_SETTINGS_MODULE=swp.settings.dev python manage.py search_index --rebuild
-```
-
-
-### Application Dependencies
-
-Before the first start of the development server you have to run:
-
-``` console
-DJANGO_SETTINGS_MODULE=swp.settings.dev python manage.py generate-schemes
-```
-
-As well as the following to generate all translation files:
-
-``` console
-DJANGO_SETTINGS_MODULE=swp.settings.dev python manage.py compile-translations
-```
-
-#### Fixtures
-
-You will probably want to install these predefined entities:
-
-``` console
-python manage.py loaddata groups sites
-```
-
-Afterwards, you may load generic test accounts for development purposes:
-
-| User | Password | Group | is_staff | is_superuser |
-| ---- | -------- | ----- | -------- | ------------ |
-| admin@localhost | admin | - | + | + |
-| swp-manager@localhost | swp-manager | swp-manager | + | - |
-| swp-editor@localhost | swp-editor | swp-editor | + | - |
-
-``` console
-python manage.py loaddata test-users
-```
-
-> **NOTE** These are totally optional and included mainly for automated tests.
-
-
-### Development Server
-
-You can run a local development server to test things like this:
-
-``` console
-DJANGO_SETTINGS_MODULE=swp.settings.dev python manage.py runserver
-```
-
-In order for scrapers to be run in development you have to start celery as well.
-Celery needs a running redis server, make sure to start it first.
-
-``` console
-DJANGO_SETTINGS_MODULE=swp.settings.dev celery -A swp worker -B -Q celery,scraper -l INFO --purge
-```
-
-
-### Production Server
-
-Please copy .env.default, adjust the configuration parameters and install apt requirements.
-
-``` console
-cp conf/.env.example .env
-while read apt ; do apt install "$apt" ; done < apt-requirements.txt
-```
-
+Once all containers are up, the application is available at http://localhost:8000
 
 ## IDE Configuration
 
