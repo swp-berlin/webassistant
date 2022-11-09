@@ -1,6 +1,6 @@
 # SWP Webmonitor
 
-The webmonitor allows monitoring websites (_thinktanks_) for the publication of new articles using configurable _scrapers_. Scrapers are executed using a headless Chrome browser. found publications are saved in a PostgreSQL database and added to an ElasticSearch Index. _Monitors_ allow to define _filters_ that aggregate publications and automatically send Citavi .ris files to configured receivers by email.  
+The webmonitor allows monitoring websites (_thinktanks_) for the publication of new articles using configurable _scrapers_. Scrapers are executed using a headless Chrome browser. Found publications are saved in a PostgreSQL database and added to an ElasticSearch Index. _Monitors_ allow to define _filters_ that aggregate publications and automatically send Citavi .ris files to configured receivers by email.  
 
 Please note that most of the application is in German only currently.
 
