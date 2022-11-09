@@ -1,7 +1,9 @@
 from __future__ import annotations
+
 from typing import Any, Mapping, TYPE_CHECKING
 
 from swp.api.serializers import UserSerializer
+
 if TYPE_CHECKING:
     from django.contrib.auth.base_user import AbstractBaseUser as User
     from rest_framework.serializers import ModelSerializer
