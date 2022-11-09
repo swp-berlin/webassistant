@@ -1,0 +1,11 @@
+<style>
+    #{{ inline_admin_formset.formset.prefix }}-group .module .original {
+        display: none;
+    }
+
+    #{{ inline_admin_formset.formset.prefix }}-group .module .has_original td {
+        padding-top: inherit;
+    }
+</style>
+
+{% include 'admin/edit_inline/tabular.html' %}
