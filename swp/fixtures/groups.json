@@ -144,5 +144,18 @@
         ]
       ]
     }
+  },
+  {
+    "model": "auth.group",
+    "fields": {
+      "name": "swp-researcher",
+      "permissions": [
+        [
+          "can_research",
+          "swp",
+          "publication"
+        ]
+      ]
+    }
   }
-  ]
+]
