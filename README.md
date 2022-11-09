@@ -1,11 +1,15 @@
-# SWP Webmonitor Backend
+# SWP Webmonitor
+
+The webmonitor allows monitoring websites (_thinktanks_) for the publication of new articles using configurable _scrapers_. Scrapers are executed using a headless Chrome browser. found publications are saved in a PostgreSQL database and added to an ElasticSearch Index. _Monitors_ allow to define _filters_ that aggregate publications and automatically send Citavi .ris files to configured receivers by email.  
+
+Please note that most of the application is in German only currently.
 
 
 ## Development setup
 
 This repository comes with a Docker Compose setup that should help to set up the requirements to run the project locally. The following containers will be started
 
-  * `swp` The main Django application, including Playwright and a headless Chrome browser. Restarts when code is changed.
+  * `swp` The main Django/React application, including Playwright and a headless Chrome browser. Restarts when code is changed.
   * `db` The PostgreSQL database, exposed to port `5432` in case you want to access it directly
   * `redis` The Redis message broker
   * `elasticsearch` A single node ElasticSearch instance
