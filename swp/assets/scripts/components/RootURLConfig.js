@@ -7,12 +7,12 @@ import {
     MonitorEdit,
     MonitorList,
     MonitorNewPublications,
-    MonitorPublications
+    MonitorPublications,
 } from 'components/monitor';
 import {ScraperAdd, ScraperEdit} from 'components/scraper';
 import {ThinktankAdd, ThinktankDetail, ThinktankEdit, ThinktankList, ThinktankPublications} from 'components/thinktank';
 import {ThinktankFilterAdd, ThinktankFilterEdit} from 'components/thinktankfilter';
-import SearchPage from 'components/Search/SearchPage';
+import SearchPage from 'components/Search';
 
 
 const RootURLConfig = () => (

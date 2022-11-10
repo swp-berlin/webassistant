@@ -8,7 +8,7 @@ import _ from 'utils/i18n';
 const SearchLabel = _('Search');
 
 const SearchForm = ({query, onQueryChange, dates, onDatesChange, onSearch}) => {
-    const handleQueryChange = useCallback(event => onQueryChange(event.target.value), []);
+    const handleQueryChange = useCallback(event => onQueryChange(event.target.value), [onQueryChange]);
     const handleSubmit = useCallback(event => event.preventDefault() || onSearch(), [onSearch]);
 
     return (

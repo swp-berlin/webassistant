@@ -1,7 +1,6 @@
 import {Button} from '@blueprintjs/core';
 import {DateRangePicker as BPDateRangePicker} from '@blueprintjs/datetime';
 import {Classes, Popover2} from '@blueprintjs/popover2';
-
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faCalendar} from '@fortawesome/free-solid-svg-icons/faCalendar';
 

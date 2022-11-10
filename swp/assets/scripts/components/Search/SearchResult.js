@@ -1,12 +1,13 @@
+import {Tag} from '@blueprintjs/core';
+import {useLocation} from 'react-router-dom';
+
 import {getPublicationsLabel, parsePageParam} from 'components/publication/helper';
 import DownloadButton from 'components/publication/DownloadButton';
-import {Tag} from '@blueprintjs/core';
 import PublicationResults from 'components/publication/PublicationResults';
-import {useLocation} from 'react-router-dom';
 import _ from 'utils/i18n';
 
 const NoPublicationsFound = _('No publications found');
-const FilterByTagLabel = _('Filter by Tag');
+const FilterByTagLabel = _('Filter by Tag:');
 
 const calculatePageCount = (total, pageSize) => Math.ceil(total / pageSize);
 
@@ -24,7 +25,7 @@ const SearchResult = ({results, tags, next: nextPage, previous: prevPage, count,
 
             {tags.length > 0 && (
                 <div className="mt-2 mb-4 flex flex-wrap space-x-2">
-                    <span>{FilterByTagLabel}:</span>
+                    <span>{FilterByTagLabel}</span>
                     {tags.map(({tag, count}) => (
                         <Tag key={tag} interactive onClick={() => onSelectTag(tag)}>{`${tag} (${count})`}</Tag>
                     ))}

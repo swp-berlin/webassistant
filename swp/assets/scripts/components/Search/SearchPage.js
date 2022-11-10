@@ -1,5 +1,7 @@
 import {useCallback, useState} from 'react';
 import {useSearchParams} from 'react-router-dom';
+import parseISO from 'date-fns/parseISO';
+import formatISO from 'date-fns/formatISO';
 
 import Page from 'components/Page';
 import {useBreadcrumb} from 'components/Navigation';
@@ -8,13 +10,11 @@ import _ from 'utils/i18n';
 
 import SearchForm from './SearchForm';
 import SearchResult from './SearchResult';
-import parseISO from 'date-fns/parseISO';
-import formatISO from 'date-fns/formatISO';
 
 const SearchLabel = _('Search');
 
-const formatDate = date => date && formatISO(date, { representation: 'date' });
-const parseDate = date => date ? parseISO(date) : null;
+const formatDate = date => date && formatISO(date, {representation: 'date'});
+const parseDate = date => (date ? parseISO(date) : null);
 const updateSearchParams = values => prev => {
     Object.keys(values).forEach(name => prev.set(name, values[name]));
     return prev;
@@ -28,7 +28,7 @@ const SearchPage = () => {
     const handleQueryChange = useCallback(term => setQuery(term), []);
 
     const [dates, setDates] = useState(
-        () => [parseDate(searchParams.get('start_date')), parseDate(searchParams.get('end_date'))]
+        () => [parseDate(searchParams.get('start_date')), parseDate(searchParams.get('end_date'))],
     );
     const handleDatesChange = useCallback(dates => setDates(dates), []);
 
@@ -36,7 +36,7 @@ const SearchPage = () => {
     const handleSelectTag = useCallback(tag => {
         setTag(tag);
         setSearchParams(updateSearchParams({tag}));
-    }, []);
+    }, [setSearchParams]);
 
     const [params, setParams] = useState({query});
 
@@ -49,7 +49,7 @@ const SearchPage = () => {
 
         setParams(params);
         setSearchParams(updateSearchParams(params));
-    }, [query, dates, tag]);
+    }, [query, dates, tag, setSearchParams]);
 
     return (
         <Page title={SearchLabel}>

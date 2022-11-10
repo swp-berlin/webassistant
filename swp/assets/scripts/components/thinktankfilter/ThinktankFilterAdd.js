@@ -1,3 +1,5 @@
+import {useParams} from 'react-router-dom';
+
 import {useQuery} from 'hooks/query';
 import _, {interpolate} from 'utils/i18n';
 import {useBreadcrumb} from 'components/Navigation';
@@ -6,7 +8,6 @@ import {Result} from 'components/Fetch';
 import {useMonitorsBreadcrumb} from 'components/monitor/MonitorList';
 
 import ThinktankFilterForm from './ThinktankFilterForm';
-import {useParams} from 'react-router-dom';
 
 
 const Title = _('Add Thinktank Filter');
