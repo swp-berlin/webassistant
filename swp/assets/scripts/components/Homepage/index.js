@@ -3,6 +3,7 @@ import Page from 'components/Page';
 import {useUser} from 'hooks/user';
 import AdminLink from './AdminLink';
 import MonitorLink from './MonitorLink';
+import SearchLink from './SearchLink';
 import ThinktankLink from './ThintankLink';
 import NoPermission from './NoPermission';
 
@@ -17,6 +18,7 @@ const Homepage = () => {
             <div className="flex justify-center items-center">
                 {viewThinktanks && <ThinktankLink className="flex-1 block" />}
                 {viewMonitors && <MonitorLink className="flex-1 block" />}
+                <SearchLink className="flex-1 block" />
                 {viewAdmin && <AdminLink className="flex-1 block" />}
                 {viewThinktanks || viewMonitors || viewAdmin || <NoPermission />}
             </div>

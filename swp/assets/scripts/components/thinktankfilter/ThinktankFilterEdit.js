@@ -1,3 +1,5 @@
+import {useParams} from 'react-router-dom';
+
 import {useQuery} from 'hooks/query';
 import _, {interpolate} from 'utils/i18n';
 import {useMonitorsBreadcrumb} from 'components/monitor/MonitorList';
@@ -17,7 +19,8 @@ const getMonitorLabel = (id, {result: {data}, loading}) => (
     loading || !data ? interpolate(MonitorLabel, [id], false) : data.monitor.name
 );
 
-const ThinktankFilterEdit = ({monitorID, id}) => {
+const ThinktankFilterEdit = () => {
+    const {monitorID, id} = useParams();
     const endpoint = `/thinktankfilter/${id}/`;
     const query = useQuery(endpoint);
     const monitorLabel = getMonitorLabel(monitorID, query);

@@ -57,6 +57,8 @@ urlpatterns = [
         ], 'scraper'))),
     ], 'thinktank'))),
 
+    path('search/', react, name='search'),
+
     # snippets
     path('snippet/<path:identifier>/', SnippetView.as_view(), name='snippet'),
 ]

@@ -25,10 +25,11 @@ const MonitorInfo = props => {
         recipientCount,
         transferredCount,
         onMonitorUpdate,
+        ...other
     } = props;
 
     return (
-        <dl {...props}>
+        <dl id={id} {...other}>
             <div className="mb-1 sm:grid sm:grid-cols-5 sm:gap-4">
                 <dt>{PublicationCountLabel}</dt>
                 <dd className="sm:col-span-4">

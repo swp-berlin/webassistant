@@ -6,6 +6,7 @@ import {Result} from 'components/Fetch';
 import {useMonitorsBreadcrumb} from 'components/monitor/MonitorList';
 
 import ThinktankFilterForm from './ThinktankFilterForm';
+import {useParams} from 'react-router-dom';
 
 
 const Title = _('Add Thinktank Filter');
@@ -18,7 +19,8 @@ const getMonitorLabel = (id, {result: {data}, loading}) => (
     loading || !data ? interpolate(MonitorLabel, [id], false) : data.name
 );
 
-const ThinktankFilterAdd = ({monitorID}) => {
+const ThinktankFilterAdd = () => {
+    const {id: monitorID} = useParams();
     const endpoint = `/monitor/${monitorID}/`;
     const query = useQuery(endpoint);
     const monitorLabel = getMonitorLabel(monitorID, query);
