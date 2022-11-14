@@ -6,6 +6,7 @@ import {MonitorAdd, MonitorDetail, MonitorEdit, MonitorList, MonitorNewPublicati
 import {ScraperAdd, ScraperEdit} from 'components/scraper';
 import {ThinktankAdd, ThinktankDetail, ThinktankEdit, ThinktankList, ThinktankPublications} from 'components/thinktank';
 import {ThinktankFilterAdd, ThinktankFilterEdit} from 'components/thinktankfilter';
+import {PublicationList, PublicationListDetail} from 'components/publication-list';
 
 
 const RootURLConfig = () => (
@@ -59,6 +60,13 @@ const RootURLConfig = () => (
         </SimpleRoute>
         <SimpleRoute path="/thinktank/:thinktankID/scraper/:id/" exact>
             {({params}) => <ScraperEdit id={params.id} thinktankID={params.thinktankID} />}
+        </SimpleRoute>
+
+        <SimpleRoute path="/publication-list/" exact>
+            {({url}) => <PublicationList url={url} />}
+        </SimpleRoute>
+        <SimpleRoute path="/publication-list/:id/" exact>
+            {({url, params}) => <PublicationListDetail id={params.id} url={url} />}
         </SimpleRoute>
     </Switch>
 );
