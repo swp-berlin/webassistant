@@ -1,13 +1,10 @@
-const clean = segment => {
-    let cleaned = String(segment);
+import trim from 'lodash/trim';
 
-    if (cleaned.startsWith('/')) cleaned = cleaned.substring(1, cleaned.length - 1);
-    if (cleaned.endsWith('/')) cleaned = cleaned.substring(0, cleaned.length - 1);
+export const Slash = '/';
 
-    return cleaned;
-};
+export const clean = url => trim(url, Slash);
 
-export const buildURL = (...args) => ['', ...args.filter(Boolean).map(clean), ''].join('/');
+export const buildURL = (...args) => ['', ...args.map(clean).filter(Boolean), ''].join(Slash);
 
 export const withParams = (url, params) => {
     const urlSearchParams = new URLSearchParams();

@@ -1,14 +1,13 @@
 import {useEffect, useState} from 'react';
+import {useQuery} from 'react-query';
 
 import _, {interpolate} from 'utils/i18n';
 
-import {useQuery} from 'hooks/query';
-
 import Page from 'components/Page';
-import {Result} from 'components/Fetch';
+import {QueryResult} from 'components/Query';
 import {useBreadcrumb} from 'components/Navigation';
 
-import {Title} from '../PublicationList';
+import {Endpoint, Title} from '../PublicationList';
 import PublicationListDetail from './PublicationListDetail';
 import ExportButton from './ExportButton';
 import EditableTitle from './EditableTitle';
@@ -18,12 +17,12 @@ const FallbackTitle = _('Publication List %(id)s');
 const getTitle = (id, data) => (data ? data.name : interpolate(FallbackTitle, {id}));
 
 const PublicationListDetailPage = ({id, url}) => {
-    const endpoint = `/publication-list/${id}/`;
-    const query = useQuery(endpoint);
-    const {result: {data}, success} = query;
+    const queryKey = [Endpoint, id];
+    const query = useQuery(queryKey);
+    const {data, isSuccess} = query;
     const [title, setTitle] = useState(() => getTitle(id, data));
     const actions = [
-        <ExportButton key="export" id={id} />,
+        isSuccess && <ExportButton key="export" id={id} />,
     ];
 
     useBreadcrumb('..', Title);
@@ -32,10 +31,10 @@ const PublicationListDetailPage = ({id, url}) => {
     useEffect(() => { setTitle(getTitle(id, data)); }, [id, data]);
 
     return (
-        <Page title={success ? <EditableTitle id={id} title={title} setTitle={setTitle} /> : title} actions={actions}>
-            <Result query={query}>
+        <Page title={isSuccess ? <EditableTitle id={id} title={title} setTitle={setTitle} /> : title} actions={actions}>
+            <QueryResult query={query}>
                 {publicationList => <PublicationListDetail {...publicationList} />}
-            </Result>
+            </QueryResult>
         </Page>
     );
 };

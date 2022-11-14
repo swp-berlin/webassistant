@@ -66,7 +66,7 @@ const RootURLConfig = () => (
             {({url}) => <PublicationList url={url} />}
         </SimpleRoute>
         <SimpleRoute path="/publication-list/:id/" exact>
-            {({url, params}) => <PublicationListDetail id={params.id} url={url} />}
+            {({url, params}) => <PublicationListDetail id={+params.id} url={url} />}
         </SimpleRoute>
     </Switch>
 );

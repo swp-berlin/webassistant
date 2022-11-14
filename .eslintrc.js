@@ -21,6 +21,9 @@ module.exports = {
         'no-shadow': 0,  // we are pros on this topic as well ...
         'radix': 0,
         'no-multiple-empty-lines': ['error', {'max': 2, 'maxEOF': 0}],
+        'padded-blocks': ['error', {
+            classes: 'always',
+        }],
 
         /* import */
         'import/prefer-default-export': 0,  // makes it complicated to extend files
