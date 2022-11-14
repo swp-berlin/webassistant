@@ -111,12 +111,12 @@ class PublicationDocument(FieldMixin, Document):
 
             return fields.ListField(base_field)
 
-        return FieldMixin.to_field(field_name, model_field)
+        return super().to_field(field_name, model_field)
 
     def update(self, *args, **kwargs):
         kwargs.setdefault('pipeline', 'language-detection')
 
-        return super(PublicationDocument, self).update(*args, **kwargs)
+        return super().update(*args, **kwargs)
 
     @classmethod
     def get_search_fields(cls, language):
