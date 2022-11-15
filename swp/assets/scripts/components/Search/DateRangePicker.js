@@ -12,6 +12,7 @@ import _ from 'utils/i18n';
 
 const SinceLabel = _('since');
 const UntilLabel = _('until');
+const ClearLabel = _('Clear');
 
 const formatDate = date => date && format(date, 'dd.MM.yyyy', {representation: 'date'});
 
@@ -42,7 +43,7 @@ const DateRangePicker = ({defaultValue, onChange}) => {
             content={(
                 <div className="flex flex-col items-center p-2 bg-white">
                     <BPDateRangePicker value={dates} defaultValue={defaultValue} onChange={handleChange} />
-                    <a onClick={handleClear}>Clear</a>
+                    <a onClick={handleClear}>{ClearLabel}</a>
                 </div>
             )}
         >
