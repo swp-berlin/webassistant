@@ -1,9 +1,15 @@
 /* eslint-disable default-case */
 
 import {useCallback, useEffect, useRef, useState} from 'react';
+import {useQueryClient} from 'react-query';
 import {Icon} from '@blueprintjs/core';
 
-import {useMutationResult} from 'components/Fetch';
+import {buildAPIURL} from 'utils/api';
+import {getClientErrors, isBadRequest} from 'utils/react-query-fetch';
+
+import {useMutation} from 'hooks/react-query';
+
+import {Endpoint} from '../PublicationList';
 
 const Enter = 'Enter';
 const Escape = 'Escape';
@@ -12,26 +18,33 @@ const preventEnter = event => {
     if (event.key === Enter) event.preventDefault();
 };
 
-const EditableTitle = ({id, title, setTitle}) => {
+const EditableTitle = ({id, title}) => {
     const inputRef = useRef(null);
     const [isEditing, setIsEditing] = useState(false);
-    const endpoint = `/publication-list/${id}/`;
-    const [mutate, {loading}] = useMutationResult(endpoint, {}, []);
+    const queryKey = [Endpoint, id];
+    const url = buildAPIURL(...queryKey);
+    const queryClient = useQueryClient();
+    const {mutate, isLoading} = useMutation(url, 'PATCH', {
+        onSuccess(data) {
+            setIsEditing(false);
+            queryClient.setQueryData(queryKey, publicationList => ({...publicationList, ...data}));
+        },
+        onError(error) {
+            if (isBadRequest(error)) return getClientErrors(error).name;
+        },
+    });
 
     const handleClick = useCallback(
         () => {
-            if (loading) return;
+            if (isLoading) return;
 
             if (isEditing) {
-                const title = inputRef.current.innerText;
-                if (title) setTitle(title);
-                mutate({name: title}, 'PATCH');
-                setIsEditing(false);
+                mutate({name: inputRef.current.innerText});
             } else {
                 setIsEditing(true);
             }
         },
-        [isEditing, loading, mutate, setTitle, setIsEditing, inputRef],
+        [isEditing, isLoading, mutate, setIsEditing, inputRef],
     );
 
     const handleCancel = useCallback(

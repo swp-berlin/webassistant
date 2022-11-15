@@ -11,7 +11,7 @@ export const Title = _('Publication Lists');
 export const Endpoint = 'publication-list';
 
 const PublicationListPage = () => {
-    useBreadcrumb('.', Title);
+    useBreadcrumb('/publication-list/', Title);
 
     return (
         <Page title={Title}>
