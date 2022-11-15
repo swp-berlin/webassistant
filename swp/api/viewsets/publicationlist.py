@@ -1,5 +1,6 @@
 from django.db import models
 from django.db.models.functions import Greatest
+from django.http import Http404
 from django.utils.text import slugify
 
 from rest_framework.decorators import action
@@ -12,6 +13,8 @@ from swp.api import default_router
 from swp.api.serializers import PublicationListSerializer, PublicationListDetailSerializer
 from swp.models import PublicationList, Publication, PublicationListEntry
 from swp.utils.ris import RISResponse
+
+LAST_UPDATED_PUBLICATION_LIST = f'{0}'
 
 
 @default_router.register('publication-list', basename='publication-list')
@@ -43,8 +46,8 @@ class PublicationListViewSet(ModelViewSet):
         return serializer.save(user=self.request.user)
 
     @action(detail=True, url_path=r'add/(?P<publication>\d+)')
-    def add(self, request, *, publication: str, **kwargs):
-        publication_list = self.get_object()
+    def add(self, request, *, pk: str, publication: str):
+        publication_list = self.get_publication_list(pk)
         publication = get_object_or_404(Publication, id=publication)
 
         PublicationListEntry.objects.create(
@@ -56,7 +59,7 @@ class PublicationListViewSet(ModelViewSet):
         return Response(status=HTTP_201_CREATED)
 
     @action(detail=True, url_path=r'remove/(?P<publication>\d+)')
-    def remove(self, request, *, publication: str, **kwargs):
+    def remove(self, request, *, pk: str, publication: str):
         publication_list = self.get_object()
         publication = get_object_or_404(Publication, id=publication)
 
@@ -74,3 +77,12 @@ class PublicationListViewSet(ModelViewSet):
         filename = '%s.ris' % slugify(publication_list.name)
 
         return RISResponse(publications, filename)
+
+    def get_publication_list(self, pk: str):
+        if pk == LAST_UPDATED_PUBLICATION_LIST:
+            try:
+                return self.queryset.latest('last_updated')
+            except PublicationList.DoesNotExist:
+                raise Http404
+
+        return self.get_object()
