@@ -1,10 +1,9 @@
 import {useMutation as useBaseMutation} from 'react-query';
 import {Intent} from '@blueprintjs/core';
 
-import {CSRFMiddlewareToken} from 'utils/csrf';
-import getResult, {getJSONOptions} from 'utils/fetch';
-import {getErrorMessage} from 'utils/react-query-fetch';
 import Toaster from 'utils/toaster';
+import {CSRFMiddlewareToken} from 'utils/csrf';
+import getResult, {getJSONOptions, getErrorMessage} from 'utils/react-query-fetch';
 
 export const useMutation = (url, method, mutationOptions) => {
     const {onError, ...options} = mutationOptions || {};

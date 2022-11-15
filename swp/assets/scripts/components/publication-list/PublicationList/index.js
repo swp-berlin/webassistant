@@ -5,6 +5,7 @@ import Query from 'components/Query';
 import {useBreadcrumb} from 'components/Navigation';
 
 import PublicationList from './PublicationList';
+import PublicationListAddForm from './PublicationListAddForm';
 
 export const Title = _('Publication Lists');
 export const Endpoint = 'publication-list';
@@ -17,6 +18,7 @@ const PublicationListPage = ({url}) => {
             <Query queryKey={Endpoint}>
                 {publicationLists => <PublicationList publicationLists={publicationLists} />}
             </Query>
+            <PublicationListAddForm endpoint={Endpoint} />
         </Page>
     );
 };
