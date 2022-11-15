@@ -1,7 +1,6 @@
 import django_filters as filters
 
 from django.db import models
-from django.http import HttpResponse
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 
@@ -16,7 +15,7 @@ from swp.api.router import default_router
 from swp.api.serializers import PublicationSerializer, ResearchSerializer, TagSerializer
 from swp.documents import PublicationDocument
 from swp.models import Monitor, Publication, ThinktankFilter
-from swp.utils.ris import RIS_MEDIA_TYPE, write_ris_data
+from swp.utils.ris import RISResponse
 from swp.utils.translation import get_language
 
 
@@ -157,12 +156,8 @@ class PublicationViewSet(viewsets.ReadOnlyModelViewSet):
     def ris(self, request):
         filterset = ResearchFilter(data=request.GET, queryset=Publication.objects, request=request)
         queryset = ResearchFilter.get_result_queryset(filterset.qs)
-        response = HttpResponse(content_type=RIS_MEDIA_TYPE)
-        response['Content-Disposition'] = f'attachment; filename="export.ris"'
 
-        write_ris_data(response, *queryset)
-
-        return response
+        return RISResponse(queryset, filename='export.ris')
 
     def get_serializer(self, *args, **kwargs):
         if self.action == 'research':

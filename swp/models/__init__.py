@@ -5,6 +5,7 @@ from .monitor import Monitor
 from .publication import Publication
 from .publicationcount import PublicationCount
 from .publicationfilter import PublicationFilter
+from .publicationlist import PublicationList, PublicationListEntry
 from .scraper import Scraper
 from .scrapererror import ScraperError
 from .thinktank import Thinktank
@@ -20,6 +21,8 @@ __all__ = [
     'Publication',
     'PublicationCount',
     'PublicationFilter',
+    'PublicationList',
+    'PublicationListEntry',
     'Scraper',
     'ScraperError',
     'Thinktank',

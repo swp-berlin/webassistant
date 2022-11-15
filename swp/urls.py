@@ -59,6 +59,11 @@ urlpatterns = [
 
     path('search/', react, name='search'),
 
+    path('publication-list/', include(([
+        path('', react, name='list'),
+        path('<int:pk>/', react, name='detail'),
+    ], 'publication-list'))),
+
     # snippets
     path('snippet/<path:identifier>/', SnippetView.as_view(), name='snippet'),
 ]

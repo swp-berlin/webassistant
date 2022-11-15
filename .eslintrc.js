@@ -1,3 +1,5 @@
+/* eslint-disable quote-props, no-multi-spaces */
+
 module.exports = {
     extends: 'airbnb',
     parser: 'babel-eslint',
@@ -12,13 +14,16 @@ module.exports = {
         /* general */
         'arrow-parens': ['error', 'as-needed'],  // single parameters should not be surrounded by parens
         'consistent-return': 0,  // useEffect is fine with inconsistent returns
-        'indent': ['warn', 4],  // indent code by 4 spaces
+        'indent': ['warn', 4, {SwitchCase: 1}],  // indent code by 4 spaces
         'max-len': ['error', 120, {ignoreStrings: true}],  // 120 characters, same as for python files
         'no-multi-assign': 0,  // we are pros ...
         'no-param-reassign': ['error', {'props': false}],
         'no-shadow': 0,  // we are pros on this topic as well ...
         'radix': 0,
-        'no-multiple-empty-lines': ["error", {"max": 2, "maxEOF": 0}],
+        'no-multiple-empty-lines': ['error', {'max': 2, 'maxEOF': 0}],
+        'padded-blocks': ['error', {
+            classes: 'always',
+        }],
 
         /* import */
         'import/prefer-default-export': 0,  // makes it complicated to extend files

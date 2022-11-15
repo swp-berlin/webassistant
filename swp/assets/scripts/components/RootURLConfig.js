@@ -12,8 +12,8 @@ import {
 import {ScraperAdd, ScraperEdit} from 'components/scraper';
 import {ThinktankAdd, ThinktankDetail, ThinktankEdit, ThinktankList, ThinktankPublications} from 'components/thinktank';
 import {ThinktankFilterAdd, ThinktankFilterEdit} from 'components/thinktankfilter';
+import {PublicationList, PublicationListDetail} from 'components/publication-list';
 import SearchPage from 'components/Search';
-
 
 const RootURLConfig = () => (
     <Routes>
@@ -37,6 +37,9 @@ const RootURLConfig = () => (
         <Route path="/thinktank/:thinktankID/scraper/:id/" element={<ScraperEdit />} />
 
         <Route path="/search/" element={<SearchPage />} />
+
+        <Route path="/publication-list/" element={<PublicationList />} />
+        <Route path="/publication-list/:id/" element={<PublicationListDetail />} />
     </Routes>
 );
 

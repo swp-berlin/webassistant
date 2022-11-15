@@ -7,14 +7,17 @@ import {get, isString} from 'utils/object';
 
 import Errors from 'components/forms/Errors';
 
-
 const RequiredLabel = _('(required)');
 
+const getErrorMessages = errors => {
+    if (!errors) return null;
 
-const getErrorMessages = errors => errors && Object.keys(errors.types).map(
-    type => ({code: type, msg: errors.types[type]}),
-).filter(error => isString(error.msg));
+    if (errors.map) return errors.map((msg, code) => ({code, msg}));
 
+    return Object.keys(errors.types)
+        .map(type => ({code: type, msg: errors.types[type]}))
+        .filter(error => isString(error.msg));
+};
 
 const Field = ({children, id, name, label, labelInfo, errors, hasError, className, disabled, readOnly, ...props}) => {
     const fieldErrors = errors && get(errors, name);
