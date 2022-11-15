@@ -15,13 +15,14 @@ const SearchForm = ({query, onQueryChange, dates, onDatesChange, onSearch}) => {
         <form onSubmit={handleSubmit}>
             <ControlGroup className="mt-2">
                 <TextInput
+                    large
                     value={query}
                     onChange={handleQueryChange}
-                    className="mb-0 w-full"
+                    className="mb-0 w-full h-8"
                     placeholder={SearchLabel}
                     rightElement={<DateRangePicker defaultValue={dates} onChange={onDatesChange} />}
                 />
-                <Button className="h-8" type="submit" disabled={query.length < 3}>{SearchLabel}</Button>
+                <Button large type="submit" disabled={query.length < 3}>{SearchLabel}</Button>
             </ControlGroup>
         </form>
     );

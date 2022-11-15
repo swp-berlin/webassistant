@@ -10,9 +10,11 @@ const NoPublicationsFound = _('No publications found');
 const FilterByTagLabel = _('Filter by Tag:');
 
 const calculatePageCount = (total, pageSize) => Math.ceil(total / pageSize);
+const sortAlphabetically = list => list.sort((a, b) => a.tag.localeCompare(b.tag));
 
+const SearchResult = ({results, tags, selectedTags, next: nextPage, previous: prevPage, count, downloadURL,
+    onSelectTag}) => {
 
-const SearchResult = ({results, tags, next: nextPage, previous: prevPage, count, downloadURL, onSelectTag}) => {
     const location = useLocation();
     const currentPage = parsePageParam(location.search) || 1;
 
@@ -26,8 +28,15 @@ const SearchResult = ({results, tags, next: nextPage, previous: prevPage, count,
             {tags.length > 0 && (
                 <div className="mt-2 mb-4 flex flex-wrap space-x-2">
                     <span>{FilterByTagLabel}</span>
-                    {tags.map(({tag, count}) => (
-                        <Tag key={tag} interactive onClick={() => onSelectTag(tag)}>{`${tag} (${count})`}</Tag>
+                    {sortAlphabetically(tags).map(({tag, count}) => (
+                        <Tag
+                            key={tag}
+                            intent={selectedTags.includes(tag) ? 'primary' : null}
+                            interactive
+                            onClick={() => onSelectTag(tag)}
+                        >
+                            {`${tag} (${count})`}
+                        </Tag>
                     ))}
                 </div>
             )}
