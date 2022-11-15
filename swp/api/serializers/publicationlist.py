@@ -1,4 +1,7 @@
+from django.utils.translation import gettext_lazy as _
+
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 from rest_framework.serializers import ModelSerializer
 
 from swp.models import PublicationList
@@ -18,6 +21,14 @@ class PublicationListSerializer(ModelSerializer):
             'entry_count',
             'last_updated',
         ]
+
+    def validate_name(self, value):
+        request = self.context.get('request')
+
+        if request.user.publication_lists.filter(name=value).exists():
+            raise ValidationError(_('A publication list with this name already exists.'), code='duplicate')
+
+        return value
 
 
 class PublicationListDetailSerializer(PublicationListSerializer):
