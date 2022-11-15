@@ -1,5 +1,5 @@
 module.exports = {
-    purge: [
+    content: [
         './swp/assets/scripts/**/*.js',
         './swp/templates/**/*.html',
     ],

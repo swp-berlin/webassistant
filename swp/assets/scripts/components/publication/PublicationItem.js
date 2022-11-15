@@ -67,7 +67,7 @@ const PublicationItem = ({
         <footer>
             {tags && (
                 <PublicationField name="tags" value={tags}>
-                    <CommaList className="italic text-gray-400" items={tags} conjunction="," />
+                    <CommaList className="italic text-gray-400 list-none flex p-0" items={tags} conjunction="," />
                 </PublicationField>
             )}
             {pdfURL ? (
