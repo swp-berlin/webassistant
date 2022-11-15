@@ -1,3 +1,6 @@
+import '@blueprintjs/datetime/lib/css/blueprint-datetime.css';
+
+import {useState} from 'react';
 import {Button} from '@blueprintjs/core';
 import {DateRangePicker as BPDateRangePicker} from '@blueprintjs/datetime';
 import {Classes, Popover2} from '@blueprintjs/popover2';
@@ -6,7 +9,6 @@ import {faCalendar} from '@fortawesome/free-solid-svg-icons/faCalendar';
 import format from 'date-fns/format';
 
 import _ from 'utils/i18n';
-import {useState} from 'react';
 
 const SinceLabel = _('since');
 const UntilLabel = _('until');
@@ -27,13 +29,22 @@ const DateRangePicker = ({defaultValue, onChange}) => {
         setDates(dates);
         onChange(dates);
     };
+    const handleClear = () => {
+        setDates([null, null]);
+        onChange([null, null]);
+    }
 
     return (
         <Popover2
             interactionKind="click"
             popoverClassName={Classes.POPOVER2_CONTENT_SIZING}
             placement="bottom-start"
-            content={<BPDateRangePicker defaultValue={defaultValue} onChange={handleChange} />}
+            content={(
+                <div className="flex flex-col items-center p-2 bg-white">
+                    <BPDateRangePicker value={dates} defaultValue={defaultValue} onChange={handleChange} />
+                    <a onClick={handleClear}>Clear</a>
+                </div>
+            )}
         >
             <Button minimal icon={<FontAwesomeIcon icon={faCalendar} />} text={getDateRepresentation(dates)} />
         </Popover2>
