@@ -17,7 +17,7 @@ const PublicationListDetail = ({id, name, publications}) => {
 
     return (
         <Page title={title} actions={actions}>
-            {isEmpty || <PublicationList items={publications} />}
+            {isEmpty || <PublicationList items={publications} showMenu />}
             {isEmpty && <p>{EmptyMessage}</p>}
         </Page>
     );

@@ -35,7 +35,7 @@ const PublicationResults = ({results, pageCount, currentPage, nextPage, prevPage
 
     return (
         <div className="publication-results">
-            <PublicationList items={results} {...props} />
+            <PublicationList items={results} {...props} showMenu />
 
             <div className="pagination mt-4" key="pagination">
                 <ButtonGroup className="page-buttons">

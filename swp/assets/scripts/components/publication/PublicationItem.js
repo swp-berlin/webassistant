@@ -3,6 +3,7 @@ import classNames from 'classnames';
 
 import _, {interpolate} from 'utils/i18n';
 
+import PublicationListMenu from 'components/PublicationListMenu';
 import PublicationField from 'components/publication/PublicationField';
 import ExternalLink from 'components/Navigation/ExternalLink';
 import CommaList from 'components/lists/CommaList';
@@ -30,9 +31,9 @@ const PDFNotFound = () => (
 );
 
 const PublicationItem = ({
-    id, title, subtitle, tags, authors, abstract, publicationDate, doi, isbn, url, pdfURL, pdfPages, ...props
+    id, title, subtitle, tags, authors, abstract, publicationDate, doi, isbn, url, pdfURL, pdfPages, showMenu, ...props
 }) => (
-    <article className="publication-item" data-id={id} {...props}>
+    <article className={classNames('publication-item', {relative: showMenu})} data-id={id} {...props}>
         <header>
             <h5><PublicationField name="title" value={title}>{url ? <a href={url}>{title}</a> : title}</PublicationField></h5>
             <div className="subtitle">
@@ -75,6 +76,7 @@ const PublicationItem = ({
             ) : <PDFNotFound />}
             {pdfPages > 0 && <span className="ml-2 text-gray-500">{interpolate(PagesLabel, [pdfPages], false)}</span>}
         </footer>
+        {showMenu && <PublicationListMenu id={id} />}
     </article>
 );
 

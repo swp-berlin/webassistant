@@ -12,6 +12,7 @@ from .publication import PublicationSerializer
 class PublicationListSerializer(ModelSerializer):
     entry_count = serializers.IntegerField(read_only=True)
     last_updated = serializers.DateTimeField(read_only=True)
+    publication_list = serializers.ListField(child=serializers.IntegerField(), read_only=True)
 
     class Meta:
         model = PublicationList
@@ -20,6 +21,7 @@ class PublicationListSerializer(ModelSerializer):
             'name',
             'entry_count',
             'last_updated',
+            'publication_list',
         ]
 
     def validate_name(self, value):

@@ -1,12 +1,14 @@
-from django.db import models
+from functools import wraps
+
+from django.contrib.postgres.aggregates import ArrayAgg
+from django.db import models, transaction
 from django.db.models.functions import Greatest
-from django.http import Http404
 from django.utils.text import slugify
 
 from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
-from rest_framework.status import HTTP_201_CREATED, HTTP_204_NO_CONTENT
+from rest_framework.status import HTTP_201_CREATED, HTTP_202_ACCEPTED
 from rest_framework.viewsets import ModelViewSet
 
 from swp.api import default_router
@@ -14,7 +16,20 @@ from swp.api.serializers import PublicationListSerializer, PublicationListDetail
 from swp.models import PublicationList, Publication, PublicationListEntry
 from swp.utils.ris import RISResponse
 
-LAST_UPDATED_PUBLICATION_LIST = f'{0}'
+
+def publication_action(handler):
+    @action(['POST'], detail=True, url_path=rf'{handler.__name__}/(?P<publication>\d+)')
+    @transaction.atomic
+    @wraps(handler)
+    def wrapper(self, request, *, pk: str, publication: str):
+        publication_list = self.get_object()
+        publication = get_object_or_404(Publication, id=publication)
+        status = handler(self, request, publication_list, publication)
+        serializer = self.get_serializer(publication_list)
+
+        return Response(serializer.data, status=status)
+
+    return wrapper
 
 
 @default_router.register('publication-list', basename='publication-list')
@@ -22,6 +37,7 @@ class PublicationListViewSet(ModelViewSet):
     serializer_class = PublicationListSerializer
     queryset = PublicationList.objects.annotate(
         entry_count=models.Count('entries'),
+        publication_list=ArrayAgg('entries__publication'),
         last_updated=Greatest(
             models.F('last_modified'),
             models.Max('entries__created'),
@@ -45,30 +61,33 @@ class PublicationListViewSet(ModelViewSet):
     def perform_create(self, serializer):
         return serializer.save(user=self.request.user)
 
-    @action(detail=True, url_path=r'add/(?P<publication>\d+)')
-    def add(self, request, *, pk: str, publication: str):
-        publication_list = self.get_publication_list(pk)
-        publication = get_object_or_404(Publication, id=publication)
-
+    @publication_action
+    def add(self, request, publication_list, publication):
         PublicationListEntry.objects.create(
             publication_list=publication_list,
             publication=publication,
             created=request.now,
         )
 
-        return Response(status=HTTP_201_CREATED)
+        publication_list.entry_count += 1
+        publication_list.publication_list.append(publication.id)
+        publication_list.last_updated = request.now
 
-    @action(detail=True, url_path=r'remove/(?P<publication>\d+)')
-    def remove(self, request, *, pk: str, publication: str):
-        publication_list = self.get_object()
-        publication = get_object_or_404(Publication, id=publication)
+        return HTTP_201_CREATED
 
-        PublicationListEntry.objects.filter(
+    @publication_action
+    def remove(self, request, publication_list, publication):
+        deleted, objs = PublicationListEntry.objects.filter(
             publication_list=publication_list,
             publication=publication,
         ).delete()
 
-        return Response(status=HTTP_204_NO_CONTENT)
+        if deleted:
+            publication_list.entry_count -= 1
+            publication_list.publication_list.remove(publication.id)
+            PublicationList.objects.filter(id=publication_list.id).update(last_modified=publication_list.last_updated)
+
+        return HTTP_202_ACCEPTED
 
     @action(detail=True)
     def export(self, request, **kwargs):
@@ -77,12 +96,3 @@ class PublicationListViewSet(ModelViewSet):
         filename = '%s.ris' % slugify(publication_list.name)
 
         return RISResponse(publications, filename)
-
-    def get_publication_list(self, pk: str):
-        if pk == LAST_UPDATED_PUBLICATION_LIST:
-            try:
-                return self.queryset.latest('last_updated')
-            except PublicationList.DoesNotExist:
-                raise Http404
-
-        return self.get_object()

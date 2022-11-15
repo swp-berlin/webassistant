@@ -48,6 +48,10 @@ class PublicationList(LastModified):
 
         return self.last_modified
 
+    @cached_property
+    def publication_list(self):
+        return self.publications.values_list('id', flat=True)
+
 
 class PublicationListEntry(LastModified):
     publication_list = models.ForeignKey(
