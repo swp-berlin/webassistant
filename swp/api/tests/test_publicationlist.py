@@ -1,5 +1,6 @@
 from django.test import TestCase
 
+from swp.api.viewsets.publicationlist import LAST_UPDATED_PUBLICATION_LIST
 from swp.models import Thinktank, Publication, PublicationList
 from swp.utils.ris import RIS_MEDIA_TYPE
 from swp.utils.testing import create_user, request, login
@@ -33,6 +34,11 @@ class PublicationTestCase(TestCase):
 
         self.assertEqual(self.user.publication_lists.count(), 2)
 
+    def test_create_duplicate(self):
+        request(self, 'api:publication-list-list', name=self.publication_list.name, status_code=400)
+
+        self.assertEqual(self.user.publication_lists.count(), 1)
+
     def test_add_endpoint(self):
         publication = Publication.objects.create(thinktank=self.thinktank, title='Test-Publication-Add')
         args = self.publication_list.id, publication.id
@@ -40,6 +46,22 @@ class PublicationTestCase(TestCase):
         request(self, 'api:publication-list-add', args=args, status_code=201)
 
         self.assertEqual(self.publication_list.entries.count(), 2)
+
+    def test_add_last_updated(self):
+        publication = Publication.objects.create(thinktank=self.thinktank, title='Test-Publication-Add-Last-Updated')
+        args = LAST_UPDATED_PUBLICATION_LIST, publication.id
+
+        request(self, 'api:publication-list-add', args=args, status_code=201)
+
+        self.assertEqual(self.publication_list.entries.count(), 2)
+
+    def test_add_last_updated_without_publication_list(self):
+        PublicationList.objects.filter(user=self.user).delete()
+        args = LAST_UPDATED_PUBLICATION_LIST, self.publication.id
+
+        request(self, 'api:publication-list-add', args=args, status_code=404)
+
+        self.assertEqual(self.publication_list.entries.count(), 0)
 
     def test_remove_endpoint(self):
         args = self.publication_list.id, self.publication.id
