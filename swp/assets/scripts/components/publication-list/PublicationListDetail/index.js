@@ -9,6 +9,7 @@ import {useBreadcrumb} from 'components/Navigation';
 import {Endpoint, Title} from '../PublicationList';
 import PublicationListDetail from './PublicationListDetail';
 
+const Search = _('Search');
 const FallbackTitle = _('Publication List %(id)s');
 
 const getTitle = (id, data) => (data ? data.name : interpolate(FallbackTitle, {id}));
@@ -18,8 +19,9 @@ const PublicationListDetailPage = () => {
     const queryKey = [Endpoint, +id];
     const query = useQuery(queryKey);
 
-    useBreadcrumb('/publication-list/', Title);
-    useBreadcrumb(`/publication-list/${id}/`, getTitle(id, query.data));
+    useBreadcrumb('/search/', Search);
+    useBreadcrumb('/search/publication-list/', Title);
+    useBreadcrumb(`/search/publication-list/${id}/`, getTitle(id, query.data));
 
     return (
         <QueryResult query={query}>

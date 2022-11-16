@@ -11,7 +11,7 @@ import {useMutation} from 'hooks/react-query';
 
 import {Endpoint} from '../PublicationList';
 
-const RedirectURL = '/publication-list/';
+const RedirectURL = '/search/publication-list/';
 
 const CancelButtonText = _('Cancel');
 const ConfirmButtonText = _('Delete');

@@ -37,9 +37,8 @@ const RootURLConfig = () => (
         <Route path="/thinktank/:thinktankID/scraper/:id/" element={<ScraperEdit />} />
 
         <Route path="/search/" element={<SearchPage />} />
-
-        <Route path="/publication-list/" element={<PublicationList />} />
-        <Route path="/publication-list/:id/" element={<PublicationListDetail />} />
+        <Route path="/search/publication-list/" element={<PublicationList />} />
+        <Route path="/search/publication-list/:id/" element={<PublicationListDetail />} />
     </Routes>
 );
 

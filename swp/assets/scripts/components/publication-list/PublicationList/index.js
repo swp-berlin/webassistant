@@ -7,11 +7,13 @@ import {useBreadcrumb} from 'components/Navigation';
 import PublicationList from './PublicationList';
 import PublicationListAddForm from './PublicationListAddForm';
 
+const Search = _('Search');
 export const Title = _('Publication Lists');
 export const Endpoint = 'publication-list';
 
 const PublicationListPage = () => {
-    useBreadcrumb('/publication-list/', Title);
+    useBreadcrumb('/search/', Search);
+    useBreadcrumb('/search/publication-list/', Title);
 
     return (
         <Page title={Title}>
