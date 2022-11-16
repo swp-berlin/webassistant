@@ -159,10 +159,22 @@ LOGGING = {
 
 CELERY_BROKER_URL = CELERY_RESULT_BACKEND = redis(db=SITE_ID)
 
+CELERY_SCRAPER_MONITORING_FILEPATH = BASE_DIR / 'celery-scraper.check'
+
 CELERY_BEAT_SCHEDULE = {
-    'monitoring': {
+    'monitoring.default': {
         'task': 'monitoring',
         'schedule': crontab(minute='*'),
+    },
+    'monitoring.scraper': {
+        'task': 'monitoring',
+        'schedule': crontab(minute='*/15'),
+        'options': {
+            'queue': 'scraper',
+        },
+        'kwargs': {
+            'filepath': f'{CELERY_SCRAPER_MONITORING_FILEPATH}',
+        },
     },
     'monitor.schedule': {
         'task': 'monitor.schedule',
