@@ -1,5 +1,5 @@
 import {useCallback} from 'react';
-import {Button, ControlGroup} from '@blueprintjs/core';
+import {Button, Classes, ControlGroup} from '@blueprintjs/core';
 
 import {TextInput} from 'components/forms';
 import DateRangePicker from 'components/Search/DateRangePicker';
@@ -13,16 +13,16 @@ const SearchForm = ({query, onQueryChange, dates, onDatesChange, onSearch}) => {
 
     return (
         <form onSubmit={handleSubmit}>
-            <ControlGroup className="mt-2">
+            <ControlGroup fill className="mt-2">
                 <TextInput
                     large
                     value={query}
                     onChange={handleQueryChange}
-                    className="mb-0 w-full h-8"
+                    className="mb-0 h-8"
                     placeholder={SearchLabel}
                     rightElement={<DateRangePicker defaultValue={dates} onChange={onDatesChange} />}
                 />
-                <Button large type="submit" disabled={query.length < 3}>{SearchLabel}</Button>
+                <Button className={Classes.FIXED} large type="submit" disabled={query.length < 3}>{SearchLabel}</Button>
             </ControlGroup>
         </form>
     );
