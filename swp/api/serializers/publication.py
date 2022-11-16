@@ -1,10 +1,12 @@
 from rest_framework import fields
+from rest_framework.fields import CharField
 from rest_framework.serializers import ModelSerializer, Serializer
 
 from swp.models import Publication
 
 
 class PublicationSerializer(ModelSerializer):
+    thinktank_name = CharField(source='thinktank.name')
 
     class Meta:
         model = Publication
@@ -15,6 +17,7 @@ class PublicationSerializer(ModelSerializer):
         fields = [
             'id',
             'thinktank_id',
+            'thinktank_name',
             'title',
             'subtitle',
             'ris_type',
