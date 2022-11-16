@@ -30,7 +30,7 @@ const PDFNotFound = () => (
     </span>
 );
 
-const PublicationItem = ({publication, showMenu, ...props}) => {
+const PublicationItem = ({publication, showMenu, className, ...props}) => {
     const {
         id,
         thinktank_id: thinktankID,
@@ -49,7 +49,7 @@ const PublicationItem = ({publication, showMenu, ...props}) => {
     } = publication;
 
     return (
-        <article className="publication-item" data-id={id} {...props}>
+        <article className={classNames('publication-item', className, {relative: showMenu})} data-id={id} {...props}>
             <header>
                 <h5>
                     <PublicationField name="title" value={title}>
