@@ -24,7 +24,7 @@ const CommaList = ({className, inline, items, conjunction, delimiter, ...props})
         <ul className={cN('list-inline pl-0', className, {inline})} {...props}>
             {items.map((item, i) => (
                 // eslint-disable-next-line react/no-array-index-key
-                <li key={i}>
+                <li className="inline" key={i}>
                     {separators[i]}
                     {item}
                 </li>
