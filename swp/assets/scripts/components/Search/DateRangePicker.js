@@ -33,7 +33,7 @@ const DateRangePicker = ({defaultValue, onChange}) => {
     const handleClear = () => {
         setDates([null, null]);
         onChange([null, null]);
-    }
+    };
 
     return (
         <Popover2
@@ -43,7 +43,7 @@ const DateRangePicker = ({defaultValue, onChange}) => {
             content={(
                 <div className="flex flex-col items-center p-2 bg-white">
                     <BPDateRangePicker value={dates} defaultValue={defaultValue} onChange={handleChange} />
-                    <a onClick={handleClear}>{ClearLabel}</a>
+                    <Button minimal onClick={handleClear}>{ClearLabel}</Button>
                 </div>
             )}
         >
