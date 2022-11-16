@@ -1,19 +1,29 @@
 import {useCallback, useState} from 'react';
-import {useSearchParams} from 'react-router-dom';
+import {Link, useSearchParams} from 'react-router-dom';
+import {Button, Intent} from '@blueprintjs/core';
 import parseISO from 'date-fns/parseISO';
 import formatISO from 'date-fns/formatISO';
 import without from 'lodash/without';
 
+import _ from 'utils/i18n';
+
 import Page from 'components/Page';
 import {useBreadcrumb} from 'components/Navigation';
 import Query from 'components/Query';
-import _ from 'utils/i18n';
-
 
 import SearchForm from './SearchForm';
 import SearchResult from './SearchResult';
 
 const SearchLabel = _('Search');
+const PublicationListLabel = _('Publication Lists');
+
+const Actions = [
+    <Link key={1} to="publication-list/">
+        <Button intent={Intent.PRIMARY}>
+            {PublicationListLabel}
+        </Button>
+    </Link>,
+];
 
 const formatDate = date => date && formatISO(date, {representation: 'date'});
 const parseDate = date => (date ? parseISO(date) : null);
@@ -78,7 +88,7 @@ const SearchPage = () => {
     if (endDate) params.end_date = endDate;
 
     return (
-        <Page title={SearchLabel}>
+        <Page title={SearchLabel} actions={Actions}>
             <SearchForm
                 query={term}
                 onQueryChange={handleTermChange}
