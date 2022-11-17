@@ -13,7 +13,7 @@ const calculatePageCount = (total, pageSize) => Math.ceil(total / pageSize);
 const sortAlphabetically = list => list.sort((a, b) => a.tag.localeCompare(b.tag));
 
 const SearchResult = ({results, tags, selectedTags, next: nextPage, previous: prevPage, count, downloadURL,
-    onSelectTag}) => {
+    onSelectTag, onAddFilter}) => {
 
     const location = useLocation();
     const currentPage = parsePageParam(location.search) || 1;
@@ -48,6 +48,7 @@ const SearchResult = ({results, tags, selectedTags, next: nextPage, previous: pr
                     currentPage={currentPage}
                     nextPage={nextPage}
                     prevPage={prevPage}
+                    onAddFilter={onAddFilter}
                 />
             )}
         </div>

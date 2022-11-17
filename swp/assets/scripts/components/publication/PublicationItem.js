@@ -16,10 +16,15 @@ const PagesLabel = _('%s pages');
 const PDFNotFoundLabel = _('No PDF found');
 
 
-const Authors = ({authors, className}) => (
+const Authors = ({authors, className, onFilter}) => (
     <span className={classNames('authors', {empty: !authors?.length}, className)}>
         {`${By} ` }
-        {authors?.length ? <CommaList inline items={authors} /> : UnknownLabel}
+        {authors?.length ? (
+            <CommaList
+                inline
+                items={authors.map(author => <Filterable field="author" text={author} onFilter={onFilter} />)}
+            />
+        ) : UnknownLabel}
     </span>
 );
 
@@ -30,7 +35,24 @@ const PDFNotFound = () => (
     </span>
 );
 
-const PublicationItem = ({publication, showMenu, className, ...props}) => {
+const Filterable = ({field, text, value, onFilter, className, ...props}) => {
+    if (!onFilter) return text;
+
+    return (
+        <span
+            onClick={() => onFilter({field, value: value || text})}
+            onKeyDown={event => event.key === 'Enter' && onFilter({field, value: value || text})}
+            role="link"
+            tabIndex="0"
+            className={classNames('hover:underline hover:cursor-pointer', className)}
+            {...props}
+        >
+            {text}
+        </span>
+    );
+};
+
+const PublicationItem = ({publication, showMenu, className, onAddFilter, ...props}) => {
     const {
         id,
         thinktank_id: thinktankID,
@@ -57,7 +79,7 @@ const PublicationItem = ({publication, showMenu, className, ...props}) => {
                     </PublicationField>
                 </h5>
                 <h6 className="italic mb-2 text-sm text-gray-800">
-                    <a href={`/thinktank/${thinktankID}/publications/`}>{thinktankName}</a>
+                    <Filterable field="thinktank" text={thinktankName} value={thinktankID} onFilter={onAddFilter} />
                 </h6>
                 <div className="subtitle">
                     {subtitle && (
@@ -67,7 +89,9 @@ const PublicationItem = ({publication, showMenu, className, ...props}) => {
                             </h6>
                         </PublicationField>
                     )}
-                    <PublicationField name="author" value={authors}><Authors authors={authors} /></PublicationField>
+                    <PublicationField name="author" value={authors}>
+                        <Authors authors={authors} onFilter={onAddFilter} />
+                    </PublicationField>
                     <PublicationField name="publication_date" value={publicationDate}>
                         <time className="ml-4">{publicationDate}</time>
                     </PublicationField>
@@ -91,7 +115,11 @@ const PublicationItem = ({publication, showMenu, className, ...props}) => {
             <footer>
                 {tags && (
                     <PublicationField name="tags" value={tags}>
-                        <CommaList className="italic text-gray-400" items={tags} conjunction="," />
+                        <CommaList
+                            className="italic text-gray-400"
+                            items={tags.map(tag => <Filterable field="tags" text={tag} onFilter={onAddFilter} />)}
+                            conjunction=","
+                        />
                     </PublicationField>
                 )}
                 {pdfURL ? (

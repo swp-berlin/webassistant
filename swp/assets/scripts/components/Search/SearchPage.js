@@ -28,6 +28,12 @@ const Actions = [
 const formatDate = date => date && formatISO(date, {representation: 'date'});
 const parseDate = date => (date ? parseISO(date) : null);
 
+const WhitespaceRegEx = /\s/g;
+const maybeQuote = text => {
+    const hasWhiteSpace = WhitespaceRegEx.test(text);
+    return hasWhiteSpace ? `"${text}"` : text;
+};
+
 const SearchPage = () => {
     useBreadcrumb('/search/', SearchLabel);
     const [searchParams, setSearchParams] = useSearchParams();
@@ -81,6 +87,21 @@ const SearchPage = () => {
         });
     }, [term, setSearchParams]);
 
+    const addFilter = filter => {
+        if (filter.field === 'tags') return handleSelectTag(filter.value);
+
+        const query = searchParams.get('query');
+        const filterString = `${filter.field}:${maybeQuote(filter.value)}`;
+
+        if (!query.includes(filterString)) {
+            setSearchParams(next => {
+                next.set('query', `${filterString} ${next.get('query')}`);
+                return next;
+            });
+            setTerm(term => `${filterString} ${term}`);
+        }
+    };
+
     const params = {};
     if (query) params.query = query;
     if (tags.length) params.tag = tags;
@@ -103,6 +124,7 @@ const SearchPage = () => {
                         selectedTags={tags}
                         onSelectTag={handleSelectTag}
                         downloadURL={`/api/publication/ris/?${searchParams.toString()}`}
+                        onAddFilter={addFilter}
                     />
                 </Query>
             )}
