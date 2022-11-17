@@ -19,7 +19,13 @@ const PublicationListMenuItem = ({publicationID, id: publicationListID, publicat
 
     return (
         <li className={classNames('publication-list-menu-item', {'is-included': isIncluded})}>
-            <Checkbox checked={isIncluded} labelElement={label} onChange={handleChange} disabled={isLoading} />
+            <Checkbox
+                className="mb-1"
+                checked={isIncluded}
+                labelElement={label}
+                onChange={handleChange}
+                disabled={isLoading}
+            />
         </li>
     );
 };

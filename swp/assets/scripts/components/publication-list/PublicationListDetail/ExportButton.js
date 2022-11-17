@@ -1,4 +1,4 @@
-import {Button, Intent} from '@blueprintjs/core';
+import {AnchorButton, Intent} from '@blueprintjs/core';
 
 import {buildAPIURL} from 'utils/api';
 import _ from 'utils/i18n';
@@ -8,9 +8,9 @@ import {Endpoint} from '../PublicationList';
 const Label = _('Export');
 
 const ExportButton = ({id}) => (
-    <a href={buildAPIURL(Endpoint, id, 'export')}>
-        <Button intent={Intent.PRIMARY} text={Label} />
-    </a>
+    <AnchorButton href={buildAPIURL(Endpoint, id, 'export')} intent={Intent.PRIMARY}>
+        {Label}
+    </AnchorButton>
 );
 
 export default ExportButton;

@@ -38,7 +38,7 @@ const PublicationListAddForm = ({endpoint}) => {
     const clientErrors = getClientErrors(error);
 
     return (
-        <form action={url} method={Method} onSubmit={handleSubmit}>
+        <form className="publication-list-add-form mt-4" action={url} method={Method} onSubmit={handleSubmit}>
             <ControlGroup>
                 <TextInput
                     name="name"

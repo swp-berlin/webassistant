@@ -52,6 +52,8 @@ const Filterable = ({field, text, value, onFilter, className, ...props}) => {
     );
 };
 
+const getClassName = (className, showMenu) => classNames('publication-item', className, {'has-menu': showMenu});
+
 const PublicationItem = ({publication, showMenu, className, onAddFilter, ...props}) => {
     const {
         id,
@@ -71,7 +73,7 @@ const PublicationItem = ({publication, showMenu, className, onAddFilter, ...prop
     } = publication;
 
     return (
-        <article className={classNames('publication-item', className, {relative: showMenu})} data-id={id} {...props}>
+        <article className={getClassName(className, showMenu)} data-id={id} {...props}>
             <header>
                 <h5>
                     <PublicationField name="title" value={title}>
