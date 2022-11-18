@@ -1,10 +1,12 @@
 import {Tag} from '@blueprintjs/core';
 import {useLocation} from 'react-router-dom';
 
+import _ from 'utils/i18n';
+
 import {getPublicationsLabel, parsePageParam} from 'components/publication/helper';
 import DownloadButton from 'components/publication/DownloadButton';
 import PublicationResults from 'components/publication/PublicationResults';
-import _ from 'utils/i18n';
+import PublicationListMenu, {PublicationListDialog, QuickAddButton} from 'components/PublicationListMenu';
 
 const NoPublicationsFound = _('No publications found');
 const FilterByTagLabel = _('Filter by Tag:');
@@ -16,7 +18,9 @@ const SearchResult = ({results, tags, next: nextPage, previous: prevPage, count,
     onAddFilter}) => {
 
     const location = useLocation();
+    const pageCount = calculatePageCount(count, 10);
     const currentPage = parsePageParam(location.search) || 1;
+    const resultProps = {results, pageCount, currentPage, nextPage, prevPage, onAddFilter};
 
     return (
         <div className="publication-preview my-4">
@@ -37,14 +41,12 @@ const SearchResult = ({results, tags, next: nextPage, previous: prevPage, count,
             )}
 
             {count > 0 && (
-                <PublicationResults
-                    results={results}
-                    pageCount={calculatePageCount(count, 10)}
-                    currentPage={currentPage}
-                    nextPage={nextPage}
-                    prevPage={prevPage}
-                    onAddFilter={onAddFilter}
-                />
+                <PublicationResults {...resultProps}>
+                    <PublicationListMenu>
+                        <PublicationListDialog />
+                        <QuickAddButton />
+                    </PublicationListMenu>
+                </PublicationResults>
             )}
         </div>
     );
