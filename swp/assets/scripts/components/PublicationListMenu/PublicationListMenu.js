@@ -1,20 +1,19 @@
-import {useCallback, useState} from 'react';
+import {cloneElement, useCallback, useState} from 'react';
 import {Button, ButtonGroup} from '@blueprintjs/core';
 
 import _ from 'utils/i18n';
 
-import QuickAddButton from './QuickAddButton';
 import PublicationListDialog from './PublicationListDialog';
 
 const ButtonTitle = _('Open publication list menu');
 
-const PublicationListMenu = ({id: publicationID, publicationLists}) => {
+const PublicationListMenu = ({publication, publicationLists, children}) => {
     const [isOpen, setIsOpen] = useState(false);
     const handleClick = useCallback(() => setIsOpen(open => !open), [setIsOpen]);
     const handleClose = useCallback(() => setIsOpen(false), [setIsOpen]);
     const dialogProps = {
         isOpen,
-        publicationID,
+        publication,
         publicationLists,
         onClose: handleClose,
     };
@@ -25,12 +24,7 @@ const PublicationListMenu = ({id: publicationID, publicationLists}) => {
                 <PublicationListDialog {...dialogProps}>
                     <Button icon={isOpen ? 'cross' : 'menu'} title={ButtonTitle} onClick={handleClick} />
                 </PublicationListDialog>
-                {publicationLists.length > 0 && (
-                    <QuickAddButton
-                        publicationID={publicationID}
-                        publicationLists={publicationLists}
-                    />
-                )}
+                {children && cloneElement(children, {publication, publicationLists})}
             </ButtonGroup>
         </aside>
     );

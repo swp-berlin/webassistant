@@ -2,14 +2,17 @@ import _ from 'utils/i18n';
 
 import Page from 'components/Page';
 import PublicationList from 'components/publication/PublicationList';
+import PublicationListMenu from 'components/PublicationListMenu';
 
 import EditableTitle from './EditableTitle';
 import ExportButton from './ExportButton';
 import DeleteButton from './DeleteButton';
+import PublicationRemoveButton from './PublicationRemoveButton';
 
 const EmptyMessage = _('This publication list is empty.');
 
-const PublicationListDetail = ({id, name, publications}) => {
+const PublicationListDetail = ({publicationList}) => {
+    const {id, name, publications} = publicationList;
     const title = <EditableTitle id={id} title={name} />;
     const isEmpty = publications.length === 0;
     const actions = [
@@ -20,8 +23,14 @@ const PublicationListDetail = ({id, name, publications}) => {
     return (
         <Page title={title} actions={actions}>
             <div className="mt-4">
-                {isEmpty || <PublicationList items={publications} showMenu />}
                 {isEmpty && <p>{EmptyMessage}</p>}
+                {isEmpty || (
+                    <PublicationList items={publications}>
+                        <PublicationListMenu>
+                            <PublicationRemoveButton publicationList={publicationList} />
+                        </PublicationListMenu>
+                    </PublicationList>
+                )}
             </div>
         </Page>
     );

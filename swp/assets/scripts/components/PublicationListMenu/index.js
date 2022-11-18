@@ -1,6 +1,9 @@
 import Query from 'components/Query';
 
 import PublicationListMenu from './PublicationListMenu';
+import QuickAddButton from './QuickAddButton';
+
+export {QuickAddButton};
 
 const NoLoadingAnimation = () => null;
 
@@ -10,9 +13,13 @@ const Options = {
     },
 };
 
-const PublicationListMenuController = ({id}) => (
+const PublicationListMenuController = ({publication, children}) => (
     <Query queryKey="publication-list" {...Options}>
-        {publicationLists => <PublicationListMenu id={id} publicationLists={publicationLists} />}
+        {publicationLists => (
+            <PublicationListMenu publication={publication} publicationLists={publicationLists}>
+                {children}
+            </PublicationListMenu>
+        )}
     </Query>
 );
 

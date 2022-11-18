@@ -11,11 +11,13 @@ const getClassName = (items, className) => classNames(
     {empty: items.length === 0},
 );
 
-const PublicationList = ({items, className, showMenu, onAddFilter, ...props}) => (
+const PublicationList = ({items, className, onAddFilter, children, ...props}) => (
     <ul className={getClassName(items, className)} {...props}>
         {items.map(publication => (
             <li key={publication.id}>
-                <PublicationItem publication={publication} showMenu={showMenu} onAddFilter={onAddFilter} />
+                <PublicationItem publication={publication} onAddFilter={onAddFilter}>
+                    {children}
+                </PublicationItem>
             </li>
         ))}
     </ul>

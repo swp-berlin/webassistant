@@ -25,7 +25,7 @@ const PublicationListDetailPage = () => {
 
     return (
         <QueryResult query={query}>
-            {publicationList => <PublicationListDetail {...publicationList} />}
+            {publicationList => <PublicationListDetail publicationList={publicationList} />}
         </QueryResult>
     );
 };

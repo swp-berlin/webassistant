@@ -1,9 +1,9 @@
+import {cloneElement} from 'react';
 import {Icon} from '@blueprintjs/core';
 import classNames from 'classnames';
 
 import _, {interpolate} from 'utils/i18n';
 
-import PublicationListMenu from 'components/PublicationListMenu';
 import PublicationField from 'components/publication/PublicationField';
 import ExternalLink from 'components/Navigation/ExternalLink';
 import CommaList from 'components/lists/CommaList';
@@ -52,9 +52,7 @@ const Filterable = ({field, text, value, onFilter, className, ...props}) => {
     );
 };
 
-const getClassName = (className, showMenu) => classNames('publication-item', className, {'has-menu': showMenu});
-
-const PublicationItem = ({publication, showMenu, className, onAddFilter, ...props}) => {
+const PublicationItem = ({publication, className, onAddFilter, children, ...props}) => {
     const {
         id,
         thinktank_id: thinktankID,
@@ -73,7 +71,7 @@ const PublicationItem = ({publication, showMenu, className, onAddFilter, ...prop
     } = publication;
 
     return (
-        <article className={getClassName(className, showMenu)} data-id={id} {...props}>
+        <article className={classNames('publication-item', className, 'relative')} data-id={id} {...props}>
             <header>
                 <h5>
                     <PublicationField name="title" value={title}>
@@ -131,7 +129,7 @@ const PublicationItem = ({publication, showMenu, className, onAddFilter, ...prop
                     <span className="ml-2 text-gray-500">{interpolate(PagesLabel, [pdfPages], false)}</span>
                 )}
             </footer>
-            {showMenu && <PublicationListMenu id={id} />}
+            {children && cloneElement(children, {publication})}
         </article>
     );
 };

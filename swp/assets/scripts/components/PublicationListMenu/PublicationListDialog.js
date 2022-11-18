@@ -7,7 +7,7 @@ import PublicationListMenuItem from './PublicationListMenuItem';
 
 const LinkTitle = _('Manage publication lists…');
 
-const PublicationListDialog = ({publicationID, publicationLists, children, ...popoverProps}) => (
+const PublicationListDialog = ({publication, publicationLists, children, ...popoverProps}) => (
     <Popover {...popoverProps} placement="left-start">
         {children}
         <div className="content p-4">
@@ -15,7 +15,7 @@ const PublicationListDialog = ({publicationID, publicationLists, children, ...po
                 {publicationLists.map(publicationList => (
                     <PublicationListMenuItem
                         key={publicationList.id}
-                        publicationID={publicationID}
+                        publicationID={publication.id}
                         {...publicationList}
                     />
                 ))}

@@ -3,6 +3,8 @@ import {Link, useLocation} from 'react-router-dom';
 import classNames from 'classnames';
 import {ButtonGroup, Icon} from '@blueprintjs/core';
 
+import PublicationListMenu, {QuickAddButton} from 'components/PublicationListMenu';
+
 import {withPageParam} from './helper';
 import PublicationList from './PublicationList';
 
@@ -35,7 +37,11 @@ const PublicationResults = ({results, pageCount, currentPage, nextPage, prevPage
 
     return (
         <div className="publication-results">
-            <PublicationList items={results} {...props} showMenu />
+            <PublicationList items={results} {...props}>
+                <PublicationListMenu>
+                    <QuickAddButton />
+                </PublicationListMenu>
+            </PublicationList>
 
             <div className="pagination mt-4" key="pagination">
                 <ButtonGroup className="page-buttons">

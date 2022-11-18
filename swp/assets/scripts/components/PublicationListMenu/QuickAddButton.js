@@ -8,12 +8,11 @@ import {useToggleMutation} from './hooks';
 const AddLabel = _('Add to %(name)s');
 const RemoveLabel = _('Remove from %(name)s');
 
-const QuickAddButton = ({publicationID, publicationLists}) => {
-    const [lastUpdatedPublicationList] = publicationLists;
-    const {id: publicationListID, publication_list: publications} = lastUpdatedPublicationList;
-    const isIncluded = publications.includes(publicationID);
-    const {mutate, isLoading} = useToggleMutation(publicationListID, publicationID, isIncluded);
-    const title = interpolate(isIncluded ? RemoveLabel : AddLabel, lastUpdatedPublicationList);
+const QuickAddButton = ({publication, publicationList}) => {
+    const {id: publicationListID, publication_list: publications} = publicationList;
+    const isIncluded = publications.includes(publication.id);
+    const {mutate, isLoading} = useToggleMutation(publicationListID, publication.id, isIncluded);
+    const title = interpolate(isIncluded ? RemoveLabel : AddLabel, publicationList);
     const handleClick = useCallback(
         event => {
             event.preventDefault();
@@ -32,4 +31,12 @@ const QuickAddButton = ({publicationID, publicationLists}) => {
     );
 };
 
-export default QuickAddButton;
+const QuickAddButtonController = ({publication, publicationLists}) => {
+    if (publicationLists.length === 0) return null;
+
+    const [lastUpdatedPublicationList] = publicationLists;
+
+    return <QuickAddButton publication={publication} publicationList={lastUpdatedPublicationList} />;
+};
+
+export default QuickAddButtonController;
