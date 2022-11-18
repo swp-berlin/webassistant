@@ -11,7 +11,7 @@ const Label = ({name, isLoading}) => (
     </>
 );
 
-const PublicationListMenuItem = ({publicationID, id: publicationListID, publication_list: publications, name}) => {
+const PublicationListDialogItem = ({publicationID, id: publicationListID, publication_list: publications, name}) => {
     const isIncluded = publications.includes(publicationID);
     const {mutate, isLoading} = useToggleMutation(publicationListID, publicationID, isIncluded);
     const handleChange = useCallback(() => mutate(), [mutate]);
@@ -30,4 +30,4 @@ const PublicationListMenuItem = ({publicationID, id: publicationListID, publicat
     );
 };
 
-export default PublicationListMenuItem;
+export default PublicationListDialogItem;

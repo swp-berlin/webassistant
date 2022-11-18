@@ -8,13 +8,10 @@ import {useMutation} from 'hooks/react-query';
 const CancelButtonText = _('Cancel');
 const ConfirmButtonText = _('Delete');
 
-const BaseProps = {
-    icon: 'trash',
-    intent: Intent.DANGER,
-};
+const DefaultIcon = 'trash';
+const DefaultIntent = Intent.DANGER;
 
 const AlertProps = {
-    ...BaseProps,
     cancelButtonText: CancelButtonText,
     confirmButtonText: ConfirmButtonText,
     canEscapeKeyCancel: true,
@@ -27,30 +24,46 @@ const DeleteAlert = ({confirmMessage, ...props}) => (
     </Alert>
 );
 
-const DeleteAlertManager = ({url, method = 'DELETE', buttonTitle, confirmMessage, onDelete, ...props}) => {
+const DeleteAlertManager = props => {
+    const {
+        url,
+        method = 'DELETE',
+        icon = DefaultIcon,
+        intent = DefaultIntent,
+        onDelete,
+        ...buttonProps
+    } = props;
+
+    const {
+        buttonTitle,
+        buttonIcon = icon,
+        buttonIntent = intent,
+        ...alertProps
+    } = buttonProps;
+
     const [isOpen, setIsOpen] = useState(false);
     const {mutate, isLoading} = useMutation(url, method, {onSuccess: onDelete});
     const handleClick = useCallback(() => setIsOpen(true), [setIsOpen]);
     const handleCancel = useCallback(() => setIsOpen(false), [setIsOpen]);
     const handleConfirm = useCallback(() => mutate(), [mutate]);
-    const {buttonIntent = BaseProps.intent} = props;
 
     return (
         <>
             <Button
-                {...BaseProps}
                 title={buttonTitle}
                 loading={isLoading}
                 onClick={handleClick}
                 intent={buttonIntent}
+                icon={buttonIcon}
             />
             <DeleteAlert
                 isOpen={isOpen}
                 loading={isLoading}
-                confirmMessage={confirmMessage}
+                intent={intent}
+                icon={icon}
                 onConfirm={handleConfirm}
                 onCancel={handleCancel}
-                {...props}
+                {...alertProps}
             />
         </>
     );

@@ -1,32 +1,24 @@
-import {Link} from 'react-router-dom';
-import {Popover} from '@blueprintjs/core';
+import {useCallback, useState} from 'react';
+import {Button, Popover} from '@blueprintjs/core';
 
 import _ from 'utils/i18n';
 
-import PublicationListMenuItem from './PublicationListMenuItem';
+import PublicationListDialogContent from './PublicationListDialogContent';
 
-const LinkTitle = _('Manage publication lists…');
+const ButtonTitle = _('Open publication list menu');
 
-const PublicationListDialog = ({publication, publicationLists, children, ...popoverProps}) => (
-    <Popover {...popoverProps} placement="left-start">
-        {children}
-        <div className="content p-4">
-            <ul className="list-none p-0 m-0">
-                {publicationLists.map(publicationList => (
-                    <PublicationListMenuItem
-                        key={publicationList.id}
-                        publicationID={publication.id}
-                        {...publicationList}
-                    />
-                ))}
-                <li className="whitespace-nowrap mt-3">
-                    <Link to="/publication-list/">
-                        {LinkTitle}
-                    </Link>
-                </li>
-            </ul>
-        </div>
-    </Popover>
-);
+const PublicationListDialog = ({publication, publicationLists}) => {
+    const [isOpen, setIsOpen] = useState(false);
+    const handleClick = useCallback(() => setIsOpen(open => !open), [setIsOpen]);
+    const handleClose = useCallback(() => setIsOpen(false), [setIsOpen]);
+    const popoverProps = {isOpen, publication, publicationLists};
+
+    return (
+        <Popover {...popoverProps} placement="left-start" onClose={handleClose}>
+            <Button icon={isOpen ? 'cross' : 'menu'} title={ButtonTitle} onClick={handleClick} />
+            <PublicationListDialogContent publication={publication} publicationLists={publicationLists} />
+        </Popover>
+    );
+};
 
 export default PublicationListDialog;

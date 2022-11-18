@@ -1,9 +1,10 @@
 import Query from 'components/Query';
 
 import PublicationListMenu from './PublicationListMenu';
+import PublicationListDialog from './PublicationListDialog';
 import QuickAddButton from './QuickAddButton';
 
-export {QuickAddButton};
+export {PublicationListDialog, QuickAddButton};
 
 const NoLoadingAnimation = () => null;
 

@@ -31,11 +31,12 @@ const PublicationRemoveButton = ({publicationList, publication}) => {
         <DeleteAlert
             url={url}
             method="POST"
+            icon="remove"
+            buttonIntent={null}
             buttonTitle={buttonTitle}
             confirmButtonText={ConfirmButtonText}
             confirmMessage={confirmMessage}
             onDelete={handleDelete}
-            buttonIntent={null}
         />
     );
 };
