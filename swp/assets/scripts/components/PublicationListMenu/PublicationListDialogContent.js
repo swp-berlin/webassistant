@@ -17,7 +17,7 @@ const PublicationListDialogContent = ({publication, publicationLists}) => (
                 />
             ))}
             <li className="whitespace-nowrap mt-3">
-                <Link to="/publication-list/">
+                <Link to="/search/publication-list/">
                     {LinkTitle}
                 </Link>
             </li>
