@@ -10,6 +10,7 @@ import Page from 'components/Page';
 import {useBreadcrumb} from 'components/Navigation';
 import Query from 'components/Query';
 
+import QueryError from './QueryError';
 import SearchForm from './SearchForm';
 import SearchResult from './SearchResult';
 
@@ -32,6 +33,7 @@ const maybeQuote = text => {
     const hasWhiteSpace = WhitespaceRegEx.test(text);
     return hasWhiteSpace ? `"${text}"` : text;
 };
+
 
 const SearchPage = () => {
     useBreadcrumb('/search/', SearchLabel);
@@ -104,7 +106,12 @@ const SearchPage = () => {
             />
 
             {params.query && (
-                <Query queryKey={['publication', 'research', params]}>
+                <Query
+                    queryKey={['publication', 'research', params]}
+                    components={{
+                        400: QueryError,
+                    }}
+                >
                     <SearchResult
                         onSelectTag={handleSelectTag}
                         downloadURL={`/api/publication/ris/?${searchParams.toString()}`}

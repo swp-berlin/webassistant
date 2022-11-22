@@ -3,11 +3,13 @@ import django_filters as filters
 from django.db import models
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
+from elasticsearch.exceptions import RequestError
 
 from elasticsearch_dsl import Q, A
 
 from rest_framework import viewsets
 from rest_framework.decorators import action
+from rest_framework.exceptions import ValidationError
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import BasePermission, IsAuthenticated
 
@@ -135,6 +137,8 @@ class ResearchFilter(filters.FilterSet):
 
 @default_router.register('publication', basename='publication')
 class PublicationViewSet(viewsets.ReadOnlyModelViewSet):
+    INVALID_QUERY_CODE = 'invalid-query'
+
     queryset = Publication.objects
     filterset_class = PublicationFilter
     ordering = ['-last_access', '-created']
@@ -150,7 +154,15 @@ class PublicationViewSet(viewsets.ReadOnlyModelViewSet):
         permission_classes=[IsAuthenticated & CanResearch],
     )
     def research(self, request):
-        return self.list(request)
+        try:
+            return self.list(request)
+        except RequestError as err:
+            if err.error == 'search_phase_execution_exception':
+                raise ValidationError({
+                    'detail': _('The query provided is invalid. Please check your input.'),
+                    'code': self.INVALID_QUERY_CODE,
+                })
+            raise err
 
     @action(detail=False, permission_classes=[IsAuthenticated & CanResearch])
     def ris(self, request):
