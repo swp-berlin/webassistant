@@ -3,7 +3,6 @@ import {Link, useSearchParams} from 'react-router-dom';
 import {Button, Intent} from '@blueprintjs/core';
 import parseISO from 'date-fns/parseISO';
 import formatISO from 'date-fns/formatISO';
-import without from 'lodash/without';
 
 import _ from 'utils/i18n';
 
@@ -63,44 +62,30 @@ const SearchPage = () => {
     const startDate = searchParams.get('start_date');
     const endDate = searchParams.get('end_date');
 
-    const handleSelectTag = useCallback(tag => {
-        setSearchParams(next => {
-            const tags = next.getAll('tag');
-            if (tags.includes(tag)) {
-                next.delete('tag');
-                without(tags, tag).forEach(tag => next.append('tag', tag));
-            } else {
-                next.append('tag', tag);
-            }
-
-            return next;
-        });
-    }, [setSearchParams]);
-
     const handleSearch = useCallback(() => {
         setSearchParams(next => {
             next.delete('tag');
             if (term) {
                 next.set('query', term);
-            } else next.delete('term');
+            } else next.delete('query');
             return next;
         });
     }, [term, setSearchParams]);
 
-    const addFilter = filter => {
-        if (filter.field === 'tags') return handleSelectTag(filter.value);
-
+    const addFilter = useCallback(filter => {
         const query = searchParams.get('query');
         const filterString = `${filter.field}:${maybeQuote(filter.value)}`;
 
         if (!query.includes(filterString)) {
             setSearchParams(next => {
-                next.set('query', `${filterString} ${next.get('query')}`);
+                next.set('query', `${next.get('query')} ${filterString}`);
                 return next;
             });
-            setTerm(term => `${filterString} ${term}`);
+            setTerm(term => `${term} ${filterString}`);
         }
-    };
+    }, [searchParams, setSearchParams]);
+
+    const handleSelectTag = useCallback(tag => addFilter({field: 'tags', value: tag}), [addFilter]);
 
     const params = {};
     if (query) params.query = query;
@@ -121,7 +106,6 @@ const SearchPage = () => {
             {params.query && (
                 <Query queryKey={['publication', 'research', params]}>
                     <SearchResult
-                        selectedTags={tags}
                         onSelectTag={handleSelectTag}
                         downloadURL={`/api/publication/ris/?${searchParams.toString()}`}
                         onAddFilter={addFilter}
