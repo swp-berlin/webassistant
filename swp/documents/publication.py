@@ -84,6 +84,8 @@ PublicationIndex = PublicationIndex(name='publications')
 class PublicationDocument(FieldMixin, Document):
     TRANSLATION_FIELDS = TRANSLATION_FIELDS
 
+    thinktank = fields.IntegerField(attr='thinktank_id')
+
     class Django:
         model = Publication
         fields = [
