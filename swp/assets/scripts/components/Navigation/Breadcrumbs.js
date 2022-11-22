@@ -1,5 +1,5 @@
 import {createContext, useContext, useEffect, useRef} from 'react';
-import {Link, useRouteMatch} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 
 import {Breadcrumb, Breadcrumbs as BlueprintBreadcrumbs} from '@blueprintjs/core';
 
@@ -27,12 +27,6 @@ export const useBreadcrumb = (href, text, icon = null) => {
         },
         [href, text, icon, changeBreadcrumbRef],
     );
-};
-
-export const useCurrentBreadcrumb = (text, icon) => {
-    const {url} = useRouteMatch();
-
-    return useBreadcrumb(url, text, icon);
 };
 
 const BreadcrumbRenderer = ({href, ...props}) => (

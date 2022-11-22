@@ -15,8 +15,8 @@ services:
       - DATABASE_HOST=db
       - REDIS_HOST=redis
       - ELASTICSEARCH_HOSTNAME=elasticsearch
+      - ELASTICSEARCH_SCHEME=http
       - ELASTICSEARCH_PASSWORD=elastic
-      - ELASTICSEARCH_VERIFY_CERTS=off
     depends_on:
       - db
       - redis
@@ -44,6 +44,8 @@ services:
       - discovery.type=single-node
       - ELASTIC_PASSWORD=elastic
       - "ES_JAVA_OPTS=-Xms750m -Xmx750m"
+    volumes:
+      - elastic:/usr/share/elasticsearch/data
 
   celery:
     image: swp
@@ -54,8 +56,8 @@ services:
       - DATABASE_HOST=db
       - REDIS_HOST=redis
       - ELASTICSEARCH_HOSTNAME=elasticsearch
+      - ELASTICSEARCH_SCHEME=http
       - ELASTICSEARCH_PASSWORD=elastic
-      - ELASTICSEARCH_VERIFY_CERTS=off
     volumes:
       - .:/app
     depends_on:
@@ -73,6 +75,7 @@ services:
       - DATABASE_HOST=db
       - REDIS_HOST=redis
       - ELASTICSEARCH_HOSTNAME=elasticsearch
+      - ELASTICSEARCH_SCHEME=http
       - ELASTICSEARCH_PASSWORD=elastic
       - ELASTICSEARCH_VERIFY_CERTS=off
     depends_on:
@@ -82,10 +85,13 @@ services:
     entrypoint: [ '/bin/sh', '-c' ]
     command:
       - |
+        /wait-for-it.sh -h db -p 5432 -t 15
+        /wait-for-it.sh -h elasticsearch -p 9200 -t 90
         python manage.py migrate
         python manage.py generate-schemes
         python manage.py compile-translations
         python manage.py loaddata groups
+        python manage.py search_index --rebuild -f
 
   frontend:
     image: node:14
@@ -103,3 +109,4 @@ services:
 
 volumes:
   pg-data:
+  elastic:

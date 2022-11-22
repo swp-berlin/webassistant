@@ -1,30 +1,6 @@
-export const CSRFMiddlewareTokenHeaderName = 'X-CSRFToken';
+import {getHandler, getJSONOptions} from './react-query-fetch';
 
-const getBody = data => {
-    const body = JSON.stringify(data);
-    const contentType = 'application/json';
-
-    return {body, contentType};
-};
-
-export const getJSONOptions = (data, CSRFMiddlewareToken, method = 'POST') => {
-    const {body, contentType} = getBody(data);
-
-    const headers = {
-        [CSRFMiddlewareTokenHeaderName]: CSRFMiddlewareToken,
-    };
-
-    if (contentType) {
-        headers['Content-Type'] = contentType;
-    }
-
-    return {
-        method,
-        credentials: 'same-origin',
-        body,
-        headers,
-    };
-};
+export {getJSONOptions};
 
 export const DefaultResult = {
     success: null,
@@ -53,26 +29,6 @@ const buildResult = (success, result, response) => {
     }
 
     return {success, status, result: {data, errors}, error, response};
-};
-
-const DataHandlers = {
-    text: response => response.text(),
-    json: response => response.json(),
-    pdf: response => response.blob(),
-};
-
-const getHandler = (response, handlers = DataHandlers) => {
-    const contentType = response.headers.get('Content-Type');
-
-    if (contentType === null) throw new Error('Missing content type header.');
-
-    const [mimeType] = contentType.split('; ');
-    const [type, subtype] = mimeType.split('/');
-    const handler = handlers[mimeType] || handlers[subtype] || handlers[type] || null;
-
-    if (handler === null) throw new Error(`No data handler found for content type ${mimeType}.`);
-
-    return handler;
 };
 
 export default async (url, options) => {

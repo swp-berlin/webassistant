@@ -1,5 +1,7 @@
 import {useMemo} from 'react';
 import PropTypes from 'prop-types';
+import cN from 'classnames';
+
 import Conjunctions from './Conjunctions';
 
 
@@ -12,17 +14,17 @@ const generateSeparators = (count, conjunction, delimiter = ',') => {
         .fill('', 0, 1);
 };
 
-const CommaList = ({items, conjunction, delimiter, ...props}) => {
+const CommaList = ({className, inline, items, conjunction, delimiter, ...props}) => {
     const separators = useMemo(
         () => generateSeparators(items.length, conjunction, delimiter),
         [items.length, conjunction, delimiter],
     );
 
     return (
-        <ul className="inline list-inline" {...props}>
+        <ul className={cN('list-inline pl-0', className, {inline})} {...props}>
             {items.map((item, i) => (
                 // eslint-disable-next-line react/no-array-index-key
-                <li key={i}>
+                <li className="inline" key={i}>
                     {separators[i]}
                     {item}
                 </li>

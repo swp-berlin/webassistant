@@ -11,11 +11,11 @@ from swp.models import (
     Scraper,
     ScraperError,
     Thinktank,
-    ThinktankFilter,
+    ThinktankFilter, PublicationList, PublicationListEntry,
 )
 from swp.models.choices import Comparator, DataResolverKey
 from swp.scraper.types import ScraperType
-from swp.utils.testing import create_superuser, login, request, admin_url
+from swp.utils.testing import create_superuser, login, request, admin_url, create_user
 
 
 class AdminTestCase(TestCase):
@@ -26,7 +26,8 @@ class AdminTestCase(TestCase):
 
     @classmethod
     def setUpModels(cls, now):
-        monitor = Monitor.objects.create(name='Test-Monitor', recipients=[cls.user.email])
+        user = create_user('simple-user')
+        monitor = Monitor.objects.create(name='Test-Monitor', recipients=[user.email])
         thinktank = Thinktank.objects.create(
             name='Test-Thinktank',
             url='https://www.piie.com/',
@@ -53,6 +54,12 @@ class AdminTestCase(TestCase):
             thinktank=thinktank,
             title='Taming the US trade deficit: A dollar policy for balanced growth',
             url='https://www.piie.com/publications/policy-briefs/taming-us-trade-deficit-dollar-policy-balanced-growth',
+        )
+
+        publication_list = PublicationList.objects.create(user=user, name='Test')
+        PublicationListEntry.objects.create(
+            publication_list=publication_list,
+            publication=publication,
         )
 
     @classmethod

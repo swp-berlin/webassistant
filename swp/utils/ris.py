@@ -68,3 +68,14 @@ def generate_ris_attachment(
     filename = generate_ris_name(name, now=now)
 
     return filename, data, RIS_MEDIA_TYPE
+
+
+class RISResponse(HttpResponse):
+
+    def __init__(self, publications, filename=None):
+        super(RISResponse, self).__init__(content_type=RIS_MEDIA_TYPE)
+
+        if filename:
+            self['Content-Disposition'] = f'attachment; filename="{filename}"'
+
+        write_ris_data(self, *publications)

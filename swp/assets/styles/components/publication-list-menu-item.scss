@@ -1,0 +1,13 @@
+.publication-list-menu-item {
+  .bp3-spinner {
+    position: absolute;
+    left: 2px;
+    top: 4px;
+  }
+
+  &.is-included {
+    .bp3-spinner-head {
+      stroke: white;
+    }
+  }
+}

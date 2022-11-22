@@ -220,6 +220,9 @@ SHELL_PLUS_POST_IMPORTS = [
 # <editor-fold desc="REST API">
 
 REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'swp.api.authentication.SessionAuthentication',
+    ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
     ],

@@ -39,7 +39,7 @@ def debug_toolbar(apps, middleware, active=True, **config):
     ips = ['localhost', '127.0.0.1'] + ['192.168.0.%i' % ip for ip in range(1, 256)]
 
     if active:
-        apps = apps + [debug_toolbar.default_app_config]
+        apps = apps + [getattr(debug_toolbar, 'default_app_config', 'debug_toolbar')]
         middleware = ['debug_toolbar.middleware.DebugToolbarMiddleware'] + middleware
         config = dict(
             # Hide the debug toolbar by default.

@@ -1,6 +1,6 @@
 import {useCallback, useMemo} from 'react';
 import {useForm} from 'react-hook-form';
-import {useHistory} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 
 import _, {interpolate} from 'utils/i18n';
 import {setErrors} from 'utils/form';
@@ -11,13 +11,13 @@ import {useMutation} from 'hooks/query';
 import getToast from './Result';
 import {DefaultProps as NetworkErrorProps} from './NetworkError';
 import {Fallback as ClientErrorFallback} from './ClientError';
-import {Fallback as ServerErrorFallback} from './ServerError';
+import {Fallback as ServerErrorFallback, Maintenance} from './ServerError';
 
 const DefaultSuccessMessage = _('Your data has been saved successfully.');
 const DefaultNetworkErrorMessage = NetworkErrorProps.description;
 const DefaultClientErrorMessage = ClientErrorFallback.description;
 const DefaultServerErrorMessage = ServerErrorFallback.description;
-const DefaultMaintenanceMessage = _('We are currently doing maintenance work. Please try again in a few seconds.');
+const DefaultMaintenanceMessage = Maintenance.description;
 const DefaultHttpErrorMessages = {
     400: _('Please correct the errors below.'),
     401: _('You have to be logged in to make this request.'),
@@ -79,26 +79,26 @@ export const handleMutationResult = (result, options) => {
     if (toast) Toaster.show(toast);
 
     if (result.success) {
-        const {history} = options;
+        const {navigate} = options;
         const redirectURL = getRedirectURL(result, options);
 
-        if (history && redirectURL) history.push(redirectURL);
+        if (navigate && redirectURL) navigate(redirectURL);
     }
 
     return result;
 };
 
 export const useMutationResult = (endpoint, {params, ...options}, dependencies) => {
-    const history = useHistory();
+    const navigate = useNavigate();
     const [mutate, result] = useMutation(endpoint, params);
 
     const handleSubmit = useCallback(
         async (data, method) => handleMutationResult(
             await mutate(data, method),
-            {history, ...options},
+            {navigate, ...options},
         ),
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        [mutate, history, ...dependencies],
+        [mutate, navigate, ...dependencies],
     );
 
     return [handleSubmit, result];
