@@ -114,7 +114,7 @@ class ResearchFilter(filters.FilterSet):
     def get_search_query(self, query, start_date=None, end_date=None, tag=None):
         language = get_language(request=self.request)
         fields = PublicationDocument.get_search_fields(language)
-        query = Q('query_string', query=query, fields=fields)
+        query = Q('query_string', query=query, fields=fields, default_operator='AND')
 
         if start_date or end_date:
             created = {'time_zone': settings.TIME_ZONE}
