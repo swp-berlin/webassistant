@@ -44,6 +44,7 @@ services:
       - discovery.type=single-node
       - ELASTIC_PASSWORD=elastic
       - "ES_JAVA_OPTS=-Xms750m -Xmx750m"
+      - xpack.security.enabled=false
     volumes:
       - elastic:/usr/share/elasticsearch/data
 
