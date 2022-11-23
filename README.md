@@ -24,17 +24,34 @@ Please note that the Docker Compose setup is not recommended to be used for a li
 
 Build the docker image (this needs to be redone whenever major dependencies change)
 
-    docker compose build --no-cache
+    docker-compose build --no-cache
 
 With the image built, Docker Compose can be used to start the services. 
 
-    docker compose up
+    docker-compose up
 
 Once the containers are running, you should create a superuser:
 
-    docker compose exec swp python manage.py createsuperuser
+    docker-compose exec swp python manage.py createsuperuser
 
-Once all containers are up, the application is available at http://localhost:8000
+Finally you can log in at http://localhost:8000
+
+### Management commands
+
+The Docker Compose setup will generally automatically do any required actions when the code is changed or the application is used. However sometimes it may be necessary to manually trigger certain actions. This can be done by running the `manage.py` script in the `swp` container.
+
+Rebuild the Elastic Search Index:
+
+    docker-compose exec swp python manage.py search_index --rebuild
+
+Run a specific scraper (identified by its ID):
+
+    docker-compose exec swp python manage.py scrape <id>
+
+More commands are listed when running manage.py without arguments:
+
+    docker-compose exec swp python manage.py
+
 
 ## IDE Configuration
 
