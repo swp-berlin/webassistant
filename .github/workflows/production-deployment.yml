@@ -11,6 +11,7 @@ jobs:
     steps:
     - name: deploy to staging
       uses: appleboy/ssh-action@master
+      runs-on: ubuntu-latest
       with:
         proxy_host: ${{ secrets.PROXY_HOST }}
         proxy_port: 6589
