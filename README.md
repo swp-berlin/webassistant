@@ -178,11 +178,12 @@ To set up the project in IntelliJ IDEA
 Add a run configuration go to `Run > Edit Configurations...`. Click the `+` in the top left corner of the dialog
 and select `Django`. Use `0.0.0.0` as the Host. Select `Use SDK of module`. Edit the environment
 variables and set `DJANGO_SETTINGS_MODULE` to `swp.settings.dev`. You should now be able to start
-the django development server by running the configuration.
+the django development server by running the configuration. Code completion will only work if the
+docker container has been started at least once.
 
 To enable running django management commands right-click on the project root and click `Open Module Settings`.
-Select the `mangage.py` located in the project root. You should now be able to run management commands 
-via `Tools > Run manage.py Task`.
+Select the `mangage.py` located in the project root. Select `swp/settings/dev.py` as the settings file. You should now 
+be able to run management commands via `Tools > Run manage.py Task`.
 
 To have proper coding assistance regarding to import paths set the WebPack Config
 in `Preferences > Languages & Frameworks > JavaScript > WebPack`.
