@@ -25,6 +25,7 @@ jobs:
           sudo systemctl stop swp@staging.service
           sudo systemctl stop celery@staging.service
           sudo systemctl stop scraper@staging.service
+          cd /var/www/staging
           git fetch --all --quiet
           git checkout --force master
           git reset --hard origin/master
