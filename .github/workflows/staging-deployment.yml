@@ -1,0 +1,47 @@
+name: staging deployment
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: deploy to staging
+      uses: appleboy/ssh-action@master
+      with:
+        proxy_host: ${{ secrets.PROXY_HOST }}
+        proxy_port: 6589
+        proxy_username: ci
+        proxy_key: ${{ secrets.DEPLOYMENT_KEY }}
+        host: 10.1.0.4
+        username: ci
+        key: ${{ secrets.DEPLOYMENT_KEY }}
+        port: 6589
+        script: |
+          sudo systemctl stop swp@staging.service
+          sudo systemctl stop celery@staging.service
+          sudo systemctl stop scraper@staging.service
+          git fetch --all --quiet
+          git checkout --force master
+          git reset --hard origin/master
+          git submodule update --init --recursive
+          export PLAYWRIGHT_BROWSERS_PATH=/var/www/staging/browsers
+          export DJANGO_SETTINGS_MODULE=swp.settings.staging
+          npx npm install
+          find . -name '*.pyc' -delete
+          env/bin/pip install -r requirements.txt -U --no-input
+          env/bin/python -m playwright install chromium
+          env/bin/python manage.py migrate
+          env/bin/python manage.py compile-translations
+          env/bin/python manage.py generate-schemes
+          npm run build
+          env/bin/python manage.py collectstatic --no-input
+          sudo systemctl start swp@staging.service
+          sudo systemctl start celery@staging.service
+          sudo systemctl start scraper@staging.service
+          sudo systemctl restart nginx.service
+
