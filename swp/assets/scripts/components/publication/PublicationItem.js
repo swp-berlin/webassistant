@@ -22,7 +22,7 @@ const Authors = ({authors, className, onFilter}) => (
         {authors?.length ? (
             <CommaList
                 inline
-                items={authors.map(author => <Filterable field="author" text={author} onFilter={onFilter} />)}
+                items={authors.map(author => <Filterable field="authors" text={author} onFilter={onFilter} />)}
             />
         ) : UnknownLabel}
     </span>
