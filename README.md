@@ -1,168 +1,56 @@
-# SWP Webmonitor Backend
+# SWP Webmonitor
 
-The main documentation on concepts and general usage can be found in the wiki
-at https://swp.wiki.cosmocode.de/
+The webmonitor allows monitoring websites (_thinktanks_) for the publication of new articles using configurable _scrapers_. Scrapers are executed using a headless Chrome browser. Found publications are saved in a PostgreSQL database and added to an ElasticSearch Index. _Monitors_ allow to define _filters_ that aggregate publications and automatically send Citavi .ris files to configured receivers by email.  
 
-
-## Setup
-
-Below is a short description on how to set up the project to run it locally.
+Please note that most of the application is in German only currently.
 
 
-### Requirements
+## Development setup
 
-* Python 3.8
-  - with virtualenv
+This repository comes with a Docker Compose setup that should help to set up the requirements to run the project locally. The following containers will be started
 
-* nodejs 14.15 (LTS)
-  * with npm 6
+  * `swp` The main Django/React application, including Playwright and a headless Chrome browser. Restarts when code is changed.
+  * `db` The PostgreSQL database, exposed to port `5432` in case you want to access it directly
+  * `redis` The Redis message broker
+  * `elasticsearch` A single node ElasticSearch instance
+  * `celery` The Celery task queue
+  * `bootstrap` Runs one-off tasks like updating translations, running database migrations etc.
+  * `frontend` Runs nmp and webpack in watch mode to automatically rebuild the frontend when code is changed.
 
-* Postgres
-
-* Elasticsearch 8.4.3
-
-
-### Code Setup
-
-``` console
-git clone git@gitlab.cosmocode.de:swp/swp.git
-```
-
-After cloning the repository, make sure to install the submodules as well.
-
-``` console
-git submodule update --init
-```
-
-The application should be setup within a Python virtual environment. Be sure to
-use Python 3! Activate the environment and set up the dependencies.
-
-``` console
-python3 -m venv env
-source env/bin activate
-pip install -r requirements.txt
-```
-
-Frontend code needs dependencies as well. Those are installed with npm:
-
-``` console
-npx npm install
-```
-
-Frontend assets are compiled with webpack. Use the watch task for development:
-
-``` console
-npm run watch
-```
-
-### Database Setup
-
-Create a Postgres database. By default the database is named `swp`
-
-``` console
-su - postgres  # not needed on macOS when postgres is installed with brew
-createuser -s -P swp
-Enter password for new role: swp
-Enter it again: swp
-createdb -O swp swp
-```
-
-Initialize the database:
-
-``` console
-DJANGO_SETTINGS_MODULE=swp.settings.dev python manage.py migrate
-```
-
-To generate a superuser account use:
-
-``` console
-DJANGO_SETTINGS_MODULE=swp.settings.dev python manage.py createsuperuser
-```
+Please note that the Docker Compose setup is not recommended to be used for a live deployment, yet!
 
 
-### Elasticsearch Setup
+### Getting started
 
-Start the elasticsearch server:
+Build the docker image (this needs to be redone whenever major dependencies change)
 
-```console
-docker run -d --name elasticsearch -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" elasticsearch:8.4.3
-```
+    docker-compose build --no-cache
 
-To obtain the elastic user password, run the following command and set the `ELASTICSEARCH_PASSWORD` variable in your
-`.env` file:
+With the image built, Docker Compose can be used to start the services. 
 
-``` console
-docker exec -it elasticsearch bin/elasticsearch-reset-password -u elastic
-```
+    docker-compose up
 
-To initially create and build indices, run the following:
+Once the containers are running, you should create a superuser:
 
-``` console
-DJANGO_SETTINGS_MODULE=swp.settings.dev python manage.py search_index --rebuild
-```
+    docker-compose exec swp python manage.py createsuperuser
 
+Finally you can log in at http://localhost:8000
 
-### Application Dependencies
+### Management commands
 
-Before the first start of the development server you have to run:
+The Docker Compose setup will generally automatically do any required actions when the code is changed or the application is used. However sometimes it may be necessary to manually trigger certain actions. This can be done by running the `manage.py` script in the `swp` container.
 
-``` console
-DJANGO_SETTINGS_MODULE=swp.settings.dev python manage.py generate-schemes
-```
+Rebuild the Elastic Search Index:
 
-As well as the following to generate all translation files:
+    docker-compose exec swp python manage.py search_index --rebuild
 
-``` console
-DJANGO_SETTINGS_MODULE=swp.settings.dev python manage.py compile-translations
-```
+Run a specific scraper (identified by its ID):
 
-#### Fixtures
+    docker-compose exec swp python manage.py scrape <id>
 
-You will probably want to install these predefined entities:
+More commands are listed when running manage.py without arguments:
 
-``` console
-python manage.py loaddata groups sites
-```
-
-Afterwards, you may load generic test accounts for development purposes:
-
-| User | Password | Group | is_staff | is_superuser |
-| ---- | -------- | ----- | -------- | ------------ |
-| admin@localhost | admin | - | + | + |
-| swp-manager@localhost | swp-manager | swp-manager | + | - |
-| swp-editor@localhost | swp-editor | swp-editor | + | - |
-
-``` console
-python manage.py loaddata test-users
-```
-
-> **NOTE** These are totally optional and included mainly for automated tests.
-
-
-### Development Server
-
-You can run a local development server to test things like this:
-
-``` console
-DJANGO_SETTINGS_MODULE=swp.settings.dev python manage.py runserver
-```
-
-In order for scrapers to be run in development you have to start celery as well.
-Celery needs a running redis server, make sure to start it first.
-
-``` console
-DJANGO_SETTINGS_MODULE=swp.settings.dev celery -A swp worker -B -Q celery,scraper -l INFO --purge
-```
-
-
-### Production Server
-
-Please copy .env.default, adjust the configuration parameters and install apt requirements.
-
-``` console
-cp conf/.env.example .env
-while read apt ; do apt install "$apt" ; done < apt-requirements.txt
-```
+    docker-compose exec swp python manage.py
 
 
 ## IDE Configuration
