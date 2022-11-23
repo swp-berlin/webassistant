@@ -169,14 +169,20 @@ while read apt ; do apt install "$apt" ; done < apt-requirements.txt
 
 ### IntelliJ IDEA
 
-To have proper coding assistance regarding to import paths set the WebPack Config
-in Preferences > Languages & Frameworks > JavaScript > WebPack.
+To set up the project in IntelliJ IDEA 
+- select `File > New > Project from existing Sources...`. 
+- In the Dialog that pops up select the folder you have cloned the repository into. 
+- When prompted to select the Project SDK use the `+` sign in the top left corner to select `New Python SDK...`. 
+- Select `Docker Compose` in the left menu and select `swp` as the Service on the right side.
 
-To properly use our lint rules defined in .eslintrc.js for JavaScript and .stylelintrc.js
+To have proper coding assistance regarding to import paths set the WebPack Config
+in `Preferences > Languages & Frameworks > JavaScript > WebPack`.
+
+To properly use our lint rules defined in `.eslintrc.js` for JavaScript and `.stylelintrc.js`
 you have to activate these tools in the preferences.
 
-To activate ESLint set the lint configuration in Preferences > Languages & Frameworks >
-JavaScript > Code Quality Tools > ESLint to automatic.
+ - To activate ESLint set the lint configuration in `Preferences > Languages & Frameworks >
+JavaScript > Code Quality Tools > ESLint to automatic`.
 
-To activate Stylelint go to Preferences > Languages & Frameworks > Style Sheets > Stylelint
+ - To activate Stylelint go to `Preferences > Languages & Frameworks > Style Sheets > Stylelint`
 and set it enabled.
