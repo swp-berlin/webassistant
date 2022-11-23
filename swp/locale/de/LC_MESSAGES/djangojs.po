@@ -40,9 +40,6 @@ msgstr "Das sind nicht die Droiden, nach denen Sie suchen."
 msgid "Your data has been saved successfully."
 msgstr "Ihre Daten wurden erfolgreich gespeichert."
 
-msgid "We are currently doing maintenance work. Please try again in a few seconds."
-msgstr "Wartungsarbeiten. Bitte versuchen Sie es in ein paar Sekunden erneut."
-
 msgid "Please correct the errors below."
 msgstr "Bitte beheben Sie die nachfolgenden Fehler."
 
@@ -64,23 +61,14 @@ msgstr "Bitte warten Sie, wir laden Ihre Daten…"
 msgid "Network Error"
 msgstr "Netzwerkfehler"
 
-msgid "A network error occurred. Please try again."
-msgstr "Ein Netzwerkfehler ist aufgetreten. Bitte versuchen Sie es erneut."
-
 msgid "Reload"
 msgstr "Neu Laden"
 
 msgid "Server Error"
 msgstr "Serverfehler"
 
-msgid "Something went wrong on our side…"
-msgstr "Etwas ist auf unserer Seite schief gelaufen…"
-
 msgid "Maintenance"
 msgstr "Wartungsarbeiten"
-
-msgid "We are currently doing maintenance work. Please reload the page in a few seconds."
-msgstr "Wartungsarbeiten. Bitte laden Sie die Seite in ein paar Sekunden erneut."
 
 msgid "Admin"
 msgstr "Admin"
@@ -94,6 +82,9 @@ msgstr "Nicht erlaubt"
 msgid "Your accounts does not have sufficient privileges."
 msgstr "Ihr Konto hat unzureichende Berechtigungen."
 
+msgid "Search"
+msgstr "Suche"
+
 msgid "Thinktanks & Scrapers"
 msgstr "Thinktanks & Scraper"
 
@@ -102,6 +93,45 @@ msgstr "Abmelden"
 
 msgid "Home"
 msgstr "Start"
+
+msgid "Open publication list menu"
+msgstr "Publikationslisten-Menu öffnen"
+
+msgid "Manage publication lists…"
+msgstr "Publikationslisten verwalten…"
+
+msgid "Add to %(name)s"
+msgstr "Zu %(name)s hinzufügen"
+
+msgid "Remove from %(name)s"
+msgstr "Aus %(name)s entfernen"
+
+msgid "Error"
+msgstr "Fehler"
+
+msgid "since"
+msgstr "seit"
+
+msgid "until"
+msgstr "bis"
+
+msgid "Clear"
+msgstr "Zurücksetzen"
+
+msgid "Invalid Query"
+msgstr "Ungültiger Suchbegriff"
+
+msgid "visit query syntax documentation"
+msgstr "query syntax documentation besuchen"
+
+msgid "Publication Lists"
+msgstr "Publikationslisten"
+
+msgid "No publications found"
+msgstr "Keine Publikationen gefunden"
+
+msgid "Filter by Tag:"
+msgstr "Nach Tag filtern:"
 
 msgid "Activate"
 msgstr "Aktivieren"
@@ -168,6 +198,9 @@ msgstr "Publikationen gesamt:"
 
 msgid "Publications since last email:"
 msgstr "Publikationen seit letzter E-Mail:"
+
+msgid "Last update of publication count:"
+msgstr "Letztes Update des Publikationszählers:"
 
 msgid "Email sent:"
 msgstr "Letzte E-Mail:"
@@ -242,6 +275,51 @@ msgstr "Zotero-Keys"
 msgid "The following keys are invalid: %(keys)s"
 msgstr "Die folgenden Schlüssel sind ungültig: %(keys)s"
 
+msgid "Add"
+msgstr "Hinzufügen"
+
+msgid "Add a new publication list…"
+msgstr "Neue Publikationsliste hinzufügen…"
+
+msgid "Publication list could not be added."
+msgstr "Publikationsliste konnte nicht hinzugefügt werden."
+
+msgid "%(name)s (%(count)s publications)"
+msgstr "%(name)s (%(count)s Publikationen)"
+
+msgid "Default"
+msgstr ""
+
+msgid "Delete"
+msgstr "Löschen"
+
+msgid "Are you sure you want to delete publication list %(name)s?"
+msgstr "Sind Sie sicher, dass sie die Publikationsliste %(name)s löschen wollen?"
+
+msgid "Delete publication list %(name)s"
+msgstr "Publikationsliste %(name)s löschen"
+
+msgid "Successfully deleted publication list %(name)s."
+msgstr "Publikationsliste %(name)s erfolgreich gelöscht."
+
+msgid "Export"
+msgstr "Exportieren"
+
+msgid "This publication list is empty."
+msgstr "Diese Publikationsliste ist leer."
+
+msgid "Remove %(title)s from %(name)s"
+msgstr "%(title)s aus %(name)s entfernen"
+
+msgid "Remove"
+msgstr "Entfernen"
+
+msgid "Are you sure you want to remove the publication %(title)s from the list %(name)s?"
+msgstr "Sind Sie sicher, dass sie die Publikation %(title)s aus der Liste %(name)s entfernen wollen?"
+
+msgid "Publication List %(id)s"
+msgstr "Publikationslisten-IDs"
+
 msgid "Download .RIS"
 msgstr ".RIS herunterladen"
 
@@ -297,9 +375,6 @@ msgstr "Abbrechen"
 
 msgid "Proceed"
 msgstr "Fortfahren"
-
-msgid "Add"
-msgstr "Hinzufügen"
 
 msgid "Resolver Type %(type)s unsupported"
 msgstr "Resolver-Typ %(type)s wird nicht unterstützt"
@@ -469,3 +544,15 @@ msgstr "Änderungen am Filter erfolgreich gespeichert"
 
 msgid "Thinktank"
 msgstr "Thinktank"
+
+msgid "A network error occurred. Please try again."
+msgstr "Ein Netzwerkfehler ist aufgetreten. Bitte versuchen Sie es erneut."
+
+msgid "Something went wrong on our side…"
+msgstr "Etwas ist auf unserer Seite schief gelaufen…"
+
+msgid "We are currently doing maintenance work. Please try again in a few seconds."
+msgstr "Wartungsarbeiten. Bitte versuchen Sie es in ein paar Sekunden erneut."
+
+msgid "An error occurred: %(error)s"
+msgstr ""

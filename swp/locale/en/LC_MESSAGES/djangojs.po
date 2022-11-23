@@ -40,9 +40,6 @@ msgstr ""
 msgid "Your data has been saved successfully."
 msgstr ""
 
-msgid "We are currently doing maintenance work. Please try again in a few seconds."
-msgstr ""
-
 msgid "Please correct the errors below."
 msgstr ""
 
@@ -64,22 +61,13 @@ msgstr ""
 msgid "Network Error"
 msgstr ""
 
-msgid "A network error occurred. Please try again."
-msgstr ""
-
 msgid "Reload"
 msgstr ""
 
 msgid "Server Error"
 msgstr ""
 
-msgid "Something went wrong on our side…"
-msgstr ""
-
 msgid "Maintenance"
-msgstr ""
-
-msgid "We are currently doing maintenance work. Please reload the page in a few seconds."
 msgstr ""
 
 msgid "Admin"
@@ -94,6 +82,9 @@ msgstr ""
 msgid "Your accounts does not have sufficient privileges."
 msgstr ""
 
+msgid "Search"
+msgstr ""
+
 msgid "Thinktanks & Scrapers"
 msgstr ""
 
@@ -101,6 +92,45 @@ msgid "Log out"
 msgstr ""
 
 msgid "Home"
+msgstr ""
+
+msgid "Open publication list menu"
+msgstr ""
+
+msgid "Manage publication lists…"
+msgstr ""
+
+msgid "Add to %(name)s"
+msgstr ""
+
+msgid "Remove from %(name)s"
+msgstr ""
+
+msgid "Error"
+msgstr ""
+
+msgid "since"
+msgstr ""
+
+msgid "until"
+msgstr ""
+
+msgid "Clear"
+msgstr ""
+
+msgid "Invalid Query"
+msgstr ""
+
+msgid "visit query syntax documentation"
+msgstr ""
+
+msgid "Publication Lists"
+msgstr ""
+
+msgid "No publications found"
+msgstr ""
+
+msgid "Filter by Tag:"
 msgstr ""
 
 msgid "Activate"
@@ -167,6 +197,9 @@ msgid "Publications overall:"
 msgstr ""
 
 msgid "Publications since last email:"
+msgstr ""
+
+msgid "Last update of publication count:"
 msgstr ""
 
 msgid "Email sent:"
@@ -242,6 +275,51 @@ msgstr ""
 msgid "The following keys are invalid: %(keys)s"
 msgstr ""
 
+msgid "Add"
+msgstr ""
+
+msgid "Add a new publication list…"
+msgstr ""
+
+msgid "Publication list could not be added."
+msgstr ""
+
+msgid "%(name)s (%(count)s publications)"
+msgstr ""
+
+msgid "Default"
+msgstr ""
+
+msgid "Delete"
+msgstr ""
+
+msgid "Are you sure you want to delete publication list %(name)s?"
+msgstr ""
+
+msgid "Delete publication list %(name)s"
+msgstr ""
+
+msgid "Successfully deleted publication list %(name)s."
+msgstr ""
+
+msgid "Export"
+msgstr ""
+
+msgid "This publication list is empty."
+msgstr ""
+
+msgid "Remove %(title)s from %(name)s"
+msgstr ""
+
+msgid "Remove"
+msgstr ""
+
+msgid "Are you sure you want to remove the publication %(title)s from the list %(name)s?"
+msgstr ""
+
+msgid "Publication List %(id)s"
+msgstr ""
+
 msgid "Download .RIS"
 msgstr ""
 
@@ -296,9 +374,6 @@ msgid "Abort"
 msgstr ""
 
 msgid "Proceed"
-msgstr ""
-
-msgid "Add"
 msgstr ""
 
 msgid "Resolver Type %(type)s unsupported"
@@ -468,4 +543,16 @@ msgid "Successfully changed filter"
 msgstr ""
 
 msgid "Thinktank"
+msgstr ""
+
+msgid "A network error occurred. Please try again."
+msgstr ""
+
+msgid "Something went wrong on our side…"
+msgstr ""
+
+msgid "We are currently doing maintenance work. Please try again in a few seconds."
+msgstr ""
+
+msgid "An error occurred: %(error)s"
 msgstr ""

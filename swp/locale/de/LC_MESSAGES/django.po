@@ -35,6 +35,12 @@ msgstr[1] "Publikationen für %d Monitore werden zu zotero übertragen"
 msgid "Send publications for selected monitors to zotero"
 msgstr "Sende Publikationen für ausgewählte Monitore zu zotero"
 
+msgid "# Entries"
+msgstr "# Einträge"
+
+msgid "Last Updated"
+msgstr "Zuletzt Geändert"
+
 msgid "Personal info"
 msgstr "Persönliche Informationen"
 
@@ -47,11 +53,11 @@ msgstr "Berechtigungen"
 msgid "Important dates"
 msgstr "Wichtige Daten"
 
-msgid "update publication count"
-msgstr "Publikationszähler aktualisieren"
-
 msgid "Internal Error"
 msgstr "Interner Fehler"
+
+msgid "A publication list with this name already exists."
+msgstr "Eine Publikationsliste mit diesem Namen existiert bereits."
 
 #, python-format
 msgid "There must be a resolver for the following fields: %(fields)s"
@@ -68,6 +74,21 @@ msgstr "Monitor"
 
 msgid "Think Tank Filter"
 msgstr "Thinktank-Filter"
+
+msgid "Start Date"
+msgstr "Start-Datum"
+
+msgid "End Date"
+msgstr "End-Datum"
+
+msgid "Query"
+msgstr "Suchbegriff"
+
+msgid "Tag"
+msgstr "Tag"
+
+msgid "The query provided is invalid. Please check your input."
+msgstr "Der eingegebene Suchbegriff ist ungültig. Bitte überprüfen Sie Ihre Eingabe."
 
 msgid "title"
 msgstr "Titel"
@@ -202,12 +223,6 @@ msgstr "Intervall"
 msgid "last sent"
 msgstr "gesendet am"
 
-msgid "publication count"
-msgstr "Publikationszähler"
-
-msgid "new publication count"
-msgstr "neuer Publikationszähler"
-
 msgid "monitor"
 msgstr "Monitor"
 
@@ -247,6 +262,15 @@ msgstr "Publikation"
 msgid "publications"
 msgstr "Publikationen"
 
+msgid "publication count"
+msgstr "Anzahl Publikationen"
+
+msgid "new publication count"
+msgstr "Anzahl neuer Publikationen"
+
+msgid "last publication count update"
+msgstr "Publikationszähler aktualisieren"
+
 msgid "think tank filter"
 msgstr "Thinktank-Filter"
 
@@ -264,6 +288,24 @@ msgstr "Publikationsfilter"
 
 msgid "publication filters"
 msgstr "Publikationsfilter"
+
+msgid "Name"
+msgstr "Name"
+
+msgid "Publications"
+msgstr "Publikationen"
+
+msgid "publication list"
+msgstr "Publikationsliste"
+
+msgid "publication lists"
+msgstr "Publikationslisten"
+
+msgid "publication list entry"
+msgstr "Publikationslisteneintrag"
+
+msgid "publication list entries"
+msgstr "Publikationslisteneinträge"
 
 msgid "type"
 msgstr "Typ"
@@ -550,3 +592,11 @@ msgstr "Der Link %(href)s führt auf eine externe Seite."
 #, python-format
 msgid "Failed to open %(href)s: %(error)s"
 msgstr "%(href)s konnte nicht geöffnet werden: %(error)s"
+
+#, python-format
+msgid "%(first)s and %(second)s"
+msgstr ""
+
+#, python-format
+msgid "%(first)s or %(second)s"
+msgstr ""
