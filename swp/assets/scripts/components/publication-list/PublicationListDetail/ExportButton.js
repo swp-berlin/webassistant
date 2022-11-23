@@ -5,7 +5,7 @@ import _ from 'utils/i18n';
 
 import {Endpoint} from '../PublicationList';
 
-const Label = _('Export');
+const Label = _('Download .RIS');
 
 const ExportButton = ({id}) => (
     <AnchorButton href={buildAPIURL(Endpoint, id, 'export')} intent={Intent.PRIMARY}>
