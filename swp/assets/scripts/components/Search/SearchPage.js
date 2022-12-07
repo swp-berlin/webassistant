@@ -89,11 +89,14 @@ const SearchPage = () => {
 
     const handleSelectTag = useCallback(tag => addFilter({field: 'tags', value: tag}), [addFilter]);
 
+    const page = searchParams.get('page');
+
     const params = {};
     if (query) params.query = query;
     if (tags.length) params.tag = tags;
     if (startDate) params.start_date = startDate;
     if (endDate) params.end_date = endDate;
+    if (page) params.page = page;
 
     return (
         <Page title={SearchLabel} actions={Actions}>
