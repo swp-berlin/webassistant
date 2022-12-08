@@ -3,7 +3,7 @@ from django_elasticsearch_dsl.indices import Index
 
 from elasticsearch.client.ingest import IngestClient
 
-from swp.models import Publication
+from swp.models import Publication, Thinktank
 
 from .fields import ANALYZERS, FieldMixin, get_translation_fields
 
@@ -84,10 +84,18 @@ PublicationIndex = PublicationIndex(name='publications')
 class PublicationDocument(FieldMixin, Document):
     TRANSLATION_FIELDS = TRANSLATION_FIELDS
 
-    thinktank = fields.IntegerField(attr='thinktank_id')
+    ttid = fields.IntegerField(attr='thinktank.id')
+    ttname = fields.TextField(attr='thinktank.name')
+    thinktank = fields.ObjectField(properties={
+        'id': fields.IntegerField(),
+        'name': fields.TextField(),
+    })
 
     class Django:
         model = Publication
+        related_models = [
+            Thinktank,
+        ]
         fields = [
             'title',
             'subtitle',
@@ -105,6 +113,14 @@ class PublicationDocument(FieldMixin, Document):
             'created',
             'hash',
         ]
+
+    def get_queryset(self):
+        return Publication.objects.select_related('thinktank')
+
+    @staticmethod
+    def get_instances_from_related(related_instance):
+        if isinstance(related_instance, Thinktank):
+            return related_instance.publications.all()
 
     @classmethod
     def to_field(cls, field_name, model_field):

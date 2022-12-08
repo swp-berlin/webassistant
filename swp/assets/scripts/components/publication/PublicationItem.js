@@ -79,7 +79,7 @@ const PublicationItem = ({publication, className, onAddFilter, children, ...prop
                     </PublicationField>
                 </h5>
                 <h6 className="italic mb-2 text-sm text-gray-800">
-                    <Filterable field="thinktank" text={thinktankName} value={thinktankID} onFilter={onAddFilter} />
+                    <Filterable field="thinktank.id" text={thinktankName} value={thinktankID} onFilter={onAddFilter} />
                 </h6>
                 <div className="subtitle">
                     {subtitle && (
