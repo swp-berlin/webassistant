@@ -12,10 +12,42 @@ model_field_class_to_field_class[CombinedISBNField] = model_field_class_to_field
 model_field_class_to_field_class[LongURLField] = model_field_class_to_field_class[models.URLField]
 
 ANALYZERS = {
+    'ar': 'arabic',
+    'bg': 'bulgarian',
+    'bn': 'bengali',
+    'ca': 'catalan',
+    'ckb': 'sorani',
+    'cs': 'czech',
+    'da': 'danish',
     'de': 'german',
+    'el': 'greek',
     'en': 'english',
     'es': 'spanish',
+    'et': 'estonian',
+    'eu': 'basque',
+    'fa': 'persian',
+    'fi': 'finnish',
     'fr': 'french',
+    'ga': 'irish',
+    'gl': 'galician',
+    'hi': 'hindi',
+    'hu': 'hungarian',
+    'hy': 'armenian',
+    'id': 'indonesian',
+    'it': 'italian',
+    'ja': 'cjk',
+    'ko': 'cjk',
+    'lt': 'lithuanian',
+    'lv': 'latvian',
+    'nl': 'dutch',
+    'no': 'norwegian',
+    'pt': 'portuguese',
+    'ro': 'romanian',
+    'ru': 'russian',
+    'sv': 'swedish',
+    'th': 'thai',
+    'tr': 'turkish',
+    'zh': 'cjk'
 }
 
 
