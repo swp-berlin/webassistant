@@ -36,7 +36,7 @@ const PDFNotFound = () => (
 );
 
 const Filterable = ({field, text, value, onFilter, className, ...props}) => {
-    if (!onFilter) return text;
+    if (!onFilter) return text || '';
 
     return (
         <span

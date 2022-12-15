@@ -50,8 +50,7 @@ const PreviewResult = ({status, result, traceback}) => {
                 <>
                     <li key={idx /* eslint-disable-line react/no-array-index-key */}>
                         <PublicationItem
-                            id={idx}
-                            {...getValues(fields, errors)}
+                            publication={{id: idx, ...getValues(fields, errors)}}
                         />
                     </li>
                     {isMultipage && maxPerPage - 1 === idx && <MultiPageMarker />}
