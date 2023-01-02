@@ -3,6 +3,7 @@ import django_filters as filters
 from django.db import models
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
+from django_elasticsearch_dsl.search import Search
 from elasticsearch.exceptions import RequestError
 
 from elasticsearch_dsl import Q, A
@@ -167,7 +168,12 @@ class PublicationViewSet(viewsets.ReadOnlyModelViewSet):
     @action(detail=False, permission_classes=[IsAuthenticated & CanResearch])
     def ris(self, request):
         filterset = ResearchFilter(data=request.GET, queryset=Publication.objects, request=request)
-        queryset = ResearchFilter.get_result_queryset(filterset.qs)
+
+        search: Search = filterset.qs
+        search.params(preserve_order=True)
+        search = search.scan()
+
+        queryset = ResearchFilter.get_result_queryset(search)
 
         return RISResponse(queryset, filename='export.ris')
 
