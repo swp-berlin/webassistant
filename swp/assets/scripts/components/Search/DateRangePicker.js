@@ -25,7 +25,7 @@ const getDateRepresentation = ([startDate, endDate]) => {
 };
 
 const DateRangePicker = ({defaultValue, onChange}) => {
-    const [dates, setDates] = useState([null, null]);
+    const [dates, setDates] = useState(defaultValue);
     const handleChange = dates => {
         setDates(dates);
         onChange(dates);
@@ -42,7 +42,7 @@ const DateRangePicker = ({defaultValue, onChange}) => {
             placement="bottom-start"
             content={(
                 <div className="flex flex-col items-center p-2 bg-white">
-                    <BPDateRangePicker value={dates} defaultValue={defaultValue} onChange={handleChange} />
+                    <BPDateRangePicker value={dates} onChange={handleChange} />
                     <Button minimal onClick={handleClear}>{ClearLabel}</Button>
                 </div>
             )}
