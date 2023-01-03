@@ -38,8 +38,9 @@ const maybeQuote = text => {
 const SearchPage = () => {
     useBreadcrumb('/search/', SearchLabel);
     const [searchParams, setSearchParams] = useSearchParams();
+    const query = searchParams.get('query');
 
-    const [term, setTerm] = useState(searchParams.get('query') || '');
+    const [term, setTerm] = useState(query || '');
     const handleTermChange = useCallback(term => setTerm(term), []);
 
     const [dates, setDates] = useState(
@@ -55,11 +56,11 @@ const SearchPage = () => {
             if (endDate) {
                 next.set('end_date', formatDate(endDate));
             } else next.delete('end_date');
+            next.delete('page');
             return next;
         });
     }, [setSearchParams]);
 
-    const query = searchParams.get('query');
     const tags = searchParams.getAll('tag');
     const startDate = searchParams.get('start_date');
     const endDate = searchParams.get('end_date');
@@ -70,9 +71,11 @@ const SearchPage = () => {
             if (term) {
                 next.set('query', term);
             } else next.delete('query');
+
+            if (term !== query) next.delete('page');
             return next;
         });
-    }, [term, setSearchParams]);
+    }, [setSearchParams, term, query]);
 
     const addFilter = useCallback(filter => {
         const query = searchParams.get('query');
