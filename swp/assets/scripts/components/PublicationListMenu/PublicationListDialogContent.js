@@ -6,13 +6,14 @@ import PublicationListDialogItem from './PublicationListDialogItem';
 
 const LinkTitle = _('Manage publication lists…');
 
-const PublicationListDialogContent = ({publication, publicationLists}) => (
+const PublicationListDialogContent = ({publication, publicationLists, lastUpdatedPublicationList}) => (
     <div className="content p-4">
         <ul className="list-none p-0 m-0">
             {publicationLists.map(publicationList => (
                 <PublicationListDialogItem
                     key={publicationList.id}
                     publicationID={publication.id}
+                    isLastUpdated={publicationList === lastUpdatedPublicationList}
                     {...publicationList}
                 />
             ))}

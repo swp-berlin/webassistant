@@ -2,7 +2,7 @@ from functools import wraps
 
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.db import models, transaction
-from django.db.models.functions import Greatest
+from django.db.models.functions import Greatest, Upper
 from django.utils.text import slugify
 
 from rest_framework.decorators import action
@@ -42,10 +42,12 @@ class PublicationListViewSet(ModelViewSet):
             models.F('last_modified'),
             models.Max('entries__created'),
         ),
+    ).order_by(
+        Upper('name').asc(),
     )
 
     def get_queryset(self):
-        queryset = self.queryset.filter(user=self.request.user).order_by('-last_updated')
+        queryset = self.queryset.filter(user=self.request.user)
 
         if self.action == 'retrieve':
             return queryset.prefetch_related('publications')

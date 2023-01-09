@@ -15,6 +15,9 @@ const SubmitLabel = _('Add');
 const Placeholder = _('Add a new publication list…');
 const ErrorMessage = _('Publication list could not be added.');
 
+const collator = new Intl.Collator('de', {sensitivity: 'accent'});
+const compare = ({name: x}, {name: y}) => collator.compare(x, y);
+
 const PublicationListAddForm = ({endpoint}) => {
     const inputRef = useRef(null);
     const url = buildAPIURL(endpoint);
@@ -22,7 +25,7 @@ const PublicationListAddForm = ({endpoint}) => {
     const {mutate, error} = useMutation(url, Method, {
         onSuccess(data) {
             inputRef.current.value = '';
-            queryClient.setQueryData(endpoint, publicationLists => ([data, ...publicationLists]));
+            queryClient.setQueryData(endpoint, publicationLists => ([data, ...publicationLists].sort(compare)));
         },
         onError(error) {
             if (isBadRequest(error)) return ErrorMessage;

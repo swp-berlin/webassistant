@@ -11,14 +11,19 @@ const Label = ({name, isLoading}) => (
     </>
 );
 
-const PublicationListDialogItem = ({publicationID, id: publicationListID, publication_list: publications, name}) => {
+const PublicationListDialogItem = props => {
+    const {publicationID, id: publicationListID, publication_list: publications, name, isLastUpdated} = props;
     const isIncluded = publications.includes(publicationID);
     const {mutate, isLoading} = useToggleMutation(publicationListID, publicationID, isIncluded);
     const handleChange = useCallback(() => mutate(), [mutate]);
     const label = <Label name={name} isLoading={isLoading} />;
+    const className = classNames('publication-list-menu-item', {
+        'is-included': isIncluded,
+        'is-last-updated': isLastUpdated,
+    });
 
     return (
-        <li className={classNames('publication-list-menu-item', {'is-included': isIncluded})}>
+        <li className={className}>
             <Checkbox
                 className="mb-1"
                 checked={isIncluded}

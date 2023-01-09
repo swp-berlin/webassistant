@@ -31,10 +31,8 @@ const QuickAddButton = ({publication, publicationList}) => {
     );
 };
 
-const QuickAddButtonController = ({publication, publicationLists}) => {
-    if (publicationLists.length === 0) return null;
-
-    const [lastUpdatedPublicationList] = publicationLists;
+const QuickAddButtonController = ({publication, lastUpdatedPublicationList}) => {
+    if (lastUpdatedPublicationList === null) return null;
 
     return <QuickAddButton publication={publication} publicationList={lastUpdatedPublicationList} />;
 };

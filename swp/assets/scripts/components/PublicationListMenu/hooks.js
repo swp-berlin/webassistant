@@ -1,5 +1,6 @@
+import {useMemo} from 'react';
 import {useQueryClient} from 'react-query';
-import findIndex from 'lodash/findIndex';
+import maxBy from 'lodash/maxBy';
 
 import {buildAPIURL} from 'utils/api';
 
@@ -7,17 +8,7 @@ import {useMutation} from 'hooks/react-query';
 
 const Endpoint = 'publication-list';
 
-const onAddSuccess = (queryClient, data) => {
-    queryClient.setQueryData(Endpoint, ([...publicationLists]) => {
-        const index = findIndex(publicationLists, {id: data.id});
-
-        if (index >= 0) publicationLists.splice(index, 1);
-
-        return [data, ...publicationLists];
-    });
-};
-
-const onRemoveSuccess = (queryClient, data) => {
+const updatePublicationLists = (queryClient, data) => {
     queryClient.setQueryData(Endpoint, publicationLists => (
         publicationLists.map(publicationList => (
             publicationList.id === data.id ? data : publicationList
@@ -32,7 +23,14 @@ export const useToggleMutation = (publicationListID, publicationID, isIncluded) 
 
     return useMutation(url, 'POST', {
         onSuccess(data) {
-            (isIncluded ? onRemoveSuccess : onAddSuccess)(queryClient, data);
+            updatePublicationLists(queryClient, data);
         },
     });
 };
+
+const timeStamp = ({last_updated: lastUpdated}) => new Date(lastUpdated);
+
+export const useLastUpdatedPublicationList = publicationLists => useMemo(
+    () => (publicationLists.length ? maxBy(publicationLists, timeStamp) : null),
+    [publicationLists],
+);

@@ -1,10 +1,13 @@
 import {Children, cloneElement} from 'react';
 import {ButtonGroup} from '@blueprintjs/core';
 
+import {useLastUpdatedPublicationList} from './hooks';
+
 const NotButtonGroup = ({children}) => children;
 
 const PublicationListMenu = ({publication, publicationLists, children}) => {
-    const props = {publication, publicationLists};
+    const lastUpdatedPublicationList = useLastUpdatedPublicationList(publicationLists);
+    const props = {publication, publicationLists, lastUpdatedPublicationList};
     const Group = Children.count(children) > 1 ? ButtonGroup : NotButtonGroup;
 
     return (
