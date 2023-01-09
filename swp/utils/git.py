@@ -1,11 +1,9 @@
 import os
 import subprocess
 
-from .settings import env
-
 
 def get_commit(path, revision='HEAD'):
-    if commit := env('GITHUB_SHA'):
+    if commit := os.environ.get('GITHUB_SHA'):
         return commit
 
     path = os.path.abspath(path)
