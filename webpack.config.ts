@@ -128,6 +128,16 @@ const config = {
                 },
             },
             {
+                test: /\.pdf$/,
+                use: {
+                    loader: 'file-loader',
+                    options: {
+                        name: 'documents/[name].[sha256:hash:base62:16].[ext]',
+                        publicPath,
+                    },
+                },
+            },
+            {
                 test: /\.svg$/,
                 exclude: /node_modules/,
                 loader: 'svg-react-loader',

@@ -1,6 +1,6 @@
 import {useCallback, useState} from 'react';
 import {Link, useSearchParams} from 'react-router-dom';
-import {Button, Intent} from '@blueprintjs/core';
+import {AnchorButton, Button, Intent} from '@blueprintjs/core';
 import parseISO from 'date-fns/parseISO';
 import formatISO from 'date-fns/formatISO';
 
@@ -14,6 +14,9 @@ import QueryError from './QueryError';
 import SearchForm from './SearchForm';
 import SearchResult from './SearchResult';
 
+import HelpTextFileURL from './helptext.pdf';
+
+const HelpLabel = _('Help');
 const SearchLabel = _('Search');
 const PublicationListLabel = _('Publication Lists');
 
@@ -23,6 +26,14 @@ const Actions = [
             {PublicationListLabel}
         </Button>
     </Link>,
+    <AnchorButton
+        href={HelpTextFileURL}
+        text="?"
+        intent={Intent.NONE}
+        target="blank"
+        title={HelpLabel}
+        download
+    />,
 ];
 
 const formatDate = date => date && formatISO(date, {representation: 'date'});
