@@ -20,6 +20,10 @@ const HelpLabel = _('Help');
 const SearchLabel = _('Search');
 const PublicationListLabel = _('Publication Lists');
 
+const QueryComponents = {
+    400: QueryError,
+};
+
 const Actions = [
     <Link key={1} to="publication-list/">
         <Button intent={Intent.PRIMARY}>
@@ -44,7 +48,6 @@ const maybeQuote = text => {
     const hasWhiteSpace = WhitespaceRegEx.test(text);
     return hasWhiteSpace ? `"${text}"` : text;
 };
-
 
 const SearchPage = () => {
     useBreadcrumb('/search/', SearchLabel);
@@ -123,12 +126,7 @@ const SearchPage = () => {
             />
 
             {params.query && (
-                <Query
-                    queryKey={['publication', 'research', params]}
-                    components={{
-                        400: QueryError,
-                    }}
-                >
+                <Query queryKey={['publication', 'research', params]} components={QueryComponents}>
                     <SearchResult
                         onSelectTag={handleSelectTag}
                         downloadURL={`/api/publication/ris/?${searchParams.toString()}`}
