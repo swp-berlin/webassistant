@@ -1,10 +1,16 @@
 import Query from 'components/Query';
 
+import {useLastUpdatedPublicationList} from './hooks';
+
 import PublicationListMenu from './PublicationListMenu';
 import PublicationListDialog from './PublicationListDialog';
 import QuickAddButton from './QuickAddButton';
 
-export {PublicationListDialog, QuickAddButton};
+export {
+    useLastUpdatedPublicationList,
+    PublicationListDialog,
+    QuickAddButton,
+};
 
 const NoLoadingAnimation = () => null;
 
