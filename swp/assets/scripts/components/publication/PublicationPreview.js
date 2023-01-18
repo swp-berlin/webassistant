@@ -14,13 +14,27 @@ const NoPublications = _('No publications');
 const calculatePageCount = (total, pageSize) => Math.ceil(total / pageSize);
 
 const PublicationPreview = ({
-    thinktankID, monitorID, endpoint, params, since, isActive, page, pageSize, noTitle, className, downloadURL, tags,
-    onSelectTag, ...props
+    thinktankFilterID,
+    thinktankID,
+    monitorID,
+    endpoint,
+    params,
+    since,
+    isActive,
+    page,
+    pageSize,
+    noTitle,
+    className,
+    downloadURL,
+    tags,
+    onSelectTag,
+    ...props
 }) => {
     const location = useLocation();
     const currentPage = page || parsePageParam(location.search) || 1;
 
     const additionalParams = {page: currentPage, page_size: pageSize};
+    if (thinktankFilterID) additionalParams.thinktankfilter = thinktankFilterID;
     if (thinktankID) additionalParams.thinktank_id = thinktankID;
     if (monitorID) additionalParams.monitor = monitorID;
     if (since) additionalParams.since = since;
@@ -53,6 +67,7 @@ const PublicationPreview = ({
 };
 
 PublicationPreview.defaultProps = {
+    thinktankFilterID: null,
     thinktankID: null,
     monitorID: null,
     endpoint: '/publication/',
@@ -65,6 +80,7 @@ PublicationPreview.defaultProps = {
 };
 
 PublicationPreview.propTypes = {
+    thinktankFilterID: PropTypes.number,
     thinktankID: PropTypes.number,
     monitorID: PropTypes.number,
     endpoint: PropTypes.string,

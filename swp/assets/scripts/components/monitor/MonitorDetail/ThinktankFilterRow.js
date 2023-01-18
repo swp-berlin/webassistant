@@ -1,6 +1,6 @@
 import {Link} from 'react-router-dom';
 
-import MonitorPublicationsLink from 'components/monitor/MonitorPublicationsLink';
+import ThinktankFilterPublicationsLink from 'components/thinktankfilter/ThinktankFilterPublicationsLink';
 
 
 const PublicationFilterItem = ({id, field, comparator, values}) => (
@@ -25,14 +25,14 @@ const ThinktankFilterRow = ({monitorID, id, name, filters, publicationCount, new
         <td><Link to={`/monitor/${monitorID}/filter/${id}/edit`}>{name || '—'}</Link></td>
         <td>{filters.length ? <PublicationFilters filters={filters} /> : '—'}</td>
         <td className="text-right">
-            <MonitorPublicationsLink id={monitorID}>
+            <ThinktankFilterPublicationsLink id={id} monitorID={monitorID}>
                 {publicationCount}
-            </MonitorPublicationsLink>
+            </ThinktankFilterPublicationsLink>
         </td>
         <td className="text-right">
-            <MonitorPublicationsLink id={monitorID} onlyNew>
+            <ThinktankFilterPublicationsLink id={id} monitorID={monitorID} onlyNew>
                 {newPublicationCount}
-            </MonitorPublicationsLink>
+            </ThinktankFilterPublicationsLink>
         </td>
     </tr>
 );

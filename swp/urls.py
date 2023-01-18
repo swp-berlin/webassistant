@@ -33,7 +33,16 @@ urlpatterns = [
         path('<int:monitor_pk>/filter/', include(([
             path('add/', react, name='add'),
             path('<int:pk>/edit/', react, name='edit'),
+            path('<int:pk>/publications/', react, name='publications'),
+            path('<int:pk>/publications/download/', ThinktankFilterRISDownloadView.as_view(), name='download'),
+            path('<int:pk>/publications/new/', react, name='new-publications'),
+            path(
+                '<int:pk>/publications/new/download/',
+                ThinktankFilterRISDownloadView.as_view(exclude_sent=True),
+                name='download-new',
+            ),
         ], 'filter'))),
+
         path('<int:pk>/publications/', react, name='publications'),
         path('<int:pk>/publications/download/', MonitorRISDownloadView.as_view(), name='download'),
         path('<int:pk>/publications/new/', react, name='new-publications'),

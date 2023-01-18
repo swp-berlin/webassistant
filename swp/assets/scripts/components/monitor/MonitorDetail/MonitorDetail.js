@@ -72,7 +72,7 @@ const MonitorDetail = () => {
                     </p>
 
                     <MonitorInfo
-                        id={id}
+                        id={+id}
                         className="my-4"
                         publicationCount={publicationCount}
                         newPublicationCount={newPublicationCount}
@@ -90,7 +90,7 @@ const MonitorDetail = () => {
                         <TransferToZoteroButton id={id} disabled={!isActive} />
                     </TableActions>
 
-                    <ThinktankFilterTable items={filters} monitorID={id} />
+                    <ThinktankFilterTable items={filters} monitorID={+id} />
                 </Page>
             )}
         </Result>
