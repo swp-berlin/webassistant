@@ -11,7 +11,12 @@ import {
 } from 'components/monitor';
 import {ScraperAdd, ScraperEdit} from 'components/scraper';
 import {ThinktankAdd, ThinktankDetail, ThinktankEdit, ThinktankList, ThinktankPublications} from 'components/thinktank';
-import {ThinktankFilterAdd, ThinktankFilterEdit} from 'components/thinktankfilter';
+import {
+    ThinktankFilterAdd,
+    ThinktankFilterEdit,
+    ThinktankFilterPublications,
+    ThinktankFilterNewPublications,
+} from 'components/thinktankfilter';
 import {PublicationList, PublicationListDetail} from 'components/publication-list';
 import SearchPage from 'components/Search';
 
@@ -25,6 +30,8 @@ const RootURLConfig = () => (
         <Route path="/monitor/add/" element={<MonitorAdd />} />
         <Route path="/monitor/:id/filter/add/" element={<ThinktankFilterAdd />} />
         <Route path="/monitor/:monitorID/filter/:id/edit/" element={<ThinktankFilterEdit />} />
+        <Route path="/monitor/:monitorID/filter/:id/publications/" element={<ThinktankFilterPublications />} />
+        <Route path="/monitor/:monitorID/filter/:id/publications/new/" element={<ThinktankFilterNewPublications />} />
         <Route path="/monitor/:id/publications/" element={<MonitorPublications />} />
         <Route path="/monitor/:id/publications/new/" element={<MonitorNewPublications />} />
 

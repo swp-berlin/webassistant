@@ -15,7 +15,7 @@ import {useMonitorsBreadcrumb} from './MonitorList';
 const PublicationsLabel = _('Publications');
 const NewPublicationsLabel = _('New Publications');
 
-const MonitorPreview = ({id, onlyNew, downloadURL, ...props}) => {
+const MonitorPreview = ({id, thinktankFilterID, onlyNew, downloadURL, ...props}) => {
     const endpoint = `/monitor/${id}/`;
     const location = useLocation();
     const query = useQuery(endpoint);
@@ -36,8 +36,9 @@ const MonitorPreview = ({id, onlyNew, downloadURL, ...props}) => {
 
                     <PublicationPreview
                         monitorID={id}
+                        thinktankFilterID={thinktankFilterID}
                         downloadURL={downloadURL}
-                        since={onlyNew && lastSent}
+                        since={onlyNew ? lastSent : null}
                         isActive
                         {...props}
                     />
@@ -48,12 +49,15 @@ const MonitorPreview = ({id, onlyNew, downloadURL, ...props}) => {
 };
 
 MonitorPreview.defaultProps = {
+    thinktankFilterID: null,
     onlyNew: false,
 };
 
 MonitorPreview.propTypes = {
     id: PropTypes.number.isRequired,
+    thinktankFilterID: PropTypes.number,
     onlyNew: PropTypes.bool,
+    downloadURL: PropTypes.string.isRequired,
 };
 
 export default MonitorPreview;
