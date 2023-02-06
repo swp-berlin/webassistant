@@ -1,8 +1,11 @@
 name: production deployment
 
 on:
-  push:
-    branches: [ "production" ]
+  workflow_run:
+    workflows: [Django CI]
+    branches: [production]
+    types:
+      - completed
 
 jobs:
   deploy:

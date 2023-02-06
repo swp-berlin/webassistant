@@ -1,10 +1,11 @@
 name: staging deployment
 
 on:
-  push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+  workflow_run:
+    workflows: [Django CI]
+    branches: [master]
+    types:
+      - completed
 
 jobs:
   deploy:
