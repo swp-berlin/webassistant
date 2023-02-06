@@ -1,4 +1,5 @@
 import datetime
+
 from typing import Optional
 
 from django.core.mail import EmailMultiAlternatives, get_connection as get_mail_connection
@@ -7,12 +8,19 @@ from django.utils.timezone import localtime
 
 from sentry_sdk import capture_exception
 
-from cosmogo.utils.mail import render_mail
-from cosmogo.utils.url import get_absolute_url
 from swp.celery import app
 from swp.db.expressions import MakeInterval
 from swp.models import Scraper
 from swp.utils.auth import get_error_recipient_email_addresses
+from swp.utils.mail import render_mail
+from swp.utils.url import get_absolute_url
+
+SECOND = 1
+MINUTE = SECOND * 60
+HOUR = MINUTE * 60
+
+HARD_TIME_LIMIT = 6 * HOUR
+SOFT_TIME_LIMIT = HARD_TIME_LIMIT - MINUTE
 
 
 @app.task(name='scraper.schedule')
@@ -41,7 +49,7 @@ def schedule_scrapers(now=None):
     return len(queryset)
 
 
-@app.task(name='scraper.run')
+@app.task(name='scraper.run', time_limit=HARD_TIME_LIMIT, soft_time_limit=SOFT_TIME_LIMIT)
 def run_scraper(scraper, now=None, using=None, force=False, silent=False):
     with transaction.atomic(using=using):
         try:
@@ -106,4 +114,3 @@ def send_scraper_errors(scraper: Scraper, force: bool = False) -> Optional[int]:
     ]
 
     return get_mail_connection().send_messages(messages)
-

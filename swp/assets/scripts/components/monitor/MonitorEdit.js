@@ -1,3 +1,5 @@
+import {useParams} from 'react-router-dom';
+
 import {useBreadcrumb} from 'components/Navigation';
 import Page from 'components/Page';
 
@@ -23,7 +25,8 @@ const getLabel = (id, {loading, result: {data}}) => {
     return data.name;
 };
 
-const MonitorEdit = ({id, ...props}) => {
+const MonitorEdit = props => {
+    const {id} = useParams();
     const endpoint = `/monitor/${id}/`;
     const result = useQuery(endpoint);
 

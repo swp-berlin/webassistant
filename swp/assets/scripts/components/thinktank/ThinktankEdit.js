@@ -1,3 +1,5 @@
+import {useParams} from 'react-router-dom';
+
 import {useBreadcrumb} from 'components/Navigation';
 import Page from 'components/Page';
 
@@ -12,7 +14,8 @@ import {getThinktankLabel} from './helper';
 
 const Title = _('Edit Thinktank');
 
-const ThinktankEdit = ({id, ...props}) => {
+const ThinktankEdit = props => {
+    const {id} = useParams();
     const endpoint = `/thinktank/${id}/`;
     const result = useQuery(endpoint);
 

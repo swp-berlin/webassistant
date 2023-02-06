@@ -9,7 +9,7 @@ import * as webpack from 'webpack';
 const ESLintPlugin = require('eslint-webpack-plugin');
 
 // @ts-ignore
-import * as AssetsMapWriterPlugin from './cosmogo/assets/assets-map-writer-plugin';
+import * as AssetsMapWriterPlugin from './swp/assets/assets-map-writer-plugin';
 
 const extractCss = new MiniCssExtractPlugin({
     filename: 'css/[name].[chunkhash].css',  /* the path is relative to the output path */
@@ -123,6 +123,16 @@ const config = {
                     loader: 'file-loader',
                     options: {
                         name: 'fonts/[name].[sha256:hash:base62:16].[ext]',
+                        publicPath,
+                    },
+                },
+            },
+            {
+                test: /\.pdf$/,
+                use: {
+                    loader: 'file-loader',
+                    options: {
+                        name: 'documents/[name].[sha256:hash:base62:16].[ext]',
                         publicPath,
                     },
                 },

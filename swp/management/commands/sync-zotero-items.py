@@ -7,9 +7,8 @@ from django.core.management import BaseCommand
 from django.db import transaction, IntegrityError
 from django.utils import timezone
 
-from cosmogo.utils.requests import TimeOutSession
-
 from swp.models import Monitor, ZoteroTransfer, Publication
+from swp.utils.requests import TimeOutSession
 from swp.utils.zotero import build_zotero_api_url, get_zotero_api_headers, OBJECT_KEY_ALPHABET
 
 

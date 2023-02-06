@@ -1,5 +1,5 @@
 import {useCallback, useEffect, useState} from 'react';
-import {Link} from 'react-router-dom';
+import {Link, useParams} from 'react-router-dom';
 
 import ActivationButton from 'components/buttons/ActivationButton';
 import {Result} from 'components/Fetch';
@@ -43,7 +43,8 @@ const UniqueFields = ({values}) => (
     </span>
 );
 
-const ThinktankDetail = ({id, ...props}) => {
+const ThinktankDetail = props => {
+    const {id} = useParams();
     const endpoint = `/thinktank/${id}/`;
     const result = useQuery(endpoint);
     const [isActive, setActive] = useState(false);

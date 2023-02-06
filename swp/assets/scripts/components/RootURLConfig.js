@@ -1,66 +1,52 @@
-import {Switch} from 'react-router-dom';
+import {Routes, Route} from 'react-router-dom';
 
-import SimpleRoute from 'components/SimpleRoute';
 import Homepage from 'components/Homepage';
-import {MonitorAdd, MonitorDetail, MonitorEdit, MonitorList, MonitorNewPublications, MonitorPublications} from 'components/monitor';
+import {
+    MonitorAdd,
+    MonitorDetail,
+    MonitorEdit,
+    MonitorList,
+    MonitorNewPublications,
+    MonitorPublications,
+} from 'components/monitor';
 import {ScraperAdd, ScraperEdit} from 'components/scraper';
 import {ThinktankAdd, ThinktankDetail, ThinktankEdit, ThinktankList, ThinktankPublications} from 'components/thinktank';
-import {ThinktankFilterAdd, ThinktankFilterEdit} from 'components/thinktankfilter';
-
+import {
+    ThinktankFilterAdd,
+    ThinktankFilterEdit,
+    ThinktankFilterPublications,
+    ThinktankFilterNewPublications,
+} from 'components/thinktankfilter';
+import {PublicationList, PublicationListDetail} from 'components/publication-list';
+import SearchPage from 'components/Search';
 
 const RootURLConfig = () => (
-    <Switch>
-        <SimpleRoute path="/" exact>
-            <Homepage />
-        </SimpleRoute>
+    <Routes>
+        <Route path="/" element={<Homepage />} />
 
-        <SimpleRoute path="/monitor/" exact>
-            <MonitorList />
-        </SimpleRoute>
-        <SimpleRoute path="/monitor/add/" exact>
-            <MonitorAdd />
-        </SimpleRoute>
-        <SimpleRoute path="/monitor/:id/" exact>
-            {({params}) => <MonitorDetail id={params.id} />}
-        </SimpleRoute>
-        <SimpleRoute path="/monitor/:id/edit" exact>
-            {({params}) => <MonitorEdit id={params.id} />}
-        </SimpleRoute>
-        <SimpleRoute path="/monitor/:id/filter/add/" exact>
-            {({params}) => <ThinktankFilterAdd monitorID={params.id} />}
-        </SimpleRoute>
-        <SimpleRoute path="/monitor/:monitorID/filter/:id/edit/" exact>
-            {({params}) => <ThinktankFilterEdit monitorID={params.monitorID} id={params.id} />}
-        </SimpleRoute>
-        <SimpleRoute path="/monitor/:id/publications/" exact>
-            {({params}) => <MonitorPublications id={params.id} />}
-        </SimpleRoute>
-        <SimpleRoute path="/monitor/:id/publications/new/" exact>
-            {({params}) => <MonitorNewPublications id={params.id} />}
-        </SimpleRoute>
+        <Route path="/monitor/" element={<MonitorList />} />
+        <Route path="/monitor/:id/" element={<MonitorDetail />} />
+        <Route path="/monitor/:id/edit/" element={<MonitorEdit />} />
+        <Route path="/monitor/add/" element={<MonitorAdd />} />
+        <Route path="/monitor/:id/filter/add/" element={<ThinktankFilterAdd />} />
+        <Route path="/monitor/:monitorID/filter/:id/edit/" element={<ThinktankFilterEdit />} />
+        <Route path="/monitor/:monitorID/filter/:id/publications/" element={<ThinktankFilterPublications />} />
+        <Route path="/monitor/:monitorID/filter/:id/publications/new/" element={<ThinktankFilterNewPublications />} />
+        <Route path="/monitor/:id/publications/" element={<MonitorPublications />} />
+        <Route path="/monitor/:id/publications/new/" element={<MonitorNewPublications />} />
 
-        <SimpleRoute path="/thinktank/" exact>
-            <ThinktankList />
-        </SimpleRoute>
-        <SimpleRoute path="/thinktank/add/" exact>
-            <ThinktankAdd />
-        </SimpleRoute>
-        <SimpleRoute path="/thinktank/:id/" exact>
-            {({params}) => <ThinktankDetail id={params.id} />}
-        </SimpleRoute>
-        <SimpleRoute path="/thinktank/:id/edit/" exact>
-            {({params}) => <ThinktankEdit id={params.id} />}
-        </SimpleRoute>
-        <SimpleRoute path="/thinktank/:id/publications/" exact>
-            {({params}) => <ThinktankPublications id={params.id} />}
-        </SimpleRoute>
-        <SimpleRoute path="/thinktank/:thinktankID/scraper/add" exact>
-            {({params}) => <ScraperAdd thinktankID={params.thinktankID} />}
-        </SimpleRoute>
-        <SimpleRoute path="/thinktank/:thinktankID/scraper/:id/" exact>
-            {({params}) => <ScraperEdit id={params.id} thinktankID={params.thinktankID} />}
-        </SimpleRoute>
-    </Switch>
+        <Route path="/thinktank/" element={<ThinktankList />} />
+        <Route path="/thinktank/add/" element={<ThinktankAdd />} />
+        <Route path="/thinktank/:id/" element={<ThinktankDetail />} />
+        <Route path="/thinktank/:id/edit/" element={<ThinktankEdit />} />
+        <Route path="/thinktank/:id/publications/" element={<ThinktankPublications />} />
+        <Route path="/thinktank/:thinktankID/scraper/add/" element={<ScraperAdd />} />
+        <Route path="/thinktank/:thinktankID/scraper/:id/" element={<ScraperEdit />} />
+
+        <Route path="/search/" element={<SearchPage />} />
+        <Route path="/search/publication-list/" element={<PublicationList />} />
+        <Route path="/search/publication-list/:id/" element={<PublicationListDetail />} />
+    </Routes>
 );
 
 export default RootURLConfig;

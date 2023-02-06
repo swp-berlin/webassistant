@@ -5,13 +5,15 @@ import {useBreadcrumb} from 'components/Navigation';
 import Page from 'components/Page';
 import ScraperForm from 'components/scraper/ScraperForm';
 import {getThinktankLabel} from 'components/thinktank/helper';
+import {useParams} from 'react-router-dom';
 
 
 const Title = _('Add Scraper');
 const Thinktanks = _('Thinktanks');
 const NewScraperLabel = _('New Scraper');
 
-const ScraperAdd = ({thinktankID}) => {
+const ScraperAdd = () => {
+    const {thinktankID} = useParams();
     const endpoint = `/thinktank/${thinktankID}/`;
     const result = useQuery(endpoint);
     const thinktankLabel = getThinktankLabel(thinktankID, result);

@@ -1,0 +1,48 @@
+name: production deployment
+
+on:
+  workflow_run:
+    workflows: [Django CI]
+    branches: [production]
+    types:
+      - completed
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: deploy to production
+      uses: appleboy/ssh-action@master
+      with:
+        proxy_host: ${{ secrets.PROXY_HOST }}
+        proxy_port: 6589
+        proxy_username: ci
+        proxy_key: ${{ secrets.DEPLOYMENT_KEY }}
+        host: 10.1.0.3
+        username: ci
+        key: ${{ secrets.DEPLOYMENT_KEY }}
+        port: 6589
+        script: |
+          sudo systemctl stop swp@production.service
+          sudo systemctl stop celery@production.service
+          sudo systemctl stop scraper@production.service
+          cd /var/www/production
+          git fetch --all --quiet
+          git checkout --force production
+          git reset --hard origin/production
+          git submodule update --init --recursive
+          export PLAYWRIGHT_BROWSERS_PATH=/var/www/production/browsers
+          export DJANGO_SETTINGS_MODULE=swp.settings.production
+          npx npm install
+          find . -name '*.pyc' -delete
+          env/bin/pip install -r requirements.txt -U --no-input
+          env/bin/python -m playwright install chromium
+          env/bin/python manage.py migrate
+          env/bin/python manage.py compile-translations
+          env/bin/python manage.py generate-schemes
+          npm run build
+          env/bin/python manage.py collectstatic --no-input
+          sudo systemctl start swp@production.service
+          sudo systemctl start celery@production.service
+          sudo systemctl start scraper@production.service
+          sudo systemctl restart nginx.service

@@ -5,7 +5,7 @@ from django import test
 from django.urls import reverse
 from django.utils import timezone
 
-from cosmogo.utils.testing import login, request
+from swp.utils.testing import login, request
 
 from swp.models import Publication, Scraper, Thinktank, User
 from swp.models.choices import ErrorLevel

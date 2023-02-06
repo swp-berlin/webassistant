@@ -1,17 +1,20 @@
+import {useParams} from 'react-router-dom';
+
 import Page from 'components/Page';
 import {useBreadcrumb} from 'components/Navigation';
-import {PublicationPreview} from 'components/publication';
 
+import {PublicationPreview} from 'components/publication';
 import {Result} from 'components/Fetch';
 import {useQuery} from 'hooks/query';
-import _ from 'utils/i18n';
 
+import _ from 'utils/i18n';
 import {getThinktankLabel} from './helper';
 
 const ThinktanksLabel = _('Thinktanks');
 const PublicationsLabel = _('Publications');
 
-const ThinktankPublications = ({id, ...props}) => {
+const ThinktankPublications = props => {
+    const {id} = useParams();
     const endpoint = `/thinktank/${id}/`;
     const result = useQuery(endpoint);
     const label = getThinktankLabel(id, result);

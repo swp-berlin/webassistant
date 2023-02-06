@@ -35,6 +35,12 @@ msgstr[1] ""
 msgid "Send publications for selected monitors to zotero"
 msgstr ""
 
+msgid "# Entries"
+msgstr ""
+
+msgid "Last Updated"
+msgstr ""
+
 msgid "Personal info"
 msgstr ""
 
@@ -47,10 +53,10 @@ msgstr ""
 msgid "Important dates"
 msgstr ""
 
-msgid "update publication count"
+msgid "Internal Error"
 msgstr ""
 
-msgid "Internal Error"
+msgid "A publication list with this name already exists."
 msgstr ""
 
 #, python-format
@@ -67,6 +73,21 @@ msgid "Monitor"
 msgstr ""
 
 msgid "Think Tank Filter"
+msgstr ""
+
+msgid "Start Date"
+msgstr ""
+
+msgid "End Date"
+msgstr ""
+
+msgid "Query"
+msgstr ""
+
+msgid "Tag"
+msgstr ""
+
+msgid "The query provided is invalid. Please check your input."
 msgstr ""
 
 msgid "title"
@@ -202,12 +223,6 @@ msgstr ""
 msgid "last sent"
 msgstr ""
 
-msgid "publication count"
-msgstr ""
-
-msgid "new publication count"
-msgstr ""
-
 msgid "monitor"
 msgstr ""
 
@@ -247,6 +262,15 @@ msgstr ""
 msgid "publications"
 msgstr ""
 
+msgid "publication count"
+msgstr ""
+
+msgid "new publication count"
+msgstr ""
+
+msgid "last publication count update"
+msgstr ""
+
 msgid "think tank filter"
 msgstr ""
 
@@ -263,6 +287,24 @@ msgid "publication filter"
 msgstr ""
 
 msgid "publication filters"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "Publications"
+msgstr ""
+
+msgid "publication list"
+msgstr ""
+
+msgid "publication lists"
+msgstr ""
+
+msgid "publication list entry"
+msgstr ""
+
+msgid "publication list entries"
 msgstr ""
 
 msgid "type"
@@ -549,4 +591,12 @@ msgstr ""
 
 #, python-format
 msgid "Failed to open %(href)s: %(error)s"
+msgstr ""
+
+#, python-format
+msgid "%(first)s and %(second)s"
+msgstr ""
+
+#, python-format
+msgid "%(first)s or %(second)s"
 msgstr ""

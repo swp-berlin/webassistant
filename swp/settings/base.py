@@ -3,8 +3,8 @@ from dotenv import load_dotenv
 
 from pathlib import Path
 
-from cosmogo.utils.gettext import trans
-from cosmogo.utils.settings import env, get_git_commit, password_validators, truthy, redis
+from swp.utils.settings import env, get_git_commit, password_validators, redis, elasticsearch
+from swp.utils.translation import trans
 
 from django.urls import reverse_lazy
 
@@ -18,9 +18,9 @@ RELEASE = get_git_commit(BASE_DIR)
 
 SECRET_KEY = env('SECRET_KEY')
 
-DEBUG = env('DEBUG', False, parser=truthy)
+DEBUG = env('DEBUG', False)
 
-SITE_ID = env('SITE_ID', 1, parser=int)
+SITE_ID = env('SITE_ID', 1)
 
 BASE_URL = 'http://localhost:8000'
 
@@ -41,9 +41,9 @@ INSTALLED_APPS = [
     'swp',
 
     # Extensions
-    'cosmogo',
-    'rest_framework',
+    'django_elasticsearch_dsl',
     'django_filters',
+    'rest_framework',
 
     # Admin
     'swp.apps.AdminConfig',
@@ -65,7 +65,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'cosmogo.middleware.now',
+    'swp.middleware.now',
 ]
 
 ROOT_URLCONF = 'swp.urls'
@@ -119,7 +119,7 @@ TIME_ZONE = 'Europe/Berlin'
 
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'static'
-STATICFILES_STORAGE = 'cosmogo.storage.webpack.WebPackStorage'
+STATICFILES_STORAGE = 'swp.storage.webpack.WebPackStorage'
 
 MEDIA_ROOT = BASE_DIR / 'media'
 
@@ -159,10 +159,22 @@ LOGGING = {
 
 CELERY_BROKER_URL = CELERY_RESULT_BACKEND = redis(db=SITE_ID)
 
+CELERY_SCRAPER_MONITORING_FILEPATH = BASE_DIR / 'celery-scraper.check'
+
 CELERY_BEAT_SCHEDULE = {
-    'monitoring': {
+    'monitoring.default': {
         'task': 'monitoring',
         'schedule': crontab(minute='*'),
+    },
+    'monitoring.scraper': {
+        'task': 'monitoring',
+        'schedule': crontab(minute='*/15'),
+        'options': {
+            'queue': 'scraper',
+        },
+        'kwargs': {
+            'filepath': f'{CELERY_SCRAPER_MONITORING_FILEPATH}',
+        },
     },
     'monitor.schedule': {
         'task': 'monitor.schedule',
@@ -186,10 +198,14 @@ CELERY_TASK_ROUTES = {
     },
 }
 
-DEBUG_TOOLBAR = False
-PLAYWRIGHT_DEBUG = env('PLAYWRIGHT_DEBUG', default=False, parser=truthy)
+ELASTICSEARCH_DSL = {
+    'default': elasticsearch(debug=DEBUG),
+}
 
-SHELL_PLUS_PRINT_SQL = env('SHELL_PLUS_PRINT_SQL', default=False, parser=truthy)
+DEBUG_TOOLBAR = False
+PLAYWRIGHT_DEBUG = env('PLAYWRIGHT_DEBUG', False)
+
+SHELL_PLUS_PRINT_SQL = env('SHELL_PLUS_PRINT_SQL', False)
 SHELL_PLUS_POST_IMPORTS = [
     ('swp.forms', '*'),
     ('swp.models.choices', '*'),
@@ -204,6 +220,9 @@ SHELL_PLUS_POST_IMPORTS = [
 # <editor-fold desc="REST API">
 
 REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'swp.api.authentication.SessionAuthentication',
+    ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
     ],
@@ -227,4 +246,3 @@ ZOTERO_API_MAX_ITEMS = 50
 ZOTERO_API_TIMEOUT = 30
 
 # </editor-fold>
-

@@ -4,7 +4,7 @@ from django import template
 from django.conf import settings
 from django.utils.safestring import mark_safe
 
-from cosmogo.encoder import AdvancedJSONEncoder
+from swp.utils.encoder import AdvancedJSONEncoder
 
 register = template.Library()
 

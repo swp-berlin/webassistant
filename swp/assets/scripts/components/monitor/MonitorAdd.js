@@ -10,7 +10,7 @@ const Title = _('New Monitor');
 const SubmitLabel = _('Create');
 const SuccessMessage = _('Successfully created monitor');
 
-const MonitorAdd = ({...props}) => {
+const MonitorAdd = props => {
     useMonitorsBreadcrumb();
     useBreadcrumb('/monitor/add/', Title);
 

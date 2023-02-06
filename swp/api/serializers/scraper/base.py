@@ -4,10 +4,9 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.fields import CharField, ChoiceField, IntegerField
 from rest_framework.serializers import ModelSerializer, Serializer
 
-from cosmogo.utils.text import enumeration
-
 from swp.models import Scraper
 from swp.models.choices import PaginatorType, ResolverType
+from swp.utils.text import enumeration
 
 from ..fields import ThinktankField, CSSSelectorField
 from ..scrapererror import ScraperErrorSerializer

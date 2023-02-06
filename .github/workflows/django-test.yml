@@ -1,0 +1,95 @@
+name: Django CI
+
+on:
+  push:
+    branches: [ "master", "production" ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 4
+      matrix:
+        python-version: [3.8]
+    services:
+      postgres:
+        image: postgres:11
+        env:
+          POSTGRES_DB: swp
+          POSTGRES_USER: swp
+          POSTGRES_PASSWORD: swp
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+    env:
+      DJANGO_SETTINGS_MODULE: swp.settings.test
+      ENVIRONMENT: test
+      SECRET_KEY: this-is-not-a-secret-key
+      DATABASE_HOST: localhost
+      ELASTICSEARCH_HOSTNAME: localhost
+      ELASTICSEARCH_PORT: 9200
+      ELASTICSEARCH_PASSWORD: elastic
+      ELASTICSEARCH_VERIFY_CERTS: f
+    steps:
+    - name: Configure sysctl limits
+      run: |
+        sudo swapoff -a
+        sudo sysctl -w vm.swappiness=1
+        sudo sysctl -w fs.file-max=262144
+        sudo sysctl -w vm.max_map_count=262144
+    - name: Runs Elasticsearch
+      uses: elastic/elastic-github-actions/elasticsearch@master
+      with:
+        stack-version: 8.4.3
+      env:
+        elasticsearch_password: elastic
+    - uses: actions/checkout@v3
+    - uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+        cache: 'pip'
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v3
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install Dependencies
+      run: |
+        apt-get upddate && apt-get -y install gettext
+        python -m pip install --upgrade pip coverage
+        pip install -r requirements.txt
+    - name: Create Index
+      run: |
+        python manage.py search_index --create
+    - name: Run Tests
+      run: |
+         python manage.py generate-schemes
+         coverage run manage.py test --noinput
+         coverage report
+    - uses: actions/upload-artifact@master
+      with:
+        name: swp-schemes
+        path: swp/assets/schemes
+  lint:
+    needs: test
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [10.x, 12.x, 14.x]
+    steps:
+    - uses: actions/checkout@v3
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - run: npm install
+    - uses: actions/download-artifact@master
+      with:
+        name: swp-schemes
+        path: swp/assets/schemes
+    - run: npm run eslint
+    - run: npm run stylelint

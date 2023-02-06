@@ -23,6 +23,7 @@ from .fields import ZoteroKeyField, ZOTERO_URI_PATTERN
 from .abstract import ActivatableModel, ActivatableQuerySet
 from .choices import Interval
 from .publicationcount import PublicationCount
+from .thinktankfilter import ThinktankFilter
 
 
 class MonitorQuerySet(ActivatableQuerySet):
@@ -105,8 +106,10 @@ class Monitor(PublicationCount, ActivatableModel):
     def recipient_count(self):
         return len(self.recipients)
 
-    def get_publications(self, exclude_sent=False):
-        qs = Publication.objects.active().filter(self.as_query)
+    def get_publications(self, *, exclude_sent: bool = False, filter_by: ThinktankFilter = None):
+        qs = Publication.objects.active().filter(
+            filter_by.as_query if filter_by else self.as_query
+        )
 
         if exclude_sent and self.last_sent:
             qs = qs.filter(last_access__gte=self.last_sent)

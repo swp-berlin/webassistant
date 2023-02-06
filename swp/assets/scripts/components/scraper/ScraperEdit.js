@@ -1,3 +1,5 @@
+import {useParams} from 'react-router-dom';
+
 import parseISO from 'date-fns/parseISO';
 import format from 'date-fns/format';
 import {de} from 'date-fns/locale';
@@ -25,7 +27,8 @@ const LastRun = ({lastRun}) => (
 );
 
 
-const ScraperEdit = ({id, thinktankID}) => {
+const ScraperEdit = () => {
+    const {id, thinktankID} = useParams();
     const endpoint = `/scraper/${id}/`;
     const query = useQuery(endpoint);
     const {loading, success, result: {data: scraper}} = query;

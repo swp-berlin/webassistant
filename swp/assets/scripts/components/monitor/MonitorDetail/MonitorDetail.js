@@ -1,5 +1,5 @@
 import {useCallback} from 'react';
-import {Link} from 'react-router-dom';
+import {Link, useParams} from 'react-router-dom';
 
 import _ from 'utils/i18n';
 
@@ -33,7 +33,8 @@ const AddThinktankFilterButton = ({id}) => (
     </Link>
 );
 
-const MonitorDetail = ({id}) => {
+const MonitorDetail = () => {
+    const {id} = useParams();
     const endpoint = `/monitor/${id}/`;
     const result = useQuery(endpoint);
     const refetchMonitor = result.fetch;
@@ -71,7 +72,7 @@ const MonitorDetail = ({id}) => {
                     </p>
 
                     <MonitorInfo
-                        id={id}
+                        id={+id}
                         className="my-4"
                         publicationCount={publicationCount}
                         newPublicationCount={newPublicationCount}
@@ -89,7 +90,7 @@ const MonitorDetail = ({id}) => {
                         <TransferToZoteroButton id={id} disabled={!isActive} />
                     </TableActions>
 
-                    <ThinktankFilterTable items={filters} monitorID={id} />
+                    <ThinktankFilterTable items={filters} monitorID={+id} />
                 </Page>
             )}
         </Result>

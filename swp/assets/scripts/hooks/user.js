@@ -1,4 +1,5 @@
 class User {
+
     constructor(
         id,
         email,
@@ -45,6 +46,7 @@ class User {
     canViewAdmin() {
         return this.isActive && this.isStaff;
     }
+
 }
 
 const UserData = (() => {

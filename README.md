@@ -1,158 +1,86 @@
-# SWP Webmonitor Backend
+# SWP Webmonitor
 
-The main documentation on concepts and general usage can be found in the wiki
-at https://swp.wiki.cosmocode.de/
+The webmonitor allows monitoring websites (_thinktanks_) for the publication of new articles using configurable _scrapers_. Scrapers are executed using a headless Chrome browser. Found publications are saved in a PostgreSQL database and added to an ElasticSearch Index. _Monitors_ allow to define _filters_ that aggregate publications and automatically send Citavi .ris files to configured receivers by email.  
 
-
-## Setup
-
-Below is a short description on how to set up the project to run it locally.
+Please note that most of the application is in German only currently.
 
 
-### Requirements
+## Development setup
 
-* Python 3.8
-  - with virtualenv
+This repository comes with a Docker Compose setup that should help to set up the requirements to run the project locally. The following containers will be started
 
-* nodejs 14.15 (LTS)
-  * with npm 6
+  * `swp` The main Django/React application, including Playwright and a headless Chrome browser. Restarts when code is changed.
+  * `db` The PostgreSQL database, exposed to port `5432` in case you want to access it directly
+  * `redis` The Redis message broker
+  * `elasticsearch` A single node ElasticSearch instance
+  * `celery` The Celery task queue
+  * `bootstrap` Runs one-off tasks like updating translations, running database migrations etc.
+  * `frontend` Runs nmp and webpack in watch mode to automatically rebuild the frontend when code is changed.
 
-* Postgres
-
-
-### Code Setup
-
-``` console
-git clone git@gitlab.cosmocode.de:swp/swp.git
-```
-
-After cloning the repository, make sure to install the submodules as well.
-
-``` console
-git submodule update --init
-```
-
-The application should be setup within a Python virtual environment. Be sure to
-use Python 3! Activate the environment and set up the dependencies.
-
-``` console
-python3 -m venv env
-source env/bin activate
-pip install -r requirements.txt
-```
-
-Frontend code needs dependencies as well. Those are installed with npm:
-
-``` console
-npx npm install
-```
-
-Frontend assets are compiled with webpack. Use the watch task for development:
-
-``` console
-npm run watch
-```
-
-### Database Setup
-
-Create a Postgres database. By default the database is named `swp`
-
-``` console
-su - postgres  # not needed on macOS when postgres is installed with brew
-createuser -s -P swp
-Enter password for new role: swp
-Enter it again: swp
-createdb -O swp swp
-```
-
-Initialize the database:
-
-``` console
-DJANGO_SETTINGS_MODULE=swp.settings.dev python manage.py migrate
-```
-
-To generate a superuser account use:
-
-``` console
-DJANGO_SETTINGS_MODULE=swp.settings.dev python manage.py createsuperuser
-```
+Please note that the Docker Compose setup is not recommended to be used for a live deployment, yet!
 
 
-### Application Dependencies
+### Getting started
 
-Before the first start of the development server you have to run:
+Build the docker image (this needs to be redone whenever major dependencies change)
 
-``` console
-DJANGO_SETTINGS_MODULE=swp.settings.dev python manage.py generate-schemes
-```
+    docker-compose build --no-cache
 
-As well as the following to generate all translation files:
+With the image built, Docker Compose can be used to start the services. 
 
-``` console
-DJANGO_SETTINGS_MODULE=swp.settings.dev python manage.py compile-translations
-```
+    docker-compose up
 
-#### Fixtures
+Once the containers are running, you should create a superuser:
 
-You will probably want to install these predefined entities:
+    docker-compose exec swp python manage.py createsuperuser
 
-``` console
-python manage.py loaddata groups sites
-```
+Finally you can log in at http://localhost:8000
 
-Afterwards, you may load generic test accounts for development purposes:
+### Management commands
 
-| User | Password | Group | is_staff | is_superuser |
-| ---- | -------- | ----- | -------- | ------------ |
-| admin@localhost | admin | - | + | + |
-| swp-manager@localhost | swp-manager | swp-manager | + | - |
-| swp-editor@localhost | swp-editor | swp-editor | + | - |
+The Docker Compose setup will generally automatically do any required actions when the code is changed or the application is used. However sometimes it may be necessary to manually trigger certain actions. This can be done by running the `manage.py` script in the `swp` container.
 
-``` console
-python manage.py loaddata test-users
-```
+Rebuild the Elastic Search Index:
 
-> **NOTE** These are totally optional and included mainly for automated tests.
+    docker-compose exec swp python manage.py search_index --rebuild
 
+Run a specific scraper (identified by its ID):
 
-### Development Server
+    docker-compose exec swp python manage.py scrape <id>
 
-You can run a local development server to test things like this:
+More commands are listed when running manage.py without arguments:
 
-``` console
-DJANGO_SETTINGS_MODULE=swp.settings.dev python manage.py runserver
-```
-
-In order for scrapers to be run in development you have to start celery as well.
-Celery needs a running redis server, make sure to start it first.
-
-``` console
-DJANGO_SETTINGS_MODULE=swp.settings.dev celery -A swp worker -B -Q celery,scraper -l INFO --purge
-```
-
-
-### Production Server
-
-Please copy .env.default, adjust the configuration parameters and install apt requirements.
-
-``` console
-cp conf/.env.example .env
-while read apt ; do apt install "$apt" ; done < apt-requirements.txt
-```
+    docker-compose exec swp python manage.py
 
 
 ## IDE Configuration
 
 ### IntelliJ IDEA
 
-To have proper coding assistance regarding to import paths set the WebPack Config
-in Preferences > Languages & Frameworks > JavaScript > WebPack.
+To set up the project in IntelliJ IDEA 
+- select `File > New > Project from existing Sources...`. 
+- In the Dialog that pops up select the folder you have cloned the repository into. 
+- When prompted to select the Project SDK use the `+` sign in the top left corner to select `New Python SDK...`. 
+- Select `Docker Compose` in the left menu and select `swp` as the Service on the right side.
 
-To properly use our lint rules defined in .eslintrc.js for JavaScript and .stylelintrc.js
+Add a run configuration go to `Run > Edit Configurations...`. Click the `+` in the top left corner of the dialog
+and select `Django`. Use `0.0.0.0` as the Host. Select `Use SDK of module`. Edit the environment
+variables and set `DJANGO_SETTINGS_MODULE` to `swp.settings.dev`. You should now be able to start
+the django development server by running the configuration. Code completion will only work if the
+docker container has been started at least once.
+
+To enable running django management commands right-click on the project root and click `Open Module Settings`.
+Select the `mangage.py` located in the project root. Select `swp/settings/dev.py` as the settings file. You should now 
+be able to run management commands via `Tools > Run manage.py Task`.
+
+To have proper coding assistance regarding to import paths set the WebPack Config
+in `Preferences > Languages & Frameworks > JavaScript > WebPack`.
+
+To properly use our lint rules defined in `.eslintrc.js` for JavaScript and `.stylelintrc.js`
 you have to activate these tools in the preferences.
 
-To activate ESLint set the lint configuration in Preferences > Languages & Frameworks >
-JavaScript > Code Quality Tools > ESLint to automatic.
+ - To activate ESLint set the lint configuration in `Preferences > Languages & Frameworks >
+JavaScript > Code Quality Tools > ESLint to automatic`.
 
-To activate Stylelint go to Preferences > Languages & Frameworks > Style Sheets > Stylelint
+ - To activate Stylelint go to `Preferences > Languages & Frameworks > Style Sheets > Stylelint`
 and set it enabled.

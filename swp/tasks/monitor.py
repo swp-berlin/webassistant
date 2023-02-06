@@ -9,12 +9,12 @@ from django.utils import timezone
 from django.utils.dateparse import parse_datetime
 
 from sentry_sdk import capture_message, push_scope
-from cosmogo.utils.mail import render_mail
-from cosmogo.utils.requests import TimeOutSession
+from swp.utils.mail import render_mail
 
 from swp.celery import app
 from swp.models import Monitor, Publication
 from swp.models.zotero import ZoteroTransfer
+from swp.utils.requests import TimeOutSession
 from swp.utils.ris import generate_ris_attachment
 from swp.utils.zotero import (
     build_zotero_api_url,
