@@ -22,6 +22,7 @@ jobs:
         username: ci
         key: ${{ secrets.DEPLOYMENT_KEY }}
         port: 6589
+        debug: true
         script: |
           sudo systemctl stop swp@production.service
           sudo systemctl stop celery@production.service
