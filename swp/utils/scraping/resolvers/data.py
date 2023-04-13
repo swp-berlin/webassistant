@@ -11,10 +11,12 @@ from .base import Resolver, SelectorMixin, get_content
 
 class DataResolver(SelectorMixin, Resolver):
 
-    def __init__(self, *args, key: str, required: bool = False, **kwargs):
+    def __init__(self, *args, key: str, required: bool = False, ignore_empty: bool = False, **kwargs):
         super().__init__(*args, **kwargs)
+
         self.required = required
         self.key = key
+        self.ignore_empty = ignore_empty
 
     async def get_element(self, node: ElementHandle) -> Union[Optional[ElementHandle], List[ElementHandle]]:
         try:
@@ -63,6 +65,9 @@ class DataResolver(SelectorMixin, Resolver):
 
         for elem in elements:
             text = await self.get_single_content(elem)
+            if not text and self.ignore_empty:
+                continue
+
             texts.add(text)
 
         return list(texts)

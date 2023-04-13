@@ -25,6 +25,7 @@ class URLResolver(FieldResolver):
 class AuthorsResolver(FieldResolver):
     key = 'authors'
     multiple = True
+    ignore_empty = True
 
 
 class TagsResolver(FieldResolver):
