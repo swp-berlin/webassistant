@@ -17,3 +17,5 @@ COPY requirements.txt /app
 RUN --mount=type=cache,target=/root/.cache pip install --upgrade pip && pip install -r requirements.txt
 
 RUN playwright install chromium
+
+RUN git config --system --replace-all safe.directory '*'
