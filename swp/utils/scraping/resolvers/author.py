@@ -8,7 +8,7 @@ class AuthorsResolver(Resolver):
 
     def __init__(self, context: ScraperContext, *args, resolver, **kwargs):
         super().__init__(context, **kwargs)
-        config = {**resolver, 'key': 'authors', 'multiple': True}
+        config = {**resolver, 'key': 'authors', 'multiple': True, 'ignore_empty': True}
         self.resolver = create_resolver(context, **config)
 
     async def resolve(self, node: ElementHandle, fields: dict, errors: dict):
