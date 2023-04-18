@@ -103,6 +103,7 @@ class PublicationDocument(FieldMixin, Document):
             'ris_type',
             'authors',
             'publication_date',
+            'publication_dt',
             'last_access',
             'url',
             'pdf_url',
