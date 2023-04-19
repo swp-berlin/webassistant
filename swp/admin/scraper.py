@@ -26,10 +26,11 @@ class ScraperAdmin(ActivatableModelAdmin):
         'checksum',
         'interval',
         'last_run',
+        'is_running',
         'is_active',
         'created',
     ]
-    readonly_fields = ['created', 'last_run']
+    readonly_fields = ['created', 'last_run', 'is_running']
     list_display = [
         'thinktank',
         'type',
@@ -37,11 +38,13 @@ class ScraperAdmin(ActivatableModelAdmin):
         'checksum',
         'last_run',
         'is_active',
+        'is_running',
     ]
     list_filter = [
         'is_active',
         'interval',
         'last_run',
+        'is_running',
     ]
     search_fields = [
         'checksum',
