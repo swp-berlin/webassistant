@@ -2,6 +2,8 @@ import datetime
 
 from typing import Optional
 
+from celery.signals import worker_shutting_down
+
 from django.core.mail import EmailMultiAlternatives, get_connection as get_mail_connection
 from django.db import models, transaction
 from django.utils.timezone import localtime
@@ -75,6 +77,14 @@ def run_scraper(scraper, now=None, using=None, force=False, silent=False):
         scraper.update(last_run=localtime(None), is_running=False, modified=False)
         if not silent:
             send_scraper_errors(scraper=scraper, force=force)
+
+
+@worker_shutting_down.connect
+def stop_scrapers(sender, **kwargs):
+    if count := Scraper.objects.filter(is_running=True).update(is_running=False):
+        print(f'Stopped {count} running scraper(s).')
+    else:
+        print('No scrapers running.')
 
 
 def get_absolute_scraper_url(scraper: Scraper) -> str:
