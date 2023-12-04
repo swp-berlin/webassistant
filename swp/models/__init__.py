@@ -2,6 +2,7 @@ from .lookups import *
 from .abstract import ActivatableModel
 from .choices import ErrorLevel, Interval
 from .monitor import Monitor
+from .pool import Pool
 from .publication import Publication
 from .publicationcount import PublicationCount
 from .publicationfilter import PublicationFilter
@@ -18,6 +19,7 @@ __all__ = [
     'ErrorLevel',
     'Interval',
     'Monitor',
+    'Pool',
     'Publication',
     'PublicationCount',
     'PublicationFilter',

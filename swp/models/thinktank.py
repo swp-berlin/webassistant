@@ -47,6 +47,7 @@ class Thinktank(ActivatableModel):
     Source of publications.
     """
 
+    pool = models.ForeignKey('swp.Pool', models.PROTECT, verbose_name=_('pool'), related_name='thinktanks')
     name = models.CharField(_('name'), max_length=100)
     description = models.TextField(_('description'), blank=True)
     url = models.URLField(_('URL'), help_text=_('Link to homepage'))

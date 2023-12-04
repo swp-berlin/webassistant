@@ -1,6 +1,9 @@
 from django.contrib import admin
+from django.utils.html import format_html
+from django.utils.translation import gettext_lazy as _
 
 from swp.models import Thinktank
+
 from .abstract import ActivatableModelAdmin
 
 
@@ -16,13 +19,23 @@ class ThinktankAdmin(ActivatableModelAdmin):
         'created',
     ]
     readonly_fields = ['created']
+    list_select_related = []
     list_display = [
         'name',
-        'url',
+        'url_display',
+        'pool',
         'created',
         'is_active',
     ]
     list_filter = [
         'is_active',
+        'pool',
         'created',
     ]
+
+    def get_queryset(self, request):
+        return ActivatableModelAdmin.get_queryset(self, request).prefetch_related('pool')
+
+    @admin.display(description=_('URL'), ordering='url')
+    def url_display(self, obj: Thinktank):
+        return format_html('<a href="{url}" target="_blank">{url}</a>', url=obj.url)
