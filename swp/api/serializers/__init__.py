@@ -1,3 +1,5 @@
+from .monitor import MonitorSerializer, MonitorDetailSerializer
+from .pool import PoolSerializer
 from .publication import PublicationSerializer, ResearchSerializer, TagSerializer
 from .publicationlist import PublicationListSerializer, PublicationListDetailSerializer
 from .scraper import ScraperSerializer, ScraperDraftSerializer, ScraperListSerializer
@@ -7,6 +9,9 @@ from .user import UserSerializer
 from .thinktankfilter import ThinktankFilterSerializer
 
 __all__ = [
+    'MonitorSerializer',
+    'MonitorDetailSerializer',
+    'PoolSerializer',
     'PublicationSerializer',
     'PublicationListSerializer',
     'PublicationListDetailSerializer',
@@ -18,6 +23,6 @@ __all__ = [
     'ScraperListSerializer',
     'ThinktankSerializer',
     'ThinktankListSerializer',
-    'UserSerializer',
     'ThinktankFilterSerializer',
+    'UserSerializer',
 ]

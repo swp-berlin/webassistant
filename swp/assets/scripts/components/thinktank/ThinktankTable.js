@@ -1,8 +1,10 @@
 import {HTMLTable, Tooltip} from '@blueprintjs/core';
 
-import {useFetchHandler} from 'hooks/table';
 import _ from 'utils/i18n';
-import {Query} from 'components/Fetch';
+
+import {getQueryComponents} from 'hooks/table';
+
+import Query from 'components/Query';
 
 import EmptyRow from './EmptyRow';
 import ThinktankRow from './ThinktankRow';
@@ -16,6 +18,9 @@ const ErrorsLabel = _('Errors');
 
 const ActiveTotalLabel = _('active / total');
 
+const ColSpan = 5;
+
+const QueryComponents = getQueryComponents(ColSpan);
 
 const ThinktankRows = ({items}) => (
     items.map(thinktank => (
@@ -33,29 +38,31 @@ const ThinktankRows = ({items}) => (
     ))
 );
 
-const ThinktankTable = ({endpoint, ...props}) => {
-    const handler = useFetchHandler(5);
+const THR = ({children}) => <th className="text-right">{children}</th>;
+
+const ThinktankTable = ({endpoint, pool, ...props}) => {
     const params = {ordering: 'name'};
+
+    if (typeof pool === 'number') params.pool = pool;
+
     return (
         <HTMLTable className="thinktank-table w-full table-fixed my-4" bordered {...props}>
             <thead>
                 <tr className="bg-gray-300">
                     <th className="w-1/2">{NameLabel}</th>
-                    <th className="text-right">{PublicationsLabel}</th>
-                    <th className="text-right">
+                    <THR>{PublicationsLabel}</THR>
+                    <THR>
                         <Tooltip content={ActiveTotalLabel}>
                             {ScrapersLabel}
                         </Tooltip>
-                    </th>
-                    <th className="text-right">{ErrorsLabel}</th>
-                    <th className="text-right">{LastRunLabel}</th>
+                    </THR>
+                    <THR>{ErrorsLabel}</THR>
+                    <THR>{LastRunLabel}</THR>
                 </tr>
             </thead>
             <tbody>
-                <Query endpoint={endpoint || 'thinktank'} params={params} {...handler}>
-                    {items => (
-                        items.length ? <ThinktankRows items={items} /> : <EmptyRow colSpan={5} />
-                    )}
+                <Query queryKey={[endpoint, params]} components={QueryComponents}>
+                    {items => items.length ? <ThinktankRows items={items} /> : <EmptyRow colSpan={ColSpan} />}
                 </Query>
             </tbody>
         </HTMLTable>

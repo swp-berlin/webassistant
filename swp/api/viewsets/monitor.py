@@ -5,8 +5,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from swp.api import default_router
-from swp.api.serializers import ThinktankFilterSerializer
-from swp.api.serializers.monitor import MonitorSerializer, MonitorDetailSerializer
+from swp.api.serializers import MonitorSerializer, MonitorDetailSerializer, ThinktankFilterSerializer
 from swp.models import Monitor, ThinktankFilter
 from swp.tasks import send_publications_to_zotero, update_publication_count
 

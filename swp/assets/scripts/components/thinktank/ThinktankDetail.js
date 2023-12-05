@@ -1,6 +1,10 @@
 import {useCallback, useEffect, useState} from 'react';
 import {Link, useParams} from 'react-router-dom';
 
+import _ from 'utils/i18n';
+
+import {useQuery} from 'hooks/query';
+
 import ActivationButton from 'components/buttons/ActivationButton';
 import {Result} from 'components/Fetch';
 import {useBreadcrumb} from 'components/Navigation';
@@ -9,8 +13,6 @@ import ScraperTable from 'components/scraper/ScraperTable';
 import {getPublicationsLabel} from 'components/publication/helper';
 import TableActions from 'components/tables/TableActions';
 
-import {useQuery} from 'hooks/query';
-import _ from 'utils/i18n';
 import {useThinktanksBreadcrumb} from './ThinktankList';
 import {getThinktankLabel} from './helper';
 
