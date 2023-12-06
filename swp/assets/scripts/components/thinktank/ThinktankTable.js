@@ -34,6 +34,7 @@ const ThinktankRows = ({items}) => (
             lastRun={thinktank.last_run}
             errorCount={thinktank.last_error_count}
             isActive={thinktank.is_active}
+            canManage={thinktank.can_manage}
         />
     ))
 );

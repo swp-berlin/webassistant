@@ -15,6 +15,7 @@ from django.utils.translation import gettext_lazy as _
 from .abstract import ActivatableModel, ActivatableQuerySet
 from .choices import UniqueKey
 from .fields import ChoiceField
+from .pool import CanManageQuerySet
 from .scraper import Scraper
 
 
@@ -32,7 +33,8 @@ class ZeroIfSubqueryNull(Coalesce):
             return exp.get_group_by_cols(alias=alias)
 
 
-class ThinktankQuerySet(ActivatableQuerySet):
+class ThinktankQuerySet(ActivatableQuerySet, CanManageQuerySet):
+    pool_ref = models.OuterRef('pool')
 
     def annotate(self, *args, **kwargs) -> ThinktankQuerySet:
         # noinspection PyTypeChecker

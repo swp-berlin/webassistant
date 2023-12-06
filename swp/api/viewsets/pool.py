@@ -9,3 +9,6 @@ from swp.models import Pool
 class PoolViewSet(ReadOnlyModelViewSet):
     serializer_class = PoolSerializer
     queryset = Pool.objects
+
+    def get_queryset(self):
+        return ReadOnlyModelViewSet.get_queryset(self).annotate_can_manage(self.request.user)

@@ -1,19 +1,31 @@
 import {useCallback, useState} from 'react';
 
 import _ from 'utils/i18n';
+import {getJSON, setJSON} from 'utils/localStorage';
 
 import {ChoicesQuery} from 'components/Fetch';
 import {Select} from 'components/forms';
-import {getJSON, setJSON} from 'utils/localStorage';
 
 const AllChoice = {
-    value: null,
-    label: _('All'),
+    id: null,
+    name: _('All'),
+    can_manage: false,
 };
 
-const prepareChoice = ({id, name}) => ({value: id, label: name});
+const prepareChoice = ({id, name, can_manage: canManage}) => ({
+    value: id,
+    label: name,
+    icon: canManage ? 'edit' : 'eye-open',
+});
 
-const prepareChoices = pools => [AllChoice, ...pools.map(prepareChoice)];
+const prepareChoices = pools => {
+    const canManage = pools.every(({can_manage: canManage}) => canManage);
+
+    return [
+        prepareChoice({...AllChoice, can_manage: canManage}),
+        ...pools.map(prepareChoice),
+    ];
+};
 
 const PoolSelect = props => (
     <ChoicesQuery endpoint="pool" prepareChoices={prepareChoices}>
@@ -23,7 +35,7 @@ const PoolSelect = props => (
 
 const LocalStorageKey = 'last-selected-pool';
 
-const getDefaultPool = () => getJSON(LocalStorageKey, AllChoice.value);
+const getDefaultPool = () => getJSON(LocalStorageKey, AllChoice.id);
 
 export const usePoolSelect = () => {
     const [pool, setPool] = useState(getDefaultPool);

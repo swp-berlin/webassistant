@@ -1,12 +1,33 @@
 from django.contrib.postgres.fields import CICharField
+from django.db import models
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
-from .abstract import LastModified
+from .abstract import UpdateQuerySet, LastModified
+from .user import User
+
+
+class CanManageQuerySet(UpdateQuerySet):
+    pool_ref = models.OuterRef('id')
+
+    def annotate_can_manage(self, user: User):
+        if user.has_pools:
+            queryset = user.pools.through.objects.filter(user=user, pool=self.pool_ref)
+            can_manage = models.Exists(queryset)
+        else:
+            can_manage = models.Value(True)
+
+        return self.annotate(can_manage=can_manage)
+
+
+class PoolQuerySet(CanManageQuerySet):
+    pass
 
 
 class Pool(LastModified):
     name = CICharField(_('name'), max_length=50, unique=True)
+
+    objects = PoolQuerySet.as_manager()
 
     class Meta:
         verbose_name = _('pool')

@@ -4,6 +4,7 @@ from rest_framework.fields import BooleanField
 from rest_framework.serializers import ModelSerializer
 
 from swp.models import Thinktank
+
 from .scraper import ScraperListSerializer
 
 
@@ -14,6 +15,7 @@ class ThinktankSerializer(ModelSerializer):
 
     scrapers = ScraperListSerializer(many=True, read_only=True)
 
+    can_manage = BooleanField(read_only=True)
     is_active = BooleanField(label=_('Active'), required=False)
 
     class Meta:
@@ -26,6 +28,7 @@ class ThinktankSerializer(ModelSerializer):
             'active_scraper_count',
             'last_error_count',
             'scrapers',
+            'can_manage',
         ]
         fields = [
             'id',
@@ -43,6 +46,8 @@ class ThinktankListSerializer(ModelSerializer):
     Light serializer for thinktank lists.
     """
 
+    can_manage = BooleanField(read_only=True)
+
     class Meta:
         model = Thinktank
         read_only_fields = [
@@ -53,6 +58,7 @@ class ThinktankListSerializer(ModelSerializer):
             'scraper_count',
             'active_scraper_count',
             'last_error_count',
+            'can_manage',
         ]
         fields = [
             'id',

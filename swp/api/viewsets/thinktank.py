@@ -1,21 +1,30 @@
 from django.db.models import Prefetch
-from rest_framework import viewsets
+
 from rest_framework.decorators import action
+from rest_framework.permissions import SAFE_METHODS, BasePermission, IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.viewsets import ModelViewSet
 
 from swp.api.router import default_router
 from swp.api.serializers import ScraperDraftSerializer, ThinktankSerializer, ThinktankListSerializer
 from swp.models import Scraper, Thinktank
 
 
+class CanManagePool(BasePermission):
+
+    def has_object_permission(self, request, view, obj: Thinktank):
+        return request.method in SAFE_METHODS or request.user.can_manage_pool(obj.pool)
+
+
 @default_router.register('thinktank', basename='thinktank')
-class ThinktankViewSet(viewsets.ModelViewSet):
-    queryset = Thinktank.objects.annotate_last_run().annotate_counts().order_by('name')
+class ThinktankViewSet(ModelViewSet):
+    permission_classes = [IsAuthenticated & CanManagePool]
+    queryset = Thinktank.objects.annotate_last_run().annotate_counts().prefetch_related('pool').order_by('name')
     filterset_fields = ['pool', 'is_active']
     serializer_class = ThinktankSerializer
 
     def get_queryset(self):
-        queryset = super().get_queryset()
+        queryset = ModelViewSet.get_queryset(self).annotate_can_manage(self.request.user)
 
         if self.action == 'retrieve':
             queryset = queryset.prefetch_related(

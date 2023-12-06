@@ -67,38 +67,51 @@ const ThinktankDetail = props => {
         }
     }, [success, thinktank]);
 
-    const actions = [
-        <ActivationButton
-            key="isActive"
-            endpoint={endpoint}
-            isActive={isActive}
-            onToggle={onToggle}
-            disabled={loading}
-        />,
-    ];
-
     return (
         <Result result={result}>
-            {({description, unique_fields: uniqueFields, publication_count: publicationCount, scrapers}) => (
-                <Page title={label} subtitle={<UniqueFields values={uniqueFields} />} actions={actions}>
-                    <Link to={`/thinktank/${id}/publications/`}>
-                        {getPublicationsLabel(publicationCount)}
-                    </Link>
+            {thinktank => {
+                const {
+                    description,
+                    scrapers,
+                    can_manage: canManage,
+                    unique_fields: uniqueFields,
+                    publication_count: publicationCount,
+                } = thinktank;
 
-                    <div className="flex justify-between items-end">
-                        <p className="my-5 w-1/2">
-                            {description}
-                        </p>
+                const subtitle = <UniqueFields values={uniqueFields} />;
 
-                        <TableActions>
-                            <ThinktankEditButton id={id} />
-                            <ScraperAddButton id={id} />
-                        </TableActions>
-                    </div>
+                const actions = canManage && (
+                    <ActivationButton
+                        endpoint={endpoint}
+                        isActive={isActive}
+                        onToggle={onToggle}
+                        disabled={loading}
+                    />
+                );
 
-                    <ScraperTable items={scrapers} {...props} />
-                </Page>
-            )}
+                return (
+                    <Page title={label} subtitle={subtitle} actions={actions}>
+                        <Link to={`/thinktank/${id}/publications/`}>
+                            {getPublicationsLabel(publicationCount)}
+                        </Link>
+
+                        <div className="flex justify-between items-end">
+                            <p className="my-5 w-1/2">
+                                {description}
+                            </p>
+
+                            {canManage && (
+                                <TableActions>
+                                    <ThinktankEditButton id={id} />
+                                    <ScraperAddButton id={id} />
+                                </TableActions>
+                            )}
+                        </div>
+
+                        <ScraperTable {...props} items={scrapers} canManage={canManage} />
+                    </Page>
+                );
+            }}
         </Result>
     );
 };

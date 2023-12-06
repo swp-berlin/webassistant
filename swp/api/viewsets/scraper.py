@@ -1,5 +1,6 @@
 from rest_framework import status
 from rest_framework.decorators import action
+from rest_framework.permissions import BasePermission, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
@@ -9,18 +10,23 @@ from ..serializers import ScraperSerializer, ScraperDraftSerializer
 from ..router import default_router
 
 
+class CanManagePool(BasePermission):
+
+    def has_object_permission(self, request, view, obj: Scraper):
+        return request.user.can_manage_pool(obj.thinktank.pool)
+
+
 @default_router.register('scraper', basename='scraper')
 class ScraperViewSet(ModelViewSet):
-    queryset = Scraper.objects.select_related('thinktank').prefetch_related(
-        'errors',
-    )
+    queryset = Scraper.objects.prefetch_related('thinktank__pool', 'errors')
     serializer_class = ScraperDraftSerializer
+    permission_classes = [IsAuthenticated & CanManagePool]
 
     def get_serializer_class(self):
-        if self.action in ['activate', 'retrieve']:
+        if self.action in {'activate', 'retrieve'}:
             return ScraperSerializer
 
-        return super().get_serializer_class()
+        return self.serializer_class
 
     @action(detail=True, methods=['post'], url_name='activate', url_path='activate')
     def activate(self, request, pk):
