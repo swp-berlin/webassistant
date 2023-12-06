@@ -1,7 +1,7 @@
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework.fields import BooleanField
-from rest_framework.serializers import ModelSerializer, SerializerMethodField
+from rest_framework.serializers import ModelSerializer
 
 from swp.models import Thinktank
 from .scraper import ScraperListSerializer
@@ -12,7 +12,6 @@ class ThinktankSerializer(ModelSerializer):
     Full thinktank serializer.
     """
 
-    last_error_count = SerializerMethodField()
     scrapers = ScraperListSerializer(many=True, read_only=True)
 
     is_active = BooleanField(label=_('Active'), required=False)
@@ -37,19 +36,6 @@ class ThinktankSerializer(ModelSerializer):
             'is_active',
             *read_only_fields,
         ]
-
-    def get_last_scraper(self, obj: Thinktank):
-        scrapers = [scraper for scraper in obj.scrapers.all() if scraper.last_run is not None]
-        latest = None
-        for scraper in scrapers:
-            last_run = getattr(latest, 'last_run', None)
-            if last_run is None or scraper.last_run > last_run:
-                latest = scraper
-
-        return latest
-
-    def get_last_error_count(self, obj: Thinktank) -> int:
-        return getattr(self.get_last_scraper(obj), 'error_count', 0)
 
 
 class ThinktankListSerializer(ModelSerializer):

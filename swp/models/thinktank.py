@@ -1,11 +1,13 @@
 from __future__ import annotations
 
 import datetime
+
 from typing import Optional
 
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.db.models.aggregates import Count, Max
+from django.db.models.functions import Coalesce
 from django.utils import timezone
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
@@ -20,10 +22,30 @@ def get_default_unique_fields():
     return [UniqueKey.URL.value]
 
 
+class ZeroIfSubqueryNull(Coalesce):
+
+    def __init__(self, queryset):
+        Coalesce.__init__(self, models.Subquery(queryset), 0)
+
+    def get_group_by_cols(self, alias=None):
+        for exp in self.source_expressions:
+            return exp.get_group_by_cols(alias=alias)
+
+
 class ThinktankQuerySet(ActivatableQuerySet):
 
+    def annotate(self, *args, **kwargs) -> ThinktankQuerySet:
+        # noinspection PyTypeChecker
+        return super().annotate(*args, **kwargs)
+
     def annotate_counts(self) -> ThinktankQuerySet:
-        return self.annotate_publication_count().annotate_scraper_count().annotate_active_scraper_count()
+        return (
+            self
+            .annotate_publication_count()
+            .annotate_scraper_count()
+            .annotate_active_scraper_count()
+            .annotate_last_error_count()
+        )
 
     def annotate_publication_count(self, to_attr='') -> ThinktankQuerySet:
         return self.annotate(**{to_attr or 'publication_count': Count('publications', distinct=True)})
@@ -40,6 +62,22 @@ class ThinktankQuerySet(ActivatableQuerySet):
 
     def annotate_last_run(self, to_attr='') -> ThinktankQuerySet:
         return self.annotate(**{to_attr or 'last_run': Max('scrapers__last_run')})
+
+    def annotate_last_error_count(self) -> ThinktankQuerySet:
+        return self.annotate(
+            last_error_count=ZeroIfSubqueryNull(
+                Scraper.objects.values(
+                    'thinktank',
+                ).filter(
+                    thinktank=models.OuterRef('id'),
+                    last_run__isnull=False,
+                ).annotate_error_count().values(
+                    'error_count',
+                ).order_by(
+                    '-last_run',
+                )[:1],
+            ),
+        )
 
 
 class Thinktank(ActivatableModel):
