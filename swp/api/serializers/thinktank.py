@@ -1,9 +1,10 @@
+from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework.fields import BooleanField
 from rest_framework.serializers import ModelSerializer
 
-from swp.models import Thinktank
+from swp.models import Thinktank, Pool
 
 from .scraper import ScraperListSerializer
 
@@ -48,6 +49,16 @@ class ThinktankSerializer(BaseThinktankSerializer):
     class Meta(BaseThinktankSerializer.Meta):
         read_only_fields = [*BaseThinktankSerializer.Meta.read_only_fields, 'scrapers']
         fields = [*BaseThinktankSerializer.Meta.fields, 'description', 'scrapers']
+
+    def validate_pool(self, pool: Pool):
+        if self.context.get('request').user.can_manage_pool(pool):
+            return pool
+
+        raise ValidationError(
+            message=_('You cannot add thinktanks to pool %(pool)s.'),
+            params={'pool': pool},
+            code='no-manager',
+        )
 
 
 class ThinktankListSerializer(BaseThinktankSerializer):

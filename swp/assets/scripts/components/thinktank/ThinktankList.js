@@ -5,6 +5,7 @@ import {useBreadcrumb} from 'components/Navigation';
 import Page from 'components/Page';
 
 import _ from 'utils/i18n';
+import {buildURL, withParams} from 'utils/url';
 
 import ThinktankTable from './ThinktankTable';
 import {usePoolSelect} from './PoolSelect';
@@ -16,8 +17,12 @@ export const useThinktanksBreadcrumb = (href = '/thinktank/', text = ThinktanksL
     useBreadcrumb(href, text)
 );
 
-const ThinktankAddButton = ({...props}) => (
-    <Link to="/thinktank/add/">
+const ThinktankAddURL = buildURL('thinktank', 'add');
+
+const getAddURL = pool => typeof pool === 'number' ? withParams(ThinktankAddURL, {pool}) : ThinktankAddURL;
+
+const ThinktankAddButton = ({pool, ...props}) => (
+    <Link to={getAddURL(pool)}>
         <Button intent={Intent.PRIMARY} text={NewLabel} {...props} />
     </Link>
 );
@@ -29,7 +34,7 @@ const ThinktankList = () => {
     const actions = (
         <>
             {poolSelect}
-            <ThinktankAddButton />
+            <ThinktankAddButton pool={pool} />
         </>
     );
 

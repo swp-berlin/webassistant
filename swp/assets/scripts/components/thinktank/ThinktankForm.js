@@ -15,7 +15,7 @@ const UniqueFieldLabel = _('Unique Field');
 
 const UniqueChoices = getChoices('UniqueKey');
 
-const DefaultValues = {
+export const DefaultValues = {
     unique_fields: [UniqueChoices[0].value],
 };
 
