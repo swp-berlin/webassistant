@@ -25,3 +25,21 @@ class PoolAdmin(admin.ModelAdmin):
         params = urlencode({'pool__id__exact': obj.id})
 
         return format_html(DEFAULT_LINK_TEMPLATE, url=f'{url}?{params}', label=obj.thinktank_count)
+
+
+class CanManagePermissionMixin:
+
+    def has_manage_permission(self, perm: str, request, obj=None):
+        if getattr(super(), f'has_{perm}_permission')(request, obj=obj):
+            return obj is None or self.can_manage_pool(request, obj)
+
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return self.has_manage_permission('change', request, obj=obj)
+
+    def has_delete_permission(self, request, obj=None):
+        return self.has_manage_permission('delete', request, obj=obj)
+
+    def can_manage_pool(self, request, obj):
+        raise NotImplementedError

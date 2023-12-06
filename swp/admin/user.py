@@ -13,7 +13,7 @@ class UserAdmin(BaseUserAdmin):
         (_('Personal info'), {'fields': ('first_name', 'last_name')}),
         (_('Notifications'), {'fields': ('is_error_recipient',)}),
         (_('Permissions'), {
-            'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions'),
+            'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions', 'pools'),
         }),
         (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
     )
@@ -23,6 +23,7 @@ class UserAdmin(BaseUserAdmin):
             'fields': ('email', 'password1', 'password2'),
         }),
     )
+    filter_horizontal = [*BaseUserAdmin.filter_horizontal, 'pools']
     list_display = [
         'email',
         'first_name',
@@ -43,4 +44,3 @@ class UserAdmin(BaseUserAdmin):
         'first_name',
         'last_name',
     ]
-
