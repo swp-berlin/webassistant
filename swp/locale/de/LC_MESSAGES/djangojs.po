@@ -155,7 +155,7 @@ msgid "Please enter a valid date in the format %(format)s"
 msgstr "Bitte geben Sie ein gültigtges Datum im Format %(format)s ein"
 
 msgid "(required)"
-msgstr "(erfordert)"
+msgstr "(erforderlich)"
 
 msgid "No Results"
 msgstr "Keine Ergebnisse"

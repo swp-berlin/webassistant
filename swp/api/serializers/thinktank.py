@@ -28,6 +28,7 @@ class BaseThinktankSerializer(ModelSerializer):
         ]
         fields = [
             'id',
+            'pool',
             'name',
             'url',
             'is_active',

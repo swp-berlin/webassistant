@@ -1,12 +1,13 @@
 import {Button, Intent} from '@blueprintjs/core';
-import {useMutationForm} from 'components/Fetch';
-import {MultiSelect, TextArea, TextInput} from 'components/forms';
 
 import _ from 'utils/i18n';
-import {CancelButton} from 'components/buttons';
 import {getChoices} from 'utils/choices';
 
+import {CancelButton} from 'components/buttons';
+import {ChoicesQuery, useMutationForm} from 'components/Fetch';
+import {MultiSelect, Select, TextArea, TextInput} from 'components/forms';
 
+const PoolLabel = _('Pool');
 const NameLabel = _('Name');
 const DescriptionLabel = _('Description');
 const URLLabel = _('URL');
@@ -18,9 +19,13 @@ const DefaultValues = {
     unique_fields: [UniqueChoices[0].value],
 };
 
+const getRedirectURL = ({id}) => `/thinktank/${id}/`;
+
+const PoolQueryParams = {can_manage: true};
+
+const preparePoolChoice = ({id, name}) => ({value: id, label: name});
 
 const ThinktankForm = ({endpoint, method, backURL, successMessage, data, submitLabel, ...props}) => {
-    const getRedirectURL = ({id}) => `/thinktank/${id}/`;
     const [onSubmit, {control, register, errors}] = useMutationForm(
         endpoint,
         {defaultValues: data || DefaultValues},
@@ -33,6 +38,9 @@ const ThinktankForm = ({endpoint, method, backURL, successMessage, data, submitL
 
     return (
         <form className="my-4 w-full max-w-screen-md" onSubmit={onSubmit} {...props}>
+            <ChoicesQuery endpoint="pool" params={PoolQueryParams} prepareChoice={preparePoolChoice}>
+                <Select name="pool" label={PoolLabel} control={control} errors={errors} required />
+            </ChoicesQuery>
             <TextInput
                 register={register({required: true})}
                 name="name"
@@ -64,12 +72,10 @@ const ThinktankForm = ({endpoint, method, backURL, successMessage, data, submitL
                 errors={errors}
                 fill
                 growVertically
-                rows="5"
+                rows={5}
             />
-
             <div className="flex justify-between">
                 <CancelButton to={backURL} />
-
                 <Button type="submit" intent={Intent.PRIMARY} text={submitLabel} />
             </div>
         </form>
