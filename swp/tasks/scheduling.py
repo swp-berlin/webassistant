@@ -12,7 +12,7 @@ from sentry_sdk import capture_exception
 
 from swp.celery import app
 from swp.db.expressions import MakeInterval
-from swp.models import Scraper
+from swp.models import Scraper, Pool
 from swp.utils.auth import get_error_recipient_email_addresses
 from swp.utils.mail import render_mail
 from swp.utils.url import get_absolute_url
@@ -100,7 +100,7 @@ def send_scraper_errors(scraper: Scraper, force: bool = False) -> Optional[int]:
     if not len(errors):
         return None
 
-    email_addresses = get_error_recipient_email_addresses()
+    email_addresses = get_pool_error_recipient_email_addresses(scraper.thinktank.pool)
     if not email_addresses:
         return None
 
@@ -124,3 +124,7 @@ def send_scraper_errors(scraper: Scraper, force: bool = False) -> Optional[int]:
     ]
 
     return get_mail_connection().send_messages(messages)
+
+
+def get_pool_error_recipient_email_addresses(pool: Pool):
+    return get_error_recipient_email_addresses(models.Q(pools=None) | models.Q(pools=pool))
