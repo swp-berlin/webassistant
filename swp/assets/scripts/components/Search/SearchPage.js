@@ -1,4 +1,4 @@
-import {useCallback, useMemo, useState} from 'react';
+import {useCallback, useMemo, useRef, useState} from 'react';
 import {Link, useSearchParams} from 'react-router-dom';
 import {AnchorButton, Button, Intent} from '@blueprintjs/core';
 import parseISO from 'date-fns/parseISO';
@@ -45,6 +45,14 @@ const formatDate = date => date && formatISO(date, {representation: 'date'});
 const parseDate = date => (date ? parseISO(date) : null);
 const updateDate = (searchParams, key, value) => updateParam(searchParams, key, formatDate(value));
 
+const useInitialDates = (startDate, endDate) => {
+    const initialDates = useRef(null);
+
+    if (initialDates.current === null) initialDates.current = [startDate, endDate].map(parseDate);
+
+    return initialDates.current;
+};
+
 const removeFilterTerm = (query, filterTerm) => query.split(' ').filter(term => term !== filterTerm).join(' ');
 const addFilterTerm = (query, filterTerm) => query ? `${query} ${filterTerm}` : filterTerm;
 
@@ -81,15 +89,9 @@ const SearchPage = () => {
     const [term, setTerm] = useState(query || '');
     const handleTermChange = useCallback(term => setTerm(term), []);
 
-    const [dates, setDates] = useState(() => [
-        parseDate(searchParams.get('start_date')),
-        parseDate(searchParams.get('end_date')),
-    ]);
-    const handleDatesChange = useCallback(dates => {
-        setDates(dates);
+    const initialDates = useInitialDates(startDate, endDate);
+    const handleDatesChange = useCallback(([startDate, endDate]) => {
         setSearchParams(next => {
-            const [startDate, endDate] = dates;
-
             updateDate(next, 'start_date', startDate);
             updateDate(next, 'end_date', endDate);
 
@@ -132,8 +134,8 @@ const SearchPage = () => {
         <Page title={SearchLabel} actions={Actions}>
             <SearchForm
                 query={term}
+                initialDates={initialDates}
                 onQueryChange={handleTermChange}
-                dates={dates}
                 onDatesChange={handleDatesChange}
                 onSearch={handleSearch}
             />

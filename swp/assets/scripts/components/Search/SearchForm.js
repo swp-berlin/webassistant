@@ -9,7 +9,7 @@ import DateRangePicker from './DateRangePicker';
 
 const SearchLabel = _('Search');
 
-const SearchForm = ({query, onQueryChange, dates, onDatesChange, onSearch}) => {
+const SearchForm = ({query, onQueryChange, initialDates, onDatesChange, onSearch}) => {
     const handleQueryChange = useCallback(event => onQueryChange(event.target.value), [onQueryChange]);
     const handleSubmit = useCallback(event => event.preventDefault() || onSearch(), [onSearch]);
 
@@ -22,7 +22,7 @@ const SearchForm = ({query, onQueryChange, dates, onDatesChange, onSearch}) => {
                     onChange={handleQueryChange}
                     className="mb-0 h-8"
                     placeholder={SearchLabel}
-                    rightElement={<DateRangePicker defaultValue={dates} onChange={onDatesChange} />}
+                    rightElement={<DateRangePicker defaultValue={initialDates} onChange={onDatesChange} />}
                 />
                 <Button className={Classes.FIXED} large type="submit" disabled={query.length < 3}>{SearchLabel}</Button>
             </ControlGroup>
