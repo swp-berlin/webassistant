@@ -3,8 +3,8 @@ import {useCallback, useState} from 'react';
 import _ from 'utils/i18n';
 import {getJSON, setJSON} from 'utils/localStorage';
 
-import {ChoicesQuery} from 'components/Fetch';
 import {Select} from 'components/forms';
+import PoolChoicesQuery from 'components/PoolChoicesQuery';
 
 const AllChoice = {
     id: null,
@@ -28,9 +28,9 @@ const prepareChoices = pools => {
 };
 
 const PoolSelect = props => (
-    <ChoicesQuery endpoint="pool" prepareChoices={prepareChoices}>
+    <PoolChoicesQuery prepareChoices={prepareChoices}>
         <Select className="mb-0 mr-2" name="pool" {...props} />
-    </ChoicesQuery>
+    </PoolChoicesQuery>
 );
 
 const LocalStorageKey = 'last-selected-pool';

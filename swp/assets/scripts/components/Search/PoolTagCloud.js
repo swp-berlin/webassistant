@@ -1,18 +1,14 @@
-import Query from 'components/Query';
-
 import _ from 'utils/i18n';
+
+import PoolQuery from 'components/PoolQuery';
 
 import TagCloud from './TagCloud';
 import InteractiveTag from './InteractiveTag';
 
-const Endpoint = 'pool';
-const Params = {can_manage: true};
-const QueryKey = [Endpoint, Params];
-
 const Label = _('Filter by Pool:');
 
 const PoolTagCloud = ({selected, onSelect}) => (
-    <Query queryKey={QueryKey}>
+    <PoolQuery canManage>
         {pools => pools.length > 0 && (
             <TagCloud label={Label}>
                 {pools.map(({id, name}) => (
@@ -26,7 +22,7 @@ const PoolTagCloud = ({selected, onSelect}) => (
                 ))}
             </TagCloud>
         )}
-    </Query>
+    </PoolQuery>
 );
 
 export default PoolTagCloud;

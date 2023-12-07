@@ -4,8 +4,9 @@ import _ from 'utils/i18n';
 import {getChoices} from 'utils/choices';
 
 import {CancelButton} from 'components/buttons';
-import {ChoicesQuery, useMutationForm} from 'components/Fetch';
+import {useMutationForm} from 'components/Fetch';
 import {MultiSelect, Select, TextArea, TextInput} from 'components/forms';
+import PoolChoicesQuery from 'components/PoolChoicesQuery';
 
 const PoolLabel = _('Pool');
 const NameLabel = _('Name');
@@ -21,10 +22,6 @@ export const DefaultValues = {
 
 const getRedirectURL = ({id}) => `/thinktank/${id}/`;
 
-const PoolQueryParams = {can_manage: true};
-
-const preparePoolChoice = ({id, name}) => ({value: id, label: name});
-
 const ThinktankForm = ({endpoint, method, backURL, successMessage, data, submitLabel, ...props}) => {
     const [onSubmit, {control, register, errors}] = useMutationForm(
         endpoint,
@@ -38,9 +35,9 @@ const ThinktankForm = ({endpoint, method, backURL, successMessage, data, submitL
 
     return (
         <form className="my-4 w-full max-w-screen-md" onSubmit={onSubmit} {...props}>
-            <ChoicesQuery endpoint="pool" params={PoolQueryParams} prepareChoice={preparePoolChoice}>
+            <PoolChoicesQuery canManage>
                 <Select name="pool" label={PoolLabel} control={control} errors={errors} required />
-            </ChoicesQuery>
+            </PoolChoicesQuery>
             <TextInput
                 register={register({required: true})}
                 name="name"
