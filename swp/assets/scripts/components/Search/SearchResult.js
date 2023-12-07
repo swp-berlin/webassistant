@@ -1,4 +1,3 @@
-import {Tag} from '@blueprintjs/core';
 import {useLocation} from 'react-router-dom';
 
 import _ from 'utils/i18n';
@@ -8,11 +7,11 @@ import DownloadButton from 'components/publication/DownloadButton';
 import PublicationResults from 'components/publication/PublicationResults';
 import PublicationListMenu, {PublicationListDialog, QuickAddButton} from 'components/PublicationListMenu';
 
+import SearchResultTagCloud from './SearchResultTagCloud';
+
 const NoPublicationsFound = _('No publications found');
-const FilterByTagLabel = _('Filter by Tag:');
 
 const calculatePageCount = (total, pageSize) => Math.ceil(total / pageSize);
-const sortAlphabetically = list => list.sort((a, b) => a.tag.localeCompare(b.tag));
 
 const SearchResult = ({
     results, tags, selectedTags, next: nextPage, previous: prevPage, count, downloadURL, onSelectTag, onAddFilter,
@@ -31,14 +30,11 @@ const SearchResult = ({
             </header>
 
             {tags.length > 0 && (
-                <div className="mt-2 mb-4 flex flex-wrap space-x-2">
-                    <span>{FilterByTagLabel}</span>
-                    {sortAlphabetically(tags).map(({tag, count}) => (
-                        <Tag key={tag} interactive onClick={() => onSelectTag(tag)}>
-                            {`${selectedTags.includes(tag) ? '-' : '+'} ${tag} (${count})`}
-                        </Tag>
-                    ))}
-                </div>
+                <SearchResultTagCloud
+                    tags={tags}
+                    selected={selectedTags}
+                    onSelect={onSelectTag}
+                />
             )}
 
             {count > 0 && (

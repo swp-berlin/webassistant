@@ -76,6 +76,13 @@ const parseTags = query => (
         })
 );
 
+const parsePools = searchParams => (
+    searchParams
+        .getAll('pool')
+        .map(pool => parseInt(pool))
+        .filter(pool => !Number.isNaN(pool))
+);
+
 const SearchPage = () => {
     useBreadcrumb('/search/', SearchLabel);
 
@@ -112,36 +119,56 @@ const SearchPage = () => {
     }, [setSearchParams, term, query]);
 
     const addFilter = useCallback(filter => {
-        const query = searchParams.get('query') || '';
         const filterTerm = `${filter.field}:${maybeQuote(filter.value)}`;
         const toggle = query.includes(filterTerm) ? removeFilterTerm : addFilterTerm;
 
         setSearchParams(next => {
-            const query = next.get('query');
-
             next.set('query', toggle(query, filterTerm));
 
             return next;
         });
         setTerm(term => toggle(term, filterTerm));
-    }, [searchParams, setSearchParams]);
+    }, [query, setSearchParams]);
 
     const handleSelectTag = useCallback(tag => addFilter({field: 'tags', value: tag}), [addFilter]);
 
+    const handleSelectPool = useCallback(pool => {
+        setSearchParams(next => {
+            const pools = parsePools(next);
+            const selected = pools.includes(pool);
+
+            if (selected) {
+                next.delete('pool');
+
+                pools.forEach(current => {
+                    if (current === pool) return;
+                    next.append('pool', current);
+                });
+            } else {
+                next.append('pool', pool);
+            }
+
+            return next;
+        });
+    }, [setSearchParams]);
+
     const tags = useMemo(() => parseTags(query || ''), [query]);
+    const pools = useMemo(() => parsePools(searchParams), [searchParams]);
 
     return (
         <Page title={SearchLabel} actions={Actions}>
             <SearchForm
                 query={term}
+                pools={pools}
                 initialDates={initialDates}
                 onQueryChange={handleTermChange}
+                onSelectPool={handleSelectPool}
                 onDatesChange={handleDatesChange}
                 onSearch={handleSearch}
             />
 
             {query && (
-                <SearchQuery query={query} startDate={startDate} endDate={endDate} page={page}>
+                <SearchQuery query={query} pools={pools} startDate={startDate} endDate={endDate} page={page}>
                     <SearchResult
                         selectedTags={tags}
                         onSelectTag={handleSelectTag}
