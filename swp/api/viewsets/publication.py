@@ -90,7 +90,6 @@ class ResearchFilter(filters.FilterSet):
     start_date = filters.DateFilter(label=_('Start Date'), required=False)
     end_date = filters.DateFilter(label=_('End Date'), required=False)
     query = filters.CharFilter(label=_('Query'), required=True)
-    tag = filters.CharFilter(label=_('Tag'), required=False)
 
     def filter_queryset(self, queryset, *, using=None):
         data = self.form.cleaned_data
@@ -114,7 +113,7 @@ class ResearchFilter(filters.FilterSet):
             '-score',
         )
 
-    def get_search_query(self, query, start_date=None, end_date=None, tag=None):
+    def get_search_query(self, query, start_date=None, end_date=None):
         language = get_language(request=self.request)
         fields = PublicationDocument.get_search_fields(language)
         query = Q('query_string', query=query, fields=fields, default_operator='AND')
@@ -129,9 +128,6 @@ class ResearchFilter(filters.FilterSet):
                 created['lte'] = end_date
 
             query &= Q('range', created=created)
-
-        if tag:
-            query &= Q('match', tags=tag)
 
         return query
 

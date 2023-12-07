@@ -1,4 +1,4 @@
-import {useCallback, useState} from 'react';
+import {useCallback, useMemo, useState} from 'react';
 import {Link, useSearchParams} from 'react-router-dom';
 import {AnchorButton, Button, Intent} from '@blueprintjs/core';
 import parseISO from 'date-fns/parseISO';
@@ -36,72 +36,97 @@ const Actions = [
     />,
 ];
 
+const updateParam = (searchParams, key, value) => {
+    if (value) searchParams.set(key, value);
+    else searchParams.delete(key);
+};
+
 const formatDate = date => date && formatISO(date, {representation: 'date'});
 const parseDate = date => (date ? parseISO(date) : null);
+const updateDate = (searchParams, key, value) => updateParam(searchParams, key, formatDate(value));
 
+const removeFilterTerm = (query, filterTerm) => query.split(' ').filter(term => term !== filterTerm).join(' ');
+const addFilterTerm = (query, filterTerm) => query ? `${query} ${filterTerm}` : filterTerm;
+
+const Quote = '"';
 const WhitespaceRegEx = /\s/g;
-const maybeQuote = text => {
-    const hasWhiteSpace = WhitespaceRegEx.test(text);
-    return hasWhiteSpace ? `"${text}"` : text;
-};
+const maybeQuote = text => WhitespaceRegEx.test(text) ? `${Quote}${text}${Quote}` : text;
+const maybeUnquote = text => (
+    text.startsWith(Quote) && text.endsWith(Quote)
+        ? text.slice(Quote.length, -Quote.length)
+        : text
+);
+
+const parseTags = query => (
+    query
+        .split(' ')
+        .filter(term => term.startsWith('tags:'))
+        .map(term => {
+            const [, tag] = term.split(':');
+
+            return maybeUnquote(tag);
+        })
+);
 
 const SearchPage = () => {
     useBreadcrumb('/search/', SearchLabel);
+
     const [searchParams, setSearchParams] = useSearchParams();
+
     const query = searchParams.get('query');
-
-    const [term, setTerm] = useState(query || '');
-    const handleTermChange = useCallback(term => setTerm(term), []);
-
-    const [dates, setDates] = useState(
-        () => [parseDate(searchParams.get('start_date')), parseDate(searchParams.get('end_date'))],
-    );
-    const handleDatesChange = useCallback(dates => {
-        setDates(dates);
-        setSearchParams(next => {
-            const [startDate, endDate] = dates;
-            if (startDate) {
-                next.set('start_date', formatDate(startDate));
-            } else next.delete('start_date');
-            if (endDate) {
-                next.set('end_date', formatDate(endDate));
-            } else next.delete('end_date');
-            next.delete('page');
-            return next;
-        });
-    }, [setSearchParams]);
-
-    const tags = searchParams.getAll('tag');
     const startDate = searchParams.get('start_date');
     const endDate = searchParams.get('end_date');
     const page = searchParams.get('page');
 
+    const [term, setTerm] = useState(query || '');
+    const handleTermChange = useCallback(term => setTerm(term), []);
+
+    const [dates, setDates] = useState(() => [
+        parseDate(searchParams.get('start_date')),
+        parseDate(searchParams.get('end_date')),
+    ]);
+    const handleDatesChange = useCallback(dates => {
+        setDates(dates);
+        setSearchParams(next => {
+            const [startDate, endDate] = dates;
+
+            updateDate(next, 'start_date', startDate);
+            updateDate(next, 'end_date', endDate);
+
+            next.delete('page');
+
+            return next;
+        });
+    }, [setSearchParams]);
+
     const handleSearch = useCallback(() => {
         setSearchParams(next => {
-            next.delete('tag');
-            if (term) {
-                next.set('query', term);
-            } else next.delete('query');
+            updateParam(next, 'query', term);
 
             if (term !== query) next.delete('page');
+
             return next;
         });
     }, [setSearchParams, term, query]);
 
     const addFilter = useCallback(filter => {
-        const query = searchParams.get('query');
-        const filterString = `${filter.field}:${maybeQuote(filter.value)}`;
+        const query = searchParams.get('query') || '';
+        const filterTerm = `${filter.field}:${maybeQuote(filter.value)}`;
+        const toggle = query.includes(filterTerm) ? removeFilterTerm : addFilterTerm;
 
-        if (!query.includes(filterString)) {
-            setSearchParams(next => {
-                next.set('query', `${next.get('query')} ${filterString}`);
-                return next;
-            });
-            setTerm(term => `${term} ${filterString}`);
-        }
+        setSearchParams(next => {
+            const query = next.get('query');
+
+            next.set('query', toggle(query, filterTerm));
+
+            return next;
+        });
+        setTerm(term => toggle(term, filterTerm));
     }, [searchParams, setSearchParams]);
 
     const handleSelectTag = useCallback(tag => addFilter({field: 'tags', value: tag}), [addFilter]);
+
+    const tags = useMemo(() => parseTags(query || ''), [query]);
 
     return (
         <Page title={SearchLabel} actions={Actions}>
@@ -114,8 +139,9 @@ const SearchPage = () => {
             />
 
             {query && (
-                <SearchQuery query={query} tags={tags} startDate={startDate} endDate={endDate} page={page}>
+                <SearchQuery query={query} startDate={startDate} endDate={endDate} page={page}>
                     <SearchResult
+                        selectedTags={tags}
                         onSelectTag={handleSelectTag}
                         downloadURL={`/api/publication/ris/?${searchParams.toString()}`}
                         onAddFilter={addFilter}

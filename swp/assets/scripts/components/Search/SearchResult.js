@@ -14,8 +14,9 @@ const FilterByTagLabel = _('Filter by Tag:');
 const calculatePageCount = (total, pageSize) => Math.ceil(total / pageSize);
 const sortAlphabetically = list => list.sort((a, b) => a.tag.localeCompare(b.tag));
 
-const SearchResult = ({results, tags, next: nextPage, previous: prevPage, count, downloadURL, onSelectTag,
-    onAddFilter}) => {
+const SearchResult = ({
+    results, tags, selectedTags, next: nextPage, previous: prevPage, count, downloadURL, onSelectTag, onAddFilter,
+}) => {
 
     const location = useLocation();
     const pageCount = calculatePageCount(count, 10);
@@ -34,7 +35,7 @@ const SearchResult = ({results, tags, next: nextPage, previous: prevPage, count,
                     <span>{FilterByTagLabel}</span>
                     {sortAlphabetically(tags).map(({tag, count}) => (
                         <Tag key={tag} interactive onClick={() => onSelectTag(tag)}>
-                            {`+ ${tag} (${count})`}
+                            {`${selectedTags.includes(tag) ? '-' : '+'} ${tag} (${count})`}
                         </Tag>
                     ))}
                 </div>
