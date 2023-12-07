@@ -8,10 +8,9 @@ import _ from 'utils/i18n';
 
 import Page from 'components/Page';
 import {useBreadcrumb} from 'components/Navigation';
-import Query from 'components/Query';
 
-import QueryError from './QueryError';
 import SearchForm from './SearchForm';
+import SearchQuery from './SearchQuery';
 import SearchResult from './SearchResult';
 
 import HelpTextFileURL from './helptext.pdf';
@@ -20,10 +19,6 @@ const HelpLabel = _('Help');
 const SearchLabel = _('Search');
 const PublicationListLabel = _('Publication Lists');
 
-const QueryComponents = {
-    400: QueryError,
-};
-
 const Actions = [
     <Link key={1} to="publication-list/">
         <Button intent={Intent.PRIMARY}>
@@ -31,6 +26,7 @@ const Actions = [
         </Button>
     </Link>,
     <AnchorButton
+        key={2}
         href={HelpTextFileURL}
         text="?"
         intent={Intent.NONE}
@@ -78,6 +74,7 @@ const SearchPage = () => {
     const tags = searchParams.getAll('tag');
     const startDate = searchParams.get('start_date');
     const endDate = searchParams.get('end_date');
+    const page = searchParams.get('page');
 
     const handleSearch = useCallback(() => {
         setSearchParams(next => {
@@ -106,15 +103,6 @@ const SearchPage = () => {
 
     const handleSelectTag = useCallback(tag => addFilter({field: 'tags', value: tag}), [addFilter]);
 
-    const page = searchParams.get('page');
-
-    const params = {};
-    if (query) params.query = query;
-    if (tags.length) params.tag = tags;
-    if (startDate) params.start_date = startDate;
-    if (endDate) params.end_date = endDate;
-    if (page) params.page = page;
-
     return (
         <Page title={SearchLabel} actions={Actions}>
             <SearchForm
@@ -125,14 +113,14 @@ const SearchPage = () => {
                 onSearch={handleSearch}
             />
 
-            {params.query && (
-                <Query queryKey={['publication', 'research', params]} components={QueryComponents}>
+            {query && (
+                <SearchQuery query={query} tags={tags} startDate={startDate} endDate={endDate} page={page}>
                     <SearchResult
                         onSelectTag={handleSelectTag}
                         downloadURL={`/api/publication/ris/?${searchParams.toString()}`}
                         onAddFilter={addFilter}
                     />
-                </Query>
+                </SearchQuery>
             )}
         </Page>
     );

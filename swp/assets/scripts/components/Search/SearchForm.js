@@ -1,9 +1,11 @@
 import {useCallback} from 'react';
 import {Button, Classes, ControlGroup} from '@blueprintjs/core';
 
-import {TextInput} from 'components/forms';
-import DateRangePicker from 'components/Search/DateRangePicker';
 import _ from 'utils/i18n';
+
+import {TextInput} from 'components/forms';
+
+import DateRangePicker from './DateRangePicker';
 
 const SearchLabel = _('Search');
 

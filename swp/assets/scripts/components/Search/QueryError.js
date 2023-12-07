@@ -1,9 +1,9 @@
-import ClientError from 'components/Fetch/ClientError';
-
 import _ from 'utils/i18n';
-import {AnchorButton} from '@blueprintjs/core';
-import GenericErrorComponent from 'components/Query/GenericError';
 
+import {AnchorButton} from '@blueprintjs/core';
+
+import ClientError from 'components/Fetch/ClientError';
+import GenericErrorComponent from 'components/Query/GenericError';
 
 const ErrorTitle = _('Invalid Query');
 const DocsHref = 'https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html#query-string-syntax';
