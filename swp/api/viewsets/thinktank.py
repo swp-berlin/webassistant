@@ -41,7 +41,7 @@ class ThinktankViewSet(ModelViewSet):
 
     def related_scraper_action(self, request, thinktank=None, status=200):
         thinktank = thinktank or self.get_object()
-        serializer = self.get_serializer(data=request.data)
+        serializer = self.get_serializer(data=request.data, thinktank=thinktank)
 
         serializer.is_valid(raise_exception=True)
         serializer.save(thinktank=thinktank)

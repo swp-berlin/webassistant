@@ -12,9 +12,11 @@ from django.utils import timezone
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
+from swp.utils.validation import get_field_validation_error
+
 from .abstract import ActivatableModel, ActivatableQuerySet
 from .choices import UniqueKey
-from .fields import ChoiceField
+from .fields import ChoiceField, DomainField
 from .pool import CanManageQuerySet
 from .scraper import Scraper
 
@@ -81,6 +83,9 @@ class ThinktankQuerySet(ActivatableQuerySet, CanManageQuerySet):
             ),
         )
 
+    def for_domain(self, domain: str) -> Optional['Thinktank']:
+        return self.filter(domain=domain, is_active=True).first()
+
 
 class Thinktank(ActivatableModel):
     """
@@ -91,6 +96,7 @@ class Thinktank(ActivatableModel):
     name = models.CharField(_('name'), max_length=100)
     description = models.TextField(_('description'), blank=True)
     url = models.URLField(_('URL'), help_text=_('Link to homepage'))
+    domain = DomainField(_('domain'), max_length=100)
     unique_fields = ArrayField(
         verbose_name=_('unique fields'),
         base_field=ChoiceField(choices=UniqueKey.choices),
@@ -103,9 +109,30 @@ class Thinktank(ActivatableModel):
     class Meta(ActivatableModel.Meta):
         verbose_name = _('think tank')
         verbose_name_plural = _('think tanks')
+        constraints = [
+            models.UniqueConstraint(
+                fields=['domain'],
+                condition=models.Q(is_active=True),
+                name='unique_active_domain',
+            ),
+        ]
 
     def __str__(self) -> str:
         return self.name
+
+    def validate_unique(self, exclude=None):
+        super().validate_unique(exclude)
+
+        if not self.is_active or (exclude and 'domain' in exclude):
+            return None
+
+        if duplicate := type(self).objects.exclude(id=self.id).for_domain(self.domain):
+            raise get_field_validation_error(
+                field='domain',
+                message=_('The domain %(domain)s already assigned to thinktank %(thinktank)s in pool %(pool)s.'),
+                params={'domain': self.domain, 'thinktank': duplicate, 'pool': duplicate.pool},
+                code='unique',
+            )
 
     @cached_property
     def publication_count(self) -> int:

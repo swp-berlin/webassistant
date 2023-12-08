@@ -1,10 +1,10 @@
 from rest_framework.fields import CharField, ChoiceField, IntegerField
-from rest_framework.serializers import ModelSerializer, Serializer
+from rest_framework.serializers import Serializer
 
 from swp.models import Scraper
 from swp.models.choices import PaginatorType, ResolverType
 
-from .base import ResolverConfigSerializer
+from .base import BaseScraperSerializer, ResolverConfigSerializer
 from .resolver import ResolverTypeField
 from ..fields import CSSSelectorField
 
@@ -60,7 +60,7 @@ class FieldResolverDraftSerializer(Serializer):
     resolver = ResolverConfigDraftSerializer()
 
 
-class ScraperDraftSerializer(ModelSerializer):
+class ScraperDraftSerializer(BaseScraperSerializer):
     data = ResolverConfigDraftSerializer()
 
     class Meta:

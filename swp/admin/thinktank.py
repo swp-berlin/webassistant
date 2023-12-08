@@ -13,6 +13,7 @@ class ThinktankAdmin(CanManagePermissionMixin, ActivatableModelAdmin):
     date_hierarchy = 'created'
     fields = [
         'pool',
+        'domain',
         'name',
         'description',
         'url',
@@ -26,6 +27,7 @@ class ThinktankAdmin(CanManagePermissionMixin, ActivatableModelAdmin):
         'name',
         'url_display',
         'pool',
+        'domain',
         'created',
         'is_active',
     ]

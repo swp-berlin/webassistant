@@ -14,4 +14,5 @@ python-dotenv==0.15.0
 redis==3.5.3
 requests==2.25.1
 sentry-sdk==0.19.5
+tldextract==5.1.1
 uWSGI==2.0.19.1

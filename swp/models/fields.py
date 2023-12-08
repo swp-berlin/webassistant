@@ -1,11 +1,14 @@
 import re
 
+from django.contrib.postgres.fields import CICharField
 from django.core.exceptions import ImproperlyConfigured
 from django.core.validators import RegexValidator
 from django.db.models import CharField, URLField
 from django.utils.translation import gettext_lazy as _
 
 from swp.utils.isbn import canonical_isbn, normalize_isbn
+from swp.validators import validate_domain
+
 from .constants import MAX_COMBINED_ISBN_LENGTH, MAX_URL_LENGTH
 
 
@@ -20,6 +23,10 @@ class ChoiceField(CharField):
         kwargs.setdefault('db_index', True)
 
         super(ChoiceField, self).__init__(verbose_name=verbose_name, choices=choices, **kwargs)
+
+
+class DomainField(CICharField):
+    default_validators = [validate_domain]
 
 
 class LongURLField(URLField):

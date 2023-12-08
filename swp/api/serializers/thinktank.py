@@ -48,7 +48,7 @@ class ThinktankSerializer(BaseThinktankSerializer):
 
     class Meta(BaseThinktankSerializer.Meta):
         read_only_fields = [*BaseThinktankSerializer.Meta.read_only_fields, 'scrapers']
-        fields = [*BaseThinktankSerializer.Meta.fields, 'description', 'scrapers']
+        fields = [*BaseThinktankSerializer.Meta.fields, 'domain', 'description', 'scrapers']
 
     def validate_pool(self, pool: Pool):
         if self.context.get('request').user.can_manage_pool(pool):

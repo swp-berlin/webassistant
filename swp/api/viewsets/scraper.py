@@ -23,12 +23,12 @@ class ScraperViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated & CanManagePool]
 
     def get_serializer_class(self):
-        if self.action in {'activate', 'retrieve'}:
+        if self.action == 'retrieve':
             return ScraperSerializer
 
         return self.serializer_class
 
-    @action(detail=True, methods=['post'], url_name='activate', url_path='activate')
+    @action(detail=True, methods=['post'], serializer_class=ScraperSerializer)
     def activate(self, request, pk):
         scraper = self.get_object()
         serializer = self.get_serializer(scraper, data=request.data)

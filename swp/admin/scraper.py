@@ -10,6 +10,7 @@ from .pool import CanManagePermissionMixin
 class ScraperErrorInline(admin.StackedInline):
     model = ScraperError
     readonly_fields = ['publication']
+    extra = 0
     fields = [
         'publication',
         'message',

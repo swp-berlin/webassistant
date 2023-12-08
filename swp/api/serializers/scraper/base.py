@@ -4,7 +4,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.fields import CharField, ChoiceField, IntegerField
 from rest_framework.serializers import ModelSerializer, Serializer
 
-from swp.models import Scraper
+from swp.models import Scraper, Thinktank
 from swp.models.choices import PaginatorType, ResolverType
 from swp.utils.text import enumeration
 
@@ -80,7 +80,33 @@ class FieldResolverSerializer(Serializer):
     resolver = ResolverConfigSerializer()
 
 
-class ScraperSerializer(ModelSerializer):
+class BaseScraperSerializer(ModelSerializer):
+
+    def __init__(self, instance=None, *args, thinktank: Thinktank = None, **kwargs):
+        self.thinktank = thinktank or instance.thinktank
+        ModelSerializer.__init__(self, instance, *args, **kwargs)
+
+    def validate(self, attrs):
+        self.validate_start_url_domain(attrs)
+
+        return attrs
+
+    def validate_start_url_domain(self, attrs):
+        if attrs.get('is_active', None) is False:
+            return None
+
+        if instance := self.instance:
+            start_url = attrs.get('start_url', instance.start_url)
+        else:
+            start_url = attrs.get('start_url')
+
+        if start_url is None:
+            return None
+
+        Scraper.validate_start_url(start_url, self.thinktank.domain)
+
+
+class ScraperSerializer(BaseScraperSerializer):
     REQUIRED_RESOLVERS = {ResolverType.TITLE.value}
 
     thinktank = ThinktankField(read_only=True)
@@ -106,6 +132,8 @@ class ScraperSerializer(ModelSerializer):
         ]
 
     def validate(self, attrs):
+        attrs = super().validate(attrs)
+
         if not self.partial or attrs.get('data'):
             self.check_missing_fields(attrs)
 

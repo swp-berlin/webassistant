@@ -3,7 +3,9 @@ from __future__ import annotations
 import datetime
 import hashlib
 import json
+
 from typing import Any, Iterable, Mapping, Optional, TYPE_CHECKING
+from urllib.parse import urlsplit
 
 from asgiref.sync import async_to_sync, sync_to_async
 from django.core.exceptions import NON_FIELD_ERRORS
@@ -13,7 +15,9 @@ from django.utils import timezone
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
+from swp.utils.domain import is_subdomain
 from swp.utils.scraping import Scraper as _Scraper
+from swp.utils.validation import get_field_validation_error
 from swp.scraper.types import ScraperType
 
 from .abstract import ActivatableModel, ActivatableQuerySet, UpdateQuerySet, LastModified
@@ -72,6 +76,24 @@ class Scraper(ActivatableModel, LastModified):
 
     def __str__(self) -> str:
         return f'{self.name} {self.pk}'
+
+    def clean(self):
+        if self.start_url and self.thinktank:
+            self.validate_start_url(self.start_url, self.thinktank.domain)
+
+    @staticmethod
+    def validate_start_url(start_url: str, domain: str):
+        try:
+            netloc = urlsplit(start_url).netloc
+        except ValueError:
+            raise get_field_validation_error('start_url', _('Please enter a valid start url.'))
+
+        if not is_subdomain(netloc, domain):
+            raise get_field_validation_error(
+                field='start_url',
+                message=_("The scraper's start url must be a subdomain of its thinktank's domain (%(domain)s)."),
+                params={'domain': domain},
+            )
 
     @cached_property
     def name(self) -> str:

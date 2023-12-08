@@ -11,6 +11,7 @@ import {useRegister} from './Register';
 import UniqueFieldsField, {DefaultValues} from './UniqueFieldsField';
 
 const PoolLabel = _('Pool');
+const DomainLabel = _('Domain');
 const NameLabel = _('Name');
 const DescriptionLabel = _('Description');
 const URLLabel = _('URL');
@@ -30,6 +31,9 @@ const ThinktankForm = ({endpoint, method, backURL, successMessage, data, submitL
             <PoolChoicesQuery canManage>
                 <Select name="pool" label={PoolLabel} control={control} errors={errors} required />
             </PoolChoicesQuery>
+            <Register required>
+                <TextInput name="domain" label={DomainLabel} />
+            </Register>
             <Register required>
                 <TextInput name="name" label={NameLabel} />
             </Register>
