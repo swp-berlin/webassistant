@@ -1,76 +1,45 @@
 import {Button, Intent} from '@blueprintjs/core';
 
 import _ from 'utils/i18n';
-import {getChoices} from 'utils/choices';
 
 import {CancelButton} from 'components/buttons';
 import {useMutationForm} from 'components/Fetch';
-import {MultiSelect, Select, TextArea, TextInput} from 'components/forms';
+import {Select, TextArea, TextInput} from 'components/forms';
 import PoolChoicesQuery from 'components/PoolChoicesQuery';
+
+import {useRegister} from './Register';
+import UniqueFieldsField, {DefaultValues} from './UniqueFieldsField';
 
 const PoolLabel = _('Pool');
 const NameLabel = _('Name');
 const DescriptionLabel = _('Description');
 const URLLabel = _('URL');
-const UniqueFieldLabel = _('Unique Field');
 
-const UniqueChoices = getChoices('UniqueKey');
-
-export const DefaultValues = {
-    unique_fields: [UniqueChoices[0].value],
-};
+export {DefaultValues};
 
 const getRedirectURL = ({id}) => `/thinktank/${id}/`;
 
 const ThinktankForm = ({endpoint, method, backURL, successMessage, data, submitLabel, ...props}) => {
-    const [onSubmit, {control, register, errors}] = useMutationForm(
-        endpoint,
-        {defaultValues: data || DefaultValues},
-        {
-            method,
-            successMessage,
-            redirectURL: getRedirectURL,
-        },
-    );
+    const formOptions = {defaultValues: data || DefaultValues};
+    const mutationOptions = {method, successMessage, redirectURL: getRedirectURL};
+    const [onSubmit, {control, register, errors}] = useMutationForm(endpoint, formOptions, mutationOptions);
+    const Register = useRegister(register, errors);
 
     return (
         <form className="my-4 w-full max-w-screen-md" onSubmit={onSubmit} {...props}>
             <PoolChoicesQuery canManage>
                 <Select name="pool" label={PoolLabel} control={control} errors={errors} required />
             </PoolChoicesQuery>
-            <TextInput
-                register={register({required: true})}
-                name="name"
-                label={NameLabel}
-                errors={errors}
-                required
-            />
-            <TextInput
-                register={register({required: true})}
-                name="url"
-                type="url"
-                label={URLLabel}
-                errors={errors}
-                required
-            />
-            <MultiSelect
-                name="unique_fields"
-                label={UniqueFieldLabel}
-                choices={UniqueChoices}
-                control={control}
-                errors={errors}
-                required
-                fill
-            />
-            <TextArea
-                register={register({required: false})}
-                name="description"
-                label={DescriptionLabel}
-                errors={errors}
-                fill
-                growVertically
-                rows={5}
-            />
+            <Register required>
+                <TextInput name="name" label={NameLabel} />
+            </Register>
+            <Register required>
+                <TextInput name="url" type="url" label={URLLabel} />
+            </Register>
+            <UniqueFieldsField control={control} errors={errors} />
+            <Register>
+                <TextArea name="description" label={DescriptionLabel} rows={5} growVertically fill />
+            </Register>
             <div className="flex justify-between">
                 <CancelButton to={backURL} />
                 <Button type="submit" intent={Intent.PRIMARY} text={submitLabel} />
