@@ -8,16 +8,13 @@ from swp.models import Scraper
 from swp.models.choices import PaginatorType, ResolverType
 from swp.utils.text import enumeration
 
+from .resolver import BaseResolverConfigSerializer, ResolverTypeField
 from ..fields import ThinktankField, CSSSelectorField
 from ..scrapererror import ScraperErrorSerializer
 
 
-class ResolverConfigSerializer(Serializer):
+class ResolverConfigSerializer(BaseResolverConfigSerializer):
     type = ChoiceField(choices=ResolverType.choices)
-
-    def get_serializer(self, type, *args, **kwargs):
-        serializer_type = ResolverSerializers[type]
-        return serializer_type(*args, **kwargs)
 
     def to_representation(self, instance):
         serializer = self.get_serializer(instance['type'], instance)
@@ -26,16 +23,12 @@ class ResolverConfigSerializer(Serializer):
 
     def to_internal_value(self, data):
         internal_data = super().to_internal_value(data)
-
-        type = internal_data['type']
-
-        serializer = self.get_serializer(type, data=data)
+        serializer = self.get_serializer(internal_data['type'], data=data)
 
         return {**internal_data, **serializer.to_internal_value(data)}
 
     def validate(self, data):
-        type = data['type']
-        serializer = self.get_serializer(type, data=data)
+        serializer = self.get_serializer(data['type'], data=data)
 
         return {**super().validate(data), **serializer.validate(data)}
 
@@ -47,6 +40,7 @@ class PaginatorSerializer(Serializer):
     max_pages = IntegerField(min_value=1)
 
 
+@ResolverConfigSerializer.register(ResolverType.LIST)
 class ListResolverSerializer(Serializer):
     selector = CSSSelectorField()
     cookie_banner_selector = CSSSelectorField(allow_blank=True, default='')
@@ -54,50 +48,36 @@ class ListResolverSerializer(Serializer):
     resolvers = ResolverConfigSerializer(many=True)
 
 
+@ResolverConfigSerializer.register(ResolverType.LINK)
 class LinkResolverSerializer(Serializer):
     selector = CSSSelectorField()
     resolvers = ResolverConfigSerializer(many=True)
 
 
+@ResolverConfigSerializer.register(ResolverType.DATA)
 class DataResolverSerializer(Serializer):
     selector = CSSSelectorField(required=True)
 
 
+@ResolverConfigSerializer.register(ResolverType.ATTRIBUTE)
 class AttributeResolverSerializer(DataResolverSerializer):
     attribute = CharField(required=True)
 
 
+@ResolverConfigSerializer.register(ResolverType.STATIC)
 class StaticResolverSerializer(Serializer):
     value = CharField()
 
 
+@ResolverConfigSerializer.register(ResolverType.DOCUMENT)
 class DocumentResolverSerializer(Serializer):
     key = CharField(default='pdf_url')
     selector = CSSSelectorField()
 
 
+@ResolverConfigSerializer.register(*ResolverTypeField)
 class FieldResolverSerializer(Serializer):
     resolver = ResolverConfigSerializer()
-
-
-ResolverSerializers = {
-    ResolverType.LIST: ListResolverSerializer,
-    ResolverType.LINK: LinkResolverSerializer,
-    ResolverType.DATA: DataResolverSerializer,
-    ResolverType.ATTRIBUTE: AttributeResolverSerializer,
-    ResolverType.STATIC: StaticResolverSerializer,
-    ResolverType.DOCUMENT: DocumentResolverSerializer,
-
-    ResolverType.TITLE: FieldResolverSerializer,
-    ResolverType.SUBTITLE: FieldResolverSerializer,
-    ResolverType.ABSTRACT: FieldResolverSerializer,
-    ResolverType.PUBLICATION_DATE: FieldResolverSerializer,
-    ResolverType.URL: FieldResolverSerializer,
-    ResolverType.AUTHORS: FieldResolverSerializer,
-    ResolverType.DOI: FieldResolverSerializer,
-    ResolverType.ISBN: FieldResolverSerializer,
-    ResolverType.TAGS: FieldResolverSerializer,
-}
 
 
 class ScraperSerializer(ModelSerializer):
