@@ -28,6 +28,14 @@ const Authors = ({authors, className, onFilter}) => (
     </span>
 );
 
+const Tags = ({tags, onFilter}) => (
+    <CommaList
+        className="italic text-gray-400"
+        items={tags.map(tag => <Filterable field="tags" text={tag} onFilter={onFilter} />)}
+        conjunction=","
+    />
+);
+
 const PDFNotFound = () => (
     <span className="text-gray-500">
         <Icon className="mr-1" icon="issue" />
@@ -115,11 +123,7 @@ const PublicationItem = ({publication, className, onAddFilter, children, ...prop
             <footer>
                 {tags && (
                     <PublicationField name="tags" value={tags}>
-                        <CommaList
-                            className="italic text-gray-400"
-                            items={tags.map(tag => <Filterable field="tags" text={tag} onFilter={onAddFilter} />)}
-                            conjunction=","
-                        />
+                        <Tags tags={tags} onFilter={onAddFilter} />
                     </PublicationField>
                 )}
                 {pdfURL ? (
