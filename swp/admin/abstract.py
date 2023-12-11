@@ -6,68 +6,82 @@ from django.db import models
 from django.db.models.base import ModelBase
 from django.utils.translation import gettext_lazy as _, ngettext
 
+from swp.models import ActivatableModel
+
 
 def get_pluralized_verbose_name(model: Union[models.Model, ModelBase], count: int = 1) -> str:
     """ Choose singular or plural model name, depending on count. """
     return ngettext(model._meta.verbose_name, model._meta.verbose_name_plural, count)
 
 
-class ActivatableModelAdmin(admin.ModelAdmin):
+class BaseActivatableModelAdmin(admin.ModelAdmin):
+
+    def get_permission_name(self, action):
+        return f'{self.opts.app_label}.%s' % get_permission_codename(action, self.opts)
+
+    @property
+    def activate_permission_name(self):
+        return self.get_permission_name('activate')
+
+    @property
+    def deactivate_permission_name(self):
+        return self.get_permission_name('deactivate')
+
+    def can_activate(self, request) -> bool:
+        return request.user.has_perm(self.activate_permission_name)
+
+    def can_deactivate(self, request) -> bool:
+        return request.user.has_perm(self.deactivate_permission_name)
+
+    def can_toggle_active(self, request, obj: ActivatableModel):
+        return self.can_deactivate(request) if obj.is_active else self.can_activate(request)
+
+    def has_activate_permission(self, request, obj: ActivatableModel = None) -> bool:
+        raise NotImplementedError
+
+    def has_deactivate_permission(self, request, obj: ActivatableModel = None) -> bool:
+        raise NotImplementedError
+
+
+class ActivatableModelAdmin(BaseActivatableModelAdmin):
     """
     Base admin for :class:`~swp.models.abstract.ActivatableModel` models.
     """
 
-    def can_activate(self, request) -> bool:
-        codename = get_permission_codename('activate', self.opts)
-        return request.user.has_perm(f'{self.opts.app_label}.{codename}')
+    def has_activate_permission(self, request, obj=None):
+        return self.can_activate(request)
 
-    def can_deactivate(self, request) -> bool:
-        codename = get_permission_codename('deactivate', self.opts)
-        return request.user.has_perm(f'{self.opts.app_label}.{codename}')
+    def has_deactivate_permission(self, request, obj=None):
+        return self.can_deactivate(request)
 
     # <editor-fold desc="Actions">
 
     actions = ['activate', 'deactivate']
 
     def activate(self, request, queryset):
-        assert self.can_activate(request)
         count = queryset.activate()
-
         format_kwargs = {'count': count, 'name': get_pluralized_verbose_name(self.model, count)}
+
         self.message_user(request, _('Activated %(count)d %(name)s') % format_kwargs)
 
     activate.short_description = _('Activate selected %(verbose_name_plural)s')
+    activate.allowed_permissions = ['activate']
 
     def deactivate(self, request, queryset):
-        assert self.can_deactivate(request)
         count = queryset.deactivate()
-
         format_kwargs = {'count': count, 'name': get_pluralized_verbose_name(self.model, count)}
+
         self.message_user(request, _('Deactivated %(count)d %(name)s') % format_kwargs)
 
     deactivate.short_description = _('Deactivate selected %(verbose_name_plural)s')
-
-    def get_actions(self, request):
-        actions = super().get_actions(request)
-
-        if not self.can_activate(request):
-            actions.pop('activate', None)
-
-        if not self.can_deactivate(request):
-            actions.pop('deactivate', None)
-
-        return actions
+    activate.allowed_permissions = ['deactivate']
 
     # </editor-fold>
 
     def get_readonly_fields(self, request, obj=None):
-        readonly_fields = list(super().get_readonly_fields(request, obj=obj))
-        can_activate = self.can_activate(request)
-        can_deactivate = self.can_deactivate(request)
+        readonly_fields = super().get_readonly_fields(request, obj=obj)
 
-        if not (can_activate and can_deactivate):
-            is_active = getattr(obj, 'is_active', None)
-            if is_active is False and not can_activate or is_active is True and not can_deactivate:
-                readonly_fields.append('is_active')
+        if obj is None or self.can_toggle_active(request, obj):
+            return readonly_fields
 
-        return readonly_fields
+        return [*readonly_fields, 'is_active']
