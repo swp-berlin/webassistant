@@ -57,7 +57,7 @@ class ThinktankSerializer(BaseThinktankSerializer):
             return pool
 
         raise ValidationError(
-            message=_('You cannot add thinktanks to pool %(pool)s.'),
+            message=_('You are not authorized to add thinktanks to pool %(pool)s.'),
             params={'pool': pool},
             code='no-manager',
         )

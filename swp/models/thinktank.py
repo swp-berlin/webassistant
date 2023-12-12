@@ -130,7 +130,7 @@ class Thinktank(ActivatableModel):
         if duplicate := type(self).objects.exclude(id=self.id).for_domain(self.domain):
             raise get_field_validation_error(
                 field='domain',
-                message=_('The domain %(domain)s already assigned to thinktank %(thinktank)s in pool %(pool)s.'),
+                message=_('The domain %(domain)s is already assigned to thinktank %(thinktank)s in pool %(pool)s.'),
                 params={'domain': self.domain, 'thinktank': duplicate, 'pool': duplicate.pool},
                 code='unique',
             )

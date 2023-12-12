@@ -35,11 +35,38 @@ msgstr[1] "Publikationen für %d Monitore werden zu zotero übertragen"
 msgid "Send publications for selected monitors to zotero"
 msgstr "Sende Publikationen für ausgewählte Monitore zu zotero"
 
+msgid "# thinktanks"
+msgstr "# Thinktanks"
+
 msgid "# Entries"
 msgstr "# Einträge"
 
 msgid "Last Updated"
 msgstr "Zuletzt Geändert"
+
+msgid "pool"
+msgstr "Pool"
+
+msgid "URL"
+msgstr "URL"
+
+#, python-format
+msgid "Deactivated %(count)s scraper because its start url is not a subdomain of %(domain)s."
+msgid_plural "Deactivated %(count)s scrapers because their start url is not a subdomain of %(domain)s."
+msgstr[0] "%(count)s Scraper wurde deaktiviert, da seine Start-URL keine Subdomain von %(domain)s ist."
+msgstr[1] "%(count)s Scraper wurden deaktiviert, da ihre Start-URL keine Subdomain von %(domain)s ist."
+
+#, python-format
+msgid "Could not activate selected thinktanks because the following domain is duplicated: %(domains)s"
+msgid_plural "Could not activate selected thinktanks because the following domains are duplicated: %(domains)s"
+msgstr[0] "Ausgewählte Thinktanks konnten nicht aktiviert werden, da die folgende Domain dupliziert ist: %(domains)s"
+msgstr[1] "Ausgewählte Thinktanks konnten nicht aktiviert werden, da die folgenden Domains dupliziert sind: %(domains)s"
+
+#, python-format
+msgid "Deactivated %(count)s scraper because its start url is not a subdomain of its thinktank's domain."
+msgid_plural "Deactivated %(count)s scrapers because their start url is not a subdomain of their thinktank's domain."
+msgstr[0] "%(count)s Scraper wurde deaktiviert, da seine Start-URL keine Subdomain der Domain seines Thinktanks ist."
+msgstr[1] "%(count)s Scraper wurden deaktiviert, da ihre Start-URL keine Subdomain der Domain ihres Thinktanks ist."
 
 msgid "Personal info"
 msgstr "Persönliche Informationen"
@@ -63,11 +90,18 @@ msgstr "Eine Publikationsliste mit diesem Namen existiert bereits."
 msgid "There must be a resolver for the following fields: %(fields)s"
 msgstr "Es muss ein Resolver für die folgenden Felder vorhanden sein: %(fields)s"
 
-msgid "Active"
-msgstr "Aktiv"
+msgid "active"
+msgstr "aktiv"
+
+#, python-format
+msgid "You are not authorized to add thinktanks to pool %(pool)s."
+msgstr "Sie sind nicht berechtigt Thinktanks zu Pool %(pool)s hinzuzufügen."
 
 msgid "Invalid Selector"
 msgstr "Ungültiger Selektor"
+
+msgid "can manage"
+msgstr ""
 
 msgid "Monitor"
 msgstr "Monitor"
@@ -84,8 +118,8 @@ msgstr "End-Datum"
 msgid "Query"
 msgstr "Suchbegriff"
 
-msgid "Tag"
-msgstr "Tag"
+msgid "Pool"
+msgstr "Pool"
 
 msgid "The query provided is invalid. Please check your input."
 msgstr "Der eingegebene Suchbegriff ist ungültig. Bitte überprüfen Sie Ihre Eingabe."
@@ -102,9 +136,6 @@ msgstr "Autoren"
 #, python-format
 msgid "Missing %s permission"
 msgstr "Fehlende Berechtigung %s"
-
-msgid "active"
-msgstr "aktiv"
 
 msgid "Activation denied"
 msgstr "Aktivierung nicht erlaubt"
@@ -166,9 +197,6 @@ msgstr "Abstract"
 msgid "Publication Date"
 msgstr "Veröffentlichungsdatum"
 
-msgid "URL"
-msgstr "URL"
-
 msgid "Authors"
 msgstr "Autoren"
 
@@ -228,6 +256,9 @@ msgstr "Monitor"
 
 msgid "monitors"
 msgstr "Monitore"
+
+msgid "pools"
+msgstr "Pools"
 
 msgid "think tank"
 msgstr "Thinktank"
@@ -328,6 +359,13 @@ msgstr "läuft"
 msgid "scraper"
 msgstr "Scraper"
 
+msgid "Please enter a valid start url."
+msgstr "Bitte geben Sie eine gültige Start-URL ein."
+
+#, python-format
+msgid "The scraper's start url must be a subdomain of its thinktank's domain (%(domain)s)."
+msgstr "Die Start-URL des Scrapers muss eine Subdomain der Domain seines Thinktanks (%(domain)s) sein."
+
 #, python-format
 msgid "%s Scraper"
 msgstr "%s Scraper"
@@ -370,11 +408,18 @@ msgstr "Scraping-Fehler"
 msgid "Link to homepage"
 msgstr "Link zur Homepage"
 
+msgid "domain"
+msgstr "Domain"
+
 msgid "unique fields"
 msgstr "eindeutige Felder"
 
 msgid "think tanks"
 msgstr "Thinktanks"
+
+#, python-format
+msgid "The domain %(domain)s is already assigned to thinktank %(thinktank)s in pool %(pool)s."
+msgstr "Die Domain %(domain)s ist bereits dem Thinktank %(thinktank)s im Pool %(pool)s zugewiesen."
 
 msgid "think tank filters"
 msgstr "Thinktank-Filter"
@@ -595,8 +640,15 @@ msgstr "%(href)s konnte nicht geöffnet werden: %(error)s"
 
 #, python-format
 msgid "%(first)s and %(second)s"
-msgstr ""
+msgstr "%(first)s und %(second)s"
 
 #, python-format
 msgid "%(first)s or %(second)s"
-msgstr ""
+msgstr "%(first)s oder %(second)s"
+
+msgid "Please enter a valid domain."
+msgstr "Bitte geben Sie eine valide Domain ein."
+
+#, python-format
+msgid "The entered domain is not a canonical domain. The canonical domain to the entered domain is: %(domain)s"
+msgstr "Die eingegebene Domain ist keine kanonische Domain. Die kanonische Domain zur eingegebenen Domain ist: %(domain)s"
