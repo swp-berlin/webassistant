@@ -7,14 +7,8 @@ from django.db import migrations, models
 from django.db.models.functions import Coalesce
 
 from swp.models.fields import DomainField
+from swp.utils.domain import get_canonical_domain
 from swp.utils.migrations import get_queryset
-
-EXTRA_TOP_LEVEL_DOMAINS = [
-    'ox.ac.uk',
-    'europa.eu',
-    'house.gov',
-    'senate.gov',
-]
 
 
 def set_domain(apps, schema_editor):  # pragma: no cover
@@ -24,13 +18,10 @@ def set_domain(apps, schema_editor):  # pragma: no cover
     if len(thinktanks) == 0:
         return 0
 
-    from tldextract import TLDExtract
-
-    extract = TLDExtract(extra_suffixes=EXTRA_TOP_LEVEL_DOMAINS)
     domains = defaultdict(list)
 
     for thinktank in thinktanks:
-        thinktank.domains = {extract(url).registered_domain for url in thinktank.urls}
+        thinktank.domains = {get_canonical_domain(url) for url in thinktank.urls}
 
         if len(thinktank.domains) == 1:
             [thinktank.domain] = thinktank.domains

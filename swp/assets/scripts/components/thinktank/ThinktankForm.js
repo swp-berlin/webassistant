@@ -4,11 +4,13 @@ import _ from 'utils/i18n';
 
 import {CancelButton} from 'components/buttons';
 import {useMutationForm} from 'components/Fetch';
+import {DefaultHandlers} from 'components/Fetch/Form';
 import {Select, TextArea, TextInput} from 'components/forms';
 import PoolChoicesQuery from 'components/PoolChoicesQuery';
 
 import {useRegister} from './Register';
 import UniqueFieldsField, {DefaultValues} from './UniqueFieldsField';
+import {showIncompatibleScraperWarning} from './ThinktankActivationButton';
 
 const PoolLabel = _('Pool');
 const DomainLabel = _('Domain');
@@ -20,9 +22,20 @@ export {DefaultValues};
 
 const getRedirectURL = ({id}) => `/thinktank/${id}/`;
 
+const getMutationOptions = (method, successMessage) => ({
+    method,
+    successMessage,
+    redirectURL: getRedirectURL,
+    handleSuccess(data, ...args) {
+        showIncompatibleScraperWarning(data);
+
+        return DefaultHandlers.handleSuccess(data, ...args);
+    },
+});
+
 const ThinktankForm = ({endpoint, method, backURL, successMessage, data, submitLabel, ...props}) => {
     const formOptions = {defaultValues: data || DefaultValues};
-    const mutationOptions = {method, successMessage, redirectURL: getRedirectURL};
+    const mutationOptions = getMutationOptions(method, successMessage);
     const [onSubmit, {control, register, errors}] = useMutationForm(endpoint, formOptions, mutationOptions);
     const Register = useRegister(register, errors);
 

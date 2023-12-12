@@ -1,13 +1,11 @@
 import {useEffect} from 'react';
-import {Button, Intent} from '@blueprintjs/core';
 
 import _ from 'utils/i18n';
 import {setErrors} from 'utils/form';
 
 import {useMutationResult} from 'components/Fetch';
+import {ActivationButton} from 'components/buttons/ActivationButton';
 
-const ActivateLabel = _('Activate');
-const DeactivateLabel = _('Deactivate');
 const ActivatedMessage = _('Scraper has been activated.');
 const DeactivatedMessage = _('Scraper has been deactivated.');
 
@@ -27,13 +25,12 @@ const ScraperActivationButton = ({id, isActive, form, onToggle}) => {
     };
     const [mutate, {success, result: {data}, loading}] = useMutationResult(endpoint, mutationOptions, []);
     const handleClick = form.handleSubmit(data => mutate({...data, is_active: !isActive}));
-    const label = isActive ? DeactivateLabel : ActivateLabel;
 
     useEffect(() => {
         if (success) onToggle(data.is_active);
     }, [data, onToggle, success]);
 
-    return <Button intent={Intent.PRIMARY} text={label} loading={loading} onClick={handleClick} />;
+    return <ActivationButton isActive={isActive} loading={loading} onClick={handleClick} />;
 };
 
 export default ScraperActivationButton;

@@ -12,6 +12,7 @@ from django.utils import timezone
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
+from swp.utils.domain import is_subdomain
 from swp.utils.validation import get_field_validation_error
 
 from .abstract import ActivatableModel, ActivatableQuerySet
@@ -133,6 +134,18 @@ class Thinktank(ActivatableModel):
                 params={'domain': self.domain, 'thinktank': duplicate, 'pool': duplicate.pool},
                 code='unique',
             )
+
+    def deactivate_incompatible_scrapers(self) -> int:
+        scrapers = self.scrapers.filter(is_active=True).values_list('id', 'start_url')
+        unrelated = [scraper for scraper, url in scrapers if not self.is_subdomain(url)]
+
+        if unrelated:
+            return scrapers.filter(id__in=unrelated).update(is_active=False)
+
+        return 0
+
+    def is_subdomain(self, url: str) -> bool:
+        return is_subdomain(url, self.domain)
 
     @cached_property
     def publication_count(self) -> int:

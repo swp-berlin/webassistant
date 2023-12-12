@@ -1,6 +1,7 @@
 import {useCallback, useMemo} from 'react';
 import {useForm} from 'react-hook-form';
 import {useNavigate} from 'react-router-dom';
+import {Intent} from '@blueprintjs/core';
 
 import _, {interpolate} from 'utils/i18n';
 import {setErrors} from 'utils/form';
@@ -28,12 +29,12 @@ const DefaultHttpErrorMessages = {
 };
 
 const handleSuccess = (data, result, {successMessage}) => ({
-    intent: 'success',
+    intent: Intent.SUCCESS,
     message: interpolate(successMessage, data),
 });
 
 const handleNetworkError = (error, resubmit, {networkErrorMessage}) => ({
-    intent: 'warning',
+    intent: Intent.WARNING,
     message: interpolate(networkErrorMessage, {error}),
 });
 
@@ -43,7 +44,7 @@ const handleHttpError = (status, errors, {setErrors, httpErrorMessages}, fallbac
     if (status === 400 && setErrors) setErrors(errors);
 
     return {
-        intent: 'danger',
+        intent: Intent.DANGER,
         message,
     };
 };
@@ -56,7 +57,7 @@ const handleServerError = (status, errors, resubmit, props) => (
     handleHttpError(status, errors, props, DefaultServerErrorMessage)
 );
 
-const DefaultHandlers = {
+export const DefaultHandlers = {
     handleSuccess,
     handleNetworkError,
     handleClientError,

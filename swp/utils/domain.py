@@ -1,11 +1,18 @@
-def is_subdomain(subdomain: str, domain: str) -> bool:
-    subdomain = str.lower(subdomain).split('.')
-    domain = str.lower(domain).split('.')
+from tldextract import TLDExtract
 
-    if subdomain == domain:
-        return True
+EXTRA_TOP_LEVEL_DOMAINS = [
+    'ox.ac.uk',
+    'europa.eu',
+    'house.gov',
+    'senate.gov',
+]
 
-    if len(domain) > len(subdomain):
-        return False
+extract = TLDExtract(extra_suffixes=EXTRA_TOP_LEVEL_DOMAINS)
 
-    return subdomain[-len(domain):] == domain
+
+def get_canonical_domain(url: str) -> str:
+    return extract(url).registered_domain
+
+
+def is_subdomain(url: str, domain: str) -> bool:
+    return get_canonical_domain(url) == domain

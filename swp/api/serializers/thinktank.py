@@ -1,7 +1,8 @@
 from django.core.exceptions import ValidationError
+from django.db import transaction
 from django.utils.translation import gettext_lazy as _
 
-from rest_framework.fields import BooleanField
+from rest_framework.fields import BooleanField, IntegerField
 from rest_framework.serializers import ModelSerializer
 
 from swp.models import Thinktank, Pool
@@ -45,10 +46,11 @@ class ThinktankSerializer(BaseThinktankSerializer):
 
     scrapers = ScraperListSerializer(many=True, read_only=True)
     is_active = BooleanField(label=_('active'), required=False)
+    deactivated_scrapers = IntegerField(read_only=True, default=0)
 
     class Meta(BaseThinktankSerializer.Meta):
-        read_only_fields = [*BaseThinktankSerializer.Meta.read_only_fields, 'scrapers']
-        fields = [*BaseThinktankSerializer.Meta.fields, 'domain', 'description', 'scrapers']
+        read_only_fields = [*BaseThinktankSerializer.Meta.read_only_fields, 'scrapers', 'deactivated_scrapers']
+        fields = [*BaseThinktankSerializer.Meta.fields, 'domain', 'description', 'scrapers', 'deactivated_scrapers']
 
     def validate_pool(self, pool: Pool):
         if self.context.get('request').user.can_manage_pool(pool):
@@ -59,6 +61,26 @@ class ThinktankSerializer(BaseThinktankSerializer):
             params={'pool': pool},
             code='no-manager',
         )
+
+    @transaction.atomic
+    def update(self, instance: Thinktank, validated_data):
+        should_deactivate_incompatible_scrapers = self.should_deactivate_incompatible_scrapers(instance, validated_data)
+        instance = super().update(instance, validated_data)
+
+        if should_deactivate_incompatible_scrapers:
+            instance.deactivated_scrapers = instance.deactivate_incompatible_scrapers()
+
+        return instance
+
+    @staticmethod
+    def should_deactivate_incompatible_scrapers(instance, validated_data):
+        if validated_data.get('is_active'):
+            return True
+
+        if validated_data.get('is_active', instance.is_active):
+            return not instance.domain == validated_data.get('domain', instance.domain)
+
+        return False
 
 
 class ThinktankListSerializer(BaseThinktankSerializer):

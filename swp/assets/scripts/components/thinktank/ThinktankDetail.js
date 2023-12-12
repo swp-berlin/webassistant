@@ -1,18 +1,16 @@
-import {useCallback, useEffect, useState} from 'react';
 import {Link, useParams} from 'react-router-dom';
+import {useQuery} from 'react-query';
 
 import _ from 'utils/i18n';
 
-import {useQuery} from 'hooks/query';
-
-import ActivationButton from 'components/buttons/ActivationButton';
-import {Result} from 'components/Fetch';
+import {QueryResult} from 'components/Query';
 import {useBreadcrumb} from 'components/Navigation';
 import Page from 'components/Page';
 import ScraperTable from 'components/scraper/ScraperTable';
 import {getPublicationsLabel} from 'components/publication/helper';
 import TableActions from 'components/tables/TableActions';
 
+import ThinktankActivationButton from './ThinktankActivationButton';
 import {useThinktanksBreadcrumb} from './ThinktankList';
 import {getThinktankLabel} from './helper';
 
@@ -48,31 +46,20 @@ const UniqueFields = ({values}) => (
 const ThinktankDetail = props => {
     const {id} = useParams();
     const endpoint = `/thinktank/${id}/`;
-    const result = useQuery(endpoint);
-    const [isActive, setActive] = useState(false);
-    const {loading, result: {data: thinktank}, success} = result;
+    const query = useQuery(['thinktank', id]);
+    const {data: thinktank, isLoading: loading} = query;
+    const label = getThinktankLabel(id, {result: {data: thinktank}, loading});
 
-    const label = getThinktankLabel(id, result);
     useThinktanksBreadcrumb();
     useBreadcrumb(endpoint, label);
 
-    const onToggle = useCallback(
-        flag => setActive(flag),
-        [setActive],
-    );
-
-    useEffect(() => {
-        if (success) {
-            setActive(thinktank.is_active);
-        }
-    }, [success, thinktank]);
-
     return (
-        <Result result={result}>
+        <QueryResult query={query}>
             {thinktank => {
                 const {
                     description,
                     scrapers,
+                    is_active: isActive,
                     can_manage: canManage,
                     unique_fields: uniqueFields,
                     publication_count: publicationCount,
@@ -81,10 +68,10 @@ const ThinktankDetail = props => {
                 const subtitle = <UniqueFields values={uniqueFields} />;
 
                 const actions = canManage && (
-                    <ActivationButton
+                    <ThinktankActivationButton
+                        id={id}
                         endpoint={endpoint}
                         isActive={isActive}
-                        onToggle={onToggle}
                         disabled={loading}
                     />
                 );
@@ -112,7 +99,7 @@ const ThinktankDetail = props => {
                     </Page>
                 );
             }}
-        </Result>
+        </QueryResult>
     );
 };
 

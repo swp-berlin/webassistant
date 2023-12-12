@@ -139,10 +139,10 @@ msgstr ""
 msgid "Deactivate"
 msgstr ""
 
-msgid "Sucessfully activated"
+msgid "Successfully activated"
 msgstr ""
 
-msgid "Sucessfully deactivated"
+msgid "Successfully deactivated"
 msgstr ""
 
 msgid "Back"
