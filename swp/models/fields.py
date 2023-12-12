@@ -6,9 +6,8 @@ from django.core.validators import RegexValidator
 from django.db.models import CharField, URLField
 from django.utils.translation import gettext_lazy as _
 
-from swp.utils.domain import get_canonical_domain
 from swp.utils.isbn import canonical_isbn, normalize_isbn
-from swp.validators import validate_domain
+from swp.validators import validate_canonical_domain
 
 from .constants import MAX_COMBINED_ISBN_LENGTH, MAX_URL_LENGTH
 
@@ -27,13 +26,7 @@ class ChoiceField(CharField):
 
 
 class DomainField(CICharField):
-    default_validators = [validate_domain]
-
-    def to_python(self, value):
-        if value := super().to_python(value):
-            return get_canonical_domain(value)
-
-        return value
+    default_validators = [validate_canonical_domain]
 
 
 class LongURLField(URLField):
