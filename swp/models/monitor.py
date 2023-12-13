@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import datetime
 import operator
+
 from collections import defaultdict
 from functools import reduce
 from typing import Iterable, Tuple, Collection

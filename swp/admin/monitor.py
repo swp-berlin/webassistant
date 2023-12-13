@@ -3,8 +3,9 @@ from django.contrib import admin, messages
 from django.utils.translation import gettext_lazy as _, ngettext
 
 from swp.models import Monitor
-from .abstract import ActivatableModelAdmin
 from swp.tasks.monitor import send_publications_to_zotero
+
+from .abstract import ActivatableModelAdmin
 
 
 class MonitorAdminForm(forms.ModelForm):
@@ -60,10 +61,12 @@ class MonitorAdmin(ActivatableModelAdmin):
             send_publications_to_zotero.delay(monitor.pk)
 
         monitor_count = len(queryset)
-
-        self.message_user(request, ngettext(
+        message = ngettext(
             'Publications for %d monitor will be transferred to zotero',
             'Publications for %d monitors will be transferred to zotero',
             monitor_count,
-        ) % monitor_count, messages.SUCCESS)
+        )
+
+        self.message_user(request, message % monitor_count, messages.SUCCESS)
+
     send_to_zotero.short_description = _('Send publications for selected monitors to zotero')

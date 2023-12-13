@@ -152,7 +152,7 @@ class ResearchFilter(filters.FilterSet):
 class PublicationViewSet(viewsets.ReadOnlyModelViewSet):
     INVALID_QUERY_CODE = 'invalid-query'
 
-    queryset = Publication.objects
+    queryset = Publication.objects.select_related('thinktank')
     filterset_class = PublicationFilter
     ordering = ['-last_access', '-created']
     pagination_class = PublicationPagination

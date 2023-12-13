@@ -12,7 +12,9 @@ from swp.scraper.types import ScraperType
 from swp.tasks.monitor import (
     monitor_new_publications,
     send_monitor_publications,
-    schedule_monitors, schedule_zotero_transfers, transfer_publication,
+    schedule_monitors,
+    schedule_zotero_transfers,
+    transfer_publication,
 )
 from swp.utils.zotero import get_zotero_publication_data, get_zotero_attachment_data
 
