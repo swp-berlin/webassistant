@@ -3,7 +3,6 @@ import {NonIdealState} from '@blueprintjs/core';
 
 import _ from 'utils/i18n';
 
-
 const Label = _('No items');
 
 const EmptyRow = ({colSpan, title}) => (

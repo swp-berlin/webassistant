@@ -2,13 +2,13 @@ import {Button, Intent} from '@blueprintjs/core';
 import {Link} from 'react-router-dom';
 
 import {useBreadcrumb} from 'components/Navigation';
+import {usePoolSelect} from 'components/PoolSelect';
 import Page from 'components/Page';
 
 import _ from 'utils/i18n';
 import {buildURL, withParams} from 'utils/url';
 
 import ThinktankTable from './ThinktankTable';
-import {usePoolSelect} from './PoolSelect';
 
 const ThinktanksLabel = _('Thinktanks');
 const NewLabel = _('New Thinktank');

@@ -4,7 +4,7 @@ import {getLabel} from 'utils/choices';
 import DateTime from 'components/DateTime';
 import MonitorPublicationsLink from 'components/monitor/MonitorPublicationsLink';
 
-import UpdatePublicationCount from './UpdatePublicationCount';
+import LastPublicationCountUpdate from './LastPublicationCount';
 
 const PublicationCountLabel = _('Publications overall:');
 const NewPublicationsLabel = _('Publications since last email:');
@@ -17,6 +17,7 @@ const TransferredToZoteroLabel = _('Transferred to Zotero');
 const MonitorInfo = props => {
     const {
         id,
+        canManage,
         publicationCount,
         newPublicationCount,
         lastPublicationCountUpdate,
@@ -51,9 +52,9 @@ const MonitorInfo = props => {
             <div className="mb-1 sm:grid sm:grid-cols-5 sm:gap-4">
                 <dt>{LastPublicationCountUpdateLabel}</dt>
                 <dd className="sm:col-span-4">
-                    <UpdatePublicationCount id={id} onMonitorUpdate={onMonitorUpdate}>
+                    <LastPublicationCountUpdate id={id} canManage={canManage} onMonitorUpdate={onMonitorUpdate}>
                         <DateTime value={lastPublicationCountUpdate} />
-                    </UpdatePublicationCount>
+                    </LastPublicationCountUpdate>
                 </dd>
             </div>
 

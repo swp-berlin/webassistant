@@ -29,11 +29,17 @@ export const useBreadcrumb = (href, text, icon = null) => {
     );
 };
 
-const BreadcrumbRenderer = ({href, ...props}) => (
-    <Link to={href}>
-        <Breadcrumb {...props} />
-    </Link>
-);
+const BreadcrumbRenderer = ({href, ...props}) => {
+    const breadcrumb = <Breadcrumb {...props} />;
+
+    if (href === null) return breadcrumb;
+
+    return (
+        <Link to={href}>
+            {breadcrumb}
+        </Link>
+    );
+};
 
 const CurrentBreadcrumbRenderer = props => <BreadcrumbRenderer {...props} current />;
 

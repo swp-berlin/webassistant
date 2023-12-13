@@ -5,10 +5,9 @@ import _ from 'utils/i18n';
 import {getQueryComponents} from 'hooks/table';
 
 import Query from 'components/Query';
+import {EmptyRow, THR} from 'components/tables';
 
-import EmptyRow from './EmptyRow';
 import ThinktankRow from './ThinktankRow';
-
 
 const NameLabel = _('Name');
 const PublicationsLabel = _('Publications');
@@ -38,8 +37,6 @@ const ThinktankRows = ({items}) => (
         />
     ))
 );
-
-const THR = ({children}) => <th className="text-right">{children}</th>;
 
 const ThinktankTable = ({endpoint, pool, ...props}) => {
     const params = {ordering: 'name'};

@@ -1,17 +1,14 @@
 import {useLocation} from 'react-router-dom';
 
-import _ from 'utils/i18n';
-
-import {getPublicationsLabel, parsePageParam} from 'components/publication/helper';
+import {parsePageParam} from 'components/publication/helper';
 import DownloadButton from 'components/publication/DownloadButton';
 import PublicationResults from 'components/publication/PublicationResults';
 import PublicationListMenu, {PublicationListDialog, QuickAddButton} from 'components/PublicationListMenu';
 
 import SearchResultTagCloud from './SearchResultTagCloud';
+import SearchResultHeader from './SearchResultHeader';
 
-const NoPublicationsFound = _('No publications found');
-
-const calculatePageCount = (total, pageSize) => Math.ceil(total / pageSize);
+export const calculatePageCount = (total, pageSize) => Math.ceil(total / pageSize);
 
 const SearchResult = ({
     results, tags, selectedTags, next: nextPage, previous: prevPage, count, downloadURL, onSelectTag, onAddFilter,
@@ -24,10 +21,9 @@ const SearchResult = ({
 
     return (
         <div className="publication-preview my-4">
-            <header className="flex space-x-4 mb-2">
-                <h3>{count ? getPublicationsLabel(count) : NoPublicationsFound}</h3>
+            <SearchResultHeader count={count}>
                 {count > 0 && <DownloadButton href={downloadURL} />}
-            </header>
+            </SearchResultHeader>
 
             {tags.length > 0 && (
                 <SearchResultTagCloud

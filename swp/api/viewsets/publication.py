@@ -21,7 +21,7 @@ from rest_framework.permissions import BasePermission, IsAuthenticated
 from swp.api.router import default_router
 from swp.api.serializers import PublicationSerializer, ResearchSerializer, TagSerializer
 from swp.documents import PublicationDocument
-from swp.models import Monitor, Pool, Publication, ThinktankFilter
+from swp.models import Monitor, Pool, Publication, Thinktank
 from swp.utils.ris import RISResponse
 from swp.utils.translation import get_language
 
@@ -65,18 +65,8 @@ class MonitorFilter(filters.ModelChoiceFilter):
         return qs
 
 
-class ThinktankFilterFilter(filters.ModelChoiceFilter):
-
-    def filter(self, qs, thinktankfilter: ThinktankFilter):
-        if thinktankfilter:
-            return qs.filter(thinktankfilter.as_query)
-
-        return qs
-
-
 class PublicationFilter(filters.FilterSet):
     monitor = MonitorFilter(label=_('Monitor'), queryset=Monitor.objects)
-    thinktankfilter = ThinktankFilterFilter(label=_('Think Tank Filter'), queryset=ThinktankFilter.objects)
     since = filters.DateTimeFilter('last_access', 'gte')
     is_active = filters.BooleanFilter('thinktank__is_active')
 
@@ -85,7 +75,6 @@ class PublicationFilter(filters.FilterSet):
         fields = [
             'thinktank_id',
             'monitor',
-            'thinktankfilter',
             'since',
         ]
 

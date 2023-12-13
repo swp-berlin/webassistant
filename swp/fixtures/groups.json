@@ -68,26 +68,6 @@
           "view_thinktank",
           "swp",
           "thinktank"
-        ],
-        [
-          "add_thinktankfilter",
-          "swp",
-          "thinktankfilter"
-        ],
-        [
-          "change_thinktankfilter",
-          "swp",
-          "thinktankfilter"
-        ],
-        [
-          "delete_thinktankfilter",
-          "swp",
-          "thinktankfilter"
-        ],
-        [
-          "view_thinktankfilter",
-          "swp",
-          "thinktankfilter"
         ]
       ]
     }
@@ -136,11 +116,6 @@
           "view_thinktank",
           "swp",
           "thinktank"
-        ],
-        [
-          "view_thinktankfilter",
-          "swp",
-          "thinktankfilter"
         ]
       ]
     }

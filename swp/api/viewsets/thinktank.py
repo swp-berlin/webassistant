@@ -1,19 +1,14 @@
 from django.db.models import Prefetch
 
 from rest_framework.decorators import action
-from rest_framework.permissions import SAFE_METHODS, BasePermission, IsAuthenticated
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
+from swp.api.permissions import CanManagePool
 from swp.api.router import default_router
 from swp.api.serializers import ScraperDraftSerializer, ThinktankSerializer, ThinktankListSerializer
 from swp.models import Scraper, Thinktank
-
-
-class CanManagePool(BasePermission):
-
-    def has_object_permission(self, request, view, obj: Thinktank):
-        return request.method in SAFE_METHODS or request.user.can_manage_pool(obj.pool)
 
 
 @default_router.register('thinktank', basename='thinktank')

@@ -5,7 +5,6 @@ from .publication import PublicationViewSet
 from .publicationlist import PublicationListViewSet
 from .scraper import ScraperViewSet
 from .thinktank import ThinktankViewSet
-from .thinktankfilter import ThinktankFilterViewSet
 
 __all__ = [
     'MonitorViewSet',
@@ -14,5 +13,4 @@ __all__ = [
     'PublicationListViewSet',
     'ScraperViewSet',
     'ThinktankViewSet',
-    'ThinktankFilterViewSet',
 ]

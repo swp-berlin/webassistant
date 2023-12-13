@@ -5,18 +5,13 @@ import {
     MonitorAdd,
     MonitorDetail,
     MonitorEdit,
+    MonitorQueryEdit,
     MonitorList,
     MonitorNewPublications,
     MonitorPublications,
 } from 'components/monitor';
 import {ScraperAdd, ScraperEdit} from 'components/scraper';
 import {ThinktankAdd, ThinktankDetail, ThinktankEdit, ThinktankList, ThinktankPublications} from 'components/thinktank';
-import {
-    ThinktankFilterAdd,
-    ThinktankFilterEdit,
-    ThinktankFilterPublications,
-    ThinktankFilterNewPublications,
-} from 'components/thinktankfilter';
 import {PublicationList, PublicationListDetail} from 'components/publication-list';
 import SearchPage from 'components/Search';
 
@@ -27,11 +22,8 @@ const RootURLConfig = () => (
         <Route path="/monitor/" element={<MonitorList />} />
         <Route path="/monitor/:id/" element={<MonitorDetail />} />
         <Route path="/monitor/:id/edit/" element={<MonitorEdit />} />
+        <Route path="/monitor/:id/edit/query/" element={<MonitorQueryEdit />} />
         <Route path="/monitor/add/" element={<MonitorAdd />} />
-        <Route path="/monitor/:id/filter/add/" element={<ThinktankFilterAdd />} />
-        <Route path="/monitor/:monitorID/filter/:id/edit/" element={<ThinktankFilterEdit />} />
-        <Route path="/monitor/:monitorID/filter/:id/publications/" element={<ThinktankFilterPublications />} />
-        <Route path="/monitor/:monitorID/filter/:id/publications/new/" element={<ThinktankFilterNewPublications />} />
         <Route path="/monitor/:id/publications/" element={<MonitorPublications />} />
         <Route path="/monitor/:id/publications/new/" element={<MonitorNewPublications />} />
 
