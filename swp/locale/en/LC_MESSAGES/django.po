@@ -1,8 +1,3 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
 #, fuzzy
 msgid ""
 msgstr ""
@@ -35,6 +30,12 @@ msgstr[1] ""
 msgid "Send publications for selected monitors to zotero"
 msgstr ""
 
+#, python-format
+msgid "%(count)s monitor could not be activated because it has an empty query."
+msgid_plural "%(count)s monitors could not be activated because they have empty queries."
+msgstr[0] ""
+msgstr[1] ""
+
 msgid "# thinktanks"
 msgstr ""
 
@@ -46,6 +47,12 @@ msgstr ""
 
 msgid "pool"
 msgstr ""
+
+#, python-format
+msgid "%(count)s scraper could not be activated because its start url is not a subdomain of its thinktank's domain."
+msgid_plural "%(count)s scrapers could not be activated because their start url is not a subdomain of their thinktank's domain."
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "URL"
 msgstr ""
@@ -104,9 +111,6 @@ msgid "can manage"
 msgstr ""
 
 msgid "Monitor"
-msgstr ""
-
-msgid "Think Tank Filter"
 msgstr ""
 
 msgid "Start Date"
@@ -239,6 +243,9 @@ msgstr ""
 msgid "description"
 msgstr ""
 
+msgid "query"
+msgstr ""
+
 msgid "recipients"
 msgstr ""
 
@@ -255,6 +262,9 @@ msgid "monitor"
 msgstr ""
 
 msgid "monitors"
+msgstr ""
+
+msgid "An active monitor must not have an empty query."
 msgstr ""
 
 msgid "pools"
@@ -300,24 +310,6 @@ msgid "new publication count"
 msgstr ""
 
 msgid "last publication count update"
-msgstr ""
-
-msgid "think tank filter"
-msgstr ""
-
-msgid "field"
-msgstr ""
-
-msgid "comparator"
-msgstr ""
-
-msgid "values"
-msgstr ""
-
-msgid "publication filter"
-msgstr ""
-
-msgid "publication filters"
 msgstr ""
 
 msgid "Name"
@@ -387,6 +379,9 @@ msgstr ""
 msgid "url"
 msgstr ""
 
+msgid "field"
+msgstr ""
+
 msgid "level"
 msgstr ""
 
@@ -419,9 +414,6 @@ msgstr ""
 
 #, python-format
 msgid "The domain %(domain)s is already assigned to thinktank %(thinktank)s in pool %(pool)s."
-msgstr ""
-
-msgid "think tank filters"
 msgstr ""
 
 msgid "is error recipient"
