@@ -1,16 +1,17 @@
 import {useLocation} from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-import {useQuery} from 'hooks/query';
 import _ from 'utils/i18n';
+
+import {useQuery} from 'hooks/query';
+
+import Page from 'components/Page';
 import {Result} from 'components/Fetch';
 import {useBreadcrumb} from 'components/Navigation';
-import Page from 'components/Page';
 import {PublicationPreview} from 'components/publication';
 
-import {getMonitorLabel} from './helper';
 import {useMonitorsBreadcrumb} from './MonitorList';
-
+import {useMonitorBreadcrumb} from './MonitorDetail';
 
 const PublicationsLabel = _('Publications');
 const NewPublicationsLabel = _('New Publications');
@@ -23,7 +24,7 @@ const MonitorPreview = ({id, thinktankFilterID, onlyNew, downloadURL, ...props})
     const label = onlyNew ? NewPublicationsLabel : PublicationsLabel;
 
     useMonitorsBreadcrumb();
-    useBreadcrumb(endpoint, getMonitorLabel(id, query));
+    useMonitorBreadcrumb(endpoint, id, query.result.data);
     useBreadcrumb(location.pathname, label);
 
     return (

@@ -2,6 +2,7 @@ from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
 from swp.models import Monitor, Publication, Thinktank
+
 from .validators import css_selector
 
 

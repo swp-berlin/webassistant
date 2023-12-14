@@ -9,7 +9,7 @@ from .auth import (
 from .base import SWPView
 from .snippets import SnippetView
 from .thinktank import ThinkTankRISDownloadView
-from .monitor import MonitorRISDownloadView, ThinktankFilterRISDownloadView
+from .monitor import MonitorRISDownloadView
 
 __all__ = [
     'LoginView',
@@ -22,5 +22,4 @@ __all__ = [
     'SnippetView',
     'ThinkTankRISDownloadView',
     'MonitorRISDownloadView',
-    'ThinktankFilterRISDownloadView',
 ]

@@ -1,75 +1,64 @@
 import {Button, Intent} from '@blueprintjs/core';
-import {useMutationForm} from 'components/Fetch';
-import {MultiSelect, TextArea, TextInput} from 'components/forms';
 
 import _ from 'utils/i18n';
+
 import {CancelButton} from 'components/buttons';
-import {getChoices} from 'utils/choices';
+import {useMutationForm} from 'components/Fetch';
+import {DefaultHandlers} from 'components/Fetch/Form';
+import {Select, TextArea, TextInput} from 'components/forms';
+import PoolChoicesQuery from 'components/PoolChoicesQuery';
 
+import {useRegister} from './Register';
+import UniqueFieldsField, {DefaultValues} from './UniqueFieldsField';
+import {showIncompatibleScraperWarning} from './ThinktankActivationButton';
 
+const PoolLabel = _('Pool');
+const DomainLabel = _('Domain');
 const NameLabel = _('Name');
 const DescriptionLabel = _('Description');
 const URLLabel = _('URL');
-const UniqueFieldLabel = _('Unique Field');
 
-const UniqueChoices = getChoices('UniqueKey');
+export {DefaultValues};
 
-const DefaultValues = {
-    unique_fields: [UniqueChoices[0].value],
-};
+const getRedirectURL = ({id}) => `/thinktank/${id}/`;
 
+const getMutationOptions = (method, successMessage) => ({
+    method,
+    successMessage,
+    redirectURL: getRedirectURL,
+    handleSuccess(data, ...args) {
+        showIncompatibleScraperWarning(data);
+
+        return DefaultHandlers.handleSuccess(data, ...args);
+    },
+});
 
 const ThinktankForm = ({endpoint, method, backURL, successMessage, data, submitLabel, ...props}) => {
-    const getRedirectURL = ({id}) => `/thinktank/${id}/`;
-    const [onSubmit, {control, register, errors}] = useMutationForm(
-        endpoint,
-        {defaultValues: data || DefaultValues},
-        {
-            method,
-            successMessage,
-            redirectURL: getRedirectURL,
-        },
-    );
+    const formOptions = {defaultValues: data || DefaultValues};
+    const mutationOptions = getMutationOptions(method, successMessage);
+    const [onSubmit, {control, register, errors}] = useMutationForm(endpoint, formOptions, mutationOptions);
+    const Register = useRegister(register, errors);
 
     return (
         <form className="my-4 w-full max-w-screen-md" onSubmit={onSubmit} {...props}>
-            <TextInput
-                register={register({required: true})}
-                name="name"
-                label={NameLabel}
-                errors={errors}
-                required
-            />
-            <TextInput
-                register={register({required: true})}
-                name="url"
-                type="url"
-                label={URLLabel}
-                errors={errors}
-                required
-            />
-            <MultiSelect
-                name="unique_fields"
-                label={UniqueFieldLabel}
-                choices={UniqueChoices}
-                control={control}
-                errors={errors}
-                required
-                fill
-            />
-            <TextArea
-                register={register({required: false})}
-                name="description"
-                label={DescriptionLabel}
-                errors={errors}
-                fill
-                growVertically
-                rows="5"
-            />
-
+            <PoolChoicesQuery canManage>
+                <Select name="pool" label={PoolLabel} control={control} errors={errors} required />
+            </PoolChoicesQuery>
+            <Register required>
+                <TextInput name="domain" label={DomainLabel} />
+            </Register>
+            <Register required>
+                <TextInput name="name" label={NameLabel} />
+            </Register>
+            <Register required>
+                <TextInput name="url" type="url" label={URLLabel} />
+            </Register>
+            <UniqueFieldsField control={control} errors={errors} />
+            <Register>
+                <TextArea name="description" label={DescriptionLabel} rows={5} growVertically fill />
+            </Register>
             <div className="flex justify-between">
                 <CancelButton to={backURL} />
-
                 <Button type="submit" intent={Intent.PRIMARY} text={submitLabel} />
             </div>
         </form>

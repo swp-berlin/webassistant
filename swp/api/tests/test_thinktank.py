@@ -5,7 +5,7 @@ from django import test
 from django.urls import reverse
 from django.utils import timezone
 
-from swp.utils.testing import login, request
+from swp.utils.testing import login, request, create_thinktank
 
 from swp.models import Publication, Scraper, Thinktank, User
 from swp.models.choices import ErrorLevel
@@ -36,21 +36,22 @@ class ThinktankTestCase(test.TestCase):
         cls.now = now = timezone.localtime()
         cls.user = User.objects.get_by_natural_key('admin@localhost')
 
-        cls.thinktanks = Thinktank.objects.bulk_create([
-            Thinktank(
+        cls.thinktanks = [
+            create_thinktank(
                 name='PIIE',
                 url='https://www.piie.com/',
                 unique_fields=['url'],
                 created=now,
                 is_active=True,
             ),
-            Thinktank(
+            create_thinktank(
                 name='China Development Institute',
                 url='http://en.cdi.org.cn/',
                 unique_fields=['url'],
                 created=now,
+                is_active=False,
             ),
-        ])
+        ]
 
         cls.thinktank: Thinktank = cls.thinktanks[0]
         cls.deactivated_thinktank: Thinktank = cls.thinktanks[1]
@@ -180,6 +181,8 @@ class ThinktankTestCase(test.TestCase):
             'name': 'CosmoCode Thinktank',
             'url': 'https://cosmocode.de',
             'unique_fields': ['url'],
+            'domain': 'cosmocode.de',
+            'pool': 0,
         }
 
         response = self.client.post('/api/thinktank/', data, 'application/json')
@@ -191,6 +194,8 @@ class ThinktankTestCase(test.TestCase):
             'name': 'EDITED',
             'url': self.thinktank.url,
             'unique_fields': self.thinktank.unique_fields,
+            'domain': self.thinktank.domain,
+            'pool': self.thinktank.pool.id,
         }
 
         url = reverse('1:thinktank-detail', args=[self.thinktank.pk])

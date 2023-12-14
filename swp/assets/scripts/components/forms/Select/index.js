@@ -1,5 +1,5 @@
-import Select from 'components/forms/Select/Select';
-import MultiSelect from 'components/forms/Select/MultiSelect';
-import Suggest from 'components/forms/Select/Suggest';
+import Select from './Select';
+import MultiSelect from './MultiSelect';
+import Suggest from './Suggest';
 
 export {Select, MultiSelect, Suggest};

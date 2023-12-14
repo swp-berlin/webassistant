@@ -6,15 +6,17 @@ import {de} from 'date-fns/locale';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faClock} from '@fortawesome/free-solid-svg-icons/faClock';
 
-import {useQuery} from 'hooks/query';
 import _ from 'utils/i18n';
+
+import {useQuery} from 'hooks/query';
+
+import Page from 'components/Page';
 import {Result} from 'components/Fetch';
 import {useBreadcrumb} from 'components/Navigation';
-import Page from 'components/Page';
 import {getThinktankLabel} from 'components/thinktank/helper';
 
 import ScraperForm from './ScraperForm';
-
+import ScraperActivationContainer from './ScraperActivationContainer';
 
 const ScraperLabel = _('Scraper');
 const Thinktanks = _('Thinktanks');
@@ -25,7 +27,6 @@ const LastRun = ({lastRun}) => (
         {`Last run: ${format(parseISO(lastRun), 'PP pp', {locale: de})}`}
     </div>
 );
-
 
 const ScraperEdit = () => {
     const {id, thinktankID} = useParams();
@@ -45,9 +46,7 @@ const ScraperEdit = () => {
                 <Page
                     title={scraper.name}
                     subtitle={scraper.last_run && <LastRun lastRun={scraper.last_run} />}
-                    actions={(
-                        <div id="scraper-activation-container" />
-                    )}
+                    actions={<ScraperActivationContainer />}
                 >
                     <ScraperForm
                         endpoint={endpoint}

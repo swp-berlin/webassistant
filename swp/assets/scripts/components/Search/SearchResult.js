@@ -1,21 +1,18 @@
-import {Tag} from '@blueprintjs/core';
 import {useLocation} from 'react-router-dom';
 
-import _ from 'utils/i18n';
-
-import {getPublicationsLabel, parsePageParam} from 'components/publication/helper';
+import {parsePageParam} from 'components/publication/helper';
 import DownloadButton from 'components/publication/DownloadButton';
 import PublicationResults from 'components/publication/PublicationResults';
 import PublicationListMenu, {PublicationListDialog, QuickAddButton} from 'components/PublicationListMenu';
 
-const NoPublicationsFound = _('No publications found');
-const FilterByTagLabel = _('Filter by Tag:');
+import SearchResultTagCloud from './SearchResultTagCloud';
+import SearchResultHeader from './SearchResultHeader';
 
-const calculatePageCount = (total, pageSize) => Math.ceil(total / pageSize);
-const sortAlphabetically = list => list.sort((a, b) => a.tag.localeCompare(b.tag));
+export const calculatePageCount = (total, pageSize) => Math.ceil(total / pageSize);
 
-const SearchResult = ({results, tags, next: nextPage, previous: prevPage, count, downloadURL, onSelectTag,
-    onAddFilter}) => {
+const SearchResult = ({
+    results, tags, selectedTags, next: nextPage, previous: prevPage, count, downloadURL, onSelectTag, onAddFilter,
+}) => {
 
     const location = useLocation();
     const pageCount = calculatePageCount(count, 10);
@@ -24,20 +21,16 @@ const SearchResult = ({results, tags, next: nextPage, previous: prevPage, count,
 
     return (
         <div className="publication-preview my-4">
-            <header className="flex space-x-4 mb-2">
-                <h3>{count ? getPublicationsLabel(count) : NoPublicationsFound}</h3>
+            <SearchResultHeader count={count}>
                 {count > 0 && <DownloadButton href={downloadURL} />}
-            </header>
+            </SearchResultHeader>
 
             {tags.length > 0 && (
-                <div className="mt-2 mb-4 flex flex-wrap space-x-2">
-                    <span>{FilterByTagLabel}</span>
-                    {sortAlphabetically(tags).map(({tag, count}) => (
-                        <Tag key={tag} interactive onClick={() => onSelectTag(tag)}>
-                            {`+ ${tag} (${count})`}
-                        </Tag>
-                    ))}
-                </div>
+                <SearchResultTagCloud
+                    tags={tags}
+                    selected={selectedTags}
+                    onSelect={onSelectTag}
+                />
             )}
 
             {count > 0 && (

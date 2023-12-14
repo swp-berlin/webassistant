@@ -1,45 +1,99 @@
 from rest_framework import serializers
+from rest_framework.relations import PrimaryKeyRelatedField
+from rest_framework.serializers import ModelSerializer
 
-from swp.api.serializers.thinktankfilter import ThinktankFilterSerializer
-from swp.models import Monitor
+from swp.models import Monitor, Pool
 
 from .fields import RecipientsField
+from .pool import PoolSerializer
 
 
-class MonitorSerializer(serializers.ModelSerializer):
-    recipient_count = serializers.IntegerField(read_only=True)
-    publication_count = serializers.IntegerField(read_only=True)
-    new_publication_count = serializers.IntegerField(read_only=True)
+class PoolField(PrimaryKeyRelatedField):
 
-    recipients = RecipientsField()
-    filters = ThinktankFilterSerializer(source='thinktank_filters', many=True, read_only=True)
+    def get_queryset(self):
+        return Pool.objects.can_manage(self.context.get('request').user)
+
+    def use_pk_only_optimization(self):
+        return False
+
+    def to_representation(self, value):
+        return PoolSerializer(value).data
+
+
+class BaseMonitorSerializer(ModelSerializer):
+    pool = PoolField()
 
     class Meta:
         model = Monitor
         fields = [
             'id',
             'name',
-            'description',
+            'pool',
+            'is_active',
+        ]
+
+
+class MonitorSerializer(BaseMonitorSerializer):
+    recipient_count = serializers.IntegerField(read_only=True)
+    publication_count = serializers.IntegerField(read_only=True)
+    new_publication_count = serializers.IntegerField(read_only=True)
+
+    class Meta(BaseMonitorSerializer.Meta):
+        fields = [
+            *BaseMonitorSerializer.Meta.fields,
             'last_sent',
-            'interval',
             'recipient_count',
             'publication_count',
             'new_publication_count',
-            'last_publication_count_update',
-            'created',
-            'recipients',
-            'zotero_keys',
-            'filters',
-            'is_active',
         ]
 
 
 class MonitorDetailSerializer(MonitorSerializer):
     transferred_count = serializers.IntegerField(read_only=True)
 
-    class Meta:
-        model = Monitor
+    class Meta(MonitorSerializer.Meta):
         fields = [
             *MonitorSerializer.Meta.fields,
+            'description',
+            'query',
+            'interval',
+            'last_publication_count_update',
             'transferred_count',
         ]
+
+
+class MonitorEditSerializer(BaseMonitorSerializer):
+    recipients = RecipientsField()
+
+    def __init__(self, instance=None, **kwargs):
+        super().__init__(instance, **kwargs)
+
+        if instance is None:
+            self.fields.pop('query')
+
+    class Meta(BaseMonitorSerializer.Meta):
+        fields = [
+            *BaseMonitorSerializer.Meta.fields,
+            'description',
+            'query',
+            'interval',
+            'recipients',
+            'zotero_keys',
+        ]
+
+    def validate(self, attrs):
+        self.validate_active_monitor_has_query(attrs)
+
+        return attrs
+
+    def validate_active_monitor_has_query(self, attrs):
+        if instance := self.instance:
+            query = attrs.get('query', instance.query)
+            is_active = attrs.get('is_active', instance.is_active)
+        else:
+            query = attrs.get('query')
+            is_active = attrs.get('is_active')
+
+        instance = Monitor(query=query, is_active=is_active)
+
+        return Monitor.clean(instance)

@@ -89,6 +89,7 @@ class PublicationDocument(FieldMixin, Document):
     thinktank = fields.ObjectField(properties={
         'id': fields.IntegerField(),
         'name': fields.TextField(),
+        'pool': fields.IntegerField(attr='pool_id'),
     })
 
     class Django:
@@ -115,7 +116,7 @@ class PublicationDocument(FieldMixin, Document):
         ]
 
     def get_queryset(self):
-        return Publication.objects.select_related('thinktank')
+        return Publication.objects.prefetch_related('thinktank')
 
     @staticmethod
     def get_instances_from_related(related_instance):

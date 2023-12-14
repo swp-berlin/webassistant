@@ -10,6 +10,9 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgid "Default"
+msgstr ""
+
 msgid "Client Error"
 msgstr "Browserfehler"
 
@@ -118,11 +121,17 @@ msgstr "bis"
 msgid "Clear"
 msgstr "Zurücksetzen"
 
+msgid "Filter by Pool:"
+msgstr "Nach Pool filtern:"
+
 msgid "Invalid Query"
 msgstr "Ungültiger Suchbegriff"
 
 msgid "visit query syntax documentation"
 msgstr "query syntax documentation besuchen"
+
+msgid "Help"
+msgstr "Hilfe"
 
 msgid "Publication Lists"
 msgstr "Publikationslisten"
@@ -139,10 +148,10 @@ msgstr "Aktivieren"
 msgid "Deactivate"
 msgstr "Deaktivieren"
 
-msgid "Sucessfully activated"
+msgid "Successfully activated"
 msgstr "Erfolgreich aktiviert"
 
-msgid "Sucessfully deactivated"
+msgid "Successfully deactivated"
 msgstr "Erfolgreich deaktiviert"
 
 msgid "Back"
@@ -155,7 +164,7 @@ msgid "Please enter a valid date in the format %(format)s"
 msgstr "Bitte geben Sie ein gültigtges Datum im Format %(format)s ein"
 
 msgid "(required)"
-msgstr "(erfordert)"
+msgstr "(erforderlich)"
 
 msgid "No Results"
 msgstr "Keine Ergebnisse"
@@ -212,7 +221,7 @@ msgid "Recipients:"
 msgstr "Empfänger:"
 
 msgid "Transferred to Zotero"
-msgstr ""
+msgstr "Zu Zotero übertragen"
 
 msgid "Name"
 msgstr "Name"
@@ -287,9 +296,6 @@ msgstr "Publikationsliste konnte nicht hinzugefügt werden."
 msgid "%(name)s (%(count)s publications)"
 msgstr "%(name)s (%(count)s Publikationen)"
 
-msgid "Default"
-msgstr ""
-
 msgid "Delete"
 msgstr "Löschen"
 
@@ -302,8 +308,8 @@ msgstr "Publikationsliste %(name)s löschen"
 msgid "Successfully deleted publication list %(name)s."
 msgstr "Publikationsliste %(name)s erfolgreich gelöscht."
 
-msgid "Export"
-msgstr "Exportieren"
+msgid "Download .RIS"
+msgstr ".RIS herunterladen"
 
 msgid "This publication list is empty."
 msgstr "Diese Publikationsliste ist leer."
@@ -319,9 +325,6 @@ msgstr "Sind Sie sicher, dass sie die Publikation %(title)s aus der Liste %(name
 
 msgid "Publication List %(id)s"
 msgstr "Publikationslisten-IDs"
-
-msgid "Download .RIS"
-msgstr ".RIS herunterladen"
 
 msgid "by"
 msgstr "von"
@@ -484,6 +487,20 @@ msgstr "Weitere von Seite 2"
 msgid "No items"
 msgstr "Keine Einträge"
 
+msgid "All"
+msgstr "Alle"
+
+msgid "Thinktank successfully activated."
+msgstr "Thinktank erfolgreich aktiviert."
+
+msgid "Thinktank successfully deactivated."
+msgstr "Thinktank erfolgreich deaktiviert."
+
+msgid "Deactivated %(count)s scraper because its start url is not a subdomain of %(domain)s."
+msgid_plural "Deactivated %(count)s scrapers because their start url is not a subdomain of %(domain)s."
+msgstr[0] "%(count)s Scraper wurde deaktiviert, da seine Start-URL keine Subdomain von %(domain)s ist."
+msgstr[1] "%(count)s Scraper wurden deaktiviert, da ihre Start-URL keine Subdomain von %(domain)s ist."
+
 msgid "New Thinktank"
 msgstr "Neuer Thinktank"
 
@@ -502,14 +519,20 @@ msgstr "Thinktank bearbeiten"
 msgid "Successfully changed thinktank"
 msgstr "Änderungen am Thinktank gespeichert"
 
-msgid "Unique Field"
-msgstr "Eindeutiges Feld"
+msgid "Pool"
+msgstr "Pool"
+
+msgid "Domain"
+msgstr "Domain"
 
 msgid "active / total"
 msgstr "aktiv / gesamt"
 
 msgid "Scrapers"
 msgstr "Scraper"
+
+msgid "Unique Field"
+msgstr "Eindeutiges Feld"
 
 #, javascript-format
 msgid "Thinktank %s"
@@ -555,4 +578,4 @@ msgid "We are currently doing maintenance work. Please try again in a few second
 msgstr "Wartungsarbeiten. Bitte versuchen Sie es in ein paar Sekunden erneut."
 
 msgid "An error occurred: %(error)s"
-msgstr ""
+msgstr "Ein Fehler ist aufgetreten: %(error)s"

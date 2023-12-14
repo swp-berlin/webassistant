@@ -3,22 +3,43 @@ import PropTypes from 'prop-types';
 import {Button, Intent} from '@blueprintjs/core';
 
 import _ from 'utils/i18n';
-import {useMutationResult} from 'components/Fetch/Form';
+
 import {useControllableState} from 'hooks/state';
 
+import {useMutationResult} from 'components/Fetch/Form';
 
 const ActivateLabel = _('Activate');
 const DeactivateLabel = _('Deactivate');
-const DefaultActivatedMessage = _('Sucessfully activated');
-const DefaultDeactivatedMessage = _('Sucessfully deactivated');
+const DefaultActivatedMessage = _('Successfully activated');
+const DefaultDeactivatedMessage = _('Successfully deactivated');
 
-const getLabel = isActive => (isActive ? DeactivateLabel : ActivateLabel);
+export const ActivationButton = ({isActive, intent = Intent.PRIMARY, ...props}) => (
+    <Button intent={intent} text={isActive ? DeactivateLabel : ActivateLabel} {...props} />
+);
 
+const getMutationOptions = (mutationOptions, onToggle, activatedMessage, deactivatedMessage) => ({
+    ...mutationOptions,
+    handleSuccess(data, ...args) {
+        const {is_active: isActive} = data;
 
-const ActivationButton = props => {
+        if (onToggle) onToggle(isActive);
+        if (mutationOptions.handleSuccess) mutationOptions.handleSuccess(data, ...args);
+
+        return ({
+            intent: Intent.SUCCESS,
+            message: isActive ? activatedMessage : deactivatedMessage,
+        });
+    },
+});
+
+const ActivationButtonController = props => {
     const {
-        endpoint, mutationOptions,
-        isActiveKey, isActive: isActiveProvided, onToggle, defaultIsActive,
+        endpoint,
+        mutationOptions,
+        isActiveKey,
+        isActive: isActiveProvided,
+        defaultIsActive,
+        onToggle,
         disabled,
         activatedMessage,
         deactivatedMessage,
@@ -30,21 +51,17 @@ const ActivationButton = props => {
         onChange: onToggle,
         defaultValue: defaultIsActive,
     });
+
     const [handleSubmit, mutationResult] = useMutationResult(
         endpoint,
-        {
-            handleSuccess: ({is_active: isActive}) => onToggle(isActive) && ({
-                intent: 'success',
-                message: isActive ? activatedMessage : deactivatedMessage,
-            }),
-            ...mutationOptions,
-        },
-        [],
+        getMutationOptions(mutationOptions, onToggle, activatedMessage, deactivatedMessage),
+        [activatedMessage, deactivatedMessage, onToggle],
     );
+
     const {loading, result: {data}, success} = mutationResult;
 
     useEffect(() => {
-        if (success) setIsActive(data[isActiveKey]);
+        if (success && setIsActive) setIsActive(data[isActiveKey]);
     }, [success, data, setIsActive, isActiveKey]);
 
     const handleClick = useCallback(
@@ -52,19 +69,18 @@ const ActivationButton = props => {
         [handleSubmit, isActiveKey, isActive],
     );
 
-    const text = getLabel(isActive);
     return (
-        <Button
-            intent={Intent.PRIMARY}
-            text={text}
+        <ActivationButton
+            isActive={isActive}
             onClick={handleClick}
-            disabled={disabled || loading}
+            disabled={disabled}
+            loading={loading}
             {...other}
         />
     );
 };
 
-ActivationButton.propTypes = {
+ActivationButtonController.propTypes = {
     isActiveKey: PropTypes.string,
     endpoint: PropTypes.string.isRequired,
     isActive: PropTypes.bool,
@@ -72,11 +88,11 @@ ActivationButton.propTypes = {
     deactivatedMessage: PropTypes.string,
 };
 
-ActivationButton.defaultProps = {
+ActivationButtonController.defaultProps = {
     isActive: undefined,
     isActiveKey: 'is_active',
     activatedMessage: DefaultActivatedMessage,
     deactivatedMessage: DefaultDeactivatedMessage,
 };
 
-export default ActivationButton;
+export default ActivationButtonController;

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import datetime
 import operator
+
 from collections import defaultdict
 from functools import reduce
 from typing import Iterable, Tuple, Collection
@@ -14,19 +15,25 @@ from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 from django.contrib.postgres.fields import ArrayField
 
-from sentry_sdk import capture_message
+from elasticsearch.exceptions import ElasticsearchException
+from elasticsearch_dsl.query import Match, QueryString
+
+from sentry_sdk import capture_message, capture_exception
 
 from swp.db.expressions import MakeInterval
 from swp.utils.ris import generate_ris_data
+from swp.utils.validation import get_field_validation_error
+
+from .pool import CanManageQuerySet
 from .publication import Publication
 from .fields import ZoteroKeyField, ZOTERO_URI_PATTERN
 from .abstract import ActivatableModel, ActivatableQuerySet
 from .choices import Interval
 from .publicationcount import PublicationCount
-from .thinktankfilter import ThinktankFilter
 
 
-class MonitorQuerySet(ActivatableQuerySet):
+class MonitorQuerySet(ActivatableQuerySet, CanManageQuerySet):
+    pool_ref = models.OuterRef('pool')
 
     def annotate_next_run(self, to_attr: str = '', *, now: datetime.datetime = None) -> MonitorQuerySet:
         next_run = Case(
@@ -73,6 +80,8 @@ class Monitor(PublicationCount, ActivatableModel):
 
     name = models.CharField(_('name'), max_length=100)
     description = models.TextField(_('description'), blank=True)
+    pool = models.ForeignKey('swp.Pool', models.PROTECT, verbose_name=_('pool'), related_name='monitors')
+    query = models.TextField(_('query'), blank=True)
     recipients = ArrayField(models.EmailField(), blank=True, verbose_name=_('recipients'))
     zotero_keys = ArrayField(
         ZoteroKeyField(),
@@ -91,25 +100,49 @@ class Monitor(PublicationCount, ActivatableModel):
     class Meta(ActivatableModel.Meta):
         verbose_name = _('monitor')
         verbose_name_plural = _('monitors')
+        constraints = [
+            models.CheckConstraint(
+                check=models.Q(is_active=False) | ~models.Q(query=''),
+                name='active_monitor_has_query',
+            ),
+        ]
 
     def __str__(self) -> str:
         return self.name
 
+    def clean(self):
+        if self.is_active and not self.query:
+            raise get_field_validation_error('query', _('An active monitor must not have an empty query.'))
+
+    def get_query(self, using=None):
+        from swp.documents import PublicationDocument
+
+        search = PublicationDocument.search(using=using).query(
+            Match(thinktank__pool=self.pool_id) &
+            QueryString(query=self.query, default_operator='AND')
+        )
+
+        search.source(False)
+
+        try:
+            ids = [result.meta.id for result in search]
+        except ElasticsearchException as error:
+            capture_exception(error)
+
+            return models.Q(id=None)
+
+        return models.Q(id__in=ids)
+
     @property
     def as_query(self):
-        thinktank_filters = self.thinktank_filters.all()
-        queries = [thinktank_filter.as_query for thinktank_filter in thinktank_filters]
-
-        return reduce(operator.or_, queries, models.Q())
+        return self.get_query(None)
 
     @property
     def recipient_count(self):
         return len(self.recipients)
 
-    def get_publications(self, *, exclude_sent: bool = False, filter_by: ThinktankFilter = None):
-        qs = Publication.objects.active().filter(
-            filter_by.as_query if filter_by else self.as_query
-        )
+    def get_publications(self, *, exclude_sent: bool = False):
+        qs = Publication.objects.active().filter(self.as_query)
 
         if exclude_sent and self.last_sent:
             qs = qs.filter(last_access__gte=self.last_sent)
@@ -125,13 +158,7 @@ class Monitor(PublicationCount, ActivatableModel):
         return self.get_publications(exclude_sent=True)
 
     def update_publication_count(self, commit: bool = True, now=None) -> Tuple[int, int]:
-        now = timezone.localtime(now)
-        counts = self.get_publication_counts(self.last_sent, commit=commit, now=now)
-
-        for thinktank_filter in self.thinktank_filters.all():
-            thinktank_filter.update_publication_count(last_sent=self.last_sent, commit=commit, now=now)
-
-        return counts
+        return self.get_publication_counts(self.last_sent, commit=commit, now=timezone.localtime(now))
 
     @cached_property
     def next_run(self) -> datetime.datetime:

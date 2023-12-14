@@ -1,77 +1,92 @@
+from django.core.exceptions import ValidationError
+from django.db import transaction
 from django.utils.translation import gettext_lazy as _
 
-from rest_framework.fields import BooleanField
-from rest_framework.serializers import ModelSerializer, SerializerMethodField
+from rest_framework.fields import BooleanField, IntegerField
+from rest_framework.serializers import ModelSerializer
 
-from swp.models import Thinktank
+from swp.models import Thinktank, Pool
+
 from .scraper import ScraperListSerializer
 
 
-class ThinktankSerializer(ModelSerializer):
+class BaseThinktankSerializer(ModelSerializer):
+    """
+    Base thinktank serializer.
+    """
+
+    can_manage = BooleanField(read_only=True)
+
+    class Meta:
+        model = Thinktank
+        read_only_fields = [
+            'can_manage',
+            'last_run',
+            'created',
+            'publication_count',
+            'scraper_count',
+            'active_scraper_count',
+            'last_error_count',
+        ]
+        fields = [
+            'id',
+            'pool',
+            'name',
+            'url',
+            'is_active',
+            'unique_fields',
+            *read_only_fields,
+        ]
+
+
+class ThinktankSerializer(BaseThinktankSerializer):
     """
     Full thinktank serializer.
     """
 
-    last_error_count = SerializerMethodField()
     scrapers = ScraperListSerializer(many=True, read_only=True)
+    is_active = BooleanField(label=_('active'), required=False)
+    deactivated_scrapers = IntegerField(read_only=True, default=0)
 
-    is_active = BooleanField(label=_('Active'), required=False)
+    class Meta(BaseThinktankSerializer.Meta):
+        read_only_fields = [*BaseThinktankSerializer.Meta.read_only_fields, 'scrapers', 'deactivated_scrapers']
+        fields = [*BaseThinktankSerializer.Meta.fields, 'domain', 'description', 'scrapers', 'deactivated_scrapers']
 
-    class Meta:
-        model = Thinktank
-        read_only_fields = [
-            'last_run',
-            'created',
-            'publication_count',
-            'scraper_count',
-            'active_scraper_count',
-            'last_error_count',
-            'scrapers',
-        ]
-        fields = [
-            'id',
-            'name',
-            'description',
-            'url',
-            'unique_fields',
-            'is_active',
-            *read_only_fields,
-        ]
+    def validate_pool(self, pool: Pool):
+        if self.context.get('request').user.can_manage_pool(pool):
+            return pool
 
-    def get_last_scraper(self, obj: Thinktank):
-        scrapers = [scraper for scraper in obj.scrapers.all() if scraper.last_run is not None]
-        latest = None
-        for scraper in scrapers:
-            last_run = getattr(latest, 'last_run', None)
-            if last_run is None or scraper.last_run > last_run:
-                latest = scraper
+        raise ValidationError(
+            message=_('You are not authorized to add thinktanks to pool %(pool)s.'),
+            params={'pool': pool},
+            code='no-manager',
+        )
 
-        return latest
+    @transaction.atomic
+    def update(self, instance: Thinktank, validated_data):
+        should_deactivate_incompatible_scrapers = self.should_deactivate_incompatible_scrapers(instance, validated_data)
+        instance = super().update(instance, validated_data)
 
-    def get_last_error_count(self, obj: Thinktank) -> int:
-        return getattr(self.get_last_scraper(obj), 'error_count', 0)
+        if should_deactivate_incompatible_scrapers:
+            instance.deactivated_scrapers = instance.deactivate_incompatible_scrapers()
+
+        return instance
+
+    @staticmethod
+    def should_deactivate_incompatible_scrapers(instance, validated_data):
+        if validated_data.get('is_active'):
+            return True
+
+        if validated_data.get('is_active', instance.is_active):
+            return not instance.domain == validated_data.get('domain', instance.domain)
+
+        return False
 
 
-class ThinktankListSerializer(ModelSerializer):
+class ThinktankListSerializer(BaseThinktankSerializer):
     """
     Light serializer for thinktank lists.
     """
 
-    class Meta:
-        model = Thinktank
-        read_only_fields = [
-            'is_active',
-            'last_run',
-            'created',
-            'publication_count',
-            'scraper_count',
-            'active_scraper_count',
-            'last_error_count',
-        ]
-        fields = [
-            'id',
-            'name',
-            'url',
-            'unique_fields',
-            *read_only_fields,
-        ]
+    class Meta(BaseThinktankSerializer.Meta):
+        read_only_fields = [*BaseThinktankSerializer.Meta.read_only_fields, 'is_active']

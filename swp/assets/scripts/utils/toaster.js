@@ -1,6 +1,14 @@
-import {Position, Toaster} from '@blueprintjs/core';
+import {Intent, Position, Toaster} from '@blueprintjs/core';
 
-export default Toaster.create({
+const toaster = Toaster.create({
     className: 'toaster',
     position: Position.TOP,
 });
+
+export const showToast = (message, intent = Intent.SUCCESS, options = {}) => toaster.show({
+    ...options,
+    message,
+    intent,
+});
+
+export default toaster;

@@ -1,37 +1,27 @@
 import {useParams} from 'react-router-dom';
 
-import {useBreadcrumb} from 'components/Navigation';
-import Page from 'components/Page';
+import _ from 'utils/i18n';
 
-import _, {interpolate} from 'utils/i18n';
 import {useQuery} from 'hooks/query';
+
+import Page from 'components/Page';
 import {Result} from 'components/Fetch';
 
 import MonitorForm from './MonitorForm';
 import {useMonitorsBreadcrumb} from './MonitorList';
-
+import {useMonitorBreadcrumb} from './MonitorDetail';
 
 const Title = _('Edit Monitor');
-const MonitorLabel = _('Monitor %s');
 const SubmitLabel = _('Save');
 const SuccessMessage = _('Successfully changed monitor');
-
-
-const getLabel = (id, {loading, result: {data}}) => {
-    if (loading || !data) {
-        return interpolate(MonitorLabel, [id], false);
-    }
-
-    return data.name;
-};
 
 const MonitorEdit = props => {
     const {id} = useParams();
     const endpoint = `/monitor/${id}/`;
-    const result = useQuery(endpoint);
+    const result = useQuery(`/monitor/${id}/edit/`);
 
     useMonitorsBreadcrumb();
-    useBreadcrumb(endpoint, getLabel(id, result));
+    useMonitorBreadcrumb(endpoint, id, result.result.data);
 
     return (
         <Result result={result}>
@@ -42,7 +32,7 @@ const MonitorEdit = props => {
                         method="PATCH"
                         submitLabel={SubmitLabel}
                         successMessage={SuccessMessage}
-                        backURL="/monitor/"
+                        backURL={endpoint}
                         data={monitor}
                         {...props}
                     />

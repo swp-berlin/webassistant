@@ -1,19 +1,20 @@
-from typing import Type, Union
+import string
+
+from typing import Union
 
 from django.apps import apps
 from django.conf import settings
-from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.contrib.auth.base_user import AbstractBaseUser as User
 
-import factory
 from django.core.management import call_command as django_call_command
-from django.db.models import Model
 from django.test import SimpleTestCase
 from django.urls import reverse
+from django.utils.crypto import get_random_string
+from django.utils.text import slugify
 
-from swp.models import Monitor, Publication, PublicationFilter, Thinktank, ThinktankFilter
-
+from swp.models import Monitor, Pool, Thinktank
+from swp.utils.domain import get_canonical_domain
 
 Args = Union[tuple, list]
 
@@ -114,74 +115,38 @@ def request(test_case: SimpleTestCase, url: str, status_code: int = None, expect
     return response
 
 
-class ThinktankFactory(factory.django.DjangoModelFactory):
-    name = factory.Sequence(lambda n: f'Thinktank #{n:03d}')
-    description = factory.Sequence(lambda n: f'Thinktank #{n:03d} Description')
-    url = factory.Sequence(lambda n: f'https://thinktank{n}/')
+def create_monitor(**kwargs) -> Monitor:
+    defaults = {
+        'pool': Pool(id=0),
+        'name': 'Test-Monitor',
+        'query': 'test',
+        'is_active': True,
+        'recipients': [],
+    }
 
-    class Meta:
-        model = Thinktank
+    defaults.update(kwargs)
 
-    @factory.post_generation
-    def publications(self, create, extracted, **kwargs):
-        if extracted:
-            for data in extracted:
-                PublicationFactory.create(thinktank=self, **data)
-
-
-class PublicationFactory(factory.django.DjangoModelFactory):
-    title = factory.Sequence(lambda n: f'Publication #{n:03d}')
-    subtitle = factory.Sequence(lambda n: f'Subtitle #{n:03d}')
-    publication_date = '2020-01-01'
-    url = 'https:/example.com'
-    pdf_url = 'https:/example.com/download.pdf'
-    pdf_pages = 42
-
-    class Meta:
-        model = Publication
+    return Monitor.objects.create(**defaults)
 
 
-class ThinktankFilterFactory(factory.django.DjangoModelFactory):
-    thinktank = factory.SubFactory(ThinktankFactory)
+def create_thinktank(name=None, domain=None, url=None, **kwargs) -> Thinktank:
+    if name is None:
+        name = 'Thinktank %s' % get_random_string(6, string.ascii_letters)
 
-    class Meta:
-        model = ThinktankFilter
+    if domain is None:
+        domain = get_canonical_domain(url) if url else '%s.com' % slugify(name)
 
-    @factory.post_generation
-    def publication_filters(self, create, extracted, **kwargs):
-        if extracted:
-            for data in extracted:
-                PublicationFilterFactory.create(thinktank_filter=self, **data)
+    if url is None:
+        url = domain and f'https://www.{domain}'
 
+    defaults = {
+        'name': name,
+        'pool': Pool(id=0),
+        'domain': domain,
+        'url': url,
+        'is_active': True,
+    }
 
-class PublicationFilterFactory(factory.django.DjangoModelFactory):
-    thinktank_filter = factory.SubFactory(ThinktankFilterFactory)
+    defaults.update(kwargs)
 
-    class Meta:
-        model = PublicationFilter
-
-
-class MonitorFactory(factory.django.DjangoModelFactory):
-    name = factory.Sequence(lambda n: f'Monitor #{n:03d}')
-    recipients = factory.List(['nobody@localhost'])
-
-    class Meta:
-        model = Monitor
-
-    @factory.post_generation
-    def thinktank_filters(self, create, extracted, **kwargs):
-        if extracted:
-            for data in extracted:
-                ThinktankFilterFactory.create(monitor=self, **data)
-
-
-def admin_url(model: Type[Model], view: str, *args, site=None, **kwargs) -> str:
-    """
-    Return an url to an admin view.
-    """
-
-    opts = model._meta
-    site = site or admin.site
-    info = site.name, opts.app_label, opts.model_name, view
-
-    return reverse('%s:%s_%s_%s' % info, args=args, kwargs=kwargs)
+    return Thinktank.objects.create(**defaults)

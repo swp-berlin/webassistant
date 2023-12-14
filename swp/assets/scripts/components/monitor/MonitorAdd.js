@@ -1,10 +1,11 @@
-import {useBreadcrumb} from 'components/Navigation';
-import Page from 'components/Page';
-
 import _ from 'utils/i18n';
-import MonitorForm from './MonitorForm';
-import {useMonitorsBreadcrumb} from './MonitorList';
 
+import Page from 'components/Page';
+import {useBreadcrumb} from 'components/Navigation';
+import {useDefaultValues} from 'components/thinktank/ThinktankAddForm';
+
+import MonitorForm, {DefaultValues} from './MonitorForm';
+import {useMonitorsBreadcrumb} from './MonitorList';
 
 const Title = _('New Monitor');
 const SubmitLabel = _('Create');
@@ -14,6 +15,8 @@ const MonitorAdd = props => {
     useMonitorsBreadcrumb();
     useBreadcrumb('/monitor/add/', Title);
 
+    const defaultValues = useDefaultValues(DefaultValues);
+
     return (
         <Page title={Title}>
             <MonitorForm
@@ -21,6 +24,7 @@ const MonitorAdd = props => {
                 method="POST"
                 submitLabel={SubmitLabel}
                 successMessage={SuccessMessage}
+                defaultValues={defaultValues}
                 backURL="/monitor/"
                 {...props}
             />

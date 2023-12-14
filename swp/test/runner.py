@@ -9,7 +9,7 @@ from django.test.runner import DiscoverRunner
 class CosmoCodeTestRunner(DiscoverRunner):
 
     def setup_test_environment(self, **kwargs):
-        if settings.MEDIA_ROOT == settings.BASE_DIR / 'media':
+        if settings.MEDIA_ROOT == settings.BASE_DIR / 'media':  # pragma: no cover
             raise ImproperlyConfigured(
                 f'Make sure to set MEDIA_ROOT to a directory distinct from the '
                 f'default MEDIA_ROOT when using {self.__class__.__name__}'

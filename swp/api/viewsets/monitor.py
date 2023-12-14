@@ -1,46 +1,45 @@
 from celery.canvas import group
+
 from django.db.models import Prefetch
-from rest_framework import viewsets
+
 from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.viewsets import ModelViewSet
 
 from swp.api import default_router
-from swp.api.serializers import ThinktankFilterSerializer
-from swp.api.serializers.monitor import MonitorSerializer, MonitorDetailSerializer
-from swp.models import Monitor, ThinktankFilter
+from swp.api.permissions import CanManagePool
+from swp.api.serializers import MonitorSerializer, MonitorDetailSerializer, MonitorEditSerializer
+from swp.models import Monitor, Pool
 from swp.tasks import send_publications_to_zotero, update_publication_count
 
 
+class CanManageMonitor(CanManagePool):
+
+    def is_safe(self, request, view):
+        return CanManagePool.is_safe(self, request, view) and not (view == 'edit')
+
+
 @default_router.register('monitor', basename='monitor')
-class MonitorViewSet(viewsets.ModelViewSet):
+class MonitorViewSet(ModelViewSet):
+    permission_classes = [IsAuthenticated & CanManagePool]
     serializer_class = MonitorSerializer
-    queryset = Monitor.objects.prefetch_related(
-        Prefetch(
-            'thinktank_filters',
-            queryset=ThinktankFilter.objects.select_related(
-                'thinktank',
-            ).prefetch_related(
-                'publication_filters',
-            ).order_by('thinktank__name')
-        ),
-    ).order_by('name')
+    queryset = Monitor.objects.order_by('name')
+    filterset_fields = ['pool']
+
+    def get_queryset(self):
+        return ModelViewSet.get_queryset(self).prefetch_related(
+            Prefetch('pool', Pool.objects.can_manage(self.request.user)),
+        )
 
     def get_serializer_class(self):
         if self.action == 'retrieve':
             return MonitorDetailSerializer
-        if self.action == 'add_filter':
-            return ThinktankFilterSerializer
 
-        return super().get_serializer_class()
+        if self.action in {'create', 'update', 'partial_update'}:
+            return MonitorEditSerializer
 
-    def related_filter_action(self, request, monitor=None, status=200):
-        monitor = monitor or self.get_object()
-        serializer = self.get_serializer(data=request.data)
-
-        serializer.is_valid(raise_exception=True)
-        serializer.save(monitor=monitor)
-
-        return Response(serializer.data, status=status)
+        return self.serializer_class
 
     def get_serializer(self, instance=None, *, many=None, **kwargs):
         if self.action == 'list':
@@ -52,15 +51,15 @@ class MonitorViewSet(viewsets.ModelViewSet):
 
         return super(MonitorViewSet, self).get_serializer(instance, many=many, **kwargs)
 
-    @action(detail=True, methods=['post'], url_name='update-publication-count', url_path='update-publication-count')
+    @action(detail=True, serializer_class=MonitorEditSerializer)
+    def edit(self, request, **kwargs):
+        return self.retrieve(request, **kwargs)
+
+    @action(detail=True, methods=['post'], url_path='update-publication-count')
     def update_publication_count(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
 
-    @action(detail=True, methods=['post'], url_name='add-filter', url_path='add-filter')
-    def add_filter(self, request, **kwargs):
-        return self.related_filter_action(request)
-
-    @action(detail=True, methods=['post'], url_name='transfer-to-zotero', url_path='transfer-to-zotero')
+    @action(detail=True, methods=['post'], url_path='transfer-to-zotero')
     def transfer_to_zotero(self, request, **kwargs):
         monitor = self.get_object()
 

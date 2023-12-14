@@ -1,17 +1,29 @@
 import datetime
+
+from contextlib import contextmanager
+from unittest.mock import patch
 from urllib.parse import urlencode
 
 from django import test
+from django.db import models
 from django.urls import reverse
 from django.utils import timezone
 
-from swp.utils.testing import create_user, login, request
-
-from swp.models import Monitor, Publication, PublicationFilter, Thinktank, ThinktankFilter
-from swp.models.choices import Comparator, FilterField
-from swp.utils.testing import MonitorFactory
+from swp.models import Publication, Monitor
+from swp.utils.testing import login, request, create_user, create_monitor, create_thinktank
 
 ONE_HOUR = datetime.timedelta(hours=1)
+
+
+@contextmanager
+def patch_monitor_query(*publications):
+    if publications:
+        return_value = models.Q(id__in=[publication.id for publication in publications])
+    else:
+        return_value = models.Q(id=None)
+
+    with patch.object(Monitor, 'get_query', return_value=return_value) as get_query:
+        yield get_query
 
 
 class PublicationTestCase(test.TestCase):
@@ -21,54 +33,46 @@ class PublicationTestCase(test.TestCase):
         cls.now = now = timezone.localtime()
         cls.user = create_user('test@localhost')
 
-        cls.monitors = Monitor.objects.bulk_create([
-            Monitor(name='Monitor A', recipients=['nobody@localhost'], created=now),
-            Monitor(name='Monitor B', recipients=['nobody@localhost'], created=now, last_sent=now),
-            Monitor(name='Monitor C', recipients=['nobody@localhost'], created=now),
-        ])
-
-        cls.thinktanks = Thinktank.objects.bulk_create([
-            Thinktank(
+        cls.thinktanks = thinktanks = [
+            create_thinktank(
                 name='PIIE',
                 url='https://www.piie.com/',
                 unique_fields=['T1-AB'],
                 created=now,
             ),
-            Thinktank(
+            create_thinktank(
                 name='China Development Institute',
                 url='http://en.cdi.org.cn/',
                 unique_fields=['url'],
                 created=now,
                 is_active=True,
             ),
-        ])
-        cls.thinktank = cls.thinktanks[1]
+        ]
 
-        cls.thinktank_filters = ThinktankFilter.objects.bulk_create([
-            ThinktankFilter(monitor=cls.monitors[0], thinktank=cls.thinktanks[0]),
-            ThinktankFilter(monitor=cls.monitors[1], thinktank=cls.thinktanks[1]),
-        ])
+        cls.thinktank = thinktanks[1]
 
-        cls.publication_filters = PublicationFilter.objects.bulk_create([
-            PublicationFilter(
-                thinktank_filter=cls.thinktank_filters[0],
-                field='title',
-                comparator='contains',
-                values=['COVID-19'],
+        [thinktank_0, thinktank_1] = thinktanks
+
+        cls.monitors = [
+            create_monitor(
+                name='Monitor A',
+                recipients=['nobody@localhost'],
+                created=now,
+                query=f'thinktank.id:{thinktank_0.id} AND title:("COVID-19" OR "COVID-20")',
             ),
-            PublicationFilter(
-                thinktank_filter=cls.thinktank_filters[0],
-                field='title',
-                comparator='contains',
-                values=['COVID-20'],
+            create_monitor(
+                name='Monitor B',
+                recipients=['nobody@localhost'],
+                created=now,
+                last_sent=now,
+                query=f'thinktank.id:{thinktank_1.id} AND title:"Annual Report"',
             ),
-            PublicationFilter(
-                thinktank_filter=cls.thinktank_filters[1],
-                field='title',
-                comparator='starts_with',
-                values=['Annual Report'],
+            create_monitor(
+                name='Monitor C',
+                recipients=['nobody@localhost'],
+                created=now,
             ),
-        ])
+        ]
 
         cls.publications = Publication.objects.bulk_create([
             Publication(
@@ -130,22 +134,31 @@ class PublicationTestCase(test.TestCase):
         self.assertEqual(response.data['pdf_pages'], self.publication.pdf_pages)
 
     def test_monitor_empty_filter(self):
-        response = request(self, f'{self.list_url}?monitor={self.monitors[0].pk}')
+        with patch_monitor_query():
+            response = request(self, f'{self.list_url}?monitor={self.monitors[0].pk}')
+
         self.assertEqual(response.data['count'], 0)
 
     def test_monitor_filter(self):
-        response = request(self, f'{self.list_url}?monitor={self.monitors[1].pk}')
+        with patch_monitor_query(self.publications[1], self.publications[2]):
+            response = request(self, f'{self.list_url}?monitor={self.monitors[1].pk}')
+
         self.assertEqual(response.data['count'], 2)
 
     def test_monitor_active_filter(self):
-        response = request(self, f'{self.list_url}?monitor={self.monitors[1].pk}&is_active=true')
-        self.assertEqual(response.data['count'], 2)
+        monitor = self.monitors[1]
 
-        self.monitors[1].update_publication_count()
-        self.assertEqual(self.monitors[1].publication_count, 2)
+        with patch_monitor_query(self.publications[1], self.publications[2]):
+            response = request(self, f'{self.list_url}?monitor={monitor.pk}&is_active=true')
+            self.assertEqual(response.data['count'], 2)
+
+            monitor.update_publication_count()
+            self.assertEqual(monitor.publication_count, 2)
 
     def test_monitor_inactive_filter(self):
-        response = request(self, f'{self.list_url}?monitor={self.monitors[1].pk}&is_active=false')
+        with patch_monitor_query(self.publications[1], self.publications[2]):
+            response = request(self, f'{self.list_url}?monitor={self.monitors[1].pk}&is_active=false')
+
         self.assertEqual(response.data['count'], 0)
 
     def test_monitor_active_since_filter(self):
@@ -155,7 +168,9 @@ class PublicationTestCase(test.TestCase):
             'since': self.monitors[1].last_sent,
         })
 
-        response = request(self, f'{self.list_url}?{query_string}')
+        with patch_monitor_query(self.publications[1], self.publications[2]):
+            response = request(self, f'{self.list_url}?{query_string}')
+
         self.assertEqual(response.data['count'], 1)
 
     def test_monitor_active_outdated_filter(self):
@@ -165,52 +180,7 @@ class PublicationTestCase(test.TestCase):
             'since': self.now + ONE_HOUR,
         })
 
-        response = request(self, f'{self.list_url}?{query_string}')
+        with patch_monitor_query(self.publications[1], self.publications[2]):
+            response = request(self, f'{self.list_url}?{query_string}')
+
         self.assertEqual(response.data['count'], 0)
-
-    def test_multiple_filters(self):
-        filter_with_multiple_values = {
-            'field': FilterField.TITLE.value,
-            'comparator': Comparator.CONTAINS.value,
-            'values': ['foo', 'bar'],
-        }
-
-        monitor = MonitorFactory.create(
-            thinktank_filters=[{
-                'thinktank__publications': [
-                    {'title': 'foo'}, {'title': 'bar'}, {'title': 'foo bar'}, {'title': 'baz'}
-                ],
-                'publication_filters': [filter_with_multiple_values],
-            }]
-        )
-
-        response = request(self, f'{self.list_url}?monitor={monitor.pk}')
-        self.assertEqual(response.data['count'], 3)
-        self.assertEqual({'foo', 'bar', 'foo bar'}, set([result['title'] for result in response.data['results']]))
-
-    def test_text_filter_field(self):
-        text_filter = {
-            'field': FilterField.TEXT.value,
-            'comparator': Comparator.CONTAINS.value,
-            'values': ['text_filter_value_1', 'text_filter_value_2'],
-        }
-
-        monitor = MonitorFactory.create(
-            thinktank_filters=[{
-                'thinktank__publications': [
-                    {FilterField.TITLE: 'text_filter_value_1'},
-                    {FilterField.ABSTRACT: 'text_filter_value_1'},
-                    {FilterField.SUBTITLE: 'text_filter_value_2'},
-                    {FilterField.AUTHORS: ['FOO']},
-                    {},
-                ],
-                'publication_filters': [text_filter],
-            }]
-        )
-
-        response = request(self, f'{self.list_url}?monitor={monitor.pk}')
-
-        self.assertEqual(response.data['count'], 3)
-        self.assertEqual(response.data['results'][0][FilterField.SUBTITLE.value], 'text_filter_value_2')
-        self.assertEqual(response.data['results'][1][FilterField.ABSTRACT.value], 'text_filter_value_1')
-        self.assertEqual(response.data['results'][2][FilterField.TITLE.value], 'text_filter_value_1')

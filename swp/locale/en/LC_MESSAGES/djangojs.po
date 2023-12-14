@@ -10,6 +10,9 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgid "Default"
+msgstr ""
+
 msgid "Client Error"
 msgstr ""
 
@@ -118,10 +121,16 @@ msgstr ""
 msgid "Clear"
 msgstr ""
 
+msgid "Filter by Pool:"
+msgstr ""
+
 msgid "Invalid Query"
 msgstr ""
 
 msgid "visit query syntax documentation"
+msgstr ""
+
+msgid "Help"
 msgstr ""
 
 msgid "Publication Lists"
@@ -139,10 +148,10 @@ msgstr ""
 msgid "Deactivate"
 msgstr ""
 
-msgid "Sucessfully activated"
+msgid "Successfully activated"
 msgstr ""
 
-msgid "Sucessfully deactivated"
+msgid "Successfully deactivated"
 msgstr ""
 
 msgid "Back"
@@ -287,9 +296,6 @@ msgstr ""
 msgid "%(name)s (%(count)s publications)"
 msgstr ""
 
-msgid "Default"
-msgstr ""
-
 msgid "Delete"
 msgstr ""
 
@@ -302,7 +308,7 @@ msgstr ""
 msgid "Successfully deleted publication list %(name)s."
 msgstr ""
 
-msgid "Export"
+msgid "Download .RIS"
 msgstr ""
 
 msgid "This publication list is empty."
@@ -318,9 +324,6 @@ msgid "Are you sure you want to remove the publication %(title)s from the list %
 msgstr ""
 
 msgid "Publication List %(id)s"
-msgstr ""
-
-msgid "Download .RIS"
 msgstr ""
 
 msgid "by"
@@ -484,6 +487,20 @@ msgstr ""
 msgid "No items"
 msgstr ""
 
+msgid "All"
+msgstr ""
+
+msgid "Thinktank successfully activated."
+msgstr ""
+
+msgid "Thinktank successfully deactivated."
+msgstr ""
+
+msgid "Deactivated %(count)s scraper because its start url is not a subdomain of %(domain)s."
+msgid_plural "Deactivated %(count)s scrapers because their start url is not a subdomain of %(domain)s."
+msgstr[0] ""
+msgstr[1] ""
+
 msgid "New Thinktank"
 msgstr ""
 
@@ -502,13 +519,19 @@ msgstr ""
 msgid "Successfully changed thinktank"
 msgstr ""
 
-msgid "Unique Field"
+msgid "Pool"
+msgstr ""
+
+msgid "Domain"
 msgstr ""
 
 msgid "active / total"
 msgstr ""
 
 msgid "Scrapers"
+msgstr ""
+
+msgid "Unique Field"
 msgstr ""
 
 #, javascript-format
