@@ -3,7 +3,7 @@ name: staging deployment
 on:
   workflow_run:
     workflows: [Django CI]
-    branches: [master]
+    branches: [staging]
     types:
       - completed
 
@@ -28,8 +28,8 @@ jobs:
           sudo systemctl stop scraper@staging.service
           cd /var/www/staging
           git fetch --all --quiet
-          git checkout --force master
-          git reset --hard origin/master
+          git checkout --force staging
+          git reset --hard origin/staging
           git submodule update --init --recursive
           export PLAYWRIGHT_BROWSERS_PATH=/var/www/staging/browsers
           export DJANGO_SETTINGS_MODULE=swp.settings.staging
@@ -46,4 +46,3 @@ jobs:
           sudo systemctl start celery@staging.service
           sudo systemctl start scraper@staging.service
           sudo systemctl restart nginx.service
-
