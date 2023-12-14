@@ -11,16 +11,16 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #, python-format
-msgid "Activated %(count)d %(name)s"
-msgstr "%(count)d %(name)s erfolgreich aktiviert"
+msgid "Activated %(count)d %(name)s."
+msgstr "%(count)d %(name)s erfolgreich aktiviert."
 
 #, python-format
 msgid "Activate selected %(verbose_name_plural)s"
 msgstr "Ausgewählte %(verbose_name_plural)s aktivieren"
 
 #, python-format
-msgid "Deactivated %(count)d %(name)s"
-msgstr "%(count)d %(name)s erfolgreich deaktiviert"
+msgid "Deactivated %(count)d %(name)s."
+msgstr "%(count)d %(name)s erfolgreich deaktiviert."
 
 #, python-format
 msgid "Deactivate selected %(verbose_name_plural)s"

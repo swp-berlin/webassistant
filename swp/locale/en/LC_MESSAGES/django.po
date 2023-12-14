@@ -11,7 +11,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #, python-format
-msgid "Activated %(count)d %(name)s"
+msgid "Activated %(count)d %(name)s."
 msgstr ""
 
 #, python-format
@@ -19,7 +19,7 @@ msgid "Activate selected %(verbose_name_plural)s"
 msgstr ""
 
 #, python-format
-msgid "Deactivated %(count)d %(name)s"
+msgid "Deactivated %(count)d %(name)s."
 msgstr ""
 
 #, python-format

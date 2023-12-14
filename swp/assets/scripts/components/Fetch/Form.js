@@ -7,26 +7,20 @@ import _, {interpolate} from 'utils/i18n';
 import {setErrors} from 'utils/form';
 import Toaster from 'utils/toaster';
 
+import {HttpErrorMessages} from 'swp/messages';
+
 import {useMutation} from 'hooks/query';
 
 import getToast from './Result';
 import {DefaultProps as NetworkErrorProps} from './NetworkError';
 import {Fallback as ClientErrorFallback} from './ClientError';
-import {Fallback as ServerErrorFallback, Maintenance} from './ServerError';
+import {Fallback as ServerErrorFallback} from './ServerError';
 
 const DefaultSuccessMessage = _('Your data has been saved successfully.');
 const DefaultNetworkErrorMessage = NetworkErrorProps.description;
 const DefaultClientErrorMessage = ClientErrorFallback.description;
 const DefaultServerErrorMessage = ServerErrorFallback.description;
-const DefaultMaintenanceMessage = Maintenance.description;
-const DefaultHttpErrorMessages = {
-    400: _('Please correct the errors below.'),
-    401: _('You have to be logged in to make this request.'),
-    403: _('You are not allowed to make this request.'),
-    404: _('The data you wanted to change does not exist anymore.'),
-    502: DefaultMaintenanceMessage,
-    503: DefaultMaintenanceMessage,
-};
+const DefaultHttpErrorMessages = HttpErrorMessages;
 
 const handleSuccess = (data, result, {successMessage}) => ({
     intent: Intent.SUCCESS,

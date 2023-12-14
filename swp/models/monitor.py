@@ -22,6 +22,7 @@ from sentry_sdk import capture_message, capture_exception
 
 from swp.db.expressions import MakeInterval
 from swp.utils.ris import generate_ris_data
+from swp.utils.validation import get_field_validation_error
 
 from .pool import CanManageQuerySet
 from .publication import Publication
@@ -99,9 +100,19 @@ class Monitor(PublicationCount, ActivatableModel):
     class Meta(ActivatableModel.Meta):
         verbose_name = _('monitor')
         verbose_name_plural = _('monitors')
+        constraints = [
+            models.CheckConstraint(
+                check=models.Q(is_active=False) | ~models.Q(query=''),
+                name='active_monitor_has_query',
+            ),
+        ]
 
     def __str__(self) -> str:
         return self.name
+
+    def clean(self):
+        if self.is_active and not self.query:
+            raise get_field_validation_error('query', _('An active monitor must not have an empty query.'))
 
     def get_query(self, using=None):
         from swp.documents import PublicationDocument

@@ -1,6 +1,6 @@
 from typing import Union
 
-from django.contrib import admin
+from django.contrib import admin, messages
 from django.contrib.auth import get_permission_codename
 from django.db import models
 from django.db.models.base import ModelBase
@@ -58,20 +58,21 @@ class ActivatableModelAdmin(BaseActivatableModelAdmin):
 
     actions = ['activate', 'deactivate']
 
-    def activate(self, request, queryset):
-        count = queryset.activate()
-        format_kwargs = {'count': count, 'name': get_pluralized_verbose_name(self.model, count)}
+    def toggle_message(self, request, message, count):
+        name = get_pluralized_verbose_name(self.model, count)
+        context = {'count': count, 'name': name}
+        level = messages.SUCCESS if count else messages.WARNING
 
-        self.message_user(request, _('Activated %(count)d %(name)s') % format_kwargs)
+        self.message_user(request, message % context, level)
+
+    def activate(self, request, queryset):
+        return self.toggle_message(request, _('Activated %(count)d %(name)s.'), queryset.activate())
 
     activate.short_description = _('Activate selected %(verbose_name_plural)s')
     activate.allowed_permissions = ['activate']
 
     def deactivate(self, request, queryset):
-        count = queryset.deactivate()
-        format_kwargs = {'count': count, 'name': get_pluralized_verbose_name(self.model, count)}
-
-        self.message_user(request, _('Deactivated %(count)d %(name)s') % format_kwargs)
+        return self.toggle_message(request, _('Deactivated %(count)d %(name)s.'), queryset.deactivate())
 
     deactivate.short_description = _('Deactivate selected %(verbose_name_plural)s')
     activate.allowed_permissions = ['deactivate']

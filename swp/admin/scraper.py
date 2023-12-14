@@ -1,7 +1,10 @@
-from django.contrib import admin
-from django.utils.translation import gettext_lazy as _
+from functools import wraps
+
+from django.contrib import admin, messages
+from django.utils.translation import gettext_lazy as _, ngettext
 
 from swp.models import Scraper, ScraperError
+from swp.utils.domain import is_subdomain
 
 from .abstract import ActivatableModelAdmin
 from .pool import CanManagePermissionMixin
@@ -71,3 +74,22 @@ class ScraperAdmin(CanManagePermissionMixin, ActivatableModelAdmin):
 
     def can_manage_pool(self, request, obj: Scraper):
         return request.user.can_manage_pool(obj.thinktank.pool)
+
+    @wraps(ActivatableModelAdmin.activate)
+    def activate(self, request, queryset):
+        scrapers = queryset.values_list('id', 'start_url', 'thinktank__domain')
+        incompatible = [scraper for scraper, url, domain in scrapers if not is_subdomain(url, domain)]
+
+        if count := len(incompatible):
+            queryset = queryset.exclude(id__in=incompatible)
+            message = ngettext(
+                "%(count)s scraper could not be activated because its start "
+                "url is not a subdomain of its thinktank's domain.",
+                "%(count)s scrapers could not be activated because their start "
+                "url is not a subdomain of their thinktank's domain.",
+                count,
+            )
+
+            self.message_user(request, message % {'count': count}, messages.WARNING)
+
+        return super().activate(request, queryset)

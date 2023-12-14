@@ -80,3 +80,20 @@ class MonitorEditSerializer(BaseMonitorSerializer):
             'recipients',
             'zotero_keys',
         ]
+
+    def validate(self, attrs):
+        self.validate_active_monitor_has_query(attrs)
+
+        return attrs
+
+    def validate_active_monitor_has_query(self, attrs):
+        if instance := self.instance:
+            query = attrs.get('query', instance.query)
+            is_active = attrs.get('is_active', instance.is_active)
+        else:
+            query = attrs.get('query')
+            is_active = attrs.get('is_active')
+
+        instance = Monitor(query=query, is_active=is_active)
+
+        return Monitor.clean(instance)

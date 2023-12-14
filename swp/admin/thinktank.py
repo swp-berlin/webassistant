@@ -1,3 +1,5 @@
+from functools import wraps
+
 from django.contrib import admin, messages
 from django.db import models, transaction
 from django.utils.html import format_html
@@ -67,6 +69,7 @@ class ThinktankAdmin(CanManagePermissionMixin, ActivatableModelAdmin):
             self.message_user(request, message % {'count': count, 'domain': obj.domain}, messages.WARNING)
 
     @transaction.atomic
+    @wraps(ActivatableModelAdmin.activate)
     def activate(self, request, queryset):
         duplicates = queryset.filter(
             models.Exists(
@@ -98,8 +101,10 @@ class ThinktankAdmin(CanManagePermissionMixin, ActivatableModelAdmin):
 
         if count:
             message = ngettext(
-                "Deactivated %(count)s scraper because its start url is not a subdomain of its thinktank's domain.",
-                "Deactivated %(count)s scrapers because their start url is not a subdomain of their thinktank's domain.",
+                "Deactivated %(count)s scraper because its start url "
+                "is not a subdomain of its thinktank's domain.",
+                "Deactivated %(count)s scrapers because their start url "
+                "is not a subdomain of their thinktank's domain.",
                 count,
             )
 

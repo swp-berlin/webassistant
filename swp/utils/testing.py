@@ -119,6 +119,7 @@ def create_monitor(**kwargs) -> Monitor:
     defaults = {
         'pool': Pool(id=0),
         'name': 'Test-Monitor',
+        'query': 'test',
         'is_active': True,
         'recipients': [],
     }
