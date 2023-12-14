@@ -114,18 +114,4 @@ class Migration(migrations.Migration):
         migrations.RunPython(
             code=build_queries,
         ),
-        migrations.RemoveField(
-            model_name='thinktankfilter',
-            name='monitor',
-        ),
-        migrations.RemoveField(
-            model_name='thinktankfilter',
-            name='thinktank',
-        ),
-        migrations.DeleteModel(
-            name='PublicationFilter',
-        ),
-        migrations.DeleteModel(
-            name='ThinktankFilter',
-        ),
     ]
