@@ -17,6 +17,10 @@ AND = ' AND '.join
 OR = ' OR '.join
 
 
+def disable_monitors(apps, schema_editor):
+    get_queryset(apps, schema_editor, 'swp', 'Monitor').update(is_active=False)
+
+
 def build_queries(apps, schema_editor):
     queryset = get_queryset(apps, schema_editor, 'swp', 'Monitor')
     monitors = queryset.prefetch_related('thinktank_filters__publication_filters')
@@ -98,6 +102,9 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+        migrations.RunPython(
+            code=disable_monitors,
+        ),
         migrations.AddField(
             model_name='monitor',
             name='query',
@@ -106,7 +113,6 @@ class Migration(migrations.Migration):
         ),
         migrations.RunPython(
             code=build_queries,
-            reverse_code=migrations.RunPython.noop,
         ),
         migrations.RemoveField(
             model_name='thinktankfilter',
