@@ -1,8 +1,3 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
 #, fuzzy
 msgid ""
 msgstr ""
@@ -35,6 +30,12 @@ msgstr[1] "Publikationen für %d Monitore werden zu zotero übertragen"
 msgid "Send publications for selected monitors to zotero"
 msgstr "Sende Publikationen für ausgewählte Monitore zu zotero"
 
+#, python-format
+msgid "%(count)s monitor could not be activated because it has an empty query."
+msgid_plural "%(count)s monitors could not be activated because they have empty queries."
+msgstr[0] "%(count)s Monitor konnte nicht aktiviert werden, da er einen leeren Query hat."
+msgstr[1] "%(count)s Monitore konnte nicht aktiviert werden, da sie leere Queries haben."
+
 msgid "# thinktanks"
 msgstr "# Thinktanks"
 
@@ -46,6 +47,12 @@ msgstr "Zuletzt Geändert"
 
 msgid "pool"
 msgstr "Pool"
+
+#, python-format
+msgid "%(count)s scraper could not be activated because its start url is not a subdomain of its thinktank's domain."
+msgid_plural "%(count)s scrapers could not be activated because their start url is not a subdomain of their thinktank's domain."
+msgstr[0] "%(count)s Scraper konnte nicht aktiviert werden, da seine Start-URL keine Subdomain der Domain seines Thinktanks ist."
+msgstr[1] "%(count)s Scraper konnten nicht aktiviert werden, da ihre Start-URL keine Subdomain der Domain ihres Thinktanks ist."
 
 msgid "URL"
 msgstr "URL"
@@ -105,9 +112,6 @@ msgstr ""
 
 msgid "Monitor"
 msgstr "Monitor"
-
-msgid "Think Tank Filter"
-msgstr "Thinktank-Filter"
 
 msgid "Start Date"
 msgstr "Start-Datum"
@@ -239,6 +243,9 @@ msgstr "Name"
 msgid "description"
 msgstr "Beschreibung"
 
+msgid "query"
+msgstr "Query"
+
 msgid "recipients"
 msgstr "Empfänger"
 
@@ -256,6 +263,9 @@ msgstr "Monitor"
 
 msgid "monitors"
 msgstr "Monitore"
+
+msgid "An active monitor must not have an empty query."
+msgstr "Ein aktiver Monitor darf keinen leeren Query haben."
 
 msgid "pools"
 msgstr "Pools"
@@ -301,24 +311,6 @@ msgstr "Anzahl neuer Publikationen"
 
 msgid "last publication count update"
 msgstr "Publikationszähler aktualisieren"
-
-msgid "think tank filter"
-msgstr "Thinktank-Filter"
-
-msgid "field"
-msgstr "Feld"
-
-msgid "comparator"
-msgstr "Vergleichsoperator"
-
-msgid "values"
-msgstr "Werte"
-
-msgid "publication filter"
-msgstr "Publikationsfilter"
-
-msgid "publication filters"
-msgstr "Publikationsfilter"
 
 msgid "Name"
 msgstr "Name"
@@ -387,6 +379,9 @@ msgstr "Fehlendes URL-Element für „%s“"
 msgid "url"
 msgstr "URL"
 
+msgid "field"
+msgstr "Feld"
+
 msgid "level"
 msgstr "Level"
 
@@ -420,9 +415,6 @@ msgstr "Thinktanks"
 #, python-format
 msgid "The domain %(domain)s is already assigned to thinktank %(thinktank)s in pool %(pool)s."
 msgstr "Die Domain %(domain)s ist bereits dem Thinktank %(thinktank)s im Pool %(pool)s zugewiesen."
-
-msgid "think tank filters"
-msgstr "Thinktank-Filter"
 
 msgid "is error recipient"
 msgstr "erhält Fehlermeldungen"

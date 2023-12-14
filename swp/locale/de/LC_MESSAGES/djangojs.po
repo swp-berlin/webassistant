@@ -1,8 +1,3 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
 #, fuzzy
 msgid ""
 msgstr ""
@@ -17,7 +12,7 @@ msgid "Client Error"
 msgstr "Browserfehler"
 
 msgid "We couldn't handle the data your client send us."
-msgstr "Wir konnten die Daten Ihres Browsers nicht verarbeiten"
+msgstr "Wir konnten die Daten Ihres Browsers nicht verarbeiten."
 
 msgid "Unauthorized"
 msgstr "Nicht berechtigt"
@@ -42,18 +37,6 @@ msgstr "Das sind nicht die Droiden, nach denen Sie suchen."
 
 msgid "Your data has been saved successfully."
 msgstr "Ihre Daten wurden erfolgreich gespeichert."
-
-msgid "Please correct the errors below."
-msgstr "Bitte beheben Sie die nachfolgenden Fehler."
-
-msgid "You have to be logged in to make this request."
-msgstr "Sie müssen angemeldet sein, um diese Anfrage auszuführen."
-
-msgid "You are not allowed to make this request."
-msgstr "Sie sind nicht berechtigt diese Anfrage auszuführen."
-
-msgid "The data you wanted to change does not exist anymore."
-msgstr "Die Daten die Sie ändern wollten, existieren nicht mehr."
 
 msgid "Loading…"
 msgstr "Lade…"
@@ -96,6 +79,9 @@ msgstr "Abmelden"
 
 msgid "Home"
 msgstr "Start"
+
+msgid "All"
+msgstr "Alle"
 
 msgid "Open publication list menu"
 msgstr "Publikationslisten-Menu öffnen"
@@ -181,6 +167,9 @@ msgstr "oder"
 msgid "nor"
 msgstr "noch"
 
+msgid "Interval"
+msgstr "Intervall"
+
 msgid "New Monitor"
 msgstr "Neuer Monitor"
 
@@ -199,8 +188,8 @@ msgstr "Monitor erfolgreich deaktiviert"
 msgid "Edit"
 msgstr "Bearbeiten"
 
-msgid "Add Thinktank"
-msgstr "Thinktank hinzufügen"
+msgid "Query"
+msgstr "Query"
 
 msgid "Publications overall:"
 msgstr "Publikationen gesamt:"
@@ -223,30 +212,21 @@ msgstr "Empfänger:"
 msgid "Transferred to Zotero"
 msgstr "Zu Zotero übertragen"
 
-msgid "Name"
-msgstr "Name"
-
-msgid "Filter"
-msgstr "Filter"
-
-msgid "Publications"
-msgstr "Publikationen"
-
-msgid "New"
-msgstr "Neu"
-
 msgid "Sync with Zotero"
 msgstr "Mit Zotero synchronisieren"
 
 msgid "Transfer to Zotero started. This might take a couple of minutes."
 msgstr "Übertragung zu Zotero gestartet. Dies kann ein paar Minuten in Anspruch nehmen."
 
-msgid "Edit Monitor"
-msgstr "Monitor bearbeiten"
+msgid "Pool"
+msgstr "Pool"
 
 #, javascript-format
 msgid "Monitor %s"
 msgstr "Monitor %s"
+
+msgid "Edit Monitor"
+msgstr "Monitor bearbeiten"
 
 msgid "Save"
 msgstr "Speichern"
@@ -254,17 +234,26 @@ msgstr "Speichern"
 msgid "Successfully changed monitor"
 msgstr "Änderungen am Monitor erfolgreich gespeichert"
 
+msgid "Name"
+msgstr "Name"
+
 msgid "Description"
 msgstr "Beschreibung"
-
-msgid "Interval"
-msgstr "Intervall"
 
 msgid "Monitors"
 msgstr "Monitore"
 
+msgid "Publications"
+msgstr "Publikationen"
+
 msgid "New Publications"
 msgstr "Neue Publikationen"
+
+msgid "Successfully changed query of monitor %(name)s."
+msgstr "Query von Monitor %(name)s erfolgreich geändert."
+
+msgid "Edit Query"
+msgstr "Query editieren"
 
 msgid "disabled"
 msgstr "deaktiviert"
@@ -487,9 +476,6 @@ msgstr "Weitere von Seite 2"
 msgid "No items"
 msgstr "Keine Einträge"
 
-msgid "All"
-msgstr "Alle"
-
 msgid "Thinktank successfully activated."
 msgstr "Thinktank erfolgreich aktiviert."
 
@@ -519,9 +505,6 @@ msgstr "Thinktank bearbeiten"
 msgid "Successfully changed thinktank"
 msgstr "Änderungen am Thinktank gespeichert"
 
-msgid "Pool"
-msgstr "Pool"
-
 msgid "Domain"
 msgstr "Domain"
 
@@ -538,36 +521,6 @@ msgstr "Eindeutiges Feld"
 msgid "Thinktank %s"
 msgstr "Thinktank %s"
 
-msgid "Filter on Field"
-msgstr "Filter nach Feld"
-
-msgid "Comparator"
-msgstr "Vergleichsoperator"
-
-msgid "Values"
-msgstr "Werte"
-
-msgid "Remove Filter"
-msgstr "Filter entfernen"
-
-msgid "Add Filter"
-msgstr "Filter hinzufügen"
-
-msgid "Add Thinktank Filter"
-msgstr "Thinktank-Filter hinzufügen"
-
-msgid "Successfully created filter"
-msgstr "Filter erfolgreich angelegt"
-
-msgid "Edit Thinktank Filter"
-msgstr "Thinktank-Filter bearbeiten"
-
-msgid "Successfully changed filter"
-msgstr "Änderungen am Filter erfolgreich gespeichert"
-
-msgid "Thinktank"
-msgstr "Thinktank"
-
 msgid "A network error occurred. Please try again."
 msgstr "Ein Netzwerkfehler ist aufgetreten. Bitte versuchen Sie es erneut."
 
@@ -576,6 +529,18 @@ msgstr "Etwas ist auf unserer Seite schief gelaufen…"
 
 msgid "We are currently doing maintenance work. Please try again in a few seconds."
 msgstr "Wartungsarbeiten. Bitte versuchen Sie es in ein paar Sekunden erneut."
+
+msgid "Please correct the errors below."
+msgstr "Bitte beheben Sie die nachfolgenden Fehler."
+
+msgid "You have to be logged in to make this request."
+msgstr "Sie müssen angemeldet sein, um diese Anfrage auszuführen."
+
+msgid "You are not allowed to make this request."
+msgstr "Sie sind nicht berechtigt diese Anfrage auszuführen."
+
+msgid "The data you wanted to change does not exist anymore."
+msgstr "Die Daten die Sie ändern wollten, existieren nicht mehr."
 
 msgid "An error occurred: %(error)s"
 msgstr "Ein Fehler ist aufgetreten: %(error)s"

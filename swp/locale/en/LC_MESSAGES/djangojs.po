@@ -1,8 +1,3 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
 #, fuzzy
 msgid ""
 msgstr ""
@@ -41,18 +36,6 @@ msgid "These aren't the droids you're looking for."
 msgstr ""
 
 msgid "Your data has been saved successfully."
-msgstr ""
-
-msgid "Please correct the errors below."
-msgstr ""
-
-msgid "You have to be logged in to make this request."
-msgstr ""
-
-msgid "You are not allowed to make this request."
-msgstr ""
-
-msgid "The data you wanted to change does not exist anymore."
 msgstr ""
 
 msgid "Loading…"
@@ -95,6 +78,9 @@ msgid "Log out"
 msgstr ""
 
 msgid "Home"
+msgstr ""
+
+msgid "All"
 msgstr ""
 
 msgid "Open publication list menu"
@@ -181,6 +167,9 @@ msgstr ""
 msgid "nor"
 msgstr ""
 
+msgid "Interval"
+msgstr ""
+
 msgid "New Monitor"
 msgstr ""
 
@@ -199,7 +188,7 @@ msgstr ""
 msgid "Edit"
 msgstr ""
 
-msgid "Add Thinktank"
+msgid "Query"
 msgstr ""
 
 msgid "Publications overall:"
@@ -223,29 +212,20 @@ msgstr ""
 msgid "Transferred to Zotero"
 msgstr ""
 
-msgid "Name"
-msgstr ""
-
-msgid "Filter"
-msgstr ""
-
-msgid "Publications"
-msgstr ""
-
-msgid "New"
-msgstr ""
-
 msgid "Sync with Zotero"
 msgstr ""
 
 msgid "Transfer to Zotero started. This might take a couple of minutes."
 msgstr ""
 
-msgid "Edit Monitor"
+msgid "Pool"
 msgstr ""
 
 #, javascript-format
 msgid "Monitor %s"
+msgstr ""
+
+msgid "Edit Monitor"
 msgstr ""
 
 msgid "Save"
@@ -254,16 +234,25 @@ msgstr ""
 msgid "Successfully changed monitor"
 msgstr ""
 
-msgid "Description"
+msgid "Name"
 msgstr ""
 
-msgid "Interval"
+msgid "Description"
 msgstr ""
 
 msgid "Monitors"
 msgstr ""
 
+msgid "Publications"
+msgstr ""
+
 msgid "New Publications"
+msgstr ""
+
+msgid "Successfully changed query of monitor %(name)s."
+msgstr ""
+
+msgid "Edit Query"
 msgstr ""
 
 msgid "disabled"
@@ -487,9 +476,6 @@ msgstr ""
 msgid "No items"
 msgstr ""
 
-msgid "All"
-msgstr ""
-
 msgid "Thinktank successfully activated."
 msgstr ""
 
@@ -519,9 +505,6 @@ msgstr ""
 msgid "Successfully changed thinktank"
 msgstr ""
 
-msgid "Pool"
-msgstr ""
-
 msgid "Domain"
 msgstr ""
 
@@ -538,36 +521,6 @@ msgstr ""
 msgid "Thinktank %s"
 msgstr ""
 
-msgid "Filter on Field"
-msgstr ""
-
-msgid "Comparator"
-msgstr ""
-
-msgid "Values"
-msgstr ""
-
-msgid "Remove Filter"
-msgstr ""
-
-msgid "Add Filter"
-msgstr ""
-
-msgid "Add Thinktank Filter"
-msgstr ""
-
-msgid "Successfully created filter"
-msgstr ""
-
-msgid "Edit Thinktank Filter"
-msgstr ""
-
-msgid "Successfully changed filter"
-msgstr ""
-
-msgid "Thinktank"
-msgstr ""
-
 msgid "A network error occurred. Please try again."
 msgstr ""
 
@@ -575,6 +528,18 @@ msgid "Something went wrong on our side…"
 msgstr ""
 
 msgid "We are currently doing maintenance work. Please try again in a few seconds."
+msgstr ""
+
+msgid "Please correct the errors below."
+msgstr ""
+
+msgid "You have to be logged in to make this request."
+msgstr ""
+
+msgid "You are not allowed to make this request."
+msgstr ""
+
+msgid "The data you wanted to change does not exist anymore."
 msgstr ""
 
 msgid "An error occurred: %(error)s"
