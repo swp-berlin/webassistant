@@ -3,8 +3,7 @@ from unittest import mock
 from django import test
 from django.utils import timezone
 
-from swp.models import Monitor, Thinktank, ThinktankFilter
-from swp.utils.testing import create_user, login, request
+from swp.utils.testing import create_user, login, request, create_monitor, create_thinktank
 
 
 class MonitorViewSetTestCase(test.TestCase):
@@ -14,33 +13,28 @@ class MonitorViewSetTestCase(test.TestCase):
         cls.now = now = timezone.localtime()
         cls.user = create_user('test-user@localhost')
 
-        cls.monitors = Monitor.objects.bulk_create([
-            Monitor(name='Monitor A', recipients=['a.nobody@localhost', 'z.nobody@localhost'], created=now),
-            Monitor(name='Monitor B', recipients=['b.nobody@localhost'], created=now),
-            Monitor(name='Monitor C', recipients=['c.nobody@localhost'], created=now),
-        ])
+        cls.monitors = [
+            create_monitor(name='Monitor A', recipients=['a.nobody@localhost', 'z.nobody@localhost'], created=now),
+            create_monitor(name='Monitor B', recipients=['b.nobody@localhost'], created=now),
+            create_monitor(name='Monitor C', recipients=['c.nobody@localhost'], created=now),
+        ]
         cls.monitor = cls.monitors[0]
 
-        cls.thinktanks = Thinktank.objects.bulk_create([
-            Thinktank(
+        cls.thinktanks = [
+            create_thinktank(
                 name='PIIE',
                 url='https://www.piie.com/',
                 unique_fields=['url'],
                 created=now,
                 is_active=True,
             ),
-            Thinktank(
+            create_thinktank(
                 name='China Development Institute',
                 url='http://en.cdi.org.cn/',
                 unique_fields=['url'],
                 created=now,
             ),
-        ])
-
-        cls.thinktank_filters = ThinktankFilter.objects.bulk_create([
-            ThinktankFilter(monitor=cls.monitors[0], thinktank=cls.thinktanks[0]),
-            ThinktankFilter(monitor=cls.monitors[0], thinktank=cls.thinktanks[0]),
-        ])
+        ]
 
     def setUp(self):
         login(self)
@@ -57,8 +51,9 @@ class MonitorViewSetTestCase(test.TestCase):
         self.assertEqual(response.data['recipient_count'], self.monitor.recipient_count)
         self.assertEqual(response.data['publication_count'], self.monitor.publication_count)
         self.assertEqual(response.data['new_publication_count'], self.monitor.new_publication_count)
-        self.assertEqual(response.data['recipients'], self.monitor.recipients)
-        self.assertEqual(len(response.data['filters']), self.monitor.thinktank_filters.count())
+
+        self.assertNotIn('recipients', response.data)
+        self.assertNotIn('zotero_keys', response.data)
 
     def test_list(self):
         with mock.patch('celery.canvas.group.delay') as delay:

@@ -103,8 +103,7 @@ class Monitor(PublicationCount, ActivatableModel):
     def __str__(self) -> str:
         return self.name
 
-    @property
-    def as_query(self, using=None):
+    def get_query(self, using=None):
         from swp.documents import PublicationDocument
 
         search = PublicationDocument.search(using=using).query(
@@ -122,6 +121,10 @@ class Monitor(PublicationCount, ActivatableModel):
             return models.Q(id=None)
 
         return models.Q(id__in=ids)
+
+    @property
+    def as_query(self):
+        return self.get_query(None)
 
     @property
     def recipient_count(self):

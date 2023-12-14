@@ -10,7 +10,7 @@ from swp.models import ErrorLevel, Publication, Scraper, ScraperError, Thinktank
 from swp.tasks.scheduling import send_scraper_errors
 from swp.utils.auth import get_user_queryset, get_superuser_email_addresses, get_error_recipient_email_addresses
 from swp.utils.scraping.scraper import Scraper as _Scraper
-from swp.utils.testing import create_user
+from swp.utils.testing import create_user, create_thinktank
 
 
 class ScraperTestCase(test.TestCase):
@@ -23,7 +23,7 @@ class ScraperTestCase(test.TestCase):
         cls.superuser_2 = create_user('superuser-2', is_superuser=True)
         cls.inactive_superuser = create_user('inactive-superuser', is_superuser=True, is_active=False, is_error_recipient=True)
 
-        cls.thinktank = Thinktank.objects.create(
+        cls.thinktank = create_thinktank(
             name='PIIE',
             url='https://example.org',
             unique_fields=['url'],
