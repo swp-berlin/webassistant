@@ -8,7 +8,7 @@ const Sentry = window.Sentry = {
 };
 
 if (process.env.NODE_ENV === 'production') {
-    init({...Sentry, dsn: 'https://04f945b1a9fd4c7786c28b3913822b1f@sentry.cosmocode.de/49'});
+    init({...Sentry, dsn: 'https://04f945b1a9fd4c7786c28b3913822b1f@sentry.cosmocode.de/40'});
 
     const user = window.SentryUserData ? {...window.SentryUserData} : null;
 
