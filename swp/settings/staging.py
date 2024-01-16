@@ -5,7 +5,7 @@ from .base import *
 ENVIRONMENT = env('ENVIRONMENT', 'staging')
 
 configure_sentry(
-    'https://3710c408a1494bc6b43038ed20acfed5@sentry.cosmocode.de/48',
+    'https://3710c408a1494bc6b43038ed20acfed5@sentry.cosmocode.de/39',
     ENVIRONMENT,
     RELEASE,
     celery=True,
