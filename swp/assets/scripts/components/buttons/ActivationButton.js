@@ -3,10 +3,11 @@ import PropTypes from 'prop-types';
 import {Button, Intent} from '@blueprintjs/core';
 
 import _ from 'utils/i18n';
+import {showToast} from 'utils/toaster';
 
 import {useControllableState} from 'hooks/state';
 
-import {useMutationResult} from 'components/Fetch/Form';
+import {DefaultHandlers, useMutationResult} from 'components/Fetch/Form';
 
 const ActivateLabel = _('Activate');
 const DeactivateLabel = _('Deactivate');
@@ -30,12 +31,25 @@ const getMutationOptions = (mutationOptions, onToggle, activatedMessage, deactiv
             message: isActive ? activatedMessage : deactivatedMessage,
         });
     },
+    handleClientError(status, errors, ...args) {
+        if (mutationOptions.handleClientError) return mutationOptions.handleClientError(status, errors, ...args);
+
+        if (status === 400 && errors) {
+            return Object.values(errors).forEach(messages => {
+                messages.forEach(message => {
+                    showToast(message, Intent.DANGER);
+                });
+            });
+        }
+
+        return DefaultHandlers.handleClientError(status, errors, ...args);
+    },
 });
 
 const ActivationButtonController = props => {
     const {
         endpoint,
-        mutationOptions,
+        mutationOptions = {},
         isActiveKey,
         isActive: isActiveProvided,
         defaultIsActive,
