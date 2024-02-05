@@ -1,3 +1,1 @@
-{% load i18n %}{% autoescape off %}{% blocktrans trimmed %}
-Error in {{ scraper }}
-{% endblocktrans %}{% endautoescape %}
+{% load i18n %}{% blocktrans %}Error in {{ scraper }}{% endblocktrans %}

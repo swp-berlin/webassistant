@@ -568,7 +568,7 @@ msgstr "Bei der Ausführung von <a href=\"%(url)s\">%(scraper)s</a> sind die fol
 msgid "%(scraper)s encountered problems while running:"
 msgstr "%(scraper)s konnte nicht fehlerfrei ausgeführt werden:"
 
-msgid "The following errors occured:"
+msgid "The following errors occurred:"
 msgstr "Die folgenden Fehler sind aufgetreten:"
 
 #, python-format
