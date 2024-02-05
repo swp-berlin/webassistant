@@ -170,8 +170,7 @@ class Thinktank(ActivatableModel):
 
     @cached_property
     def last_run(self) -> Optional[datetime.datetime]:
-        runs = [scraper.last_run for scraper in self.scrapers.all() if scraper.last_run is not None]
-        return max(runs) if runs else None
+        return max([scraper.last_run for scraper in self.scrapers.all() if scraper.last_run is not None], default=None)
 
     @cached_property
     def last_error_count(self) -> int:
