@@ -1,10 +1,10 @@
+import {useQueryClient} from 'react-query';
 import {Intent} from '@blueprintjs/core';
 
 import _, {interpolate, ngettext} from 'utils/i18n';
 import Toaster from 'utils/toaster';
 
 import {ActivationButton} from 'components/buttons';
-import {useQueryClient} from 'react-query';
 
 const ActivatedMessage = _('Thinktank successfully activated.');
 const DeactivatedMessage = _('Thinktank successfully deactivated.');

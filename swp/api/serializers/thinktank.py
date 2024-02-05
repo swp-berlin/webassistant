@@ -62,6 +62,24 @@ class ThinktankSerializer(BaseThinktankSerializer):
             code='no-manager',
         )
 
+    def validate(self, attrs):
+        self.validate_unique_domain(attrs)
+
+        return attrs
+
+    def validate_unique_domain(self, attrs):
+        if instance := self.instance:
+            is_active = attrs.get('is_active', instance.is_active)
+            domain = attrs.get('domain', instance.domain)
+            exclude = instance.id
+        else:
+            is_active = attrs.get('is_active', True)
+            domain = attrs.get('domain', '')
+            exclude = None
+
+        if is_active:
+            Thinktank.validate_unique_domain(domain, exclude)
+
     @transaction.atomic
     def update(self, instance: Thinktank, validated_data):
         should_deactivate_incompatible_scrapers = self.should_deactivate_incompatible_scrapers(instance, validated_data)

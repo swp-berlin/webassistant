@@ -127,11 +127,15 @@ class Thinktank(ActivatableModel):
         if not self.is_active or (exclude and 'domain' in exclude):
             return None
 
-        if duplicate := type(self).objects.exclude(id=self.id).for_domain(self.domain):
+        self.validate_unique_domain(self.domain, self.id)
+
+    @classmethod
+    def validate_unique_domain(cls, domain: str, exclude: int = None):
+        if duplicate := cls.objects.exclude(id=exclude).for_domain(domain):
             raise get_field_validation_error(
                 field='domain',
                 message=_('The domain %(domain)s is already assigned to thinktank %(thinktank)s in pool %(pool)s.'),
-                params={'domain': self.domain, 'thinktank': duplicate, 'pool': duplicate.pool},
+                params={'domain': domain, 'thinktank': duplicate, 'pool': duplicate.pool},
                 code='unique',
             )
 
@@ -170,8 +174,7 @@ class Thinktank(ActivatableModel):
 
     @cached_property
     def last_run(self) -> Optional[datetime.datetime]:
-        runs = [scraper.last_run for scraper in self.scrapers.all() if scraper.last_run is not None]
-        return max(runs) if runs else None
+        return max([scraper.last_run for scraper in self.scrapers.all() if scraper.last_run is not None], default=None)
 
     @cached_property
     def last_error_count(self) -> int:
