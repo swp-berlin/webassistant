@@ -12,6 +12,8 @@ from django.utils.text import Truncator
 from django.utils.translation import gettext_lazy as _
 
 from swp.models import Publication
+from swp.utils.date import parse_date
+
 if TYPE_CHECKING:
     from swp.models import Thinktank
 
@@ -63,6 +65,11 @@ class ScrapedPublicationForm(forms.ModelForm):
         clean = functools.partial(self.truncate, max_length=field.base_field.max_length)
 
         return [clean(author) for author in items]
+
+    def clean_publication_dt(self) -> datetime.date:
+        value = self.truncated_field('publication_date')
+        default = f'{datetime.date.today().year}-01-01'
+        return parse_date(value, default_date_str=default)
 
     def clean(self) -> Mapping[str, Any]:
         super().clean()
