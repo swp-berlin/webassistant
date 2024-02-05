@@ -15,6 +15,9 @@ omit =
     # ignore wsgi & asgi
     */?sgi.py
 
+    # ignore some debug only files
+    */views/debug.py
+
 [report]
 include =
     swp/*
@@ -25,3 +28,4 @@ omit =
     */settings/*
     */tests.py
     */?sgi.py
+    */views/debug.py

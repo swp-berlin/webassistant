@@ -1,0 +1,18 @@
+<!DOCTYPE html> {% load i18n %} {% get_current_language as lang %}
+<html lang="{{ lang }}">
+    <head>
+        <meta charset="UTF-8">
+        <title>{{ subject }}</title>
+    </head>
+    <body>
+        <h1>{{ subject }}</h1>
+        <article>
+            <h2>HTML</h2>
+            {{ html|safe }}
+        </article>
+        <article>
+            <h2>Plain</h2>
+            <pre>{{ plain }}</pre>
+        </article>
+    </body>
+</html>
