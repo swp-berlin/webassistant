@@ -53,6 +53,7 @@ class ScraperError(models.Model):
     code = models.CharField(_('error code'), max_length=8, default=DEFAULT_ERROR)
     message = models.TextField(_('message'))
     timestamp = models.DateTimeField(_('timestamp'), default=timezone.now, editable=False)
+    sent = models.DateTimeField(_('sent'), null=True, editable=False)
 
     objects = ScraperErrorQuerySet.as_manager()
 
@@ -74,10 +75,7 @@ class ScraperError(models.Model):
 
     @cached_property
     def source(self) -> str:
-        if self.publication_id:
-            return self.publication.title or self.publication.url
-
-        return self.title or self.url
+        return (self.publication.title or self.publication.url) if self.publication_id else (self.title or self.url)
 
     @property
     def is_error(self) -> bool:

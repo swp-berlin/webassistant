@@ -1,10 +1,11 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db import transaction
 from django.utils.lorem_ipsum import COMMON_P as LOREM_IPSUM
 from django.views.generic import TemplateView
 
 from swp.forms import PasswordResetForm
-from swp.models import Monitor, Scraper, Thinktank, Publication, ScraperError
-from swp.tasks.scheduling import get_absolute_scraper_url
+from swp.models import Monitor, Publication
+from swp.tasks.errorreport import collect_scraper_errors
 from swp.utils.mail import render_mail
 
 
@@ -19,7 +20,8 @@ class MailPreView(LoginRequiredMixin, TemplateView):
 
         return super().get_context_data(**kwargs)
 
-    def get_mail_context(self, identifier):
+    @transaction.atomic
+    def get_mail_context(self, identifier, *, using: str = None):
         if identifier == 'monitor-publications':
             monitor = Monitor(name='Preview', description=LOREM_IPSUM)
             publications = Publication.objects.order_by('?')[:10]
@@ -34,19 +36,9 @@ class MailPreView(LoginRequiredMixin, TemplateView):
             return MailPreViewPasswordResetForm.get_context(self.request)
 
         if identifier == 'scraper-errors':
-            thinktank = Thinktank(id=1, name='Preview')
-            scraper = Scraper(id=1, thinktank=thinktank)
-            publication = Publication(id=1, thinktank=thinktank, url='https://example.com', title='Example')
+            queryset, pools = collect_scraper_errors(using)
 
-            return {
-                'scraper': scraper,
-                'thinktank': thinktank,
-                'url': get_absolute_scraper_url(scraper),
-                'errors': [
-                    ScraperError(scraper=scraper, publication=publication, message='Error 1'),
-                    ScraperError(scraper=scraper, title='Something went wrong', message='Error 2'),
-                ],
-            }
+            return {'pools': pools}
 
         raise NotImplementedError(f'Missing mail context for {identifier}.')
 
