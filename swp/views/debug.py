@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.utils.lorem_ipsum import COMMON_P as LOREM_IPSUM
 from django.views.generic import TemplateView
 
 from swp.forms import PasswordResetForm
@@ -20,7 +21,14 @@ class MailPreView(LoginRequiredMixin, TemplateView):
 
     def get_mail_context(self, identifier):
         if identifier == 'monitor-publications':
-            return {'monitor': Monitor(name='Preview')}
+            monitor = Monitor(name='Preview', description=LOREM_IPSUM)
+            publications = Publication.objects.order_by('?')[:10]
+
+            return {
+                'monitor': monitor,
+                'last_sent': monitor.created,
+                'publications': publications,
+            }
 
         if identifier == 'password-reset':
             return MailPreViewPasswordResetForm.get_context(self.request)

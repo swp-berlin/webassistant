@@ -1,4 +1,27 @@
 {% load i18n %}
-{% blocktranslate %}Attached you will find all new publications for {{ monitor }}.{% endblocktranslate %}
+WebAssistantAlert
+
+
+{{ monitor }} - {% now 'SHORT_DATE_FORMAT' %}
+{% blocktranslate with count=publications|length date=last_sent|date:'SHORT_DATE_FORMAT' trimmed %}
+    {{ count }} new publications since {{ date }}
+{% endblocktranslate %}
+
+
+{% translate 'SWP Information Services' %}
+{{ monitor.description }}
+
+
+{% for publication in publications %}
+{{ publication }}
+{{ publication.authors_label }}
+{{ publication.created|date:'SHORT_DATE_FORMAT' }}, {{ publication.pdf_pages_label }}
+{{ publication.source }}
+{% translate 'Tags' %}: {{ publication.tags|join:', ' }}
+
+
+{% endfor %}
+
+{% blocktranslate %}Attached you will find all new publications for {{ monitor }} in RIS format.{% endblocktranslate %}
 
 {% translate 'The SWP team' %}
