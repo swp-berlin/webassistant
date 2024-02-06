@@ -64,7 +64,7 @@ urlpatterns = [
     path('snippet/<path:identifier>/', SnippetView.as_view(), name='snippet'),
 ]
 
-if settings.DEBUG:
+if settings.MAIL_PREVIEW_ENABLED:
     urlpatterns += [
         path('mail/preview/<slug:identifier>/', MailPreView.as_view(), name='mail-preview'),
     ]
