@@ -7,6 +7,7 @@ from .auth import (
     PasswordResetView,
 )
 from .base import SWPView
+from .debug import MailPreView
 from .snippets import SnippetView
 from .thinktank import ThinkTankRISDownloadView
 from .monitor import MonitorRISDownloadView
@@ -14,6 +15,7 @@ from .monitor import MonitorRISDownloadView
 __all__ = [
     'LoginView',
     'LogoutView',
+    'MailPreView',
     'PasswordResetConfirmView',
     'PasswordResetCompleteView',
     'PasswordResetDoneView',

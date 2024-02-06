@@ -568,7 +568,7 @@ msgstr ""
 msgid "%(scraper)s encountered problems while running:"
 msgstr ""
 
-msgid "The following errors occured:"
+msgid "The following errors occurred:"
 msgstr ""
 
 #, python-format

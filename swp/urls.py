@@ -64,6 +64,11 @@ urlpatterns = [
     path('snippet/<path:identifier>/', SnippetView.as_view(), name='snippet'),
 ]
 
+if settings.DEBUG:
+    urlpatterns += [
+        path('mail/preview/<slug:identifier>/', MailPreView.as_view(), name='mail-preview'),
+    ]
+
 if settings.DEBUG_TOOLBAR:  # pragma: no cover
     import debug_toolbar
 

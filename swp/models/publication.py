@@ -2,8 +2,10 @@ from __future__ import annotations
 
 from django.db import models
 from django.utils import timezone
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext_lazy as _, ngettext
 from django.contrib.postgres.fields import ArrayField
+
+from swp.utils.text import when, spaced
 
 from .constants import MAX_TAG_LENGTH, MAX_TITLE_LENGTH
 from .fields import CombinedISBNField, LongURLField
@@ -69,4 +71,20 @@ class Publication(models.Model):
         ]
 
     def __str__(self) -> str:
-        return self.title or f'{self.pk}'
+        return self.title_label
+
+    @property
+    def title_label(self):
+        return spaced(self.title) or f'{self.pk}'
+
+    @property
+    def authors_label(self, delimiter='; ', default='–'):
+        return delimiter.join(when(spaced(author) for author in self.authors)) or default
+
+    @property
+    def pdf_pages_label(self):
+        return ngettext('%d page', '%d pages', self.pdf_pages) % self.pdf_pages
+
+    @property
+    def source(self):
+        return self.url or self.pdf_url
