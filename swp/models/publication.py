@@ -79,7 +79,7 @@ class Publication(models.Model):
 
     @property
     def authors_label(self, delimiter='; ', default='–'):
-        return delimiter.join(when(spaced(author) for author in self.authors)) or default
+        return delimiter.join(when(spaced(author) for author in self.authors or [])) or default
 
     @property
     def pdf_pages_label(self):
