@@ -78,8 +78,12 @@ class Publication(models.Model):
         return spaced(self.title) or f'{self.pk}'
 
     @property
-    def authors_label(self, delimiter='; ', default='–'):
-        return delimiter.join(when(spaced(author) for author in self.authors or [])) or default
+    def authors_label(self):
+        return joined(self.authors or [], '; ')
+
+    @property
+    def tags_label(self):
+        return joined(self.tags or [], ', ')
 
     @property
     def pdf_pages_label(self):
@@ -88,3 +92,7 @@ class Publication(models.Model):
     @property
     def source(self):
         return self.url or self.pdf_url
+
+
+def joined(values, delimiter, default='–'):
+    return delimiter.join(when(spaced(value) for value in values)) or default
