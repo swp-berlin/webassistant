@@ -10,7 +10,8 @@ omit =
     */settings/*
 
     # ignore the tests itself
-    */tests.py
+    */test*.py
+    */tests/*.py
 
     # ignore wsgi & asgi
     */?sgi.py
@@ -26,6 +27,7 @@ omit =
     # doesn't need to be reported
     */migrations/*
     */settings/*
-    */tests.py
+    */test*.py
+    */tests/*.py
     */?sgi.py
     */views/debug.py

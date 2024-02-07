@@ -188,6 +188,10 @@ CELERY_BEAT_SCHEDULE = {
         'task': 'scraper.schedule',
         'schedule': crontab(hour='*', minute=0),
     },
+    'error-report.send': {
+        'task': 'error-report.send',
+        'schedule': crontab(hour=7, minute=30),
+    },
 }
 
 CELERY_TASK_CREATE_MISSING_QUEUES = True

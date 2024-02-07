@@ -36,7 +36,7 @@
             {% endspaceless %}
         </p>
         <p style="margin: 0.3rem 0; padding: 0"><a style="color: #004778" href="{{ publication.source }}">{{ publication.source }}</a></p>
-        <p style="margin: 0.3rem 0; padding: 0">{% translate 'Tags' %}: {{ publication.tags|join:', ' }}</p>
+        <p style="margin: 0.3rem 0; padding: 0">{% translate 'Tags' %}: {{ publication.tags_label }}</p>
         <p style="margin: 0.5rem 0; padding: 0"><a style="color: #004778" href="#table-of-contents">{% translate 'Back to table of contents' %}</a></p>
     </article>
 {% endfor %}

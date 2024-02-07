@@ -1,3 +1,4 @@
+import random
 import string
 
 from typing import Union
@@ -13,7 +14,7 @@ from django.urls import reverse
 from django.utils.crypto import get_random_string
 from django.utils.text import slugify
 
-from swp.models import Monitor, Pool, Thinktank
+from swp.models import Monitor, Pool, Thinktank, Scraper, ScraperError
 from swp.utils.domain import get_canonical_domain
 
 Args = Union[tuple, list]
@@ -150,3 +151,46 @@ def create_thinktank(name=None, domain=None, url=None, **kwargs) -> Thinktank:
     defaults.update(kwargs)
 
     return Thinktank.objects.create(**defaults)
+
+
+def create_scraper(thinktank: Thinktank, **kwargs) -> Scraper:
+    defaults = {
+        'thinktank': thinktank,
+        'start_url': thinktank.url,
+        'data': {},
+    }
+
+    defaults.update(kwargs)
+
+    return Scraper.objects.create(**defaults)
+
+
+SCRAPER_ERROR_FIELDS = [
+    '',
+    'url',
+    'title',
+    'subtitle',
+    'abstract',
+]
+
+SCRAPER_ERROR_CODES = [
+    '',
+    'missing',
+    'invalid',
+]
+
+
+def create_scraper_error(scraper, *, code: str = None, field: str = None, **kwargs) -> ScraperError:
+    code = code or random.choice(SCRAPER_ERROR_CODES)
+    field = field or random.choice(SCRAPER_ERROR_FIELDS)
+
+    defaults = {
+        'scraper': scraper,
+        'code': code,
+        'field': field,
+        'message': f'{code} {field}',
+    }
+
+    defaults.update(kwargs)
+
+    return ScraperError.objects.create(**defaults)

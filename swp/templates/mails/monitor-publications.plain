@@ -17,7 +17,7 @@ WebAssistantAlert
 {{ publication.authors_label }}
 {{ publication.created|date:'SHORT_DATE_FORMAT' }}, {{ publication.pdf_pages_label }}
 {{ publication.source }}
-{% translate 'Tags' %}: {{ publication.tags|join:', ' }}
+{% translate 'Tags' %}: {{ publication.tags_label }}
 
 
 {% endfor %}
