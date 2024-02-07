@@ -303,6 +303,12 @@ msgstr ""
 msgid "publications"
 msgstr ""
 
+#, python-format
+msgid "%d page"
+msgid_plural "%d pages"
+msgstr[0] ""
+msgstr[1] ""
+
 msgid "publication count"
 msgstr ""
 
@@ -365,15 +371,15 @@ msgstr ""
 msgid "Scraping Error"
 msgstr ""
 
-msgid "Missing title and URL"
+#, python-format
+msgid "Missing URL element for \"%s\""
 msgstr ""
 
 #, python-format
 msgid "Missing title for %s"
 msgstr ""
 
-#, python-format
-msgid "Missing URL element for \"%s\""
+msgid "Missing title and URL"
 msgstr ""
 
 msgid "url"
@@ -392,6 +398,9 @@ msgid "message"
 msgstr ""
 
 msgid "timestamp"
+msgstr ""
+
+msgid "sent"
 msgstr ""
 
 msgid "scraping error"
@@ -534,21 +543,27 @@ msgid "SWP Webmonitor"
 msgstr ""
 
 #, python-format
-msgid "Attached you will find all publications for %(monitor)s."
+msgid "%(count)s new publications since %(date)s"
+msgstr ""
+
+msgid "SWP Information Services"
+msgstr ""
+
+msgid "Table of Contents"
+msgstr ""
+
+msgid "Back to table of contents"
+msgstr ""
+
+#, python-format
+msgid "Attached you will find all new publications for %(monitor)s in RIS format."
 msgstr ""
 
 msgid "The SWP team"
 msgstr ""
 
 #, python-format
-msgid "Attached you will find all new publications for %(monitor)s."
-msgstr ""
-
-#, python-format
 msgid "Publications for %(monitor)s"
-msgstr ""
-
-msgid "Reset password"
 msgstr ""
 
 msgid "You're receiving this email because you requested a password reset for your SWP account."
@@ -560,19 +575,11 @@ msgstr ""
 msgid "Please go to the following page and choose a new password:"
 msgstr ""
 
-#, python-format
-msgid "<a href=\"%(url)s\">%(scraper)s</a> encountered the following problems:"
+msgid "Reset password"
 msgstr ""
 
 #, python-format
-msgid "%(scraper)s encountered problems while running:"
-msgstr ""
-
-msgid "The following errors occurred:"
-msgstr ""
-
-#, python-format
-msgid "Error in %(scraper)s"
+msgid "Scraper Error Report for %(date)s"
 msgstr ""
 
 msgid "Scraping protection prevents page access"
