@@ -14,7 +14,8 @@ WebAssistantAlert
 
 {% for publication in publications %}
 {{ publication }}
-{{ publication.authors_label }}
+{{ publication.authors_label }}{% if publication.abstract_label %}
+{{ publication.abstract_label }}{% endif %}
 {{ publication.created|date:'SHORT_DATE_FORMAT' }}, {{ publication.pdf_pages_label }}
 {{ publication.source }}
 {% translate 'Tags' %}: {{ publication.tags_label }}

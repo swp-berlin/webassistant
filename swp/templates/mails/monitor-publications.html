@@ -29,6 +29,7 @@
 	<article style="margin: 2rem 0; padding: 0">
         <h4 id="publication-{{ publication.id }}" style="margin: 0; padding: 0; color: #004778">{{ publication }}</h4>
         <p style="margin: 0.3rem 0; padding: 0; font-style: italic">{{ publication.authors_label }}</p>
+        {% if publication.abstract_label %}<p style="margin: 0.3rem 0; padding: 0;">{{ publication.abstract_label }}</p>{% endif %}
         <p style="margin: 0.3rem 0; padding: 0">
             {% spaceless %}
                 <time datetime="{{ publication.created|date:'Y-m-d' }}">{{ publication.created|date:'SHORT_DATE_FORMAT' }}</time>
