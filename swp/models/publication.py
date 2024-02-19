@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from django.db import models
 from django.utils import timezone
+from django.utils.text import Truncator
 from django.utils.translation import gettext_lazy as _, ngettext
 from django.contrib.postgres.fields import ArrayField
 
@@ -80,6 +81,11 @@ class Publication(models.Model):
     @property
     def authors_label(self):
         return joined(self.authors or [], '; ')
+
+    @property
+    def abstract_label(self):
+        if abstract := spaced(self.abstract):
+            return Truncator(abstract).words(120)
 
     @property
     def tags_label(self):
