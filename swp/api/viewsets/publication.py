@@ -21,7 +21,7 @@ from rest_framework.permissions import BasePermission, IsAuthenticated
 from swp.api.router import default_router
 from swp.api.serializers import PublicationSerializer, ResearchSerializer, TagSerializer
 from swp.documents import PublicationDocument
-from swp.models import Monitor, Pool, Publication, Thinktank
+from swp.models import Monitor, Pool, Publication
 from swp.utils.ris import RISResponse
 from swp.utils.translation import get_language
 

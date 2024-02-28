@@ -127,7 +127,7 @@ class Monitor(PublicationCount, ActivatableModel):
         search.source(False)
 
         try:
-            ids = [result.meta.id for result in search]
+            ids = [result.meta.id for result in search.scan()]
         except ElasticsearchException as error:
             capture_exception(error)
 
@@ -144,7 +144,7 @@ class Monitor(PublicationCount, ActivatableModel):
         return len(self.recipients)
 
     def get_publications(self, *, exclude_sent: bool = False):
-        qs = Publication.objects.active().filter(self.as_query)
+        qs = Publication.objects.filter(self.as_query)
 
         if exclude_sent and self.last_sent:
             qs = qs.filter(last_access__gte=self.last_sent)
