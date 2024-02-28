@@ -127,7 +127,7 @@ class Monitor(PublicationCount, ActivatableModel):
         search.source(False)
 
         try:
-            ids = [result.meta.id for result in search]
+            ids = [result.meta.id for result in search.scan()]
         except ElasticsearchException as error:
             capture_exception(error)
 
