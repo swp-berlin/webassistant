@@ -22,6 +22,7 @@ from sentry_sdk import capture_message, capture_exception
 
 from swp.db.expressions import MakeInterval
 from swp.utils.ris import generate_ris_data
+from swp.utils.translation import get_language
 from swp.utils.validation import get_field_validation_error
 
 from .pool import CanManageQuerySet
@@ -47,8 +48,7 @@ class MonitorQuerySet(ActivatableQuerySet, CanManageQuerySet):
         return self.annotate(**{to_attr or 'next_run': next_run})
 
     def next_run_before(self, end: datetime.datetime, *, now: datetime.datetime = None) -> MonitorQuerySet:
-        scheduled = models.Q(next_run__lt=end)
-        return self.annotate_next_run(now=now).complex_filter(scheduled)
+        return self.annotate_next_run(now=now).filter(next_run__lt=end)
 
     def next_run_between(
         self,
@@ -114,12 +114,14 @@ class Monitor(PublicationCount, ActivatableModel):
         if self.is_active and not self.query:
             raise get_field_validation_error('query', _('An active monitor must not have an empty query.'))
 
-    def get_query(self, using=None):
+    def get_query(self, language=None, using=None):
         from swp.documents import PublicationDocument
 
+        language = get_language(language)
+        fields = PublicationDocument.get_search_fields(language)
         search = PublicationDocument.search(using=using).query(
             Match(thinktank__pool=self.pool_id) &
-            QueryString(query=self.query, default_operator='AND')
+            QueryString(query=self.query, fields=fields, default_operator='AND')
         )
 
         search.source(False)
