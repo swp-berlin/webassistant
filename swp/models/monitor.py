@@ -120,7 +120,6 @@ class Monitor(PublicationCount, ActivatableModel):
         language = get_language(language)
         fields = PublicationDocument.get_search_fields(language)
         search = PublicationDocument.search(using=using).query(
-            Match(thinktank__pool=self.pool_id) &
             QueryString(query=self.query, fields=fields, default_operator='AND')
         )
 
