@@ -35,7 +35,6 @@ const usePage = () => {
 const MonitorQueryEditForm = ({monitor}) => {
     const page = usePage();
     const navigate = useNavigate();
-    const pools = [monitor.pool.id];
     const url = buildAPIURL('monitor', monitor.id);
     const [query, setQuery] = useState(monitor.query || '');
     const [searchQuery, setSearchQuery] = useState(query);
@@ -72,7 +71,7 @@ const MonitorQueryEditForm = ({monitor}) => {
                 <Button intent={Intent.PRIMARY} loading={isLoading} onClick={handleSave}>{SaveLabel}</Button>
             </div>
             {searchQuery && (
-                <SearchQuery query={searchQuery} pools={pools} page={page}>
+                <SearchQuery query={searchQuery} page={page}>
                     <MonitorQueryResult page={page} />
                 </SearchQuery>
             )}

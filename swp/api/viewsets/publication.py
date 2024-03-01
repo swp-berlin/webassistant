@@ -1,6 +1,7 @@
 import operator
 
 from functools import reduce
+from typing import List
 
 import django_filters as filters
 
@@ -22,7 +23,7 @@ from rest_framework.permissions import BasePermission, IsAuthenticated
 from swp.api.router import default_router
 from swp.api.serializers import PublicationSerializer, ResearchSerializer, TagSerializer
 from swp.documents import PublicationDocument
-from swp.models import Monitor, Pool, Publication
+from swp.models import Monitor, Pool, Publication, User
 from swp.utils.ris import RISResponse
 from swp.utils.translation import get_language
 
@@ -81,7 +82,7 @@ class PublicationFilter(filters.FilterSet):
 
 
 def get_pool_queryset(request):
-    return Pool.objects.can_manage(request.user)
+    return Pool.objects.can_research(request.user)
 
 
 class ResearchFilter(filters.FilterSet):
@@ -133,9 +134,18 @@ class ResearchFilter(filters.FilterSet):
 
         return query
 
-    def get_pool_query(self, pool=None):
-        if pool := pool or self.request.user.pools.only('id'):
-            return reduce(operator.or_, [Match(thinktank__pool=pool.id) for pool in pool])
+    def get_pool_query(self, pool: List[Pool] = None):
+        if ids := self.get_pool_ids(self.request.user, pool):
+            return reduce(operator.or_, [Match(thinktank__pool=pool) for pool in ids])
+
+    @staticmethod
+    def get_pool_ids(user: User, pools: List[Pool] = None):
+        if pools:
+            return [pool.id for pool in pools]
+        elif user.can_research_all_pools:
+            return None
+        else:
+            return user.pools.values_list('id', flat=True)
 
 
 @default_router.register('publication', basename='publication')

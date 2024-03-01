@@ -4,6 +4,7 @@ from django.db import models
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
+from swp.utils.permission import has_perm
 from swp.utils.translation import trans
 
 
@@ -47,6 +48,10 @@ class User(AbstractUser):
     @property
     def can_research(self):
         return self.has_perm(f'{self._meta.app_label}.can_research')
+
+    @property
+    def can_research_all_pools(self):
+        return has_perm(self, self.pools.model, 'view')
 
     @cached_property
     def has_pools(self):
