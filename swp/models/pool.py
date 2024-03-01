@@ -22,6 +22,12 @@ class CanManageQuerySet(UpdateQuerySet):
     def can_manage(self, user: User):
         return self.annotate_can_manage(user).filter(can_manage=True)
 
+    def can_research(self, user: User):
+        if user.can_research_all_pools:
+            return self.all()
+        else:
+            return self.can_manage(user)
+
 
 class PoolQuerySet(CanManageQuerySet):
     pass

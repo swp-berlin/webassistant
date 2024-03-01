@@ -108,6 +108,11 @@
           "monitor"
         ],
         [
+          "view_pool",
+          "swp",
+          "pool"
+        ],
+        [
           "view_publication",
           "swp",
           "publication"

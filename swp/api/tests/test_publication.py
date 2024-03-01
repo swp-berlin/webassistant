@@ -10,7 +10,7 @@ from django.urls import reverse
 from django.utils import timezone
 
 from swp.models import Publication, Monitor
-from swp.utils.testing import login, request, create_user, create_monitor, create_thinktank
+from swp.utils.testing import login, request, create_user, create_monitor, create_thinktank, add_to_group
 
 ONE_HOUR = datetime.timedelta(hours=1)
 
@@ -31,7 +31,9 @@ class PublicationTestCase(test.TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.now = now = timezone.localtime()
-        cls.user = create_user('test@localhost')
+        cls.user = user = create_user('test@localhost')
+
+        add_to_group(user, 'swp-researcher')
 
         cls.thinktanks = thinktanks = [
             create_thinktank(
@@ -184,3 +186,30 @@ class PublicationTestCase(test.TestCase):
             response = request(self, f'{self.list_url}?{query_string}')
 
         self.assertEqual(response.data['count'], 0)
+
+    def test_research(self):
+        url = reverse('1:publication-research')
+        params = urlencode({'query': 'COVID-19'})
+
+        request(self, f'{url}?{params}')
+
+    def test_research_as_editor(self):
+        add_to_group(self.user, 'swp-editor')
+        PublicationTestCase.test_research(self)
+
+    def test_research_invalid_query(self):
+        url = reverse('1:publication-research')
+        params = urlencode({'query': 'thinktank.id:'})
+
+        request(self, f'{url}?{params}', status_code=400)
+
+    def test_ris(self):
+        url = reverse('1:publication-ris')
+        params = urlencode({
+            'query': 'COVID-19',
+            'pool': 0,
+            'start_date': self.now.strftime('%Y-%m-%d'),
+            'end_date': self.now.strftime('%Y-%m-%d'),
+        })
+
+        request(self, f'{url}?{params}')
