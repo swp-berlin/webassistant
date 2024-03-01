@@ -16,7 +16,7 @@ from django.utils.translation import gettext_lazy as _
 from django.contrib.postgres.fields import ArrayField
 
 from elasticsearch.exceptions import ElasticsearchException
-from elasticsearch_dsl.query import Match, QueryString
+from elasticsearch_dsl.query import QueryString
 
 from sentry_sdk import capture_message, capture_exception
 
