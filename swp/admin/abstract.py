@@ -1,12 +1,12 @@
 from typing import Union
 
 from django.contrib import admin, messages
-from django.contrib.auth import get_permission_codename
 from django.db import models
 from django.db.models.base import ModelBase
 from django.utils.translation import gettext_lazy as _, ngettext
 
 from swp.models import ActivatableModel
+from swp.utils.permission import get_permission
 
 
 def get_pluralized_verbose_name(model: Union[models.Model, ModelBase], count: int = 1) -> str:
@@ -17,7 +17,7 @@ def get_pluralized_verbose_name(model: Union[models.Model, ModelBase], count: in
 class BaseActivatableModelAdmin(admin.ModelAdmin):
 
     def get_permission_name(self, action):
-        return f'{self.opts.app_label}.%s' % get_permission_codename(action, self.opts)
+        return get_permission(self.model, action)
 
     @property
     def activate_permission_name(self):

@@ -1,13 +1,17 @@
 from rest_framework import status
 from rest_framework.decorators import action
-from rest_framework.permissions import BasePermission, IsAuthenticated
+from rest_framework.permissions import BasePermission
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
+from swp.api.permissions import HasActivatablePermission
+from swp.api.router import default_router
+from swp.api.serializers import ScraperSerializer, ScraperDraftSerializer
 from swp.models import Scraper
 
-from ..serializers import ScraperSerializer, ScraperDraftSerializer
-from ..router import default_router
+
+class HasScraperPermission(HasActivatablePermission):
+    pass
 
 
 class CanManagePool(BasePermission):
@@ -20,7 +24,7 @@ class CanManagePool(BasePermission):
 class ScraperViewSet(ModelViewSet):
     queryset = Scraper.objects.prefetch_related('thinktank__pool', 'errors')
     serializer_class = ScraperDraftSerializer
-    permission_classes = [IsAuthenticated & CanManagePool]
+    permission_classes = [HasScraperPermission & CanManagePool]
 
     def get_serializer_class(self):
         if self.action == 'retrieve':

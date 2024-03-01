@@ -3,6 +3,7 @@ import shutil
 
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
+from django.core.management import call_command
 from django.test.runner import DiscoverRunner
 
 
@@ -21,3 +22,8 @@ class CosmoCodeTestRunner(DiscoverRunner):
     def teardown_test_environment(self, **kwargs):
         DiscoverRunner.teardown_test_environment(self, **kwargs)
         shutil.rmtree(settings.MEDIA_ROOT, ignore_errors=True)
+
+    def setup_databases(self, **kwargs):
+        names = DiscoverRunner.setup_databases(self, **kwargs)
+        call_command('loaddata', 'groups.json')
+        return names

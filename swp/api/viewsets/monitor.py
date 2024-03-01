@@ -3,15 +3,24 @@ from celery.canvas import group
 from django.db.models import Prefetch
 
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from swp.api import default_router
-from swp.api.permissions import CanManagePool
+from swp.api.permissions import CanManagePool, HasActivatablePermission
 from swp.api.serializers import MonitorSerializer, MonitorDetailSerializer, MonitorEditSerializer
 from swp.models import Monitor, Pool
 from swp.tasks import send_publications_to_zotero, update_publication_count
+from swp.utils.permission import has_perm
+
+
+class HasMonitorPermission(HasActivatablePermission):
+
+    def has_object_permission(self, request, view, obj: Monitor):
+        if view.action == 'edit':
+            return has_perm(request.user, obj, 'change')
+
+        return super().has_object_permission(request, view, obj)
 
 
 class CanManageMonitor(CanManagePool):
@@ -22,7 +31,7 @@ class CanManageMonitor(CanManagePool):
 
 @default_router.register('monitor', basename='monitor')
 class MonitorViewSet(ModelViewSet):
-    permission_classes = [IsAuthenticated & CanManagePool]
+    permission_classes = [HasMonitorPermission & CanManagePool]
     serializer_class = MonitorSerializer
     queryset = Monitor.objects.order_by('name')
     filterset_fields = ['pool']

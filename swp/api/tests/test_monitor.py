@@ -3,7 +3,7 @@ from unittest import mock
 from django import test
 from django.utils import timezone
 
-from swp.utils.testing import create_user, login, request, create_monitor, create_thinktank
+from swp.utils.testing import create_user, login, request, create_monitor, create_thinktank, add_to_group
 
 
 class MonitorViewSetTestCase(test.TestCase):
@@ -11,7 +11,9 @@ class MonitorViewSetTestCase(test.TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.now = now = timezone.localtime()
-        cls.user = create_user('test-user@localhost')
+        cls.user = user = create_user('test-user@localhost')
+
+        add_to_group(user, 'swp-editor')
 
         cls.monitors = [
             create_monitor(name='Monitor A', recipients=['a.nobody@localhost', 'z.nobody@localhost'], created=now),

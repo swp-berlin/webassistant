@@ -8,6 +8,8 @@ from django.db.models.base import ModelBase
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
+from swp.utils.permission import has_perm
+
 
 class UpdateQuerySet(models.QuerySet):
     """
@@ -89,13 +91,13 @@ class ActivatableModel(models.Model, metaclass=ActivatableModelBase):
 
     def can_activate(self, user: User) -> bool:
         """ Check user for permission to activate. """
-        codename = get_permission_codename('activate', self._meta)
-        return user.has_perm(f'{self._meta.app_label}.{codename}')
+
+        return has_perm(user, self, 'activate')
 
     def can_deactivate(self, user: User) -> bool:
         """ Check user for permission to deactivate. """
-        codename = get_permission_codename('deactivate', self._meta)
-        return user.has_perm(f'{self._meta.app_label}.{codename}')
+
+        return has_perm(user, self, 'deactivate')
 
     def set_active(self, is_active: bool, *, commit: bool = True):
         self.is_active = is_active
