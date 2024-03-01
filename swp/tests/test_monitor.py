@@ -20,12 +20,10 @@ from swp.tasks.monitor import (
 from swp.utils.testing import create_monitor, create_thinktank
 from swp.utils.zotero import get_zotero_publication_data, get_zotero_attachment_data
 
-
 ONE_HOUR = datetime.timedelta(hours=1)
 ONE_DAY = datetime.timedelta(days=1)
 
-
-NEW_RIS_DATA = b"""TY  - ICOMM
+PUB1_RIS_DATA = b"""TY  - ICOMM
 TI  - Impact of COVID-19 lockdowns on individual mobility and the importance of socioeconomic factors
 Y3  - 2020-11
 PB  - PIIE
@@ -36,24 +34,17 @@ AU  - A. L. Phabet
 AU  - Dr. Dyslexia
 ER  - \n"""
 
-FULL_RIS_DATA = b"""TY  - ICOMM
+PUB2_RIS_DATA = b"""TY  - ICOMM
 TI  - Already accessed publication
 Y3  - 2021
 PB  - PIIE
 UR  - https://example.org
 DO  - 10.1000/182
 SN  - 978-3-16-148410-0
-ER  - \nTY  - ICOMM
-TI  - Impact of COVID-19 lockdowns on individual mobility and the importance of socioeconomic factors
-Y3  - 2020-11
-PB  - PIIE
-UR  - https://piie.com/publications/policy-briefs/impact-covid-19-lockdowns-individual-mobility-and-importance
-L1  - https://www.piie.com/system/files/documents/pb20-14.pdf
-SP  - 22
-AU  - A. L. Phabet
-AU  - Dr. Dyslexia
 ER  - \n"""
 
+NEW_RIS_DATA = PUB1_RIS_DATA
+FULL_RIS_DATA = PUB1_RIS_DATA + PUB2_RIS_DATA
 
 ZOTERO_COLLECTIONS = {'92BRC33T', 'BFGHEX22'}
 
