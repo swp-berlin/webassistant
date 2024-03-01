@@ -13,6 +13,8 @@ ALLOWED_HOSTS = '*'
 EMAIL_BACKEND = env('EMAIL_BACKEND', 'django.core.mail.backends.console.EmailBackend')
 EMAIL_PORT = env('EMAIL_PORT', 1025, parser=int)
 
+REST_FRAMEWORK_DEFAULT_RENDERER_CLASSES.append('rest_framework.renderers.BrowsableAPIRenderer')
+
 [
     INSTALLED_APPS,
     MIDDLEWARE,
