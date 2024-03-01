@@ -7,6 +7,7 @@ from django.apps import apps
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.base_user import AbstractBaseUser as User
+from django.contrib.auth.models import Group
 
 from django.core.management import call_command as django_call_command
 from django.test import SimpleTestCase
@@ -48,6 +49,12 @@ def create_user(username: str, **kwargs):
 
 def create_superuser(email: str = 'admin@localhost', **kwargs) -> User:
     return get_user_model().objects.create_superuser(email, **kwargs)
+
+
+def add_to_group(user, name: str):
+    group = Group.objects.get(name=name)
+
+    return user.groups.add(group)
 
 
 def get_url(url: str, args: Args = None, kwargs: dict = None) -> str:

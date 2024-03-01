@@ -42,7 +42,7 @@ EDITOR_PERMS = [
 
 
 class PermissionTestCase(test.TestCase):
-    fixtures = ['groups', 'test-users']
+    fixtures = ['test-users']
 
     @classmethod
     def setUpTestData(cls):

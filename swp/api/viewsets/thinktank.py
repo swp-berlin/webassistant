@@ -1,19 +1,28 @@
 from django.db.models import Prefetch
 
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
-from swp.api.permissions import CanManagePool
+from swp.api.permissions import CanManagePool, HasActivatablePermission
 from swp.api.router import default_router
 from swp.api.serializers import ScraperDraftSerializer, ThinktankSerializer, ThinktankListSerializer
 from swp.models import Scraper, Thinktank
+from swp.utils.permission import has_perm
+
+
+class HasThinktankPermission(HasActivatablePermission):
+
+    def has_object_permission(self, request, view, obj: Thinktank):
+        if view.action == 'add_scraper':
+            return has_perm(request.user, Scraper, 'add')
+
+        return super().has_object_permission(request, view, obj)
 
 
 @default_router.register('thinktank', basename='thinktank')
 class ThinktankViewSet(ModelViewSet):
-    permission_classes = [IsAuthenticated & CanManagePool]
+    permission_classes = [HasThinktankPermission & CanManagePool]
     queryset = Thinktank.objects.annotate_last_run().annotate_counts().prefetch_related('pool').order_by('name')
     filterset_fields = ['pool', 'is_active']
     serializer_class = ThinktankSerializer
