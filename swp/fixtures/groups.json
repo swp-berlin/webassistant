@@ -78,6 +78,11 @@
       "name": "swp-editor",
       "permissions": [
         [
+          "can_research",
+          "swp",
+          "publication"
+        ],
+        [
           "activate_monitor",
           "swp",
           "monitor"
