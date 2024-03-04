@@ -9,9 +9,9 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('auth', '0012_alter_user_first_name_max_length'),
-        ('swp', '0047_scrapererror_sent'),
+        ('swp', '0048_add_pool_view_perm_to_editor_role'),
     ]
 
     operations = [
-        AddRolePerm('swp-editor', 'view_pool'),
+        AddRolePerm('swp-editor', 'can_research'),
     ]
