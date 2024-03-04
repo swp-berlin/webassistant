@@ -18,6 +18,8 @@ const SaveLabel = _('Save');
 const SearchLabel = _('Search');
 const SuccessMessage = _('Successfully changed query of monitor %(name)s.');
 
+const Pools = [];
+
 const usePage = () => {
     const [searchParams] = useSearchParams();
 
@@ -71,7 +73,7 @@ const MonitorQueryEditForm = ({monitor}) => {
                 <Button intent={Intent.PRIMARY} loading={isLoading} onClick={handleSave}>{SaveLabel}</Button>
             </div>
             {searchQuery && (
-                <SearchQuery query={searchQuery} page={page}>
+                <SearchQuery query={searchQuery} pools={Pools} page={page}>
                     <MonitorQueryResult page={page} />
                 </SearchQuery>
             )}
