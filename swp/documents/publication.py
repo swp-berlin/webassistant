@@ -84,6 +84,7 @@ PublicationIndex = PublicationIndex(name='publications')
 class PublicationDocument(FieldMixin, Document):
     TRANSLATION_FIELDS = TRANSLATION_FIELDS
 
+    pool = fields.IntegerField(attr='thinktank.pool_id')
     ttid = fields.IntegerField(attr='thinktank.id')
     ttname = fields.TextField(attr='thinktank.name')
     thinktank = fields.ObjectField(properties={
