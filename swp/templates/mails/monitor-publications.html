@@ -13,7 +13,8 @@
 <p>{{ monitor.description }}</p>
 
 <div style="color: #004778">
-    <h3 id="table-of-contents">{% translate 'Table of Contents' %}</h3>
+    <a name="table-of-contents"></a>
+    <h3>{% translate 'Table of Contents' %}</h3>
     <ul>
         {% for publication in publications %}
             <li>
@@ -27,7 +28,8 @@
 
 {% for publication in publications %}
 	<article style="margin: 2rem 0; padding: 0">
-        <h4 id="publication-{{ publication.id }}" style="margin: 0; padding: 0; color: #004778">{{ publication }}</h4>
+        <a name="publication-{{ publication.id }}"></a>
+        <h4 style="margin: 0; padding: 0; color: #004778">{{ publication }}</h4>
         <p style="margin: 0.3rem 0; padding: 0; font-style: italic">{{ publication.authors_label }}</p>
         {% if publication.abstract_label %}<p style="margin: 0.3rem 0; padding: 0;">{{ publication.abstract_label }}</p>{% endif %}
         <p style="margin: 0.3rem 0; padding: 0">
