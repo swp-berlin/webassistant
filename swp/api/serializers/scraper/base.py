@@ -4,20 +4,17 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.fields import CharField, ChoiceField, IntegerField
 from rest_framework.serializers import ModelSerializer, Serializer
 
-from swp.models import Scraper
+from swp.models import Scraper, Thinktank
 from swp.models.choices import PaginatorType, ResolverType
 from swp.utils.text import enumeration
 
+from .resolver import BaseResolverConfigSerializer, ResolverTypeField
 from ..fields import ThinktankField, CSSSelectorField
 from ..scrapererror import ScraperErrorSerializer
 
 
-class ResolverConfigSerializer(Serializer):
+class ResolverConfigSerializer(BaseResolverConfigSerializer):
     type = ChoiceField(choices=ResolverType.choices)
-
-    def get_serializer(self, type, *args, **kwargs):
-        serializer_type = ResolverSerializers[type]
-        return serializer_type(*args, **kwargs)
 
     def to_representation(self, instance):
         serializer = self.get_serializer(instance['type'], instance)
@@ -26,16 +23,12 @@ class ResolverConfigSerializer(Serializer):
 
     def to_internal_value(self, data):
         internal_data = super().to_internal_value(data)
-
-        type = internal_data['type']
-
-        serializer = self.get_serializer(type, data=data)
+        serializer = self.get_serializer(internal_data['type'], data=data)
 
         return {**internal_data, **serializer.to_internal_value(data)}
 
     def validate(self, data):
-        type = data['type']
-        serializer = self.get_serializer(type, data=data)
+        serializer = self.get_serializer(data['type'], data=data)
 
         return {**super().validate(data), **serializer.validate(data)}
 
@@ -47,6 +40,7 @@ class PaginatorSerializer(Serializer):
     max_pages = IntegerField(min_value=1)
 
 
+@ResolverConfigSerializer.register(ResolverType.LIST)
 class ListResolverSerializer(Serializer):
     selector = CSSSelectorField()
     cookie_banner_selector = CSSSelectorField(allow_blank=True, default='')
@@ -54,53 +48,65 @@ class ListResolverSerializer(Serializer):
     resolvers = ResolverConfigSerializer(many=True)
 
 
+@ResolverConfigSerializer.register(ResolverType.LINK)
 class LinkResolverSerializer(Serializer):
     selector = CSSSelectorField()
     resolvers = ResolverConfigSerializer(many=True)
 
 
+@ResolverConfigSerializer.register(ResolverType.DATA)
 class DataResolverSerializer(Serializer):
     selector = CSSSelectorField(required=True)
 
 
+@ResolverConfigSerializer.register(ResolverType.ATTRIBUTE)
 class AttributeResolverSerializer(DataResolverSerializer):
     attribute = CharField(required=True)
 
 
+@ResolverConfigSerializer.register(ResolverType.STATIC)
 class StaticResolverSerializer(Serializer):
     value = CharField()
 
 
+@ResolverConfigSerializer.register(ResolverType.DOCUMENT)
 class DocumentResolverSerializer(Serializer):
     key = CharField(default='pdf_url')
     selector = CSSSelectorField()
 
 
+@ResolverConfigSerializer.register(*ResolverTypeField)
 class FieldResolverSerializer(Serializer):
     resolver = ResolverConfigSerializer()
 
 
-ResolverSerializers = {
-    ResolverType.LIST: ListResolverSerializer,
-    ResolverType.LINK: LinkResolverSerializer,
-    ResolverType.DATA: DataResolverSerializer,
-    ResolverType.ATTRIBUTE: AttributeResolverSerializer,
-    ResolverType.STATIC: StaticResolverSerializer,
-    ResolverType.DOCUMENT: DocumentResolverSerializer,
+class BaseScraperSerializer(ModelSerializer):
 
-    ResolverType.TITLE: FieldResolverSerializer,
-    ResolverType.SUBTITLE: FieldResolverSerializer,
-    ResolverType.ABSTRACT: FieldResolverSerializer,
-    ResolverType.PUBLICATION_DATE: FieldResolverSerializer,
-    ResolverType.URL: FieldResolverSerializer,
-    ResolverType.AUTHORS: FieldResolverSerializer,
-    ResolverType.DOI: FieldResolverSerializer,
-    ResolverType.ISBN: FieldResolverSerializer,
-    ResolverType.TAGS: FieldResolverSerializer,
-}
+    def __init__(self, instance=None, *args, thinktank: Thinktank = None, **kwargs):
+        self.thinktank = thinktank or instance.thinktank
+        ModelSerializer.__init__(self, instance, *args, **kwargs)
+
+    def validate(self, attrs):
+        self.validate_start_url_domain(attrs)
+
+        return attrs
+
+    def validate_start_url_domain(self, attrs):
+        if attrs.get('is_active', None) is False:
+            return None
+
+        if instance := self.instance:
+            start_url = attrs.get('start_url', instance.start_url)
+        else:
+            start_url = attrs.get('start_url')
+
+        if start_url is None:
+            return None
+
+        Scraper.validate_start_url(start_url, self.thinktank.domain)
 
 
-class ScraperSerializer(ModelSerializer):
+class ScraperSerializer(BaseScraperSerializer):
     REQUIRED_RESOLVERS = {ResolverType.TITLE.value}
 
     thinktank = ThinktankField(read_only=True)
@@ -126,6 +132,8 @@ class ScraperSerializer(ModelSerializer):
         ]
 
     def validate(self, attrs):
+        attrs = super().validate(attrs)
+
         if not self.partial or attrs.get('data'):
             self.check_missing_fields(attrs)
 

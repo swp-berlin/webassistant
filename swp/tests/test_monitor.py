@@ -7,21 +7,23 @@ from django.core import mail
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 
-from swp.models import Monitor, Publication, Scraper, Thinktank, ZoteroTransfer
+from swp.api.tests.test_publication import patch_monitor_query
+from swp.models import Monitor, Publication, Scraper, ZoteroTransfer
 from swp.scraper.types import ScraperType
 from swp.tasks.monitor import (
     monitor_new_publications,
     send_monitor_publications,
-    schedule_monitors, schedule_zotero_transfers, transfer_publication,
+    schedule_monitors,
+    schedule_zotero_transfers,
+    transfer_publication,
 )
+from swp.utils.testing import create_monitor, create_thinktank
 from swp.utils.zotero import get_zotero_publication_data, get_zotero_attachment_data
-
 
 ONE_HOUR = datetime.timedelta(hours=1)
 ONE_DAY = datetime.timedelta(days=1)
 
-
-NEW_RIS_DATA = b"""TY  - ICOMM
+PUB1_RIS_DATA = b"""TY  - ICOMM
 TI  - Impact of COVID-19 lockdowns on individual mobility and the importance of socioeconomic factors
 Y3  - 2020-11
 PB  - PIIE
@@ -32,24 +34,17 @@ AU  - A. L. Phabet
 AU  - Dr. Dyslexia
 ER  - \n"""
 
-FULL_RIS_DATA = b"""TY  - ICOMM
+PUB2_RIS_DATA = b"""TY  - ICOMM
 TI  - Already accessed publication
 Y3  - 2021
 PB  - PIIE
 UR  - https://example.org
 DO  - 10.1000/182
 SN  - 978-3-16-148410-0
-ER  - \nTY  - ICOMM
-TI  - Impact of COVID-19 lockdowns on individual mobility and the importance of socioeconomic factors
-Y3  - 2020-11
-PB  - PIIE
-UR  - https://piie.com/publications/policy-briefs/impact-covid-19-lockdowns-individual-mobility-and-importance
-L1  - https://www.piie.com/system/files/documents/pb20-14.pdf
-SP  - 22
-AU  - A. L. Phabet
-AU  - Dr. Dyslexia
 ER  - \n"""
 
+NEW_RIS_DATA = PUB1_RIS_DATA
+FULL_RIS_DATA = PUB1_RIS_DATA + PUB2_RIS_DATA
 
 ZOTERO_COLLECTIONS = {'92BRC33T', 'BFGHEX22'}
 
@@ -66,7 +61,7 @@ class MonitorTestCase(test.TestCase):
     def setUpTestData(cls):
         cls.now = now = timezone.localtime()
 
-        cls.monitor = Monitor.objects.create(
+        cls.monitor = create_monitor(
             name='PIIE Monitor',
             recipients=['test-1@localhost', 'test-2@localhost'],
             zotero_keys=[
@@ -78,21 +73,21 @@ class MonitorTestCase(test.TestCase):
             created=now,
         )
 
-        cls.thinktanks = thinktanks = Thinktank.objects.bulk_create([
-            Thinktank(
+        cls.thinktanks = thinktanks = [
+            create_thinktank(
                 name='PIIE',
                 url='https://www.piie.com/',
                 unique_fields=['url'],
                 is_active=True,
                 created=now,
             ),
-            Thinktank(
+            create_thinktank(
                 name='Deactivated Thinktank',
                 url='https://example.net/',
                 unique_fields=['url'],
                 created=now,
             ),
-        ])
+        ]
 
         thinktank, *thinktanks = thinktanks
 
@@ -161,13 +156,16 @@ class MonitorTestCase(test.TestCase):
         ])
 
     def test_publications(self):
-        self.assertSequenceEqual(self.monitor.publications.order_by('pk'), self.publications)
+        with patch_monitor_query(*self.publications):
+            self.assertSequenceEqual(self.monitor.publications.order_by('pk'), self.publications)
 
     def test_new_publications(self):
         self.model.objects.filter(pk=self.monitor.pk).update(last_sent=self.now)
         monitor = self.model.objects.get(pk=self.monitor.pk)
 
-        new_publications = list(monitor.new_publications)
+        with patch_monitor_query(*self.publications):
+            new_publications = list(monitor.new_publications)
+
         self.assertEqual(len(new_publications), 1)
         self.assertEqual(new_publications[0].pk, self.publications[0].pk)
 
@@ -177,13 +175,15 @@ class MonitorTestCase(test.TestCase):
         self.assertEqual(monitor.publication_count, 0)
         self.assertEqual(monitor.new_publication_count, 0)
 
-        counts = monitor.update_publication_count()
+        with patch_monitor_query(*self.publications):
+            self.assertEqual(len(monitor.publications), 2)
+            self.assertEqual(len(monitor.new_publications), 2)
+
+            counts = monitor.update_publication_count()
 
         self.assertEqual(counts, (2, 2))
         self.assertEqual(monitor.publication_count, 2)
-        self.assertEqual(len(monitor.publications), 2)
         self.assertEqual(monitor.new_publication_count, 2)
-        self.assertEqual(len(monitor.new_publications), 2)
 
     def test_next_run(self):
         monitor = self.model.objects.annotate_next_run('annotated_next_run', now=self.now).get(pk=self.monitor.pk)
@@ -226,14 +226,18 @@ class MonitorTestCase(test.TestCase):
         self.assertEqual(queryset.count(), 0)
 
     def test_generate_ris_data(self):
-        data = self.monitor.generate_ris_data()
+        with patch_monitor_query(*self.publications):
+            data = self.monitor.generate_ris_data()
+
         self.assertEqual(data, FULL_RIS_DATA)
 
     def test_generate_new_ris_data(self):
         self.model.objects.filter(pk=self.monitor.pk).update(last_sent=self.now)
         monitor = self.model.objects.get(pk=self.monitor.pk)
 
-        data = monitor.generate_ris_data(exclude_sent=True)
+        with patch_monitor_query(*self.publications):
+            data = monitor.generate_ris_data(exclude_sent=True)
+
         self.assertEqual(data, NEW_RIS_DATA)
 
     def test_do_not_generate_outdated_ris_data(self):
@@ -241,12 +245,15 @@ class MonitorTestCase(test.TestCase):
         self.model.objects.filter(pk=self.monitor.pk).update(last_sent=self.now)
         monitor = self.model.objects.get(pk=self.monitor.pk)
 
-        data = monitor.generate_ris_data(exclude_sent=True)
+        with patch_monitor_query(*self.publications):
+            data = monitor.generate_ris_data(exclude_sent=True)
+
         self.assertEqual(data, b'')
 
     def test_send_monitor_publications(self):
         with mock.patch('swp.tasks.monitor.transfer_publication.delay') as transfer_publication:
-            count = send_monitor_publications(self.monitor, now=self.now)
+            with patch_monitor_query(*self.publications):
+                count = send_monitor_publications(self.monitor, now=self.now)
 
             transfers = ZoteroTransfer.objects.all()
 
@@ -272,7 +279,8 @@ class MonitorTestCase(test.TestCase):
         self.assertEqual(monitor.last_sent, self.now)
 
     def test_transfer_publication(self):
-        schedule_zotero_transfers(self.monitor)
+        with patch_monitor_query(*self.publications):
+            schedule_zotero_transfers(self.monitor)
 
         transfers = ZoteroTransfer.objects.all()
 
@@ -311,7 +319,8 @@ class MonitorTestCase(test.TestCase):
         monitor = self.model.objects.get(pk=self.monitor.pk)
 
         with mock.patch('swp.tasks.monitor.send_publications_to_zotero'):
-            count = send_monitor_publications(monitor, now=self.now)
+            with patch_monitor_query(*self.publications):
+                count = send_monitor_publications(monitor, now=self.now)
 
         self.assertEqual(len(mail.outbox), 2)
         self.assertEqual(count, 2)
@@ -322,7 +331,8 @@ class MonitorTestCase(test.TestCase):
 
     def test_new_monitor_publications(self):
         with mock.patch('swp.tasks.monitor.send_publications_to_zotero'):
-            count = monitor_new_publications(self.monitor.pk, now=self.now)
+            with patch_monitor_query(*self.publications):
+                count = monitor_new_publications(self.monitor.pk, now=self.now)
 
         self.assertEqual(len(mail.outbox), 2)
         self.assertEqual(count, 2)
@@ -334,7 +344,8 @@ class MonitorTestCase(test.TestCase):
         self.model.objects.filter(pk=self.monitor.pk).update(last_sent=self.now)
 
         with mock.patch('swp.tasks.monitor.send_publications_to_zotero'):
-            count = monitor_new_publications(self.monitor.pk, now=self.now)
+            with patch_monitor_query(*self.publications):
+                count = monitor_new_publications(self.monitor.pk, now=self.now)
 
         self.assertEqual(len(mail.outbox), 2)
         self.assertEqual(count, 2)

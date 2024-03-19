@@ -1,11 +1,48 @@
 {% load i18n %}
 
-<p>
-{% blocktranslate trimmed %}
-    Attached you will find all publications for {{ monitor }}.
-{% endblocktranslate %}
+<h1 style="color: #B37C00">WebAssistantAlert</h1>
+
+<h2 style="color: #B37C00">{{ monitor }} - {% now 'SHORT_DATE_FORMAT' %}</h2>
+<p style="color: #004778">
+    {% blocktranslate with count=publications|length date=last_sent|date:'SHORT_DATE_FORMAT' trimmed %}
+        {{ count }} new publications since {{ date }}
+    {% endblocktranslate %}
 </p>
 
-<p>
-    {% blocktrans %}The SWP team{% endblocktrans %}
-</p>
+<h3>{% translate 'SWP Information Services' %}</h3>
+<p>{{ monitor.description }}</p>
+
+<div style="color: #004778">
+    <a name="table-of-contents"></a>
+    <h3>{% translate 'Table of Contents' %}</h3>
+    <ul>
+        {% for publication in publications %}
+            <li>
+                <a style="color: inherit" href="#publication-{{ publication.id }}">
+                    {{ publication }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+
+{% for publication in publications %}
+	<article style="margin: 2rem 0; padding: 0">
+        <a name="publication-{{ publication.id }}"></a>
+        <h4 style="margin: 0; padding: 0; color: #004778">{{ publication }}</h4>
+        <p style="margin: 0.3rem 0; padding: 0; font-style: italic">{{ publication.authors_label }}</p>
+        {% if publication.abstract_label %}<p style="margin: 0.3rem 0; padding: 0;">{{ publication.abstract_label }}</p>{% endif %}
+        <p style="margin: 0.3rem 0; padding: 0">
+            {% spaceless %}
+                <time datetime="{{ publication.created|date:'Y-m-d' }}">{{ publication.created|date:'SHORT_DATE_FORMAT' }}</time>
+                {% if publication.pdf_pages %}<span>, {{ publication.pdf_pages_label }}</span>{% endif %}
+            {% endspaceless %}
+        </p>
+        <p style="margin: 0.3rem 0; padding: 0"><a style="color: #004778" href="{{ publication.source }}">{{ publication.source }}</a></p>
+        <p style="margin: 0.5rem 0; padding: 0"><a style="color: #004778" href="#table-of-contents">{% translate 'Back to table of contents' %}</a></p>
+    </article>
+{% endfor %}
+
+<p>{% blocktranslate %}Attached you will find all new publications for {{ monitor }} in RIS format.{% endblocktranslate %}</p>
+
+<p>{% translate 'The SWP team' %}</p>

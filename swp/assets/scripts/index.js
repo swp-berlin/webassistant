@@ -2,8 +2,9 @@ import 'styles/index.scss';
 
 import {render} from 'react-dom';
 
-import App from 'components/App';
 import {CSRFMiddlewareToken} from 'utils/csrf';
+
+import App from 'components/App';
 
 const AppNode = document.getElementById('app');
 

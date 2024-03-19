@@ -20,6 +20,7 @@ module.exports = {
         'no-param-reassign': ['error', {'props': false}],
         'no-shadow': 0,  // we are pros on this topic as well ...
         'radix': 0,
+        'no-confusing-arrow': 0,  // it's not confusing to us
         'no-multiple-empty-lines': ['error', {'max': 2, 'maxEOF': 0}],
         'padded-blocks': ['error', {
             classes: 'always',

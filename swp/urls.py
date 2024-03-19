@@ -30,27 +30,13 @@ urlpatterns = [
         path('add/', react, name='add'),
         path('<int:pk>/', react, name='detail'),
         path('<int:pk>/edit/', react, name='edit'),
-        path('<int:monitor_pk>/filter/', include(([
-            path('add/', react, name='add'),
-            path('<int:pk>/edit/', react, name='edit'),
-            path('<int:pk>/publications/', react, name='publications'),
-            path('<int:pk>/publications/download/', ThinktankFilterRISDownloadView.as_view(), name='download'),
-            path('<int:pk>/publications/new/', react, name='new-publications'),
-            path(
-                '<int:pk>/publications/new/download/',
-                ThinktankFilterRISDownloadView.as_view(exclude_sent=True),
-                name='download-new',
-            ),
-        ], 'filter'))),
-
-        path('<int:pk>/publications/', react, name='publications'),
-        path('<int:pk>/publications/download/', MonitorRISDownloadView.as_view(), name='download'),
-        path('<int:pk>/publications/new/', react, name='new-publications'),
-        path(
-            '<int:pk>/publications/new/download/',
-            MonitorRISDownloadView.as_view(exclude_sent=True),
-            name='download-new',
-        ),
+        path('<int:pk>/edit/query/', react, name='edit-query'),
+        path('<int:pk>/publications/', include([
+            path('', react, name='publications'),
+            path('download/', MonitorRISDownloadView.as_view(), name='download'),
+            path('new/', react, name='new-publications'),
+            path('new/download/', MonitorRISDownloadView.as_view(exclude_sent=True), name='download-new'),
+        ])),
     ], 'monitor'))),
 
     path('thinktank/', include(([
@@ -77,6 +63,11 @@ urlpatterns = [
     # snippets
     path('snippet/<path:identifier>/', SnippetView.as_view(), name='snippet'),
 ]
+
+if settings.MAIL_PREVIEW_ENABLED:
+    urlpatterns += [
+        path('mail/preview/<slug:identifier>/', MailPreView.as_view(), name='mail-preview'),
+    ]
 
 if settings.DEBUG_TOOLBAR:  # pragma: no cover
     import debug_toolbar

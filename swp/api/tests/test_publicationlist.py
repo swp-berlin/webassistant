@@ -1,8 +1,8 @@
 from django.test import TestCase
 
-from swp.models import Thinktank, Publication, PublicationList
+from swp.models import Publication, PublicationList
 from swp.utils.ris import RIS_MEDIA_TYPE
-from swp.utils.testing import create_user, request, login
+from swp.utils.testing import create_user, request, login, create_thinktank
 
 
 class PublicationTestCase(TestCase):
@@ -10,7 +10,7 @@ class PublicationTestCase(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.user = user = create_user('publication-list')
-        cls.thinktank = thinktank = Thinktank.objects.create(name='Test-Thinktank')
+        cls.thinktank = thinktank = create_thinktank(name='Test-Thinktank')
         cls.publication = publication = Publication.objects.create(thinktank=thinktank, title='Test-Publication')
         cls.publication_list = publication_list = PublicationList.objects.create(user=user, name='Test')
         cls.publication_list_entry = publication_list.entries.create(publication=publication)

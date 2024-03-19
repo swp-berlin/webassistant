@@ -1,16 +1,14 @@
 from unittest import mock
 
 from django import test
-from django.core import mail
 from django.utils import timezone
 
 
 from swp.forms.publication import ScrapedPublicationForm
 from swp.models import ErrorLevel, Publication, Scraper, ScraperError, Thinktank
-from swp.tasks.scheduling import send_scraper_errors
 from swp.utils.auth import get_user_queryset, get_superuser_email_addresses, get_error_recipient_email_addresses
 from swp.utils.scraping.scraper import Scraper as _Scraper
-from swp.utils.testing import create_user
+from swp.utils.testing import create_user, create_thinktank
 
 
 class ScraperTestCase(test.TestCase):
@@ -23,7 +21,7 @@ class ScraperTestCase(test.TestCase):
         cls.superuser_2 = create_user('superuser-2', is_superuser=True)
         cls.inactive_superuser = create_user('inactive-superuser', is_superuser=True, is_active=False, is_error_recipient=True)
 
-        cls.thinktank = Thinktank.objects.create(
+        cls.thinktank = create_thinktank(
             name='PIIE',
             url='https://example.org',
             unique_fields=['url'],
@@ -69,30 +67,6 @@ class ScraperTestCase(test.TestCase):
 
     def test_scraper_error_count(self):
         self.assertEqual(self.scraper.error_count, 1)
-
-    def test_send_scraper_errors(self):
-        count = send_scraper_errors(self.scraper)
-
-        self.assertEqual(count, 2)
-        self.assertEqual(len(mail.outbox), 2)
-
-        self.assertEqual(mail.outbox[0].to, ['superuser-1@test.case'])
-        self.assertIn(self.scraper.name, mail.outbox[0].subject)
-
-    def test_do_not_send_errors_for_warnings(self):
-        self.scraper.errors.all().update(level=ErrorLevel.WARNING)
-        count = send_scraper_errors(self.scraper)
-
-        self.assertFalse(count)
-        self.assertEqual(len(mail.outbox), 0)
-
-    def test_do_not_send_to_inactive_users(self):
-        get_user_queryset().update(is_active=False)
-
-        count = send_scraper_errors(self.scraper)
-
-        self.assertFalse(count)
-        self.assertEqual(len(mail.outbox), 0)
 
     def test_form_normalization(self):
         fields = {

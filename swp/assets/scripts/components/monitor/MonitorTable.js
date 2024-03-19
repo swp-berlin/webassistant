@@ -2,14 +2,12 @@ import {HTMLTable} from '@blueprintjs/core';
 
 import _ from 'utils/i18n';
 
-import {useFetchHandler} from 'hooks/table';
-import {useQuery} from 'hooks/query';
+import {getQueryComponents} from 'hooks/table';
 
-import {Result} from 'components/Fetch';
-import {EmptyRow} from 'components/tables';
+import {EmptyRow, THR} from 'components/tables';
+import Query from 'components/Query';
 
 import MonitorRow from './MonitorRow';
-
 
 const NameLabel = _('Name');
 const RecipientsLabel = _('Recipients');
@@ -17,6 +15,9 @@ const PublicationsLabel = _('Publications');
 const NewPublicationsLabel = _('New Publications');
 const LastRunLabel = _('Last Run');
 
+const ColSpan = 5;
+
+const QueryComponents = getQueryComponents(ColSpan);
 
 const MonitorRows = ({monitors}) => (
     monitors.map(monitor => (
@@ -33,28 +34,26 @@ const MonitorRows = ({monitors}) => (
     ))
 );
 
-const MonitorTable = props => {
-    const handler = useFetchHandler(5);
+const MonitorTable = ({pool, ...props}) => {
     const params = {ordering: 'name'};
-    const query = useQuery('monitor', params);
+
+    if (typeof pool === 'number') params.pool = pool;
 
     return (
         <HTMLTable className="thinktank-table w-full table-fixed my-4" bordered {...props}>
             <thead>
                 <tr className="bg-gray-300">
                     <th className="w-1/2">{NameLabel}</th>
-                    <th className="text-right">{RecipientsLabel}</th>
-                    <th className="text-right">{PublicationsLabel}</th>
-                    <th className="text-right">{NewPublicationsLabel}</th>
-                    <th className="text-right">{LastRunLabel}</th>
+                    <THR>{RecipientsLabel}</THR>
+                    <THR>{PublicationsLabel}</THR>
+                    <THR>{NewPublicationsLabel}</THR>
+                    <THR>{LastRunLabel}</THR>
                 </tr>
             </thead>
             <tbody>
-                <Result query={query} {...handler}>
-                    {monitors => (
-                        monitors.length ? <MonitorRows monitors={monitors} /> : <EmptyRow colSpan={5} />
-                    )}
-                </Result>
+                <Query queryKey={['monitor', params]} components={QueryComponents}>
+                    {monitors => monitors.length ? <MonitorRows monitors={monitors} /> : <EmptyRow colSpan={ColSpan} />}
+                </Query>
             </tbody>
         </HTMLTable>
     );

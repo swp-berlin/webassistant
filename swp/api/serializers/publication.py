@@ -12,12 +12,11 @@ class PublicationSerializer(ModelSerializer):
         model = Publication
         read_only_fields = [
             'thinktank_id',
+            'thinktank_name',
             'created',
         ]
         fields = [
             'id',
-            'thinktank_id',
-            'thinktank_name',
             'title',
             'subtitle',
             'ris_type',

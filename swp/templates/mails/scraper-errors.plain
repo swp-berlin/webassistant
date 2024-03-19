@@ -1,19 +1,20 @@
-{% load i18n %}{% autoescape off %}
+{% load i18n %} {% now 'SHORT_DATE_FORMAT' as date %}
+{% blocktranslate %}Scraper Error Report for {{ date }}{% endblocktranslate %}
 
-{% blocktrans trimmed %}
-{{ scraper }} encountered problems while running:
-{% endblocktrans %}
-
-{{ url }}
-
-{% blocktrans trimmed %}
-The following errors occured:
-{% endblocktrans %}
-
-{% for error in errors %}
-    * {% if error.scraped_title %}{{ error.scraped_title }}
-      {% endif %}{% if error.scraped_url %}{{ error.scraped_url }}
-      {% endif %}{{ error.message }}
+{% for pool, thinktanks in pools.items %}
+{{ pool }}
+{% for thinktank, scrapers in thinktanks.items %}
+    {{ thinktank }}
+    {% for scraper, codes in scrapers.items %}
+        {{ scraper }}
+        {% for code, errors in codes.items %}
+            {{ code }}
+            {% for error in errors %}
+                {% if error.scraped_title %}{{ error.scraped_title }}
+                {% endif %}{% if error.scraped_url %}{{ error.scraped_url }}
+                {% endif %}{{ error.message }}
+            {% endfor %}
+        {% endfor %}
+    {% endfor %}
 {% endfor %}
-
-{% endautoescape %}
+{% endfor %}

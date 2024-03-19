@@ -84,11 +84,13 @@ PublicationIndex = PublicationIndex(name='publications')
 class PublicationDocument(FieldMixin, Document):
     TRANSLATION_FIELDS = TRANSLATION_FIELDS
 
+    pool = fields.IntegerField(attr='thinktank.pool_id')
     ttid = fields.IntegerField(attr='thinktank.id')
     ttname = fields.TextField(attr='thinktank.name')
     thinktank = fields.ObjectField(properties={
         'id': fields.IntegerField(),
         'name': fields.TextField(),
+        'pool': fields.IntegerField(attr='pool_id'),
     })
 
     class Django:
@@ -115,7 +117,7 @@ class PublicationDocument(FieldMixin, Document):
         ]
 
     def get_queryset(self):
-        return Publication.objects.select_related('thinktank')
+        return Publication.objects.prefetch_related('thinktank')
 
     @staticmethod
     def get_instances_from_related(related_instance):

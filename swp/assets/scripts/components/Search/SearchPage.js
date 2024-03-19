@@ -1,4 +1,4 @@
-import {useCallback, useState} from 'react';
+import {useCallback, useMemo, useRef, useState} from 'react';
 import {Link, useSearchParams} from 'react-router-dom';
 import {AnchorButton, Button, Intent} from '@blueprintjs/core';
 import parseISO from 'date-fns/parseISO';
@@ -8,10 +8,9 @@ import _ from 'utils/i18n';
 
 import Page from 'components/Page';
 import {useBreadcrumb} from 'components/Navigation';
-import Query from 'components/Query';
 
-import QueryError from './QueryError';
 import SearchForm from './SearchForm';
+import SearchQuery from './SearchQuery';
 import SearchResult from './SearchResult';
 
 import HelpTextFileURL from './helptext.pdf';
@@ -20,10 +19,6 @@ const HelpLabel = _('Help');
 const SearchLabel = _('Search');
 const PublicationListLabel = _('Publication Lists');
 
-const QueryComponents = {
-    400: QueryError,
-};
-
 const Actions = [
     <Link key={1} to="publication-list/">
         <Button intent={Intent.PRIMARY}>
@@ -31,6 +26,7 @@ const Actions = [
         </Button>
     </Link>,
     <AnchorButton
+        key={2}
         href={HelpTextFileURL}
         text="?"
         intent={Intent.NONE}
@@ -40,99 +36,146 @@ const Actions = [
     />,
 ];
 
+const updateParam = (searchParams, key, value) => {
+    if (value) searchParams.set(key, value);
+    else searchParams.delete(key);
+};
+
 const formatDate = date => date && formatISO(date, {representation: 'date'});
 const parseDate = date => (date ? parseISO(date) : null);
+const updateDate = (searchParams, key, value) => updateParam(searchParams, key, formatDate(value));
 
-const WhitespaceRegEx = /\s/g;
-const maybeQuote = text => {
-    const hasWhiteSpace = WhitespaceRegEx.test(text);
-    return hasWhiteSpace ? `"${text}"` : text;
+const useInitialDates = (startDate, endDate) => {
+    const initialDates = useRef(null);
+
+    if (initialDates.current === null) initialDates.current = [startDate, endDate].map(parseDate);
+
+    return initialDates.current;
 };
+
+const removeFilterTerm = (query, filterTerm) => query.split(' ').filter(term => term !== filterTerm).join(' ');
+const addFilterTerm = (query, filterTerm) => query ? `${query} ${filterTerm}` : filterTerm;
+
+const Quote = '"';
+const WhitespaceRegEx = /\s/g;
+const maybeQuote = text => WhitespaceRegEx.test(text) ? `${Quote}${text}${Quote}` : text;
+const maybeUnquote = text => (
+    text.startsWith(Quote) && text.endsWith(Quote)
+        ? text.slice(Quote.length, -Quote.length)
+        : text
+);
+
+const parseTags = query => (
+    query
+        .split(' ')
+        .filter(term => term.startsWith('tags:'))
+        .map(term => {
+            const [, tag] = term.split(':');
+
+            return maybeUnquote(tag);
+        })
+);
+
+const parsePools = searchParams => (
+    searchParams
+        .getAll('pool')
+        .map(pool => parseInt(pool))
+        .filter(pool => !Number.isNaN(pool))
+);
 
 const SearchPage = () => {
     useBreadcrumb('/search/', SearchLabel);
+
     const [searchParams, setSearchParams] = useSearchParams();
+
     const query = searchParams.get('query');
+    const startDate = searchParams.get('start_date');
+    const endDate = searchParams.get('end_date');
+    const page = searchParams.get('page');
 
     const [term, setTerm] = useState(query || '');
     const handleTermChange = useCallback(term => setTerm(term), []);
 
-    const [dates, setDates] = useState(
-        () => [parseDate(searchParams.get('start_date')), parseDate(searchParams.get('end_date'))],
-    );
-    const handleDatesChange = useCallback(dates => {
-        setDates(dates);
+    const initialDates = useInitialDates(startDate, endDate);
+    const handleDatesChange = useCallback(([startDate, endDate]) => {
         setSearchParams(next => {
-            const [startDate, endDate] = dates;
-            if (startDate) {
-                next.set('start_date', formatDate(startDate));
-            } else next.delete('start_date');
-            if (endDate) {
-                next.set('end_date', formatDate(endDate));
-            } else next.delete('end_date');
+            updateDate(next, 'start_date', startDate);
+            updateDate(next, 'end_date', endDate);
+
             next.delete('page');
+
             return next;
         });
     }, [setSearchParams]);
 
-    const tags = searchParams.getAll('tag');
-    const startDate = searchParams.get('start_date');
-    const endDate = searchParams.get('end_date');
-
     const handleSearch = useCallback(() => {
         setSearchParams(next => {
-            next.delete('tag');
-            if (term) {
-                next.set('query', term);
-            } else next.delete('query');
+            updateParam(next, 'query', term);
 
             if (term !== query) next.delete('page');
+
             return next;
         });
     }, [setSearchParams, term, query]);
 
     const addFilter = useCallback(filter => {
-        const query = searchParams.get('query');
-        const filterString = `${filter.field}:${maybeQuote(filter.value)}`;
+        const filterTerm = `${filter.field}:${maybeQuote(filter.value)}`;
+        const toggle = query.includes(filterTerm) ? removeFilterTerm : addFilterTerm;
 
-        if (!query.includes(filterString)) {
-            setSearchParams(next => {
-                next.set('query', `${next.get('query')} ${filterString}`);
-                return next;
-            });
-            setTerm(term => `${term} ${filterString}`);
-        }
-    }, [searchParams, setSearchParams]);
+        setSearchParams(next => {
+            next.set('query', toggle(query, filterTerm));
+
+            return next;
+        });
+        setTerm(term => toggle(term, filterTerm));
+    }, [query, setSearchParams]);
 
     const handleSelectTag = useCallback(tag => addFilter({field: 'tags', value: tag}), [addFilter]);
 
-    const page = searchParams.get('page');
+    const handleSelectPool = useCallback(pool => {
+        setSearchParams(next => {
+            const pools = parsePools(next);
+            const selected = pools.includes(pool);
 
-    const params = {};
-    if (query) params.query = query;
-    if (tags.length) params.tag = tags;
-    if (startDate) params.start_date = startDate;
-    if (endDate) params.end_date = endDate;
-    if (page) params.page = page;
+            if (selected) {
+                next.delete('pool');
+
+                pools.forEach(current => {
+                    if (current === pool) return;
+                    next.append('pool', current);
+                });
+            } else {
+                next.append('pool', pool);
+            }
+
+            return next;
+        });
+    }, [setSearchParams]);
+
+    const tags = useMemo(() => parseTags(query || ''), [query]);
+    const pools = useMemo(() => parsePools(searchParams), [searchParams]);
 
     return (
         <Page title={SearchLabel} actions={Actions}>
             <SearchForm
                 query={term}
+                pools={pools}
+                initialDates={initialDates}
                 onQueryChange={handleTermChange}
-                dates={dates}
+                onSelectPool={handleSelectPool}
                 onDatesChange={handleDatesChange}
                 onSearch={handleSearch}
             />
 
-            {params.query && (
-                <Query queryKey={['publication', 'research', params]} components={QueryComponents}>
+            {query && (
+                <SearchQuery query={query} pools={pools} startDate={startDate} endDate={endDate} page={page}>
                     <SearchResult
+                        selectedTags={tags}
                         onSelectTag={handleSelectTag}
                         downloadURL={`/api/publication/ris/?${searchParams.toString()}`}
                         onAddFilter={addFilter}
                     />
-                </Query>
+                </SearchQuery>
             )}
         </Page>
     );

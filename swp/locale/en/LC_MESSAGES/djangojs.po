@@ -1,14 +1,12 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
 #, fuzzy
 msgid ""
 msgstr ""
 "Language: en\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Default"
+msgstr ""
 
 msgid "Client Error"
 msgstr ""
@@ -38,18 +36,6 @@ msgid "These aren't the droids you're looking for."
 msgstr ""
 
 msgid "Your data has been saved successfully."
-msgstr ""
-
-msgid "Please correct the errors below."
-msgstr ""
-
-msgid "You have to be logged in to make this request."
-msgstr ""
-
-msgid "You are not allowed to make this request."
-msgstr ""
-
-msgid "The data you wanted to change does not exist anymore."
 msgstr ""
 
 msgid "Loading…"
@@ -94,6 +80,9 @@ msgstr ""
 msgid "Home"
 msgstr ""
 
+msgid "All"
+msgstr ""
+
 msgid "Open publication list menu"
 msgstr ""
 
@@ -118,10 +107,16 @@ msgstr ""
 msgid "Clear"
 msgstr ""
 
+msgid "Filter by Pool:"
+msgstr ""
+
 msgid "Invalid Query"
 msgstr ""
 
 msgid "visit query syntax documentation"
+msgstr ""
+
+msgid "Help"
 msgstr ""
 
 msgid "Publication Lists"
@@ -139,10 +134,10 @@ msgstr ""
 msgid "Deactivate"
 msgstr ""
 
-msgid "Sucessfully activated"
+msgid "Successfully activated"
 msgstr ""
 
-msgid "Sucessfully deactivated"
+msgid "Successfully deactivated"
 msgstr ""
 
 msgid "Back"
@@ -172,6 +167,9 @@ msgstr ""
 msgid "nor"
 msgstr ""
 
+msgid "Interval"
+msgstr ""
+
 msgid "New Monitor"
 msgstr ""
 
@@ -190,7 +188,7 @@ msgstr ""
 msgid "Edit"
 msgstr ""
 
-msgid "Add Thinktank"
+msgid "Query"
 msgstr ""
 
 msgid "Publications overall:"
@@ -214,29 +212,20 @@ msgstr ""
 msgid "Transferred to Zotero"
 msgstr ""
 
-msgid "Name"
-msgstr ""
-
-msgid "Filter"
-msgstr ""
-
-msgid "Publications"
-msgstr ""
-
-msgid "New"
-msgstr ""
-
 msgid "Sync with Zotero"
 msgstr ""
 
 msgid "Transfer to Zotero started. This might take a couple of minutes."
 msgstr ""
 
-msgid "Edit Monitor"
+msgid "Pool"
 msgstr ""
 
 #, javascript-format
 msgid "Monitor %s"
+msgstr ""
+
+msgid "Edit Monitor"
 msgstr ""
 
 msgid "Save"
@@ -245,16 +234,25 @@ msgstr ""
 msgid "Successfully changed monitor"
 msgstr ""
 
-msgid "Description"
+msgid "Name"
 msgstr ""
 
-msgid "Interval"
+msgid "Description"
 msgstr ""
 
 msgid "Monitors"
 msgstr ""
 
+msgid "Publications"
+msgstr ""
+
 msgid "New Publications"
+msgstr ""
+
+msgid "Successfully changed query of monitor %(name)s."
+msgstr ""
+
+msgid "Edit Query"
 msgstr ""
 
 msgid "disabled"
@@ -287,9 +285,6 @@ msgstr ""
 msgid "%(name)s (%(count)s publications)"
 msgstr ""
 
-msgid "Default"
-msgstr ""
-
 msgid "Delete"
 msgstr ""
 
@@ -302,7 +297,7 @@ msgstr ""
 msgid "Successfully deleted publication list %(name)s."
 msgstr ""
 
-msgid "Export"
+msgid "Download .RIS"
 msgstr ""
 
 msgid "This publication list is empty."
@@ -318,9 +313,6 @@ msgid "Are you sure you want to remove the publication %(title)s from the list %
 msgstr ""
 
 msgid "Publication List %(id)s"
-msgstr ""
-
-msgid "Download .RIS"
 msgstr ""
 
 msgid "by"
@@ -484,6 +476,17 @@ msgstr ""
 msgid "No items"
 msgstr ""
 
+msgid "Thinktank successfully activated."
+msgstr ""
+
+msgid "Thinktank successfully deactivated."
+msgstr ""
+
+msgid "Deactivated %(count)s scraper because its start url is not a subdomain of %(domain)s."
+msgid_plural "Deactivated %(count)s scrapers because their start url is not a subdomain of %(domain)s."
+msgstr[0] ""
+msgstr[1] ""
+
 msgid "New Thinktank"
 msgstr ""
 
@@ -502,7 +505,7 @@ msgstr ""
 msgid "Successfully changed thinktank"
 msgstr ""
 
-msgid "Unique Field"
+msgid "Domain"
 msgstr ""
 
 msgid "active / total"
@@ -511,38 +514,11 @@ msgstr ""
 msgid "Scrapers"
 msgstr ""
 
+msgid "Unique Field"
+msgstr ""
+
 #, javascript-format
 msgid "Thinktank %s"
-msgstr ""
-
-msgid "Filter on Field"
-msgstr ""
-
-msgid "Comparator"
-msgstr ""
-
-msgid "Values"
-msgstr ""
-
-msgid "Remove Filter"
-msgstr ""
-
-msgid "Add Filter"
-msgstr ""
-
-msgid "Add Thinktank Filter"
-msgstr ""
-
-msgid "Successfully created filter"
-msgstr ""
-
-msgid "Edit Thinktank Filter"
-msgstr ""
-
-msgid "Successfully changed filter"
-msgstr ""
-
-msgid "Thinktank"
 msgstr ""
 
 msgid "A network error occurred. Please try again."
@@ -552,6 +528,18 @@ msgid "Something went wrong on our side…"
 msgstr ""
 
 msgid "We are currently doing maintenance work. Please try again in a few seconds."
+msgstr ""
+
+msgid "Please correct the errors below."
+msgstr ""
+
+msgid "You have to be logged in to make this request."
+msgstr ""
+
+msgid "You are not allowed to make this request."
+msgstr ""
+
+msgid "The data you wanted to change does not exist anymore."
 msgstr ""
 
 msgid "An error occurred: %(error)s"

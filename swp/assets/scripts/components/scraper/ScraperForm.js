@@ -1,13 +1,14 @@
 import {useCallback, useState} from 'react';
-import {useMutationForm} from 'components/Fetch';
-import {Select, TextInput} from 'components/forms';
 import {Button} from '@blueprintjs/core';
 
-import ScraperTypes from 'schemes/scraperTypes.json';
-import {getChoices} from 'utils/choices';
 import _ from 'utils/i18n';
+import {getChoices} from 'utils/choices';
+
+import {useMutationForm} from 'components/Fetch';
+import {Select, TextInput} from 'components/forms';
 import Field from 'components/forms/Field';
-import Portal from 'components/Portal';
+
+import ScraperTypes from 'schemes/scraperTypes.json';
 
 import ResolverForm from './ResolverForm/ResolverForm';
 import ResolverFormProvider from './ResolverForm/ResolverFormContext';
@@ -18,13 +19,12 @@ import {
     FieldResolverForm,
 } from './ResolverForm/forms';
 import {Preview, PreviewButton} from './preview';
-
 import BackendScraperErrors from './BackendScraperErrors';
 import ScraperTypeSelect from './ScraperTypeSelect';
 import ScraperFormErrors from './ScraperFormErrors';
 import ScraperTypeDescription from './ScraperTypeDescription';
 import ScraperActivationButton from './ScraperActivationButton';
-
+import {ScraperActivationPortal} from './ScraperActivationContainer';
 
 const StartURLLabel = _('Start URL');
 const TypeLabel = _('Scraper Type');
@@ -67,8 +67,7 @@ const ScraperForm = ({endpoint, data, method, redirectURL}) => {
     const [preview, setPreview] = useState(null);
     const handlePreview = useCallback(preview => setPreview(preview.id), []);
 
-    // eslint-disable-next-line no-unused-vars
-    const [onSubmit, form, result, mutate] = useMutationForm(
+    const [, form, , mutate] = useMutationForm(
         endpoint,
         {defaultValues: data || DEFAULT_VALUES},
         {method, redirectURL},
@@ -91,9 +90,9 @@ const ScraperForm = ({endpoint, data, method, redirectURL}) => {
     return (
         <form className="mt-8 scraper-form grid grid-cols-1 lg:grid-cols-2 gap-8" onSubmit={handleSubmit}>
             {id && (
-                <Portal id="scraper-activation-container">
+                <ScraperActivationPortal>
                     <ScraperActivationButton id={id} isActive={isActive} form={form} onToggle={setIsActive} />
-                </Portal>
+                </ScraperActivationPortal>
             )}
             <div>
                 <TextInput
