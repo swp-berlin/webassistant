@@ -3,17 +3,22 @@ from __future__ import annotations
 import datetime
 import hashlib
 import json
+
 from typing import Any, Iterable, Mapping, Optional, TYPE_CHECKING
+from urllib.parse import urlsplit
 
 from asgiref.sync import async_to_sync, sync_to_async
 from django.core.exceptions import NON_FIELD_ERRORS
 from django.db import models, transaction, IntegrityError
 from django.db.models.aggregates import Count
+from django.shortcuts import resolve_url
 from django.utils import timezone
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
+from swp.utils.domain import is_subdomain
 from swp.utils.scraping import Scraper as _Scraper
+from swp.utils.validation import get_field_validation_error
 from swp.scraper.types import ScraperType
 
 from .abstract import ActivatableModel, ActivatableQuerySet, UpdateQuerySet, LastModified
@@ -72,6 +77,27 @@ class Scraper(ActivatableModel, LastModified):
 
     def __str__(self) -> str:
         return f'{self.name} {self.pk}'
+
+    def get_absolute_url(self):
+        return resolve_url('thinktank:scraper:edit', self.thinktank_id, self.id)
+
+    def clean(self):
+        if self.start_url and self.thinktank:
+            self.validate_start_url(self.start_url, self.thinktank.domain)
+
+    @staticmethod
+    def validate_start_url(start_url: str, domain: str):
+        try:
+            netloc = urlsplit(start_url).netloc
+        except ValueError:
+            raise get_field_validation_error('start_url', _('Please enter a valid start url.'))
+
+        if not is_subdomain(netloc, domain):
+            raise get_field_validation_error(
+                field='start_url',
+                message=_("The scraper's start url must be a subdomain of its thinktank's domain (%(domain)s)."),
+                params={'domain': domain},
+            )
 
     @cached_property
     def name(self) -> str:
@@ -215,24 +241,22 @@ class Scraper(ActivatableModel, LastModified):
 
         :return: ``True`` if publication is complete, otherwise ``False``.
         """
+
         title = fields.get('title') or ''
         url = fields.get('url') or ''
 
         if title and url:
             return True
 
-        if not title and not url:
-            message = _('Missing title and URL')
-            field = ''
-        elif not title:
-            error_message = errors.get('title', {}).get('message', '')
-            message = error_message or _('Missing title for %s') % url
-            field = 'title'
-        elif not url:
-            error_message = errors.get('url', {}).get('message', '')
-            message = error_message or _('Missing URL element for "%s"') % title
+        def get_message(key, fallback, context):
+            return key, errors.get(key, {}).get('message', '') or (fallback % context)
 
-            field = 'url'
+        if title:
+            field, message = get_message('url', _('Missing URL element for "%s"'), title)
+        elif url:
+            field, message = get_message('title', _('Missing title for %s'), url)
+        else:
+            field, message = '', _('Missing title and URL')
 
         field_error = ScraperError(
             scraper=self,
@@ -249,12 +273,16 @@ class Scraper(ActivatableModel, LastModified):
         return False
 
     @sync_to_async
-    def save_publication(self, publication):
-        hash = get_hash({field: getattr(publication, field, '') for field in self.unique_fields})
-        if not self.scraped_publications.filter(hash=hash).exists():
-            publication.hash = hash
-            publication.save(force_insert=True)
-            self.scraped_publications.add(publication)
+    def save_publication(self, publication) -> bool:
+        publication.hash = get_hash({field: getattr(publication, field, '') for field in self.unique_fields})
+
+        if self.scraped_publications.filter(hash=publication.hash).exists():
+            return False
+
+        publication.save(force_insert=True)
+        self.scraped_publications.add(publication)
+
+        return True
 
     @transaction.atomic
     def save_publications(self, publications):

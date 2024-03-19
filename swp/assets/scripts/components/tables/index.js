@@ -1,3 +1,9 @@
 import EmptyRow from './EmptyRow';
+import TableActions from './TableActions';
+import THR from './THR';
 
-export {EmptyRow};
+export {
+    EmptyRow,
+    TableActions,
+    THR,
+};

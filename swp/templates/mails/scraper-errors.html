@@ -1,28 +1,46 @@
-{% load i18n %}
+{% load i18n %} {% now 'SHORT_DATE_FORMAT' as date %}
 
-<p>
-    {% blocktrans trimmed %}
-        <a href="{{ url }}">{{ scraper }}</a> encountered the following problems:
-    {% endblocktrans %}
-</p>
+<h1>{% blocktranslate %}Scraper Error Report for {{ date }}{% endblocktranslate %}</h1>
 
-<ul>
-{% for error in errors %}
-    <li>
-        {% if error.source %}
-            <h4>
-                {% if error.scraped_url %}
-                    <a href="{{ error.scraped_url }}">
-                        {{ error.source }}
-                    </a>
-                {% else %}
-                    {{ error.source }}
-                {% endif %}
-            </h4>
-            <p>{{ error.message }}</p>
-        {% else %}
-            {{ error.message }}
-        {% endif %}
-    </li>
+{% for pool, thinktanks in pools.items %}
+    <h2>{{ pool }}</h2>
+    <ul>
+        {% for thinktank, scrapers in thinktanks.items %}
+            <li>
+                <h3>{{ thinktank }}</h3>
+                <ul>
+                    {% for scraper, codes in scrapers.items %}
+                        <li>
+                            <h4>{{ scraper }}</h4>
+                            <ul>
+                                {% for code, errors in codes.items %}
+                                    <li>
+                                        <h5>{{ code }}</h5>
+                                        <ul>
+                                            {% for error in errors %}
+                                                <li>
+                                                    {% if error.source %}
+                                                        <h6>
+                                                            {% if error.scraped_url %}
+                                                                <a href="{{ error.scraped_url }}">
+                                                                    {{ error.source }}
+                                                                </a>
+                                                            {% else %}
+                                                                {{ error.source }}
+                                                            {% endif %}
+                                                        </h6>
+                                                    {% endif %}
+                                                    <p>{{ error.message|truncatechars:200 }}</p>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </li>
+        {% endfor %}
+    </ul>
 {% endfor %}
-</ul>

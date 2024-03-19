@@ -1,10 +1,7 @@
 import datetime
 
-from typing import Optional
-
 from celery.signals import worker_shutting_down
 
-from django.core.mail import EmailMultiAlternatives, get_connection as get_mail_connection
 from django.db import models, transaction
 from django.utils.timezone import localtime
 
@@ -13,9 +10,6 @@ from sentry_sdk import capture_exception
 from swp.celery import app
 from swp.db.expressions import MakeInterval
 from swp.models import Scraper
-from swp.utils.auth import get_error_recipient_email_addresses
-from swp.utils.mail import render_mail
-from swp.utils.url import get_absolute_url
 
 SECOND = 1
 MINUTE = SECOND * 60
@@ -52,17 +46,16 @@ def schedule_scrapers(now=None):
 
 
 @app.task(name='scraper.run', time_limit=HARD_TIME_LIMIT, soft_time_limit=SOFT_TIME_LIMIT)
-def run_scraper(scraper, now=None, using=None, force=False, silent=False):
+def run_scraper(scraper, *, now: datetime.datetime = None, using: str = None, force: bool = False):
+    queryset = Scraper.objects.using(using).select_related('thinktank')
+
     with transaction.atomic(using=using):
         try:
-            scraper = Scraper.objects.select_related('thinktank').get_for_update(pk=scraper)
+            scraper = queryset.get_for_update(id=scraper)
         except Scraper.DoesNotExist:
             return None
 
-        if not force and scraper.is_running:
-            return None
-
-        if not force and scraper.next_run > localtime(now):
+        if skip(scraper, force, now):
             return None
 
         scraper.errors.all().delete()
@@ -75,8 +68,10 @@ def run_scraper(scraper, now=None, using=None, force=False, silent=False):
         capture_exception(error)
     finally:
         scraper.update(last_run=localtime(None), is_running=False, modified=False)
-        if not silent:
-            send_scraper_errors(scraper=scraper, force=force)
+
+
+def skip(scraper: Scraper, force: bool = False, now: datetime.datetime = None):
+    return False if force else scraper.is_running or scraper.next_run > localtime(now)
 
 
 @worker_shutting_down.connect
@@ -85,42 +80,3 @@ def stop_scrapers(sender, **kwargs):
         print(f'Stopped {count} running scraper(s).')
     else:
         print('No scrapers running.')
-
-
-def get_absolute_scraper_url(scraper: Scraper) -> str:
-    args = [scraper.thinktank_id, scraper.pk]
-    return get_absolute_url(None, 'thinktank:scraper:edit', *args)
-
-
-def send_scraper_errors(scraper: Scraper, force: bool = False) -> Optional[int]:
-    if not force and scraper.is_running:
-        return None
-
-    errors = scraper.errors.error_only()
-    if not len(errors):
-        return None
-
-    email_addresses = get_error_recipient_email_addresses()
-    if not email_addresses:
-        return None
-
-    context = {
-        'scraper': scraper,
-        'thinktank': scraper.thinktank,
-        'url': get_absolute_scraper_url(scraper),
-        'errors': errors,
-    }
-
-    subject, message, html_message = render_mail('scraper-errors', context=context)
-    alternatives = [(html_message, 'text/html')] if html_message else []
-
-    messages = [
-        EmailMultiAlternatives(
-            subject=subject,
-            body=message,
-            to=[email],
-            alternatives=alternatives,
-        ) for email in email_addresses
-    ]
-
-    return get_mail_connection().send_messages(messages)

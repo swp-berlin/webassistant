@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 from typing import Any, Mapping, Optional, TYPE_CHECKING
 
 from celery.states import READY_STATES
@@ -8,6 +9,7 @@ from rest_framework.serializers import Serializer
 
 from swp.api.serializers.scraper.base import ResolverConfigSerializer
 from swp.tasks.scraper import preview_scraper
+
 if TYPE_CHECKING:
     from celery.result import AsyncResult
 

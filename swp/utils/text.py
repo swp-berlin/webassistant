@@ -1,3 +1,5 @@
+from typing import Iterable, Iterator
+
 from django.utils.translation import gettext_lazy as _
 
 
@@ -16,3 +18,11 @@ def enumeration(words, conjunction=CONJUNCTION_AND, delimiter=DELIMITER):
         return conjunction % dict(first=delimiter.join(first), second=second)
 
     return second
+
+
+def when(values: Iterable[str]) -> Iterator[str]:
+    return filter(None, values)
+
+
+def spaced(value: str) -> str:
+    return ' '.join(when(str.split(value)))

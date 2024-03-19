@@ -1,25 +1,24 @@
 import {useCallback} from 'react';
 import {Link, useParams} from 'react-router-dom';
+import {Card} from '@blueprintjs/core';
 
 import _ from 'utils/i18n';
 
 import {useQuery} from 'hooks/query';
 
-import {Result} from 'components/Fetch';
-import {useBreadcrumb} from 'components/Navigation';
-import TableActions from 'components/tables/TableActions';
 import Page from 'components/Page';
-import {getMonitorLabel} from 'components/monitor/helper';
+import {Result} from 'components/Fetch';
+import TableActions from 'components/tables/TableActions';
 import {useMonitorsBreadcrumb} from 'components/monitor/MonitorList';
+
+import {useMonitorBreadcrumb} from './hooks';
 
 import MonitorActivationButton from './MonitorActivationButton';
 import MonitorInfo from './MonitorInfo';
-import ThinktankFilterTable from './ThinktankFilterTable';
 import TransferToZoteroButton from './TransferToZoteroButton';
 
-
 const EditLabel = _('Edit');
-const AddThinktankLabel = _('Add Thinktank');
+const QueryLabel = _('Query');
 
 const EditButton = ({id}) => (
     <Link to={`/monitor/${id}/edit/`} className="bp3-button bp3-icon-edit">
@@ -27,10 +26,8 @@ const EditButton = ({id}) => (
     </Link>
 );
 
-const AddThinktankFilterButton = ({id}) => (
-    <Link to={`/monitor/${id}/filter/add/`} className="bp3-button bp3-icon-add">
-        {AddThinktankLabel}
-    </Link>
+const EditQueryButton = ({id}) => (
+    <Link to={`/monitor/${id}/edit/query/`} className="bp3-button bp3-icon-edit bp3-small ml-2" />
 );
 
 const MonitorDetail = () => {
@@ -41,7 +38,7 @@ const MonitorDetail = () => {
     const handleMonitorUpdate = useCallback(() => refetchMonitor(), [refetchMonitor]);
 
     useMonitorsBreadcrumb();
-    useBreadcrumb(endpoint, getMonitorLabel(id, result));
+    useMonitorBreadcrumb(endpoint, id, result.result.data);
 
     return (
         <Result result={result}>
@@ -52,14 +49,15 @@ const MonitorDetail = () => {
                 last_sent: lastSent,
                 recipient_count: recipientCount,
                 is_active: isActive,
+                pool: {can_manage: canManage},
                 name,
                 description,
                 interval,
-                filters,
+                query,
             }) => (
                 <Page
                     title={name}
-                    actions={(
+                    actions={canManage && (
                         <MonitorActivationButton
                             endpoint={endpoint}
                             defaultIsActive={isActive}
@@ -74,6 +72,7 @@ const MonitorDetail = () => {
                     <MonitorInfo
                         id={+id}
                         className="my-4"
+                        canManage={canManage}
                         publicationCount={publicationCount}
                         newPublicationCount={newPublicationCount}
                         lastPublicationCountUpdate={lastPublicationCountUpdate}
@@ -84,13 +83,20 @@ const MonitorDetail = () => {
                         onMonitorUpdate={handleMonitorUpdate}
                     />
 
-                    <TableActions>
-                        <EditButton id={id} />
-                        <AddThinktankFilterButton id={id} />
-                        <TransferToZoteroButton id={id} disabled={!isActive} />
-                    </TableActions>
+                    {canManage && (
+                        <TableActions>
+                            <EditButton id={id} />
+                            <TransferToZoteroButton id={id} disabled={!isActive} />
+                        </TableActions>
+                    )}
 
-                    <ThinktankFilterTable items={filters} monitorID={+id} />
+                    <Card className="mt-2">
+                        <div className="flex">
+                            <h5>{QueryLabel}</h5>
+                            {canManage && <EditQueryButton id={id} />}
+                        </div>
+                        <p className="my-2">{query}</p>
+                    </Card>
                 </Page>
             )}
         </Result>

@@ -188,6 +188,10 @@ CELERY_BEAT_SCHEDULE = {
         'task': 'scraper.schedule',
         'schedule': crontab(hour='*', minute=0),
     },
+    'error-report.send': {
+        'task': 'error-report.send',
+        'schedule': crontab(hour=7, minute=30),
+    },
 }
 
 CELERY_TASK_CREATE_MISSING_QUEUES = True
@@ -219,6 +223,10 @@ SHELL_PLUS_POST_IMPORTS = [
 
 # <editor-fold desc="REST API">
 
+REST_FRAMEWORK_DEFAULT_RENDERER_CLASSES = [
+    'rest_framework.renderers.JSONRenderer',
+]
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'swp.api.authentication.SessionAuthentication',
@@ -226,6 +234,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
     ],
+    'DEFAULT_RENDERER_CLASSES': REST_FRAMEWORK_DEFAULT_RENDERER_CLASSES,
     'DEFAULT_FILTER_BACKENDS': [
         'django_filters.rest_framework.DjangoFilterBackend',
         'rest_framework.filters.OrderingFilter',
@@ -246,3 +255,5 @@ ZOTERO_API_MAX_ITEMS = 50
 ZOTERO_API_TIMEOUT = 30
 
 # </editor-fold>
+
+MAIL_PREVIEW_ENABLED = env('MAIL_PREVIEW_ENABLED', DEBUG)

@@ -73,6 +73,8 @@ export const getErrorMessage = error => {
             case 503:
                 return Message.Maintenance;
             default:
+                if (error.code in Message.HttpErrorMessages) return Message.HttpErrorMessages[error.code];
+
                 return Message.getGenericErrorMessage(error.response.statusText);
         }
     }

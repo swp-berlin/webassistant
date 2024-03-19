@@ -1,3 +1,4 @@
+from .errorreport import send_scraper_errors
 from .monitor import (
     monitor_new_publications,
     schedule_monitors,
@@ -18,5 +19,6 @@ __all__ = [
     'schedule_scrapers',
     'send_all_monitor_publications_to_zotero',
     'send_publications_to_zotero',
+    'send_scraper_errors',
     'update_publication_count',
 ]

@@ -12,7 +12,7 @@ from swp.models import (
     User,
 )
 from swp.scraper.types import ScraperType
-
+from swp.utils.testing import create_thinktank, create_monitor
 
 MANAGER_PERMS = [
     'swp.activate_scraper',
@@ -42,7 +42,7 @@ EDITOR_PERMS = [
 
 
 class PermissionTestCase(test.TestCase):
-    fixtures = ['groups', 'test-users']
+    fixtures = ['test-users']
 
     @classmethod
     def setUpTestData(cls):
@@ -51,11 +51,12 @@ class PermissionTestCase(test.TestCase):
         cls.manager = User.objects.get_by_natural_key('swp-manager@localhost')
         cls.editor = User.objects.get_by_natural_key('swp-editor@localhost')
 
-        cls.thinktank = Thinktank.objects.create(
+        cls.thinktank = create_thinktank(
             name='PIIE',
             url='https://www.piie.com/',
             unique_fields=['T1-AB'],
             created=now,
+            is_active=False,
         )
 
         cls.scraper = Scraper.objects.create(
@@ -67,10 +68,11 @@ class PermissionTestCase(test.TestCase):
             created=now,
         )
 
-        cls.monitor = Monitor.objects.create(
+        cls.monitor = create_monitor(
             name='Monitor Sergejewitsch Gorbatschow',
             recipients=['the-party@localhost'],
             created=now,
+            is_active=False,
         )
 
     def test_manager_permissions(self):

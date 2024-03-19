@@ -3,19 +3,10 @@ from django.contrib.auth.models import Group
 from django.test import TestCase
 from django.utils import timezone
 
-
-from swp.models import (
-    Monitor,
-    Publication,
-    PublicationFilter,
-    Scraper,
-    ScraperError,
-    Thinktank,
-    ThinktankFilter, PublicationList, PublicationListEntry,
-)
-from swp.models.choices import Comparator, DataResolverKey
+from swp.models import *
 from swp.scraper.types import ScraperType
-from swp.utils.testing import create_superuser, login, request, admin_url, create_user
+from swp.utils.admin import admin_url
+from swp.utils.testing import create_superuser, login, request, create_user, create_monitor, create_thinktank
 
 
 class AdminTestCase(TestCase):
@@ -27,18 +18,13 @@ class AdminTestCase(TestCase):
     @classmethod
     def setUpModels(cls, now):
         user = create_user('simple-user')
-        monitor = Monitor.objects.create(name='Test-Monitor', recipients=[user.email])
-        thinktank = Thinktank.objects.create(
+
+        create_monitor(name='Test-Monitor', recipients=[user.email])
+
+        thinktank = create_thinktank(
             name='Test-Thinktank',
             url='https://www.piie.com/',
             unique_fields=['T1-AB'],
-        )
-        thinktank_filter = ThinktankFilter.objects.create(thinktank=thinktank, monitor=monitor)
-        PublicationFilter.objects.create(
-            thinktank_filter=thinktank_filter,
-            field=DataResolverKey.TITLE,
-            comparator=Comparator.STARTS_WITH,
-            values=['Taming'],
         )
 
         scraper = Scraper.objects.create(

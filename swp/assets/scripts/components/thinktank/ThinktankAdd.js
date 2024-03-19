@@ -1,7 +1,8 @@
+import _ from 'utils/i18n';
+
 import {useBreadcrumb} from 'components/Navigation';
 import Page from 'components/Page';
 
-import _ from 'utils/i18n';
 import ThinktankAddForm from './ThinktankAddForm';
 import {useThinktanksBreadcrumb} from './ThinktankList';
 

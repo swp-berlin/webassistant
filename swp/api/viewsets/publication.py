@@ -1,12 +1,18 @@
+import operator
+
+from functools import reduce
+from typing import List
+
 import django_filters as filters
 
 from django.db import models
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
+
 from django_elasticsearch_dsl.search import Search
 from elasticsearch.exceptions import RequestError
-
-from elasticsearch_dsl import Q, A
+from elasticsearch_dsl.aggs import Terms
+from elasticsearch_dsl.query import Match, QueryString, Range
 
 from rest_framework import viewsets
 from rest_framework.decorators import action
@@ -17,7 +23,7 @@ from rest_framework.permissions import BasePermission, IsAuthenticated
 from swp.api.router import default_router
 from swp.api.serializers import PublicationSerializer, ResearchSerializer, TagSerializer
 from swp.documents import PublicationDocument
-from swp.models import Monitor, Publication, ThinktankFilter
+from swp.models import Monitor, Pool, Publication, User
 from swp.utils.ris import RISResponse
 from swp.utils.translation import get_language
 
@@ -61,18 +67,8 @@ class MonitorFilter(filters.ModelChoiceFilter):
         return qs
 
 
-class ThinktankFilterFilter(filters.ModelChoiceFilter):
-
-    def filter(self, qs, thinktankfilter: ThinktankFilter):
-        if thinktankfilter:
-            return qs.filter(thinktankfilter.as_query)
-
-        return qs
-
-
 class PublicationFilter(filters.FilterSet):
     monitor = MonitorFilter(label=_('Monitor'), queryset=Monitor.objects)
-    thinktankfilter = ThinktankFilterFilter(label=_('Think Tank Filter'), queryset=ThinktankFilter.objects)
     since = filters.DateTimeFilter('last_access', 'gte')
     is_active = filters.BooleanFilter('thinktank__is_active')
 
@@ -81,23 +77,26 @@ class PublicationFilter(filters.FilterSet):
         fields = [
             'thinktank_id',
             'monitor',
-            'thinktankfilter',
             'since',
         ]
+
+
+def get_pool_queryset(request):
+    return Pool.objects.can_research(request.user)
 
 
 class ResearchFilter(filters.FilterSet):
     start_date = filters.DateFilter(label=_('Start Date'), required=False)
     end_date = filters.DateFilter(label=_('End Date'), required=False)
     query = filters.CharFilter(label=_('Query'), required=True)
-    tag = filters.CharFilter(label=_('Tag'), required=False)
+    pool = filters.ModelMultipleChoiceFilter(label=_('Pool'), queryset=get_pool_queryset, required=False)
 
     def filter_queryset(self, queryset, *, using=None):
         data = self.form.cleaned_data
         query = self.get_search_query(**data)
         search = PublicationDocument.search(using=using).query(query)
 
-        search.aggs.bucket('tags', A('terms', field='tags'))
+        search.aggs.bucket('tags', Terms(field='tags'))
 
         return search.source(False)
 
@@ -114,10 +113,10 @@ class ResearchFilter(filters.FilterSet):
             '-score',
         )
 
-    def get_search_query(self, query, start_date=None, end_date=None, tag=None):
+    def get_search_query(self, query, pool=None, start_date=None, end_date=None):
         language = get_language(request=self.request)
         fields = PublicationDocument.get_search_fields(language)
-        query = Q('query_string', query=query, fields=fields, default_operator='AND')
+        query = QueryString(query=query, fields=fields, default_operator='AND')
 
         if start_date or end_date:
             created = {'time_zone': settings.TIME_ZONE}
@@ -128,19 +127,32 @@ class ResearchFilter(filters.FilterSet):
             if end_date:
                 created['lte'] = end_date
 
-            query &= Q('range', created=created)
+            query &= Range(created=created)
 
-        if tag:
-            query &= Q('match', tags=tag)
+        if pool_query := self.get_pool_query(pool):
+            query &= pool_query
 
         return query
+
+    def get_pool_query(self, pool: List[Pool] = None):
+        if ids := self.get_pool_ids(self.request.user, pool):
+            return reduce(operator.or_, [Match(thinktank__pool=pool) for pool in ids])
+
+    @staticmethod
+    def get_pool_ids(user: User, pools: List[Pool] = None):
+        if pools:
+            return [pool.id for pool in pools]
+        elif user.can_research_all_pools:
+            return None
+        else:
+            return user.pools.values_list('id', flat=True)
 
 
 @default_router.register('publication', basename='publication')
 class PublicationViewSet(viewsets.ReadOnlyModelViewSet):
     INVALID_QUERY_CODE = 'invalid-query'
 
-    queryset = Publication.objects
+    queryset = Publication.objects.select_related('thinktank')
     filterset_class = PublicationFilter
     ordering = ['-last_access', '-created']
     pagination_class = PublicationPagination

@@ -66,6 +66,8 @@ def make_monitor_publication_messages(
 ) -> Iterable[EmailMultiAlternatives]:
     context = {
         'monitor': monitor,
+        'publications': publications,
+        'last_sent': monitor.last_sent or monitor.created,
     }
 
     subject, message, html_message = render_mail('monitor-publications', context=context)

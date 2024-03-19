@@ -68,26 +68,6 @@
           "view_thinktank",
           "swp",
           "thinktank"
-        ],
-        [
-          "add_thinktankfilter",
-          "swp",
-          "thinktankfilter"
-        ],
-        [
-          "change_thinktankfilter",
-          "swp",
-          "thinktankfilter"
-        ],
-        [
-          "delete_thinktankfilter",
-          "swp",
-          "thinktankfilter"
-        ],
-        [
-          "view_thinktankfilter",
-          "swp",
-          "thinktankfilter"
         ]
       ]
     }
@@ -97,6 +77,11 @@
     "fields": {
       "name": "swp-editor",
       "permissions": [
+        [
+          "can_research",
+          "swp",
+          "publication"
+        ],
         [
           "activate_monitor",
           "swp",
@@ -128,6 +113,11 @@
           "monitor"
         ],
         [
+          "view_pool",
+          "swp",
+          "pool"
+        ],
+        [
           "view_publication",
           "swp",
           "publication"
@@ -136,11 +126,6 @@
           "view_thinktank",
           "swp",
           "thinktank"
-        ],
-        [
-          "view_thinktankfilter",
-          "swp",
-          "thinktankfilter"
         ]
       ]
     }
