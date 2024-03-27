@@ -5,6 +5,7 @@ import DateTime from 'components/DateTime';
 import MonitorPublicationsLink from 'components/monitor/MonitorPublicationsLink';
 
 import LastPublicationCountUpdate from './LastPublicationCount';
+import MonitorTransferredCount from './MonitorTransferredCount';
 
 const PublicationCountLabel = _('Publications overall:');
 const NewPublicationsLabel = _('Publications since last email:');
@@ -24,7 +25,6 @@ const MonitorInfo = props => {
         lastSent,
         interval,
         recipientCount,
-        transferredCount,
         onMonitorUpdate,
         ...other
     } = props;
@@ -61,7 +61,7 @@ const MonitorInfo = props => {
             <div className="mb-1 sm:grid sm:grid-cols-5 sm:gap-4">
                 <dt>{TransferredToZoteroLabel}</dt>
                 <dd className="sm:col-span-4">
-                    {transferredCount}
+                    <MonitorTransferredCount id={id} />
                 </dd>
             </div>
 
