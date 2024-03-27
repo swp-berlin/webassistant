@@ -1,4 +1,5 @@
 from django.contrib.postgres.fields import ArrayField
+from django.contrib.postgres.indexes import GinIndex
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -14,16 +15,11 @@ class ZoteroTransfer(models.Model):
         on_delete=models.CASCADE,
     )
 
-    api_key = models.CharField(_('api key'), max_length=255)
-    path = models.CharField(_('path'), max_length=255)
+    api_key = models.CharField(_('api key'), max_length=255, db_index=True)
+    path = models.CharField(_('path'), max_length=255, db_index=True)
     key = ZoteroObjectKeyField(_('key'), null=True, blank=True)
     attachment_key = ZoteroObjectKeyField(_('attachment key'), null=True, blank=True)
-    collection_keys = ArrayField(
-        ZoteroObjectKeyField(),
-        verbose_name=_('collection keys'),
-        blank=True,
-        default=list,
-    )
+    collection_keys = ArrayField(ZoteroObjectKeyField(), verbose_name=_('collection keys'), blank=True, default=list)
 
     version = models.IntegerField(_('version'), default=0, editable=False)
 
@@ -32,9 +28,15 @@ class ZoteroTransfer(models.Model):
     last_transferred = models.DateTimeField(_('transferred'), null=True, blank=True)
 
     class Meta:
-        unique_together = ['publication', 'api_key', 'path']
         verbose_name = _('zotero transfer')
         verbose_name_plural = _('zotero transfers')
+        unique_together = [
+            ('publication', 'api_key', 'path'),
+        ]
+        indexes = [
+            GinIndex(fields=['collection_keys']),
+            models.Index(models.Q(last_transferred__gte=models.F('updated')), name='transferred_after_updated_idx'),
+        ]
 
     def __str__(self):
         return f'[{self.created}] {self.api_key}/{self.path} - {self.collection_keys}'
