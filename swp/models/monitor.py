@@ -5,7 +5,7 @@ import operator
 
 from collections import defaultdict
 from functools import reduce
-from typing import Iterable, Tuple, Collection
+from typing import Iterable, Tuple, Collection, Optional
 
 from django.db import models
 from django.db.models.expressions import Case, ExpressionWrapper, F, When
@@ -220,11 +220,11 @@ class Monitor(PublicationCount, ActivatableModel):
     def transferred_count(self) -> int:
         return self.get_transferred_count(None)
 
-    def get_transferred_count(self, language=None, using=None) -> int:
+    def get_transferred_count(self, language=None, using=None) -> Optional[int]:
         zotero_infos = self.get_zotero_publication_keys()
 
         if not zotero_infos:
-            return 0
+            return None
 
         publication_ids = self.get_publication_ids(language, using)
 
