@@ -8,7 +8,6 @@ from functools import reduce
 from typing import Iterable, Tuple, Collection
 
 from django.db import models
-from django.db.models import Count
 from django.db.models.expressions import Case, ExpressionWrapper, F, When
 from django.utils import timezone
 from django.utils.functional import cached_property
@@ -31,6 +30,7 @@ from .fields import ZoteroKeyField, ZOTERO_URI_PATTERN
 from .abstract import ActivatableModel, ActivatableQuerySet
 from .choices import Interval
 from .publicationcount import PublicationCount
+from .zotero import ZoteroTransfer
 
 
 class MonitorQuerySet(ActivatableQuerySet, CanManageQuerySet):
@@ -114,7 +114,7 @@ class Monitor(PublicationCount, ActivatableModel):
         if self.is_active and not self.query:
             raise get_field_validation_error('query', _('An active monitor must not have an empty query.'))
 
-    def get_query(self, language=None, using=None):
+    def get_publication_ids(self, language=None, using=None):
         from swp.documents import PublicationDocument
 
         language = get_language(language)
@@ -126,13 +126,17 @@ class Monitor(PublicationCount, ActivatableModel):
         search.source(False)
 
         try:
-            ids = [result.meta.id for result in search.scan()]
+            return [result.meta.id for result in search.scan()]
         except ElasticsearchException as error:
             capture_exception(error)
 
-            return models.Q(id=None)
+        return None
 
-        return models.Q(id__in=ids)
+    def get_query(self, language=None, using=None):
+        if ids := self.get_publication_ids(language, using):
+            return models.Q(id__in=ids)
+
+        return models.Q(id=None)
 
     @property
     def as_query(self):
@@ -214,24 +218,34 @@ class Monitor(PublicationCount, ActivatableModel):
 
     @property
     def transferred_count(self) -> int:
+        return self.get_transferred_count(None)
+
+    def get_transferred_count(self, language=None, using=None) -> int:
         zotero_infos = self.get_zotero_publication_keys()
 
-        transferred_condition = reduce(
-            operator.or_,
-            [
-                models.Q(**{
-                    'zotero_transfers__api_key': api_key,
-                    'zotero_transfers__path': path,
-                    'zotero_transfers__collection_keys__contains': collections,
-                })
-                for (api_key, path, collections) in zotero_infos
-            ],
-            models.Q(),
+        if not zotero_infos:
+            return 0
+
+        publication_ids = self.get_publication_ids(language, using)
+
+        if not publication_ids:
+            return 0
+
+        query = reduce(operator.or_, [
+            models.Q(api_key=api_key, path=path, collection_keys__contains=collections)
+            for api_key, path, collections in zotero_infos
+        ])
+
+        queryset = ZoteroTransfer.objects.filter(
+            query,
+            last_transferred__gte=F('updated'),
+            publication__in=publication_ids,
+        ).values(
+            'publication',  # group by
+        ).alias(
+            count=models.Count('*'),
+        ).filter(
+            count=len(zotero_infos),
         )
 
-        return self.get_publications().filter(
-            transferred_condition,
-            zotero_transfers__last_transferred__gte=F('zotero_transfers__updated')
-        ).annotate(transfers_completed_count=Count('zotero_transfers')).filter(
-            transfers_completed_count=len(zotero_infos),
-        ).count()
+        return queryset.count()
