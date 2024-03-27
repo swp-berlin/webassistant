@@ -149,8 +149,8 @@ class Monitor(PublicationCount, ActivatableModel):
     def get_publications(self, *, exclude_sent: bool = False):
         qs = Publication.objects.filter(self.as_query)
 
-        if exclude_sent and self.last_sent:
-            qs = qs.filter(last_access__gte=self.last_sent)
+        if exclude_sent:
+            qs = qs.filter(last_access__gte=self.last_sent or self.created)
 
         return qs
 
@@ -163,7 +163,7 @@ class Monitor(PublicationCount, ActivatableModel):
         return self.get_publications(exclude_sent=True)
 
     def update_publication_count(self, commit: bool = True, now=None) -> Tuple[int, int]:
-        return self.get_publication_counts(self.last_sent, commit=commit, now=timezone.localtime(now))
+        return self.get_publication_counts(self.last_sent or self.created, commit=commit, now=timezone.localtime(now))
 
     @cached_property
     def next_run(self) -> datetime.datetime:

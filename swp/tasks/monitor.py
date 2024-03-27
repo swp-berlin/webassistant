@@ -45,14 +45,16 @@ def schedule_monitors(now: datetime.datetime = None, dry_run: bool = False, **kw
 
 
 @app.task(name='monitor.new-publications')
-def monitor_new_publications(monitor_id: int, now: datetime.datetime = None, **kwargs) -> Optional[int]:
+def monitor_new_publications(monitor_id: int, now: datetime.datetime = None, *, using=None, **kwargs) -> Optional[int]:
     """ Dispatch new monitor publications to all recipients. """
-    with transaction.atomic(using=kwargs.get('using')):
-        monitor = Monitor.objects.get_for_update(pk=monitor_id)
+    with transaction.atomic(using=using):
+        monitor = Monitor.objects.using(using).get_for_update(pk=monitor_id)
+
         if not monitor.is_active:
             return None
 
-        monitor.update_publication_count()
+        monitor.update_publication_count(now=now)
+
         if not monitor.new_publication_count:
             return None
 
