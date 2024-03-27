@@ -73,7 +73,10 @@ class MonitorViewSet(ModelViewSet):
     def update_publication_count(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
 
-    @action(detail=True, methods=['get'], url_path='transferred-count', serializer_class=MonitorTransferredSerializer)
+    @action(detail=True,
+            url_path='transferred-count',
+            queryset=queryset.only('pool', 'query', 'zotero_keys'),
+            serializer_class=MonitorTransferredSerializer)
     def transferred_count(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
 
