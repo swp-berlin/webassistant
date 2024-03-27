@@ -177,13 +177,13 @@ class MonitorTestCase(test.TestCase):
 
         with patch_monitor_query(*self.publications):
             self.assertEqual(len(monitor.publications), 2)
-            self.assertEqual(len(monitor.new_publications), 2)
+            self.assertEqual(len(monitor.new_publications), 1)
 
             counts = monitor.update_publication_count()
 
-        self.assertEqual(counts, (2, 2))
+        self.assertEqual(counts, (2, 1))
         self.assertEqual(monitor.publication_count, 2)
-        self.assertEqual(monitor.new_publication_count, 2)
+        self.assertEqual(monitor.new_publication_count, 1)
 
     def test_next_run(self):
         monitor = self.model.objects.annotate_next_run('annotated_next_run', now=self.now).get(pk=self.monitor.pk)
@@ -272,7 +272,7 @@ class MonitorTestCase(test.TestCase):
         attachments = mail.outbox[0].attachments
         self.assertEqual(len(attachments), 1)
         self.assertEqual(attachments[0][0], 'PIIE Monitor.ris')
-        self.assertEqual(attachments[0][1], FULL_RIS_DATA)
+        self.assertEqual(attachments[0][1], NEW_RIS_DATA)
         self.assertEqual(attachments[0][2], 'application/x-research-info-systems')
 
         monitor = self.model.objects.get(pk=self.monitor.pk)
