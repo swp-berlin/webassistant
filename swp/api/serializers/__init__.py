@@ -1,4 +1,4 @@
-from .monitor import MonitorSerializer, MonitorDetailSerializer, MonitorEditSerializer
+from .monitor import MonitorSerializer, MonitorDetailSerializer, MonitorEditSerializer, MonitorTransferredSerializer
 from .pool import PoolSerializer
 from .publication import PublicationSerializer, ResearchSerializer, TagSerializer
 from .publicationlist import PublicationListSerializer, PublicationListDetailSerializer
@@ -11,6 +11,7 @@ __all__ = [
     'MonitorSerializer',
     'MonitorDetailSerializer',
     'MonitorEditSerializer',
+    'MonitorTransferredSerializer',
     'PoolSerializer',
     'PublicationSerializer',
     'PublicationListSerializer',

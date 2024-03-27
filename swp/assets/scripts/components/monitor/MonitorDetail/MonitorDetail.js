@@ -45,7 +45,6 @@ const MonitorDetail = () => {
             {({publication_count: publicationCount,
                 new_publication_count: newPublicationCount,
                 last_publication_count_update: lastPublicationCountUpdate,
-                transferred_count: transferredCount,
                 last_sent: lastSent,
                 recipient_count: recipientCount,
                 is_active: isActive,
@@ -76,7 +75,6 @@ const MonitorDetail = () => {
                         publicationCount={publicationCount}
                         newPublicationCount={newPublicationCount}
                         lastPublicationCountUpdate={lastPublicationCountUpdate}
-                        transferredCount={transferredCount}
                         lastSent={lastSent}
                         interval={interval}
                         recipientCount={recipientCount}

@@ -49,7 +49,6 @@ class MonitorSerializer(BaseMonitorSerializer):
 
 
 class MonitorDetailSerializer(MonitorSerializer):
-    transferred_count = serializers.IntegerField(read_only=True)
 
     class Meta(MonitorSerializer.Meta):
         fields = [
@@ -58,6 +57,15 @@ class MonitorDetailSerializer(MonitorSerializer):
             'query',
             'interval',
             'last_publication_count_update',
+        ]
+
+
+class MonitorTransferredSerializer(ModelSerializer):
+    transferred_count = serializers.IntegerField(read_only=True)
+
+    class Meta:
+        model = Monitor
+        fields = [
             'transferred_count',
         ]
 

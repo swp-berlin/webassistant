@@ -8,7 +8,12 @@ from rest_framework.viewsets import ModelViewSet
 
 from swp.api import default_router
 from swp.api.permissions import CanManagePool, HasActivatablePermission
-from swp.api.serializers import MonitorSerializer, MonitorDetailSerializer, MonitorEditSerializer
+from swp.api.serializers import (
+    MonitorSerializer,
+    MonitorDetailSerializer,
+    MonitorEditSerializer,
+    MonitorTransferredSerializer,
+)
 from swp.models import Monitor, Pool
 from swp.tasks import send_publications_to_zotero, update_publication_count
 from swp.utils.permission import has_perm
@@ -66,6 +71,10 @@ class MonitorViewSet(ModelViewSet):
 
     @action(detail=True, methods=['post'], url_path='update-publication-count')
     def update_publication_count(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+    @action(detail=True, methods=['get'], url_path='transferred-count', serializer_class=MonitorTransferredSerializer)
+    def transferred_count(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
 
     @action(detail=True, methods=['post'], url_path='transfer-to-zotero')
