@@ -43,7 +43,7 @@ class Publication(models.Model):
     title = models.CharField(_('title'), max_length=MAX_TITLE_LENGTH)  # [T1]
     subtitle = models.CharField(_('subtitle'), max_length=255, blank=True)  # [T2]
     abstract = models.TextField(_('abstract'), blank=True)  # [AB]
-    authors = ArrayField(models.CharField(max_length=255), blank=True, null=True, verbose_name=_('authors'))  # [AU]
+    authors = ArrayField(models.CharField(max_length=255, blank=True), blank=True, null=True, verbose_name=_('authors'))  # [AU]
     publication_date = models.CharField(_('publication date'), max_length=255, blank=True, default='')  # [PY]
     last_access = models.DateTimeField(_('last access'), default=timezone.now, editable=False)  # [Y2]
     url = LongURLField(_('URL'))  # [UR]
