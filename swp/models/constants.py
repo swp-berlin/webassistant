@@ -5,6 +5,9 @@ MAX_URL_LENGTH: int = 1024
 #: Maximum length of a publication title
 MAX_TITLE_LENGTH: int = 255
 
+#: Maximum length of a single author
+MAX_AUTHOR_LENGTH: int = 255
+
 #: Maximum length of a single publication tag
 MAX_TAG_LENGTH: int = 255
 
@@ -16,4 +19,3 @@ MAX_ISSN_LENGTH: int = len('2049-3630')
 
 #: Maximum length of combined ISBN/ISSN identifier
 MAX_COMBINED_ISBN_LENGTH: int = max(MAX_ISBN_LENGTH, MAX_ISSN_LENGTH)
-

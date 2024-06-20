@@ -29,3 +29,20 @@ class ScraperTestCase(TestCase):
 
         self.assertIsNotNone(publication)
         self.assertFalse(await sync_to_async(scraper.errors.exists)())
+
+    async def test_empty_tag_no_error(self):
+        scraper: Scraper = await sync_to_async(create_scraper)(self.thinktank)
+
+        fields = {
+            'url': f'{self.thinktank.url}/test',
+            'title': 'Some Title',
+            'authors': ['Some Author'],
+            'publication_date': '\n\tApril 26, 2024\n\t',
+            'abstract': 'Some Abstract',
+            'tags': ['\n\t\n\t'],
+        }
+
+        publication = await scraper.build_publication(fields, {}, thinktank=self.thinktank, now=localtime(None))
+
+        self.assertIsNotNone(publication)
+        self.assertFalse(await sync_to_async(scraper.errors.exists)())
