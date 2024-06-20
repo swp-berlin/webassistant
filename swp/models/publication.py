@@ -4,12 +4,11 @@ from django.db import models
 from django.utils import timezone
 from django.utils.text import Truncator
 from django.utils.translation import gettext_lazy as _, ngettext
-from django.contrib.postgres.fields import ArrayField
 
 from swp.utils.text import when, spaced
 
-from .constants import MAX_TAG_LENGTH, MAX_TITLE_LENGTH
-from .fields import CombinedISBNField, LongURLField
+from .constants import MAX_AUTHOR_LENGTH, MAX_TAG_LENGTH, MAX_TITLE_LENGTH
+from .fields import CombinedISBNField, LongURLField, CharArrayField
 
 
 class PublicationQuerySet(models.QuerySet):
@@ -43,7 +42,7 @@ class Publication(models.Model):
     title = models.CharField(_('title'), max_length=MAX_TITLE_LENGTH)  # [T1]
     subtitle = models.CharField(_('subtitle'), max_length=255, blank=True)  # [T2]
     abstract = models.TextField(_('abstract'), blank=True)  # [AB]
-    authors = ArrayField(models.CharField(max_length=255), blank=True, null=True, verbose_name=_('authors'))  # [AU]
+    authors = CharArrayField(max_length=MAX_AUTHOR_LENGTH, blank=True, null=True, verbose_name=_('authors'))  # [AU]
     publication_date = models.CharField(_('publication date'), max_length=255, blank=True, default='')  # [PY]
     last_access = models.DateTimeField(_('last access'), default=timezone.now, editable=False)  # [Y2]
     url = LongURLField(_('URL'))  # [UR]
@@ -51,14 +50,7 @@ class Publication(models.Model):
     pdf_pages = models.PositiveIntegerField(_('number of pages'), default=0)  # [EP]
     doi = models.CharField(_('DOI'), max_length=255, blank=True)  # [DO]
     isbn = CombinedISBNField(_('ISBN/ISSN'), blank=True)  # [SN]
-
-    tags = ArrayField(
-        models.CharField(max_length=MAX_TAG_LENGTH),
-        blank=True,
-        default=list,
-        verbose_name=_('tags'),
-    )  # [KW]
-
+    tags = CharArrayField(max_length=MAX_TAG_LENGTH, blank=True, default=list, verbose_name=_('tags'))  # [KW]
     created = models.DateTimeField(_('created'), default=timezone.now, editable=False)
     hash = models.CharField(_('hash'), max_length=32, blank=True, null=True)
 

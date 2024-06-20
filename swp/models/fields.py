@@ -1,6 +1,6 @@
 import re
 
-from django.contrib.postgres.fields import CICharField
+from django.contrib.postgres.fields import ArrayField, CICharField
 from django.core.exceptions import ImproperlyConfigured
 from django.core.validators import RegexValidator
 from django.db.models import CharField, URLField
@@ -10,6 +10,22 @@ from swp.utils.isbn import canonical_isbn, normalize_isbn
 from swp.validators import validate_canonical_domain
 
 from .constants import MAX_COMBINED_ISBN_LENGTH, MAX_URL_LENGTH
+
+
+class CharArrayField(ArrayField):
+
+    def __init__(self, *, max_length: int, **kwargs):
+        blank = kwargs.setdefault('blank', False)
+
+        super().__init__(CharField(max_length=max_length, blank=blank), **kwargs)
+
+    def deconstruct(self):
+        name, path, args, kwargs = ArrayField.deconstruct(self)
+
+        if base_field := kwargs.pop('base_field', None):
+            kwargs.setdefault('max_length', base_field.max_length)
+
+        return name, path, args, kwargs
 
 
 class ChoiceField(CharField):
