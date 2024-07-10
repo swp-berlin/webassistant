@@ -23,6 +23,7 @@ class PublicationSerializer(ModelSerializer):
             'authors',
             'abstract',
             'publication_date',
+            'publication_dt',
             'last_access',
             'url',
             'pdf_url',
