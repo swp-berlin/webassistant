@@ -2,7 +2,20 @@
 
 <h1>{% blocktranslate %}Scraper Error Report for {{ date }}{% endblocktranslate %}</h1>
 
+<a name="table-of-contents"></a>
+<h3>{% translate 'Table of Contents' %}</h3>
+<ul>
+    {% for pool in pools.keys %}
+        <li>
+            <a href="#pool-{{ pool.id }}">
+                {{ pool }} ({{ pool.error_count }})
+            </a>
+        </li>
+    {% endfor %}
+</ul>
+
 {% for pool, thinktanks in pools.items %}
+    <a name="pool-{{ pool.id }}"></a>
     <h2>{{ pool }}</h2>
     <ul>
         {% for thinktank, scrapers in thinktanks.items %}
@@ -43,4 +56,5 @@
             </li>
         {% endfor %}
     </ul>
+    <a style="color: #004778" href="#table-of-contents">{% translate 'Back to table of contents' %}</a>
 {% endfor %}
