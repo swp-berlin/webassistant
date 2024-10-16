@@ -10,7 +10,7 @@ DEBUG = True
 
 SECRET_KEY = 'this-is-not-a-secret-key'
 
-ALLOWED_HOSTS = '*'
+ALLOWED_HOSTS = ['*']
 
 if find_executable('mailhog'):
     EMAIL_PORT = 1025
