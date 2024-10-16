@@ -1,8 +1,6 @@
 from django_elasticsearch_dsl import Document, fields
 from django_elasticsearch_dsl.indices import Index
 
-from elasticsearch.client.ingest import IngestClient
-
 from swp.models import Publication, Thinktank
 
 from .fields import ANALYZERS, FieldMixin, get_translation_fields
@@ -26,7 +24,7 @@ class PublicationIndex(Index):
         return result
 
     def put_ingest_pipeline(self, **kwargs):
-        return IngestClient(self.connection).put_pipeline(**kwargs)
+        return self.connection.ingest.put_pipeline(**kwargs)
 
     def add_language_detection(self, *field_names, target_field='_language'):
         languages = ', '.join(f"'{language}'" for language in LANGUAGES)

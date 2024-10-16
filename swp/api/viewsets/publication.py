@@ -10,7 +10,7 @@ from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 
 from django_elasticsearch_dsl.search import Search
-from elasticsearch.exceptions import RequestError
+from elasticsearch import BadRequestError
 from elasticsearch_dsl.aggs import Terms
 from elasticsearch_dsl.query import Match, QueryString, Range
 
@@ -169,7 +169,7 @@ class PublicationViewSet(viewsets.ReadOnlyModelViewSet):
     def research(self, request):
         try:
             return self.list(request)
-        except RequestError as err:
+        except BadRequestError as err:
             if err.error == 'search_phase_execution_exception':
                 raise ValidationError({
                     'detail': _('The query provided is invalid. Please check your input.'),
