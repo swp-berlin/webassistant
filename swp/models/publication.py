@@ -8,7 +8,7 @@ from django.utils.translation import gettext_lazy as _, ngettext
 from swp.utils.text import when, spaced
 
 from .constants import MAX_AUTHOR_LENGTH, MAX_TAG_LENGTH, MAX_TITLE_LENGTH
-from .fields import CombinedISBNField, LongURLField, CharArrayField
+from .fields import CombinedISBNField, LongURLField, CharArrayField, DenseVectorField
 
 
 class PublicationQuerySet(models.QuerySet):
@@ -60,6 +60,7 @@ class Publication(models.Model):
     tags = CharArrayField(max_length=MAX_TAG_LENGTH, blank=True, default=list, verbose_name=_('tags'))  # [KW]
     created = models.DateTimeField(_('created'), default=timezone.now, editable=False)
     hash = models.CharField(_('hash'), max_length=32, blank=True, null=True)
+    embedding = DenseVectorField(_('embedding'), dims=512, null=True, editable=False)
 
     objects = PublicationQuerySet.as_manager()
 

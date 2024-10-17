@@ -3,7 +3,7 @@ import re
 from django.contrib.postgres.fields import ArrayField, CICharField
 from django.core.exceptions import ImproperlyConfigured
 from django.core.validators import RegexValidator
-from django.db.models import CharField, URLField
+from django.db.models import CharField, FloatField, URLField
 from django.utils.translation import gettext_lazy as _
 
 from swp.utils.isbn import canonical_isbn, normalize_isbn
@@ -89,6 +89,29 @@ class CombinedISBNField(CharField):
         setattr(model_instance, self.attname, cleaned_value)
 
         return super().pre_save(model_instance, add)
+
+
+class DenseVectorField(ArrayField):
+
+    def __init__(self, verbose_name: str = None, *, dims: int, **kwargs):
+        kwargs['verbose_name'] = verbose_name
+        kwargs['base_field'] = FloatField()
+        kwargs['size'] = dims
+
+        ArrayField.__init__(self, **kwargs)
+
+    @property
+    def dims(self):
+        return self.size
+
+    def deconstruct(self):
+        name, path, args, kwargs = ArrayField.deconstruct(self)
+
+        kwargs['dims'] = kwargs.pop('size')
+
+        kwargs.pop('base_field', None)
+
+        return name, path, args, kwargs
 
 
 # Regex that matches ZOTERO URIs with an API Key prepended

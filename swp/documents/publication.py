@@ -115,6 +115,7 @@ class PublicationDocument(FieldMixin, Document):
             'isbn',
             'created',
             'hash',
+            'embedding',
         ]
         queryset_pagination = 2000
 
