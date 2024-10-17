@@ -50,7 +50,7 @@ class LongURLField(URLField):
     def __init__(self, verbose_name: str = None, *, max_length: int = None, **kwargs):
         max_length = max_length or MAX_URL_LENGTH
         if max_length < MAX_URL_LENGTH:
-            raise ImproperlyConfigured('Long URL field must have a length of at least %d' % MAX_URL_LENGTH)
+            raise ImproperlyConfigured(f'Long URL field must have a length of at least {MAX_URL_LENGTH}.')
 
         super().__init__(verbose_name, max_length=max_length, **kwargs)
 
