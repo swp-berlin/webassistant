@@ -1,4 +1,5 @@
 from .abstract import ActivatableModelAdmin
+from .category import CategoryAdmin
 from .monitor import MonitorAdmin
 from .pool import PoolAdmin
 from .publication import PublicationAdmin
@@ -10,6 +11,7 @@ from .user import UserAdmin
 
 __all__ = [
     'ActivatableModelAdmin',
+    'CategoryAdmin',
     'MonitorAdmin',
     'PoolAdmin',
     'PublicationAdmin',

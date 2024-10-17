@@ -60,6 +60,8 @@ class Scraper(ActivatableModel, LastModified):
 
     data = models.JSONField(_('data'))
 
+    categories = models.ManyToManyField('swp.Category', 'scrapers', verbose_name=_('categories'), blank=True)
+
     start_url = LongURLField(_('start URL'))
     checksum = models.CharField(_('checksum'), max_length=64, unique=True, blank=True, null=True)
 
