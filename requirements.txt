@@ -6,13 +6,17 @@ django-elasticsearch-dsl==8.0
 django-filter==2.4.0
 djangorestframework==3.12.2
 elasticsearch<9
+fastembed==0.3.6
+nltk==3.9.1
+pdfminer.six==20240706
 pikepdf==5.6.1
 playwright==1.27
 polib==1.1.0
 psycopg2==2.8.6
 python-dotenv==0.15.0
 redis==3.5.3
-requests==2.25.1
+requests<3.0
 sentry-sdk==0.19.5
 tldextract==5.1.1
+tokenizers  # managed by fastembed, we just need it for typing
 uWSGI==2.0.19.1
