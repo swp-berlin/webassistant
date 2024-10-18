@@ -282,6 +282,7 @@ class Scraper(ActivatableModel, LastModified):
             return False
 
         publication.save(force_insert=True)
+        publication.categories.add(*self.categories.all())
         self.scraped_publications.add(publication)
 
         return True
