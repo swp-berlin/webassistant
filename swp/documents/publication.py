@@ -1,3 +1,4 @@
+from django.db.models import Prefetch
 from django_elasticsearch_dsl import Document, fields
 from django_elasticsearch_dsl.indices import Index
 
@@ -113,9 +114,12 @@ class PublicationDocument(FieldMixin, Document):
             'created',
             'hash',
         ]
+        queryset_pagination = 2000
 
     def get_queryset(self):
-        return Publication.objects.prefetch_related('thinktank')
+        return Publication.objects.prefetch_related(
+            Prefetch('thinktank', Thinktank.objects.only('name', 'pool')),
+        )
 
     @staticmethod
     def get_instances_from_related(related_instance):
