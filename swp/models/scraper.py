@@ -287,11 +287,6 @@ class Scraper(ActivatableModel, LastModified):
 
         return True
 
-    @transaction.atomic
-    def save_publications(self, publications):
-        Publication.objects.bulk_create(publications)
-        self.scraped_publications.add(*publications)
-
     @sync_to_async
     def save_error(self, error: ScraperError):
         error.save(force_insert=True)
