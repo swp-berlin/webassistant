@@ -65,4 +65,4 @@ class ScraperDraftSerializer(BaseScraperSerializer):
 
     class Meta:
         model = Scraper
-        fields = ['start_url', 'type', 'interval', 'data']
+        fields = ['start_url', 'type', 'interval', 'data', 'categories']
