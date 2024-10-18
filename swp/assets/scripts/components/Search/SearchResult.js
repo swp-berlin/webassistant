@@ -1,5 +1,7 @@
 import {useLocation} from 'react-router-dom';
 
+import _ from 'utils/i18n';
+
 import {parsePageParam} from 'components/publication/helper';
 import DownloadButton from 'components/publication/DownloadButton';
 import PublicationResults from 'components/publication/PublicationResults';
@@ -8,12 +10,26 @@ import PublicationListMenu, {PublicationListDialog, QuickAddButton} from 'compon
 import SearchResultTagCloud from './SearchResultTagCloud';
 import SearchResultHeader from './SearchResultHeader';
 
+const FilterByTagLabel = _('Filter by Tag:');
+const FilterByCategoryLabel = _('Filter by Category:');
+
 export const calculatePageCount = (total, pageSize) => Math.ceil(total / pageSize);
 
-const SearchResult = ({
-    results, tags, selectedTags, next: nextPage, previous: prevPage, count, downloadURL, onSelectTag, onAddFilter,
-}) => {
-
+const SearchResult = props => {
+    const {
+        results,
+        tags,
+        categories,
+        selectedTags,
+        selectedCategories,
+        next: nextPage,
+        previous: prevPage,
+        count,
+        downloadURL,
+        onSelectTag,
+        onSelectCategory,
+        onAddFilter,
+    } = props;
     const location = useLocation();
     const pageCount = calculatePageCount(count, 10);
     const currentPage = parsePageParam(location.search) || 1;
@@ -25,9 +41,19 @@ const SearchResult = ({
                 {count > 0 && <DownloadButton href={downloadURL} />}
             </SearchResultHeader>
 
+            {categories.length > 0 && (
+                <SearchResultTagCloud
+                    label={FilterByCategoryLabel}
+                    values={categories}
+                    selected={selectedCategories}
+                    onSelect={onSelectCategory}
+                />
+            )}
+
             {tags.length > 0 && (
                 <SearchResultTagCloud
-                    tags={tags}
+                    label={FilterByTagLabel}
+                    values={tags}
                     selected={selectedTags}
                     onSelect={onSelectTag}
                 />

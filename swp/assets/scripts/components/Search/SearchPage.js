@@ -57,24 +57,32 @@ const removeFilterTerm = (query, filterTerm) => query.split(' ').filter(term => 
 const addFilterTerm = (query, filterTerm) => query ? `${query} ${filterTerm}` : filterTerm;
 
 const Quote = '"';
+const Term = ':';
 const WhitespaceRegEx = /\s/g;
-const maybeQuote = text => WhitespaceRegEx.test(text) ? `${Quote}${text}${Quote}` : text;
+const needsQuote = text => WhitespaceRegEx.test(text) || text.includes(Term);
+const maybeQuote = text => needsQuote(text) ? `${Quote}${text}${Quote}` : text;
 const maybeUnquote = text => (
     text.startsWith(Quote) && text.endsWith(Quote)
         ? text.slice(Quote.length, -Quote.length)
         : text
 );
 
-const parseTags = query => (
-    query
-        .split(' ')
-        .filter(term => term.startsWith('tags:'))
-        .map(term => {
-            const [, tag] = term.split(':');
+const parseTerms = (keyword, query) => {
+    const prefix = `${keyword}${Term}`;
 
-            return maybeUnquote(tag);
-        })
-);
+    return query
+        .split(' ')
+        .filter(term => term.startsWith(prefix))
+        .map(term => {
+            const [, value] = term.split(Term);
+
+            return maybeUnquote(value);
+        });
+};
+
+const parseTags = query => parseTerms('tags', query);
+
+const parseCategories = query => parseTerms('categories', query);
 
 const parsePools = searchParams => (
     searchParams
@@ -130,7 +138,9 @@ const SearchPage = () => {
         setTerm(term => toggle(term, filterTerm));
     }, [query, setSearchParams]);
 
-    const handleSelectTag = useCallback(tag => addFilter({field: 'tags', value: tag}), [addFilter]);
+    const handleSelectTag = useCallback(value => addFilter({field: 'tags', value}), [addFilter]);
+
+    const handleSelectCategory = useCallback(value => addFilter({field: 'categories', value}), [addFilter]);
 
     const handleSelectPool = useCallback(pool => {
         setSearchParams(next => {
@@ -154,6 +164,7 @@ const SearchPage = () => {
 
     const tags = useMemo(() => parseTags(query || ''), [query]);
     const pools = useMemo(() => parsePools(searchParams), [searchParams]);
+    const categories = useMemo(() => parseCategories(query || ''), [query]);
 
     return (
         <Page title={SearchLabel} actions={Actions}>
@@ -171,7 +182,9 @@ const SearchPage = () => {
                 <SearchQuery query={query} pools={pools} startDate={startDate} endDate={endDate} page={page}>
                     <SearchResult
                         selectedTags={tags}
+                        selectedCategories={categories}
                         onSelectTag={handleSelectTag}
+                        onSelectCategory={handleSelectCategory}
                         downloadURL={`/api/publication/ris/?${searchParams.toString()}`}
                         onAddFilter={addFilter}
                     />

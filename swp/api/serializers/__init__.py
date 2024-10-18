@@ -1,7 +1,7 @@
 from .category import CategorySerializer, CategoryChoiceSerializer
 from .monitor import MonitorSerializer, MonitorDetailSerializer, MonitorEditSerializer, MonitorTransferredSerializer
 from .pool import PoolSerializer
-from .publication import PublicationSerializer, ResearchSerializer, TagSerializer
+from .publication import PublicationSerializer, ResearchSerializer, BucketSerializer
 from .publicationlist import PublicationListSerializer, PublicationListDetailSerializer
 from .scraper import ScraperSerializer, ScraperDraftSerializer, ScraperListSerializer
 from .scrapererror import ScraperErrorSerializer
@@ -20,7 +20,7 @@ __all__ = [
     'PublicationListSerializer',
     'PublicationListDetailSerializer',
     'ResearchSerializer',
-    'TagSerializer',
+    'BucketSerializer',
     'ScraperErrorSerializer',
     'ScraperSerializer',
     'ScraperDraftSerializer',
