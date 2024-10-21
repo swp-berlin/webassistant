@@ -1,3 +1,5 @@
+/* eslint-disable no-use-before-define */
+
 import {useCallback, useMemo, useRef, useState} from 'react';
 import {Link, useSearchParams} from 'react-router-dom';
 import {AnchorButton, Button, Intent} from '@blueprintjs/core';
@@ -53,12 +55,12 @@ const useInitialDates = (startDate, endDate) => {
     return initialDates.current;
 };
 
-const removeFilterTerm = (query, filterTerm) => query.split(' ').filter(term => term !== filterTerm).join(' ');
+const removeFilterTerm = (query, filterTerm) => splitQuery(query).filter(term => term !== filterTerm).join(' ');
 const addFilterTerm = (query, filterTerm) => query ? `${query} ${filterTerm}` : filterTerm;
 
 const Quote = '"';
 const Term = ':';
-const WhitespaceRegEx = /\s/g;
+const WhitespaceRegEx = /\s/;
 const needsQuote = text => WhitespaceRegEx.test(text) || text.includes(Term);
 const maybeQuote = text => needsQuote(text) ? `${Quote}${text}${Quote}` : text;
 const maybeUnquote = text => (
@@ -67,11 +69,34 @@ const maybeUnquote = text => (
         : text
 );
 
+const splitQuery = query => {
+    const bits = query.split(' ');
+    const terms = [];
+
+    let term = '';
+
+    bits.forEach(bit => {
+        if (term) {
+            term = `${term} ${bit}`;
+
+            if (bit.endsWith(Quote)) {
+                terms.push(term);
+                term = '';
+            }
+        } else if (bit.includes(Quote)) {
+            term = bit;
+        } else {
+            terms.push(bit);
+        }
+    });
+
+    return terms;
+};
+
 const parseTerms = (keyword, query) => {
     const prefix = `${keyword}${Term}`;
 
-    return query
-        .split(' ')
+    return splitQuery(query)
         .filter(term => term.startsWith(prefix))
         .map(term => {
             const [, value] = term.split(Term);
