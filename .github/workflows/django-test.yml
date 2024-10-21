@@ -58,7 +58,7 @@ jobs:
     - name: Install Dependencies
       run: |
         apt-get update && apt-get -y install gettext
-        python -m pip install --upgrade pip coverage
+        python -m pip install -U "pip<24.1" coverage
         pip install -r requirements.txt
     - name: Create Index
       run: |
