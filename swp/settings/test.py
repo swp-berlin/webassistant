@@ -40,3 +40,6 @@ SILENCED_SYSTEM_CHECKS = [
 # We set the redis port to an unassigned port so we
 # detect asynchronous task calls that aren't mocked.
 CELERY_BROKER_URL = CELERY_RESULT_BACKEND = redis(port=1234)
+
+# Use with care, the corresponding test will rebuild the search index deleting an existing one.
+TEST_REBUILD_SEARCH_INDEX = env('TEST_REBUILD_SEARCH_INDEX', False)
