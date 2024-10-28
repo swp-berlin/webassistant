@@ -8,7 +8,7 @@ from swp.models.fields import DenseVectorField
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('swp', '0051_char_array_fields'),
+        ('swp', '0053_convert_static_tags_to_categories'),
     ]
 
     operations = [
