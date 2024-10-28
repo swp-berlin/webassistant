@@ -3,11 +3,11 @@ from typing import List
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
 
-from django_elasticsearch_dsl import Document, fields
+from django_elasticsearch_dsl import DEDField, Document, fields
 from django_elasticsearch_dsl.documents import model_field_class_to_field_class
 from elasticsearch_dsl import DenseVector
 
-from swp.models.fields import CombinedISBNField, LongURLField, DenseVectorField
+from swp.models.fields import CombinedISBNField, LongURLField, DenseVectorField as DenseVectorModelField
 
 model_field_class_to_field_class[CombinedISBNField] = model_field_class_to_field_class[models.CharField]
 model_field_class_to_field_class[LongURLField] = model_field_class_to_field_class[models.URLField]
@@ -52,6 +52,10 @@ ANALYZERS = {
 }
 
 
+class DenseVectorField(DEDField, DenseVector):
+    pass
+
+
 class TranslationField(fields.ObjectField):
 
     def __init__(self, attr=None, **kwargs):
@@ -91,11 +95,8 @@ class FieldMixin:
         if field_name in cls.TRANSLATION_FIELDS:
             return TranslationField(attr=field_name)
 
-        if isinstance(model_field, DenseVectorField):
-            return DenseVector(
-                required=not model_field.null,
-                dims=model_field.dims,
-            )
+        if isinstance(model_field, DenseVectorModelField):
+            return DenseVectorField(dims=model_field.dims, required=not model_field.null)
 
         if isinstance(model_field, ArrayField):
             base_field = Document.to_field(field_name, model_field.base_field)
