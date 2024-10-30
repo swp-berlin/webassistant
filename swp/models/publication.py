@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from django.conf import settings
 from django.db import models
 from django.utils import timezone
 from django.utils.text import Truncator
@@ -60,7 +61,7 @@ class Publication(models.Model):
     tags = CharArrayField(max_length=MAX_TAG_LENGTH, blank=True, default=list, verbose_name=_('tags'))  # [KW]
     created = models.DateTimeField(_('created'), default=timezone.now, editable=False)
     hash = models.CharField(_('hash'), max_length=32, blank=True, null=True)
-    embedding = DenseVectorField(_('embedding'), dims=512, null=True, editable=False)
+    embedding = DenseVectorField(_('embedding'), dims=settings.EMBEDDING_VECTOR_DIMS, null=True, editable=False)
 
     objects = PublicationQuerySet.as_manager()
 
