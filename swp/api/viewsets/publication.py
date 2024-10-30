@@ -16,10 +16,10 @@ from elasticsearch_dsl.query import Match, QueryString, Range
 
 from rest_framework import viewsets
 from rest_framework.decorators import action
-from rest_framework.exceptions import ValidationError
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import BasePermission, IsAuthenticated
 
+from swp.api.exceptions import InvalidQueryError
 from swp.api.router import default_router
 from swp.api.serializers import PublicationSerializer, ResearchSerializer, BucketSerializer
 from swp.documents import PublicationDocument
@@ -31,14 +31,6 @@ BUCKETS = [
     'tags',
     'categories',
 ]
-
-
-class InvalidQueryError(ValidationError):
-    default_code = 'invalid-query'
-    default_detail = {
-        'detail': _('The query provided is invalid. Please check your input.'),
-        'code': default_code,
-    }
 
 
 class CanResearch(BasePermission):
