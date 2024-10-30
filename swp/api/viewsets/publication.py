@@ -116,7 +116,12 @@ class ResearchFilter(filters.FilterSet):
         for bucket in BUCKETS:
             search.aggs.bucket(bucket, Terms(field=bucket))
 
-        return search.source(False)
+        search = search.source(False)
+
+        # Fill response cache, so we avoid an extra count query when paginating.
+        search.execute(ignore_cache=True)
+
+        return search
 
     @staticmethod
     def get_result_queryset(search):
