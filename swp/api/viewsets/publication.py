@@ -33,6 +33,14 @@ BUCKETS = [
 ]
 
 
+class InvalidQueryError(ValidationError):
+    default_code = 'invalid-query'
+    default_detail = {
+        'detail': _('The query provided is invalid. Please check your input.'),
+        'code': default_code,
+    }
+
+
 class CanResearch(BasePermission):
 
     def has_permission(self, request, view):
@@ -160,8 +168,6 @@ class ResearchFilter(filters.FilterSet):
 
 @default_router.register('publication', basename='publication')
 class PublicationViewSet(viewsets.ReadOnlyModelViewSet):
-    INVALID_QUERY_CODE = 'invalid-query'
-
     queryset = Publication.objects.select_related('thinktank')
     filterset_class = PublicationFilter
     ordering = ['-last_access', '-created']
@@ -181,10 +187,7 @@ class PublicationViewSet(viewsets.ReadOnlyModelViewSet):
             return self.list(request)
         except BadRequestError as err:
             if err.error == 'search_phase_execution_exception':
-                raise ValidationError({
-                    'detail': _('The query provided is invalid. Please check your input.'),
-                    'code': self.INVALID_QUERY_CODE,
-                })
+                raise InvalidQueryError from err
             raise err
 
     @action(detail=False, permission_classes=[IsAuthenticated & CanResearch])
