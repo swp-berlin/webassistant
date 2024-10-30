@@ -75,7 +75,7 @@ class Command(BaseCommand):
                 continue
 
             publication = Publication(id=publication, pdf_url=url, created=created)
-            urls[url] = spooling.get_filepath(directory, publication, 'pdf')
+            urls[url] = spooling.get_filepath(directory, 'todo', publication, 'pdf')
 
         if not urls:
             return self.stdout.write('No PDF files to download…')

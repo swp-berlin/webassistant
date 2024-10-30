@@ -1,125 +1,41 @@
-import os
+import mimetypes
+import posixpath
 
-from functools import lru_cache
-from typing import List, Iterator
+from pathlib import Path
+from urllib.parse import urlsplit, urlunsplit
 
-import nltk
-import numpy as np
+from django.conf import settings
 
-from pdfminer.high_level import extract_text
-from fastembed import TextEmbedding
-from tokenizers import Encoding
+from swp.utils.requests import TimeOutSession
 
-nltk.download('punkt_tab')
+TIMEOUT = 3.05, None
 
 
-def tokenize(text: str, embedding: TextEmbedding) -> Encoding:
-    return embedding.model.tokenizer.encode(text)
+def get_url(endpoint: str, filename: str = None, *, version: int = 1):
+    scheme, netloc, path, query, fragment = urlsplit(settings.EMBEDDING_API_HOST)
+    path = posixpath.join('api', f'v{version}', endpoint, filename or '')
+    components = scheme, netloc, path, query, fragment
+
+    return urlunsplit(components)
 
 
-@lru_cache(maxsize=None)
-def get_embedding(model_name):
-    return TextEmbedding(
-        model_name=model_name,
-        local_files_only=True,
-        cache_dir='/Users/oliverzander/Projects/SWP/embedding-models',
-    )
+def request(method, url, **kwargs):
+    with TimeOutSession(TIMEOUT) as session:
+        return session.json(method, url, **kwargs)
 
 
-def prepare_text(text: str):
-    return text.replace(f'-{os.linesep}', '')  # remove hyphenation
+def embed(filepath: Path, *, filename: str = None, content_type: str = None, **headers):
+    url = get_url('embedding', filename or filepath.name)
+
+    if content_type is None:
+        content_type, encoding = mimetypes.guess_type(filepath)
+
+    if content_type:
+        headers.setdefault('Content-Type', content_type)
+
+    with open(filepath, 'rb') as fp:
+        return request('PUT', url, data=fp, headers=headers)
 
 
-def get_documents(text: str, embedding: TextEmbedding) -> Iterator[str]:
-    """
-    Splits the text in documents that are within the embedding's token limit preserving whole sentences when possible.
-    """
-
-    sentences = nltk.sent_tokenize(text)
-    document = ''
-
-    while sentences:
-        sentence, *sentences = sentences
-
-        if document:
-            segment = f'{document} {sentence}'
-        else:
-            segment = sentence
-
-        tokenized = tokenize(segment, embedding)
-
-        if tokenized.overflowing:
-            if not document:
-                document, sentence = split_sentence(sentence, embedding)
-            sentences = [sentence, *sentences]
-            yield document
-            document = ''
-        else:
-            document = segment
-
-
-def split_sentence(sentence: str, embedding: TextEmbedding):
-    words = nltk.word_tokenize(sentence)
-    chunk = ''
-
-    while words:
-        word, *words = words
-
-        if chunk:
-            segment = f'{chunk} {word}'
-        else:
-            segment = word
-
-        tokenized = tokenize(segment, embedding)
-
-        if tokenized.overflowing:
-            if not chunk:
-                # A word is too long for the token limit (should basically never happen).
-                # We have no choice than split it.
-
-                _, end = tokenized.offsets[-2]
-                chunk, suffix = word[:end], word[end:]
-                words = [suffix, *words]
-
-            return chunk, ' '.join(words)
-
-        chunk = segment
-
-
-def embed(text: str) -> List[float]:
-    text = prepare_text(text)
-    embedding = get_embedding('intfloat/multilingual-e5-large')
-    documents = [*get_documents(text, embedding)]
-    embeddings = [*embedding.embed(documents)]
-
-    return avg(documents, embeddings)
-
-
-def avg(documents: List[str], embeddings: List[np.array]) -> List[float]:
-    """
-    Averaging the documents embedding vectors into a single vector using the method described by OpenAI:
-    https://cookbook.openai.com/examples/embedding_long_inputs#2-chunking-the-input-text
-    """
-
-    weights = [*map(len, documents)]
-    average = np.average(embeddings, axis=0, weights=weights)
-    average /= np.linalg.norm(average)
-
-    return average.tolist()
-
-
-def embed_pdf(filepath):
-    text = extract_text(filepath)
-
-    return embed(text)
-
-
-def embed_txt(filepath):
-    with open(filepath) as fp:
-        text = fp.read()
-
-    return embed(text)
-
-
-def embed_test():
-    return embed_txt('test-data/kurzanalyse6-2021-iab-bamf-soep-befragung-hilfebedarfe.pdfminer.txt')
+def embed_query(query: str):
+    return request('GET', get_url('query-embed'), params={'query': query})
