@@ -192,7 +192,7 @@ class PublicationViewSet(viewsets.ReadOnlyModelViewSet):
         filterset = ResearchFilter(data=request.GET, queryset=Publication.objects, request=request)
 
         search: Search = filterset.qs
-        search.params(preserve_order=True)
+        search = search.params(preserve_order=True)
         search = search.scan()
 
         queryset = ResearchFilter.get_result_queryset(search)
