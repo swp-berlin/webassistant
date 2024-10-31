@@ -2,11 +2,13 @@ from __future__ import annotations
 
 import datetime
 import os
+import shutil
 
 from contextlib import suppress
 from pathlib import Path
 from typing import TYPE_CHECKING, Literal, Iterator, Tuple
 
+from django.conf import settings
 from django.utils.timezone import localtime
 
 if TYPE_CHECKING:
@@ -67,3 +69,26 @@ def is_date(value: str) -> bool:
         return False
     else:
         return True
+
+
+def spool_file(publication: Publication, source: Path, extension: Extension, directory: Path = None) -> Path:
+    return base_spool(shutil.copy, publication, source, extension, directory)
+
+
+def spool_content(publication: Publication, content: str, extension: Extension, directory: Path = None) -> Path:
+    return base_spool(write, publication, content, extension, directory)
+
+
+def base_spool(action, publication: Publication, source, extension: Extension, directory: Path = None):
+    destination = get_filepath(directory or settings.EMBEDDING_SPOOLING_DIR, 'todo', publication, extension)
+
+    os.makedirs(destination.parent, exist_ok=True)
+
+    return action(source, destination)
+
+
+def write(content: str, destination: Path) -> Path:
+    with open(destination, 'w') as fp:
+        fp.write(content)
+
+    return destination
