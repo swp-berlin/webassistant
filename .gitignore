@@ -24,6 +24,7 @@ dump.rdb
 /ms-playwright
 
 # Database
+*.sql
 *.psql
 
 # Mac
