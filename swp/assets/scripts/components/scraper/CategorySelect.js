@@ -9,8 +9,8 @@ const QueryKey = ['category', 'choices'];
 
 const DisabledCategorySelect = ({name, control, choices, ...props}) => {
     const {field} = useController({name, control});
-    const isSelected = field.value.includes;
-    const values = choices.filter(({value}) => isSelected(value)).map(({label}) => label);
+    const selected = new Set(field.value);
+    const values = choices.filter(({value}) => selected.has(value)).map(({label}) => label);
 
     return (
         <Field {...props} name={name} disabled>
