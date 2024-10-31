@@ -15,11 +15,19 @@ class PublicationAdmin(admin.ModelAdmin):
         'authors',
         'abstract',
         'publication_date',
-        'last_access',
         'url',
         'pdf_url',
         'pdf_pages',
         'tags',
+        'categories',
+        'last_access',
+    ]
+    raw_id_fields = [
+        'thinktank',
+        'scrapers',
+    ]
+    autocomplete_fields = [
+        'categories',
     ]
     readonly_fields = [
         'last_access',
@@ -39,4 +47,5 @@ class PublicationAdmin(admin.ModelAdmin):
         'subtitle',
         'abstract',
         'tags',
+        'categories__name',
     ]

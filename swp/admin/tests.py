@@ -21,6 +21,8 @@ class AdminTestCase(TestCase):
 
         create_monitor(name='Test-Monitor', recipients=[user.email])
 
+        category = Category.objects.create(name='Test')
+
         thinktank = create_thinktank(
             name='Test-Thinktank',
             url='https://www.piie.com/',
@@ -34,7 +36,8 @@ class AdminTestCase(TestCase):
             start_url='https://www.piie.com/research/publications/policy-briefs',
             checksum='de9474fa85634623fd9ae9838f949a02c9365ede3499a26c9be52363a8b7f214',
         )
-        ScraperError.objects.create(scraper=scraper, code='error', message="You're a test case, Harry!")
+        scraper.errors.create(code='error', message="You're a test case, Harry!")
+        scraper.categories.add(category)
 
         publication = Publication.objects.create(
             thinktank=thinktank,
@@ -43,10 +46,7 @@ class AdminTestCase(TestCase):
         )
 
         publication_list = PublicationList.objects.create(user=user, name='Test')
-        PublicationListEntry.objects.create(
-            publication_list=publication_list,
-            publication=publication,
-        )
+        publication_list.entries.create(publication=publication)
 
     @classmethod
     def setUpTestData(cls):

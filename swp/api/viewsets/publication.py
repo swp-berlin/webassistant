@@ -21,11 +21,16 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import BasePermission, IsAuthenticated
 
 from swp.api.router import default_router
-from swp.api.serializers import PublicationSerializer, ResearchSerializer, TagSerializer
+from swp.api.serializers import PublicationSerializer, ResearchSerializer, BucketSerializer
 from swp.documents import PublicationDocument
 from swp.models import Monitor, Pool, Publication, User
 from swp.utils.ris import RISResponse
 from swp.utils.translation import get_language
+
+BUCKETS = [
+    'tags',
+    'categories',
+]
 
 
 class CanResearch(BasePermission):
@@ -42,18 +47,22 @@ class PublicationPagination(PageNumberPagination):
 class ResearchPagination(PublicationPagination):
 
     def __init__(self):
-        self.tags = None
+        self.buckets = {}
 
     def paginate_queryset(self, queryset, request, view=None):
         page = super(ResearchPagination, self).paginate_queryset(queryset, request, view=view)
         response = queryset.execute(ignore_cache=False)
-        self.tags = response.aggregations['tags'].buckets
+
+        for bucket in BUCKETS:
+            self.buckets[bucket] = response.aggregations[bucket].buckets
 
         return page
 
     def get_paginated_response(self, data):
         response = super(ResearchPagination, self).get_paginated_response(data)
-        response.data['tags'] = TagSerializer(self.tags, many=True).data
+
+        for bucket, values in self.buckets.items():
+            response.data[bucket] = BucketSerializer(values, many=True).data
 
         return response
 
@@ -96,7 +105,8 @@ class ResearchFilter(filters.FilterSet):
         query = self.get_search_query(**data)
         search = PublicationDocument.search(using=using).query(query)
 
-        search.aggs.bucket('tags', Terms(field='tags'))
+        for bucket in BUCKETS:
+            search.aggs.bucket(bucket, Terms(field=bucket))
 
         return search.source(False)
 
