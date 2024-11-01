@@ -6,6 +6,8 @@ from django.core.exceptions import ImproperlyConfigured
 from django.core.management import call_command
 from django.test.runner import DiscoverRunner
 
+from swp.utils.testing import override_dns_name
+
 
 class CosmoCodeTestRunner(DiscoverRunner):
 
@@ -27,3 +29,7 @@ class CosmoCodeTestRunner(DiscoverRunner):
         names = DiscoverRunner.setup_databases(self, **kwargs)
         call_command('loaddata', 'groups.json')
         return names
+
+    def run_tests(self, test_labels, extra_tests=None, **kwargs):
+        with override_dns_name('de.swp.test'):
+            return DiscoverRunner.run_tests(self, test_labels, extra_tests=extra_tests, **kwargs)

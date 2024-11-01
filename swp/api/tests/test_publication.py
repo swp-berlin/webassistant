@@ -5,12 +5,24 @@ from unittest.mock import patch
 from urllib.parse import urlencode
 
 from django import test
+from django.conf import settings
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
 
+from swp.api.viewsets.publication import get_query_vector
 from swp.models import Publication, Monitor
-from swp.utils.testing import login, request, create_user, create_monitor, create_thinktank, add_to_group
+from swp.utils.requests import TimeOutSession
+from swp.utils.testing import (
+    login,
+    request,
+    clear_cache,
+    create_user,
+    add_to_group,
+    create_monitor,
+    create_thinktank,
+    get_random_embedding_vector,
+)
 
 ONE_HOUR = datetime.timedelta(hours=1)
 
@@ -202,6 +214,28 @@ class PublicationTestCase(test.TestCase):
         params = urlencode({'query': 'thinktank.id:'})
 
         request(self, f'{url}?{params}', status_code=400)
+
+    @clear_cache(get_query_vector)
+    def helper_research_full_text(self, success, result, status_code):
+        url = reverse('1:publication-research')
+        params = urlencode({'query': '<COVID-19>'})
+        return_value = success, result
+
+        with patch.object(TimeOutSession, 'json', return_value=return_value) as json:
+            request(self, f'{url}?{params}', status_code=status_code)
+
+        self.assertTrue(json.called)
+
+    def test_research_full_text_success(self):
+        vector = get_random_embedding_vector(settings.EMBEDDING_VECTOR_DIMS)
+
+        self.helper_research_full_text(True, vector, 200)
+
+    def test_research_full_text_unavailable(self):
+        self.helper_research_full_text(None, Exception('unavailable'), 503)
+
+    def test_research_full_text_invalid(self):
+        self.helper_research_full_text(False, 'invalid', 400)
 
     def test_ris(self):
         url = reverse('1:publication-ris')

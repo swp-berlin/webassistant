@@ -1,6 +1,7 @@
 import operator
 
-from functools import reduce
+from contextlib import suppress
+from functools import reduce, lru_cache
 from typing import List
 
 import django_filters as filters
@@ -12,18 +13,19 @@ from django.utils.translation import gettext_lazy as _
 from django_elasticsearch_dsl.search import Search
 from elasticsearch import BadRequestError
 from elasticsearch_dsl.aggs import Terms
-from elasticsearch_dsl.query import Match, QueryString, Range
+from elasticsearch_dsl.query import Match, QueryString, Range, Knn
 
 from rest_framework import viewsets
 from rest_framework.decorators import action
-from rest_framework.exceptions import ValidationError
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import BasePermission, IsAuthenticated
 
+from swp.api.exceptions import InvalidQueryError, FullTextSearchError
 from swp.api.router import default_router
 from swp.api.serializers import PublicationSerializer, ResearchSerializer, BucketSerializer
 from swp.documents import PublicationDocument
 from swp.models import Monitor, Pool, Publication, User
+from swp.utils.embedding import embed_query
 from swp.utils.ris import RISResponse
 from swp.utils.translation import get_language
 
@@ -94,6 +96,20 @@ def get_pool_queryset(request):
     return Pool.objects.can_research(request.user)
 
 
+@lru_cache(maxsize=50)
+def get_query_vector(query: str):
+    success, result = embed_query(query)
+
+    if success:
+        return result
+
+    elif success is None:
+        raise FullTextSearchError from result
+
+    else:
+        raise InvalidQueryError
+
+
 class ResearchFilter(filters.FilterSet):
     start_date = filters.DateFilter(label=_('Start Date'), required=False)
     end_date = filters.DateFilter(label=_('End Date'), required=False)
@@ -108,7 +124,12 @@ class ResearchFilter(filters.FilterSet):
         for bucket in BUCKETS:
             search.aggs.bucket(bucket, Terms(field=bucket))
 
-        return search.source(False)
+        search = search.source(False)
+
+        # Fill response cache, so we avoid an extra count query when paginating.
+        search.execute(ignore_cache=True)
+
+        return search
 
     @staticmethod
     def get_result_queryset(search):
@@ -123,7 +144,8 @@ class ResearchFilter(filters.FilterSet):
             '-score',
         )
 
-    def get_search_query(self, query, pool=None, start_date=None, end_date=None):
+    def get_search_query(self, query: str, pool=None, start_date=None, end_date=None, *, k=50):
+        query, knn = self.parse_query(query)
         language = get_language(request=self.request)
         fields = PublicationDocument.get_search_fields(language)
         query = QueryString(query=query, fields=fields, default_operator='AND')
@@ -142,7 +164,23 @@ class ResearchFilter(filters.FilterSet):
         if pool_query := self.get_pool_query(pool):
             query &= pool_query
 
-        return query
+        if knn is None:
+            return query
+
+        return Knn(field='embedding', k=k, query_vector=get_query_vector(knn), filter=query)
+
+    @staticmethod
+    def parse_query(query: str):
+        query, knn = query.strip(), None
+
+        with suppress(ValueError):
+            start, end = query.index('<'), query.index('>')
+
+            if start == 0:
+                knn = query[1: end].strip() or None
+                query = query[end + 1:].strip() or '*'
+
+        return query, knn
 
     def get_pool_query(self, pool: List[Pool] = None):
         if ids := self.get_pool_ids(self.request.user, pool):
@@ -160,8 +198,6 @@ class ResearchFilter(filters.FilterSet):
 
 @default_router.register('publication', basename='publication')
 class PublicationViewSet(viewsets.ReadOnlyModelViewSet):
-    INVALID_QUERY_CODE = 'invalid-query'
-
     queryset = Publication.objects.select_related('thinktank')
     filterset_class = PublicationFilter
     ordering = ['-last_access', '-created']
@@ -181,10 +217,7 @@ class PublicationViewSet(viewsets.ReadOnlyModelViewSet):
             return self.list(request)
         except BadRequestError as err:
             if err.error == 'search_phase_execution_exception':
-                raise ValidationError({
-                    'detail': _('The query provided is invalid. Please check your input.'),
-                    'code': self.INVALID_QUERY_CODE,
-                })
+                raise InvalidQueryError from err
             raise err
 
     @action(detail=False, permission_classes=[IsAuthenticated & CanResearch])
@@ -192,7 +225,7 @@ class PublicationViewSet(viewsets.ReadOnlyModelViewSet):
         filterset = ResearchFilter(data=request.GET, queryset=Publication.objects, request=request)
 
         search: Search = filterset.qs
-        search.params(preserve_order=True)
+        search = search.params(preserve_order=True)
         search = search.scan()
 
         queryset = ResearchFilter.get_result_queryset(search)

@@ -1,4 +1,4 @@
-from distutils.spawn import find_executable
+import shutil
 
 from .base import *
 
@@ -12,7 +12,7 @@ SECRET_KEY = 'this-is-not-a-secret-key'
 
 ALLOWED_HOSTS = ['*']
 
-if find_executable('mailhog'):
+if shutil.which('mailhog'):
     EMAIL_PORT = 1025
 else:
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

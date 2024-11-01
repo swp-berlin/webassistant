@@ -91,8 +91,8 @@ class PublicationDocument(FieldMixin, Document):
         'name': fields.TextField(),
         'pool': fields.IntegerField(attr='pool_id'),
     })
-    tags = fields.KeywordField()
-    categories = fields.KeywordField()
+    tags = fields.KeywordField(multi=True)
+    categories = fields.KeywordField(multi=True)
 
     class Django:
         model = Publication
@@ -115,6 +115,7 @@ class PublicationDocument(FieldMixin, Document):
             'isbn',
             'created',
             'hash',
+            'embedding',
         ]
         queryset_pagination = 2000
 

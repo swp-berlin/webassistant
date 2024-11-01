@@ -206,6 +206,7 @@ const SearchPage = () => {
             {query && (
                 <SearchQuery query={query} pools={pools} startDate={startDate} endDate={endDate} page={page}>
                     <SearchResult
+                        query={query}
                         selectedTags={tags}
                         selectedCategories={categories}
                         onSelectTag={handleSelectTag}

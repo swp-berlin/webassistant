@@ -9,7 +9,7 @@ from urllib.parse import urlsplit
 
 from asgiref.sync import async_to_sync, sync_to_async
 from django.core.exceptions import NON_FIELD_ERRORS
-from django.db import models, transaction, IntegrityError
+from django.db import models, IntegrityError
 from django.db.models.aggregates import Count
 from django.shortcuts import resolve_url
 from django.utils import timezone
@@ -19,6 +19,7 @@ from django.utils.translation import gettext_lazy as _
 from swp.utils.domain import is_subdomain
 from swp.utils.scraping import Scraper as _Scraper
 from swp.utils.validation import get_field_validation_error
+from swp.utils.spooling import spool_file
 from swp.scraper.types import ScraperType
 
 from .abstract import ActivatableModel, ActivatableQuerySet, UpdateQuerySet, LastModified
@@ -284,6 +285,9 @@ class Scraper(ActivatableModel, LastModified):
         publication.save(force_insert=True)
         publication.categories.add(*self.categories.all())
         self.scraped_publications.add(publication)
+
+        if publication.pdf_path:
+            spool_file(publication, publication.pdf_path, 'pdf')
 
         return True
 

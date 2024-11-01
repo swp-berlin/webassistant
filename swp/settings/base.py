@@ -188,6 +188,11 @@ CELERY_BEAT_SCHEDULE = {
         'task': 'scraper.schedule',
         'schedule': crontab(hour='*', minute=0),
     },
+    'process-embeddings': {
+        'task': 'call-command',
+        'args': ('process-embeddings',),
+        'schedule': crontab(hour=3, minute=15),
+    },
     'error-report.send': {
         'task': 'error-report.send',
         'schedule': crontab(hour=7, minute=30),
@@ -239,6 +244,7 @@ REST_FRAMEWORK = {
         'django_filters.rest_framework.DjangoFilterBackend',
         'rest_framework.filters.OrderingFilter',
     ],
+    'EXCEPTION_HANDLER': 'swp.api.exceptions.exception_handler',
 }
 
 # </editor-fold>
@@ -257,3 +263,13 @@ ZOTERO_API_TIMEOUT = 30
 # </editor-fold>
 
 MAIL_PREVIEW_ENABLED = env('MAIL_PREVIEW_ENABLED', DEBUG)
+
+EMBEDDING_SPOOLING_DIR = BASE_DIR / 'spooling'
+
+EMBEDDING_SPOOLING_KEEP_DONE = env('EMBEDDING_SPOOLING_KEEP_DONE', DEBUG)
+EMBEDDING_SPOOLING_KEEP_LOST = env('EMBEDDING_SPOOLING_KEEP_LOST', DEBUG)
+EMBEDDING_SPOOLING_KEEP_ERROR = env('EMBEDDING_SPOOLING_KEEP_ERROR', True)
+
+EMBEDDING_VECTOR_DIMS = env('EMBEDDING_VECTOR_DIMS', 384)
+
+EMBEDDING_API_HOST = env('EMBEDDING_HOST', 'http://localhost:8080')
