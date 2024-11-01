@@ -8,7 +8,7 @@ import InteractiveTag from './InteractiveTag';
 const Label = _('Filter by Pool:');
 
 const PoolTagCloud = ({selected, onSelect}) => (
-    <PoolQuery canManage>
+    <PoolQuery>
         {pools => pools.length > 0 && (
             <TagCloud label={Label}>
                 {pools.map(({id, name}) => (

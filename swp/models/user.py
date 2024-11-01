@@ -49,10 +49,6 @@ class User(AbstractUser):
     def can_research(self):
         return self.has_perm(f'{self._meta.app_label}.can_research')
 
-    @property
-    def can_research_all_pools(self):
-        return has_perm(self, self.pools.model, 'view')
-
     @cached_property
     def has_pools(self):
         return self.pools.exists()
