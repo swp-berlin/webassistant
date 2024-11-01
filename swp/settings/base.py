@@ -188,6 +188,11 @@ CELERY_BEAT_SCHEDULE = {
         'task': 'scraper.schedule',
         'schedule': crontab(hour='*', minute=0),
     },
+    'process-embeddings': {
+        'task': 'call-command',
+        'args': ('process-embeddings',),
+        'schedule': crontab(hour=3, minute=15),
+    },
     'error-report.send': {
         'task': 'error-report.send',
         'schedule': crontab(hour=7, minute=30),

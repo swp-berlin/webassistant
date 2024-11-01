@@ -5,7 +5,7 @@ from .monitor import (
     send_all_monitor_publications_to_zotero,
     send_publications_to_zotero,
 )
-from .monitoring import monitoring
+from .monitoring import call_command, monitoring
 from .publicationcount import update_publication_count
 from .scraper import preview_scraper
 from .scheduling import run_scraper, schedule_scrapers
