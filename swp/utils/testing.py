@@ -1,6 +1,7 @@
 import random
 import string
 
+from contextlib import contextmanager
 from typing import Union
 
 from django.apps import apps
@@ -121,6 +122,27 @@ def request(test_case: SimpleTestCase, url: str, status_code: int = None, expect
         test_case.assertEqual(response.status_code, status_code, msg=msg)
 
     return response
+
+
+@contextmanager
+def override_dns_name(new_dns_name: str, *, attr='_fqdn'):
+    """
+    This context manager can be used to prefill the DNS name cache to avoid long timeouts on local machines.
+    """
+
+    from django.core.mail import DNS_NAME
+
+    old_dns_name = getattr(DNS_NAME, attr, None)
+
+    setattr(DNS_NAME, attr, new_dns_name)
+
+    try:
+        yield old_dns_name
+    finally:
+        if old_dns_name:
+            setattr(DNS_NAME, attr, old_dns_name)
+        else:
+            delattr(DNS_NAME, attr)
 
 
 def create_monitor(**kwargs) -> Monitor:
