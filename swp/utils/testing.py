@@ -2,7 +2,7 @@ import random
 import string
 
 from contextlib import contextmanager
-from typing import Union
+from typing import Union, Protocol
 
 from django.apps import apps
 from django.conf import settings
@@ -223,3 +223,20 @@ def create_scraper_error(scraper, *, code: str = None, field: str = None, **kwar
     defaults.update(kwargs)
 
     return ScraperError.objects.create(**defaults)
+
+
+def get_random_embedding_vector(dims: int, *, signs=(+1, -1)):
+    return [random.random() * random.choice(signs) for _ in range(dims)]
+
+
+class Cache(Protocol):
+
+    def cache_clear(self): ...
+
+
+@contextmanager
+def clear_cache(cache: Cache):
+    try:
+        yield cache
+    finally:
+        cache.cache_clear()
