@@ -1,120 +1,79 @@
-# Manual Setup Guide
+# Production Setup
 
-The recommended way to set up the SWP web assistant is by using Docker Compose. However, if you prefer to set up the
-application manually, you can follow this guide.
+The following document describes how to set up the application for production.
 
-## Prerequisites
+Assumed is a Debian-based system, but the instructions should be similar for other systems. The application is set up
+in `/var/www/production`.
 
-Ensure you have the following installed on your system:
+## Install dependencies
 
-- Python 3.9
-- PostgreSQL 13
-- Node.js 14
-- Redis 4
-- Elasticsearch 8.4.3
+```bash
+sudo apt-get update
+sudo apt-get install -y $(cat apt-requirements.txt) 
+```
 
-## Step-by-Step Setup
+## Create the database
 
-1. **Clone the Repository**
+```bash
+sudo -i -u postgres
+psql
+  CREATE DATABASE swp;
+  CREATE USER swp WITH PASSWORD 'swp';
+  GRANT ALL PRIVILEGES ON DATABASE swp TO swp;
+  \q
+exit
+```
 
-   Clone the repository to your local machine:
+## Install the application
 
-   ```bash
-   git clone <repository-url>
-   cd <repository-directory>
-   ```
+```bash
+cd /var/www
+git clone https://github.com/swp-berlin/webassistant.git production
+cd production
+git submodule update --init --recursive
+```
 
-2. **Set Up Python Environment**
+## Set up the application
 
-   Create a virtual environment and activate it:
+```bash
+cd /var/www/production
+export PLAYWRIGHT_BROWSERS_PATH=/var/www/production/browsers
+export DJANGO_SETTINGS_MODULE=swp.settings.production
+python3 -m venv env
+source env/bin/activate
+npx npm install
+pip install -r requirements.txt -U --no-input
+python -m playwright install chromium
+python manage.py migrate
+python manage.py compile-translations
+python manage.py generate-schemes
+npm run build
+python manage.py collectstatic --no-input
+```
 
-   ```bash
-   python3 -m venv venv
-   source venv/bin/activate
-   ```
+## Set up dependencies
 
-3. **Install Python Dependencies**
+FIXME:
 
-   Install the required Python packages:
+* UWSGI und Celery Setup?
+* Redis?
+* ElasticSearch?
 
-   ```bash
-   pip install -r requirements.txt
-   ```
 
-4. **Set Up PostgreSQL**
 
-   Create a PostgreSQL database and user:
+## Set up and start the services
 
-   ```bash
-   sudo -u postgres psql
-   CREATE DATABASE swp;
-   CREATE USER swp WITH PASSWORD 'swp';
-   ALTER ROLE swp SET client_encoding TO 'utf8';
-   ALTER ROLE swp SET default_transaction_isolation TO 'read committed';
-   ALTER ROLE swp SET timezone TO 'UTC';
-   GRANT ALL PRIVILEGES ON DATABASE swp TO swp;
-   \q
-   ```
+```bash
+ln -s /var/www/production/conf/systemd/celery@.service /etc/systemd/system/celery@production.service
+ln -s /var/www/production/conf/systemd/celery@.service /etc/systemd/system/scraper@production.service
+systemctl daemon-reload
 
-5. **Set Up Environment Variables**
+systemctl enable swp@production.service
+systemctl enable celery@production.service
+systemctl enable scraper@production.service
 
-   Create a `.env` file in the root directory and add the following environment variables:
-
-   ```env
-   DJANGO_SETTINGS_MODULE=swp.settings.dev
-   ENVIRONMENT=develop
-   DATABASE_HOST=localhost
-   REDIS_HOST=localhost
-   ELASTICSEARCH_HOSTNAME=localhost
-   ELASTICSEARCH_SCHEME=http
-   ELASTICSEARCH_PASSWORD=elastic
-   ```
-
-6. **Run Database Migrations**
-
-   Apply the database migrations:
-
-   ```bash
-   python manage.py migrate
-   ```
-
-7. **Install Node.js Dependencies**
-
-   Install the Node.js dependencies:
-
-   ```bash
-   npm install
-   ```
-
-8. **Run the Application**
-
-   Start the Django development server:
-
-   ```bash
-   python manage.py runserver
-   ```
-
-   In a separate terminal, start the frontend:
-
-   ```bash
-   npm run watch
-   ```
-
-9. **Access the Application**
-
-   Open your web browser and go to `http://localhost:8000` to access the application.
-
-## Additional Commands
-
-- To run Celery workers:
-
-  ```bash
-  celery -A swp worker -B -Q celery,scraper -l DEBUG --purge
-  ```
-
-- To rebuild the search index:
-
-  ```bash
-  python manage.py search_index --rebuild -f
-  ```
+systemctl start swp@production.service
+systemctl start celery@production.service
+systemctl start scraper@production.service
+```
 
