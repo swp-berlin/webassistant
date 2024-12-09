@@ -43,6 +43,7 @@ class DocumentResolver(DataResolver):
 
         fields['pdf_url'] = download.url
         fields['pdf_pages'] = pdf_pages
+        fields['pdf_path'] = file_path
 
     async def get_element(self, node: ElementHandle) -> Optional[ElementHandle]:
         elements = await super().get_element(node)
