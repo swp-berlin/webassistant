@@ -17,6 +17,7 @@ export const calculatePageCount = (total, pageSize) => Math.ceil(total / pageSiz
 
 const SearchResult = props => {
     const {
+        query,
         results,
         tags,
         categories,
@@ -37,7 +38,7 @@ const SearchResult = props => {
 
     return (
         <div className="publication-preview my-4">
-            <SearchResultHeader count={count}>
+            <SearchResultHeader query={query} count={count}>
                 {count > 0 && <DownloadButton href={downloadURL} />}
             </SearchResultHeader>
 

@@ -43,7 +43,7 @@ jobs:
     - name: Runs Elasticsearch
       uses: elastic/elastic-github-actions/elasticsearch@master
       with:
-        stack-version: 8.4.3
+        stack-version: 8.15.3
       env:
         elasticsearch_password: elastic
     - uses: actions/checkout@v3

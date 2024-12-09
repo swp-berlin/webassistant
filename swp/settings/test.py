@@ -43,3 +43,5 @@ CELERY_BROKER_URL = CELERY_RESULT_BACKEND = redis(port=1234)
 
 # Use with care, the corresponding test will rebuild the search index deleting an existing one.
 TEST_REBUILD_SEARCH_INDEX = env('TEST_REBUILD_SEARCH_INDEX', False)
+
+EMBEDDING_API_HOST = 'http://localhost:1234'
