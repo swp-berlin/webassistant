@@ -1,4 +1,5 @@
-from swp.utils.isbn import canonical_isbn, isbn_digits
+from swp.utils.isbn import canonical_isbn
+
 from .field import FieldResolver
 
 

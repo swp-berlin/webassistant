@@ -1,12 +1,14 @@
 import {useController} from 'react-hook-form';
-import {Select} from 'components/forms';
+
 import _ from 'utils/i18n';
 import {getChoices} from 'utils/choices';
 
+import {Select} from 'components/forms';
+
+import BaseResolverForm from './BaseResolverForm';
 import DataResolverForm from './DataResolverForm';
 import AttributeResolverForm from './AttributeResolverForm';
 import StaticResolverForm from './StaticResolverForm';
-
 
 const FieldLabel = _('Field');
 const TypeLabel = _('Type');
@@ -22,7 +24,6 @@ const FieldForms = {
     Static: StaticResolverForm,
 };
 
-
 const getLabel = type => ResolverLabels[type] || FieldLabel;
 
 const FieldResolverForm = props => {
@@ -34,10 +35,10 @@ const FieldResolverForm = props => {
     });
 
     const Form = FieldForms[value];
+    const label = getLabel(field?.type);
 
     return (
-        <div>
-            <h2 className="text-lg mb-4">{getLabel(field?.type)}</h2>
+        <BaseResolverForm label={label}>
             <input name={`${prefix}.type`} type="hidden" value={field?.type} ref={register()} />
             <Select
                 name={`${prefix}.resolver.type`}
@@ -49,7 +50,7 @@ const FieldResolverForm = props => {
                 errors={errors}
             />
             <Form {...props} prefix={`${prefix}.resolver`} field={field?.resolver || {}} />
-        </div>
+        </BaseResolverForm>
     );
 };
 
