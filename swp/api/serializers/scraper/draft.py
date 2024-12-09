@@ -55,6 +55,12 @@ class DocumentResolverDraftSerializer(Serializer):
     selector = CSSSelectorField(allow_blank=True)
 
 
+@ResolverConfigDraftSerializer.register(ResolverType.EMBEDDINGS)
+class EmbeddingsResolverDraftSerializer(Serializer):
+    key = CharField(default='text_content')
+    selector = CSSSelectorField(allow_blank=True)
+
+
 @ResolverConfigDraftSerializer.register(*ResolverTypeField)
 class FieldResolverDraftSerializer(Serializer):
     resolver = ResolverConfigDraftSerializer()

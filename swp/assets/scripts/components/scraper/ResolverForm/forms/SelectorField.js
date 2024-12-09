@@ -1,6 +1,8 @@
-import {TextInput} from 'components/forms';
 import _ from 'utils/i18n';
 
+import {TextInput} from 'components/forms';
+
+const SelectorLabel = _('Selector');
 const SelectorInvalidMessage = _('Please enter a valid css selector');
 
 const isValidSelector = selector => {
@@ -13,7 +15,6 @@ const isValidSelector = selector => {
     return true;
 };
 
-
 const SelectorField = ({register, required, ...props}) => (
     <TextInput
         register={register({validate: {invalid: value => !required || isValidSelector(value)}})}
@@ -23,6 +24,7 @@ const SelectorField = ({register, required, ...props}) => (
 
 SelectorField.defaultProps = {
     required: false,
+    label: SelectorLabel,
 };
 
 export default SelectorField;

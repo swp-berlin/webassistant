@@ -35,6 +35,7 @@ class ResolverType(models.TextChoices):
     STATIC = 'Static', _('Static')
 
     DOCUMENT = 'Document', _('Document')
+    EMBEDDINGS = 'Embeddings', _('Embeddings')
     DOI = 'DOI', _('DOI')
     ISBN = 'ISBN', _('ISBN/ISSN')
 
@@ -58,6 +59,7 @@ class ListResolverType(models.TextChoices):
     AUTHORS = ResolverType.AUTHORS
     TAGS = ResolverType.TAGS
     DOCUMENT = ResolverType.DOCUMENT
+    EMBEDDINGS = ResolverType.EMBEDDINGS
     DOI = ResolverType.DOI
     ISBN = ResolverType.ISBN
 

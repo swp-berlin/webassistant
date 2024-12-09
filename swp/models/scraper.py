@@ -20,7 +20,7 @@ from django.utils.translation import gettext_lazy as _
 from swp.utils.domain import is_subdomain
 from swp.utils.scraping import Scraper as _Scraper
 from swp.utils.validation import get_field_validation_error
-from swp.utils.spooling import spool_file
+from swp.utils.spooling import spool_file, spool_content
 from swp.scraper.types import ScraperType
 
 from .abstract import ActivatableModel, ActivatableQuerySet, UpdateQuerySet, LastModified
@@ -290,6 +290,8 @@ class Scraper(ActivatableModel, LastModified):
         if settings.ENABLE_EMBEDDINGS:
             if publication.pdf_path:
                 spool_file(publication, publication.pdf_path, 'pdf')
+            elif publication.text_content:
+                spool_content(publication, publication.text_content, 'txt')
 
         return True
 

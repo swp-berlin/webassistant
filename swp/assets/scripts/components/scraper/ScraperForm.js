@@ -14,6 +14,7 @@ import ResolverForm from './ResolverForm/ResolverForm';
 import ResolverFormProvider from './ResolverForm/ResolverFormContext';
 import {
     DocumentResolverForm,
+    EmbeddingsResolverForm,
     LinkResolverForm,
     ListResolverForm,
     FieldResolverForm,
@@ -45,6 +46,7 @@ const Forms = {
     Static: FieldResolverForm,
 
     Document: DocumentResolverForm,
+    Embeddings: EmbeddingsResolverForm,
 
     Title: FieldResolverForm,
     Subtitle: FieldResolverForm,
