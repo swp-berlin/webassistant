@@ -129,6 +129,7 @@ class ScraperSerializer(BaseScraperSerializer):
             'interval',
             'is_active',
             'errors',
+            'categories',
         ]
 
     def validate(self, attrs):

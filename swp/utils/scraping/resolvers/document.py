@@ -1,4 +1,4 @@
-from typing import Optional, Tuple, Union
+from typing import Optional, Union
 
 import pikepdf
 
@@ -39,10 +39,11 @@ class DocumentResolver(DataResolver):
         download = await download_info.value
         file_path = await download.path()
 
-        pdf_pages, meta = self.get_meta(file_path)
+        pdf_pages = self.get_pdf_pages(file_path)
 
         fields['pdf_url'] = download.url
         fields['pdf_pages'] = pdf_pages
+        fields['pdf_path'] = file_path
 
     async def get_element(self, node: ElementHandle) -> Optional[ElementHandle]:
         elements = await super().get_element(node)
@@ -52,14 +53,9 @@ class DocumentResolver(DataResolver):
 
         return elements[0] if elements else None
 
-    def get_meta(self, path) -> Tuple[int, dict]:
+    def get_pdf_pages(self, path) -> int:
         try:
-            pdf = pikepdf.open(path)
-        except pikepdf.PdfError as err:
-            raise self.make_error(_('Failed to open pdf: %(error)s') % {'error': str(err)})
-
-        page_count = len(pdf.pages)
-        meta = pdf.docinfo.as_dict()
-        pdf.close()
-
-        return page_count, meta
+            with pikepdf.open(path) as pdf:
+                return len(pdf.pages)
+        except pikepdf.PdfError as error:
+            raise self.make_error(_('Failed to open pdf: %(error)s') % {'error': error})

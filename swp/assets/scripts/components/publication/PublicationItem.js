@@ -8,13 +8,11 @@ import PublicationField from 'components/publication/PublicationField';
 import ExternalLink from 'components/Navigation/ExternalLink';
 import CommaList from 'components/lists/CommaList';
 
-
 const By = _('by');
 const UnknownLabel = _('unknown');
 const ISBNLabel = _('ISBN: %s');
 const PagesLabel = _('%s pages');
 const PDFNotFoundLabel = _('No PDF found');
-
 
 const Authors = ({authors, className, onFilter}) => (
     <span className={classNames('authors', {empty: !authors?.length}, className)}>
@@ -28,10 +26,10 @@ const Authors = ({authors, className, onFilter}) => (
     </span>
 );
 
-const Tags = ({tags, onFilter}) => (
+const TagItems = ({items, onFilter}) => (
     <CommaList
         className="italic text-gray-400"
-        items={tags.map(tag => <Filterable field="tags" text={tag} onFilter={onFilter} />)}
+        items={items.map(item => <Filterable {...item} onFilter={onFilter} />)}
         conjunction=","
     />
 );
@@ -67,6 +65,7 @@ const PublicationItem = ({publication, className, onAddFilter, children, ...prop
         thinktank_name: thinktankName,
         title,
         subtitle,
+        categories,
         tags,
         authors,
         abstract,
@@ -77,6 +76,11 @@ const PublicationItem = ({publication, className, onAddFilter, children, ...prop
         pdf_url: pdfURL,
         pdf_pages: pdfPages,
     } = publication;
+
+    const tagItems = [
+        ...categories.map(({id, name}) => ({key: `cat-${id}`, text: name, field: 'categories'})),
+        ...tags.map((tag, index) => ({key: `tag-${index}`, text: tag, field: 'tags'})),
+    ];
 
     return (
         <article className={classNames('publication-item', className, 'relative')} data-id={id} {...props}>
@@ -121,11 +125,9 @@ const PublicationItem = ({publication, className, onAddFilter, children, ...prop
                 </p>
             </PublicationField>
             <footer>
-                {tags && (
-                    <PublicationField name="tags" value={tags}>
-                        <Tags tags={tags} onFilter={onAddFilter} />
-                    </PublicationField>
-                )}
+                <PublicationField name="tags" value={tags}>
+                    <TagItems items={tagItems} onFilter={onAddFilter} />
+                </PublicationField>
                 {pdfURL ? (
                     <PublicationField name="pdf_url" value={pdfURL}><ExternalLink to={pdfURL} /></PublicationField>
                 ) : <PDFNotFound />}

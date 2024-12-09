@@ -4,13 +4,17 @@ from rest_framework.serializers import ModelSerializer, Serializer
 
 from swp.models import Publication
 
+from .category import CategorySerializer
+
 
 class PublicationSerializer(ModelSerializer):
     thinktank_name = CharField(source='thinktank.name')
+    categories = CategorySerializer(many=True)
 
     class Meta:
         model = Publication
         read_only_fields = [
+            'categories',
             'thinktank_id',
             'thinktank_name',
             'created',
@@ -41,6 +45,6 @@ class ResearchSerializer(PublicationSerializer):
         fields = [*PublicationSerializer.Meta.fields, 'score']
 
 
-class TagSerializer(Serializer):
-    tag = fields.CharField(source='key')
+class BucketSerializer(Serializer):
+    value = fields.CharField(source='key')
     count = fields.IntegerField(source='doc_count')

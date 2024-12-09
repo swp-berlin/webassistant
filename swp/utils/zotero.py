@@ -54,6 +54,7 @@ def get_zotero_publication_data(transfer: ZoteroTransfer) -> Mapping[str, Any]:
     authors = publication.authors or []
     creators = [get_zotero_author_data(author) for author in authors]
     title = f'{publication.title}: {publication.subtitle}' if publication.subtitle else publication.title
+    tags = [*publication.categories.values_list('name', flat=True), *publication.tags]
 
     data = {
         'itemType': 'book',
@@ -77,11 +78,9 @@ def get_zotero_publication_data(transfer: ZoteroTransfer) -> Mapping[str, Any]:
         'archiveLocation': '',
         'libraryCatalog': '',
         'callNumber': '',
-        'rights': ', '.join(publication.tags),  # [SWP-167] TODO Excel says to store under "rights" -- but why?
+        'rights': ', '.join(tags),  # [SWP-167] TODO Excel says to store under "rights" -- but why?
         'extra': f'DOI: {publication.doi}' if publication.doi else '',
-        'tags': [
-            {'tag': tag} for tag in publication.tags
-        ],
+        'tags': [{'tag': tag} for tag in tags],
         'collections': transfer.collection_keys,
         'relations': {}
     }

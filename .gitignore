@@ -17,12 +17,14 @@ dump.rdb
 
 # Application
 *.mo
+/spooling
 /static
 /test-data
 /data
 /ms-playwright
 
 # Database
+*.sql
 *.psql
 
 # Mac

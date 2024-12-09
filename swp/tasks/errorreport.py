@@ -1,3 +1,4 @@
+from django.contrib.postgres.aggregates import ArrayAgg
 from django.core import mail
 from django.core.mail import EmailMultiAlternatives
 from django.db import transaction
@@ -54,25 +55,38 @@ def collect_scraper_errors(using: str = None):
     for error in queryset.select_for_update(nowait=False):
         scraper = error.scraper
         thinktank = scraper.thinktank
+        pool = thinktank.pool
         key = '-'.join(when([error.code, error.field])) or 'general'
 
-        pools[thinktank.pool][thinktank][scraper][key].append(error)
+        pools[pool][thinktank][scraper][key].append(error)
+        pool.error_count = getattr(pool, 'error_count', 0) + 1
 
     return queryset, pools.dict
 
 
 def get_recipients(pools):
-    queryset = get_user_queryset(is_active=True, is_error_recipient=True)
-    users = queryset.exclude(email='').prefetch_related('pools').only('email')
+    queryset = get_user_queryset(
+        is_active=True,
+        is_error_recipient=True,
+    ).exclude(
+        email='',
+    ).annotate(
+        user_pool_ids=ArrayAgg('pools'),
+    ).values_list(
+        'email',
+        'user_pool_ids',
+    )
 
-    for user in users:
-        if user_pools := user.pools.all():
-            user_pools = {pool: pools[pool] for pool in user_pools if pool in pools}
-        else:
+    for email, user_pool_ids in queryset:
+        user_pool_ids = {*user_pool_ids}
+
+        if user_pool_ids == {None}:
             user_pools = pools
+        else:
+            user_pools = {pool: thinktanks for pool, thinktanks in pools.items() if pool.id in user_pool_ids}
 
         if user_pools:
-            yield user.email, user_pools
+            yield email, user_pools
 
 
 def get_message(recipient, pools):

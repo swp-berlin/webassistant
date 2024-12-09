@@ -1,5 +1,6 @@
 from .lookups import *
 from .abstract import ActivatableModel
+from .category import Category
 from .choices import ErrorLevel, Interval
 from .monitor import Monitor
 from .pool import Pool
@@ -14,6 +15,7 @@ from .zotero import ZoteroTransfer
 
 __all__ = [
     'ActivatableModel',
+    'Category',
     'ErrorLevel',
     'Interval',
     'Monitor',

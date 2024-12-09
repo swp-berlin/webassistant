@@ -31,3 +31,7 @@ omit =
     */tests/*.py
     */?sgi.py
     */views/debug.py
+exclude_lines =
+    pragma: no cover
+    raise NotImplementedError
+    if TYPE_CHECKING:

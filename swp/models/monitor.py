@@ -14,7 +14,7 @@ from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 from django.contrib.postgres.fields import ArrayField
 
-from elasticsearch.exceptions import ElasticsearchException
+from elasticsearch import ApiError
 from elasticsearch_dsl.query import QueryString
 
 from sentry_sdk import capture_message, capture_exception
@@ -127,7 +127,7 @@ class Monitor(PublicationCount, ActivatableModel):
 
         try:
             return [result.meta.id for result in search.scan()]
-        except ElasticsearchException as error:
+        except ApiError as error:
             capture_exception(error)
 
         return None

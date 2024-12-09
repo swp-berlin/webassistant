@@ -1,7 +1,8 @@
 import random
 import string
 
-from typing import Union
+from contextlib import contextmanager
+from typing import Union, Protocol
 
 from django.apps import apps
 from django.conf import settings
@@ -123,6 +124,27 @@ def request(test_case: SimpleTestCase, url: str, status_code: int = None, expect
     return response
 
 
+@contextmanager
+def override_dns_name(new_dns_name: str, *, attr='_fqdn'):
+    """
+    This context manager can be used to prefill the DNS name cache to avoid long timeouts on local machines.
+    """
+
+    from django.core.mail import DNS_NAME
+
+    old_dns_name = getattr(DNS_NAME, attr, None)
+
+    setattr(DNS_NAME, attr, new_dns_name)
+
+    try:
+        yield old_dns_name
+    finally:
+        if old_dns_name:
+            setattr(DNS_NAME, attr, old_dns_name)
+        else:
+            delattr(DNS_NAME, attr)
+
+
 def create_monitor(**kwargs) -> Monitor:
     defaults = {
         'pool': Pool(id=0),
@@ -201,3 +223,20 @@ def create_scraper_error(scraper, *, code: str = None, field: str = None, **kwar
     defaults.update(kwargs)
 
     return ScraperError.objects.create(**defaults)
+
+
+def get_random_embedding_vector(dims: int, *, signs=(+1, -1)):
+    return [random.random() * random.choice(signs) for _ in range(dims)]
+
+
+class Cache(Protocol):
+
+    def cache_clear(self): ...
+
+
+@contextmanager
+def clear_cache(cache: Cache):
+    try:
+        yield cache
+    finally:
+        cache.cache_clear()
