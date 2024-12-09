@@ -8,6 +8,7 @@ from typing import Any, Iterable, Mapping, Optional, TYPE_CHECKING
 from urllib.parse import urlsplit
 
 from asgiref.sync import async_to_sync, sync_to_async
+from django.conf import settings
 from django.core.exceptions import NON_FIELD_ERRORS
 from django.db import models, IntegrityError
 from django.db.models.aggregates import Count
@@ -286,8 +287,9 @@ class Scraper(ActivatableModel, LastModified):
         publication.categories.add(*self.categories.all())
         self.scraped_publications.add(publication)
 
-        if publication.pdf_path:
-            spool_file(publication, publication.pdf_path, 'pdf')
+        if settings.ENABLE_EMBEDDINGS:
+            if publication.pdf_path:
+                spool_file(publication, publication.pdf_path, 'pdf')
 
         return True
 
