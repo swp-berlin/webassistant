@@ -92,10 +92,6 @@ class PublicationFilter(filters.FilterSet):
         ]
 
 
-def get_pool_queryset(request):
-    return Pool.objects.can_research(request.user)
-
-
 @lru_cache(maxsize=50)
 def get_query_vector(query: str):
     success, result = embed_query(query)
@@ -114,7 +110,7 @@ class ResearchFilter(filters.FilterSet):
     start_date = filters.DateFilter(label=_('Start Date'), required=False)
     end_date = filters.DateFilter(label=_('End Date'), required=False)
     query = filters.CharFilter(label=_('Query'), required=True)
-    pool = filters.ModelMultipleChoiceFilter(label=_('Pool'), queryset=get_pool_queryset, required=False)
+    pool = filters.ModelMultipleChoiceFilter(label=_('Pool'), queryset=Pool.objects, required=False)
 
     def filter_queryset(self, queryset, *, using=None):
         data = self.form.cleaned_data
@@ -144,7 +140,7 @@ class ResearchFilter(filters.FilterSet):
             '-score',
         )
 
-    def get_search_query(self, query: str, pool=None, start_date=None, end_date=None, *, k=50):
+    def get_search_query(self, query: str, pool: List[Pool] = None, start_date=None, end_date=None, *, k=50):
         query, knn = self.parse_query(query)
         language = get_language(request=self.request)
         fields = PublicationDocument.get_search_fields(language)
@@ -161,8 +157,8 @@ class ResearchFilter(filters.FilterSet):
 
             query &= Range(created=created)
 
-        if pool_query := self.get_pool_query(pool):
-            query &= pool_query
+        if pools := pool:
+            query &= reduce(operator.or_, [Match(thinktank__pool=pool.id) for pool in pools])
 
         if knn is None:
             return query
@@ -181,19 +177,6 @@ class ResearchFilter(filters.FilterSet):
                 query = query[end + 1:].strip() or '*'
 
         return query, knn
-
-    def get_pool_query(self, pool: List[Pool] = None):
-        if ids := self.get_pool_ids(self.request.user, pool):
-            return reduce(operator.or_, [Match(thinktank__pool=pool) for pool in ids])
-
-    @staticmethod
-    def get_pool_ids(user: User, pools: List[Pool] = None):
-        if pools:
-            return [pool.id for pool in pools]
-        elif user.can_research_all_pools:
-            return None
-        else:
-            return user.pools.values_list('id', flat=True)
 
 
 @default_router.register('publication', basename='publication')
