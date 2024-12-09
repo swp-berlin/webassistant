@@ -24,8 +24,8 @@ from swp.api.exceptions import InvalidQueryError, FullTextSearchError
 from swp.api.router import default_router
 from swp.api.serializers import PublicationSerializer, ResearchSerializer, BucketSerializer
 from swp.documents import PublicationDocument
-from swp.models import Monitor, Pool, Publication, User
 from swp.utils.embedding import embed_query
+from swp.models import Monitor, Pool, Publication, Thinktank, Category
 from swp.utils.ris import RISResponse
 from swp.utils.translation import get_language
 
@@ -181,7 +181,10 @@ class ResearchFilter(filters.FilterSet):
 
 @default_router.register('publication', basename='publication')
 class PublicationViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Publication.objects.select_related('thinktank')
+    queryset = Publication.objects.prefetch_related(
+        models.Prefetch('thinktank', Thinktank.objects.only('name')),
+        models.Prefetch('categories', Category.objects.only('name')),
+    )
     filterset_class = PublicationFilter
     ordering = ['-last_access', '-created']
     pagination_class = PublicationPagination
