@@ -23,7 +23,7 @@ class CanManagePool(BasePermission):
 
 @default_router.register('scraper', basename='scraper')
 class ScraperViewSet(RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin, GenericViewSet):
-    queryset = Scraper.objects.prefetch_related('thinktank__pool', 'errors')
+    queryset = Scraper.objects.prefetch_related('thinktank__pool', 'errors', 'categories')
     serializer_class = ScraperDraftSerializer
     permission_classes = [HasScraperPermission & CanManagePool]
 

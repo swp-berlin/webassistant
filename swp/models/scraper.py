@@ -60,6 +60,8 @@ class Scraper(ActivatableModel, LastModified):
 
     data = models.JSONField(_('data'))
 
+    categories = models.ManyToManyField('swp.Category', 'scrapers', verbose_name=_('categories'), blank=True)
+
     start_url = LongURLField(_('start URL'))
     checksum = models.CharField(_('checksum'), max_length=64, unique=True, blank=True, null=True)
 
@@ -280,14 +282,10 @@ class Scraper(ActivatableModel, LastModified):
             return False
 
         publication.save(force_insert=True)
+        publication.categories.add(*self.categories.all())
         self.scraped_publications.add(publication)
 
         return True
-
-    @transaction.atomic
-    def save_publications(self, publications):
-        Publication.objects.bulk_create(publications)
-        self.scraped_publications.add(*publications)
 
     @sync_to_async
     def save_error(self, error: ScraperError):

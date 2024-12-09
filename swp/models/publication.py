@@ -26,16 +26,23 @@ class Publication(models.Model):
     """
 
     thinktank = models.ForeignKey(
-        'swp.Thinktank',
+        to='swp.Thinktank',
         on_delete=models.CASCADE,
         related_name='publications',
         verbose_name=_('think tank'),
     )
 
     scrapers = models.ManyToManyField(
-        'swp.Scraper',
+        to='swp.Scraper',
         related_name='scraped_publications',
         verbose_name=_('scrapers'),
+    )
+
+    categories = models.ManyToManyField(
+        to='swp.Category',
+        related_name='publications',
+        verbose_name=_('categories'),
+        blank=True,
     )
 
     ris_type = models.CharField(_('reference type'), max_length=7, default='ICOMM')  # [TY]

@@ -41,6 +41,6 @@ class ResearchSerializer(PublicationSerializer):
         fields = [*PublicationSerializer.Meta.fields, 'score']
 
 
-class TagSerializer(Serializer):
-    tag = fields.CharField(source='key')
+class BucketSerializer(Serializer):
+    value = fields.CharField(source='key')
     count = fields.IntegerField(source='doc_count')

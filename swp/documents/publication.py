@@ -1,7 +1,8 @@
+from django.db.models import Prefetch
 from django_elasticsearch_dsl import Document, fields
 from django_elasticsearch_dsl.indices import Index
 
-from swp.models import Publication, Thinktank
+from swp.models import Category, Publication, Thinktank
 
 from .fields import ANALYZERS, FieldMixin, get_translation_fields
 
@@ -90,11 +91,14 @@ class PublicationDocument(FieldMixin, Document):
         'name': fields.TextField(),
         'pool': fields.IntegerField(attr='pool_id'),
     })
+    tags = fields.KeywordField()
+    categories = fields.KeywordField()
 
     class Django:
         model = Publication
         related_models = [
             Thinktank,
+            Category,
         ]
         fields = [
             'title',
@@ -109,27 +113,29 @@ class PublicationDocument(FieldMixin, Document):
             'pdf_pages',
             'doi',
             'isbn',
-            'tags',
             'created',
             'hash',
         ]
+        queryset_pagination = 2000
+
+    queryset = Publication.objects.prefetch_related(
+        Prefetch('thinktank', Thinktank.objects.only('name', 'pool')),
+        Prefetch('categories', Category.objects.only('name')),
+    )
 
     def get_queryset(self):
-        return Publication.objects.prefetch_related('thinktank')
+        return self.queryset.all()
+
+    def get_instances_from_related(self, related_instance):
+        if isinstance(related_instance, Thinktank):
+            return self.queryset.filter(thinktank=related_instance)
+
+        if isinstance(related_instance, Category):
+            return self.queryset.filter(categories=related_instance)
 
     @staticmethod
-    def get_instances_from_related(related_instance):
-        if isinstance(related_instance, Thinktank):
-            return related_instance.publications.all()
-
-    @classmethod
-    def to_field(cls, field_name, model_field):
-        if field_name == 'tags':
-            base_field = fields.KeywordField(attr=field_name)
-
-            return fields.ListField(base_field)
-
-        return super().to_field(field_name, model_field)
+    def prepare_categories(instance):
+        return [category.name for category in instance.categories.all()]
 
     def update(self, *args, **kwargs):
         kwargs.setdefault('pipeline', 'language-detection')
