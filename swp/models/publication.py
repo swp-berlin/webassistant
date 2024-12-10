@@ -4,6 +4,7 @@ from django.conf import settings
 from django.db import models
 from django.utils import timezone
 from django.utils.text import Truncator
+from django.utils.timezone import localdate
 from django.utils.translation import gettext_lazy as _, ngettext
 
 from swp.utils.text import when, spaced
@@ -52,6 +53,7 @@ class Publication(models.Model):
     abstract = models.TextField(_('abstract'), blank=True)  # [AB]
     authors = CharArrayField(max_length=MAX_AUTHOR_LENGTH, blank=True, null=True, verbose_name=_('authors'))  # [AU]
     publication_date = models.CharField(_('publication date'), max_length=255, blank=True, default='')  # [PY]
+    publication_date_clean = models.DateField(_('publication date (clean)'), blank=True)
     last_access = models.DateTimeField(_('last access'), default=timezone.now, editable=False)  # [Y2]
     url = LongURLField(_('URL'))  # [UR]
     pdf_url = LongURLField(_('PDF URL'), blank=True)  # [L1]
@@ -99,6 +101,12 @@ class Publication(models.Model):
     @property
     def source(self):
         return self.url or self.pdf_url
+
+    def save(self, **kwargs):
+        if self.publication_date_clean is None:
+            self.publication_date_clean = localdate(self.created)
+
+        return super().save(**kwargs)
 
 
 def joined(values, delimiter, default='–'):

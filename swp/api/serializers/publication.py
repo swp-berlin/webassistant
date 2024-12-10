@@ -1,5 +1,4 @@
 from rest_framework import fields
-from rest_framework.fields import CharField
 from rest_framework.serializers import ModelSerializer, Serializer
 
 from swp.models import Publication
@@ -8,7 +7,7 @@ from .category import CategorySerializer
 
 
 class PublicationSerializer(ModelSerializer):
-    thinktank_name = CharField(source='thinktank.name')
+    thinktank_name = fields.CharField(source='thinktank.name')
     categories = CategorySerializer(many=True)
 
     class Meta:
