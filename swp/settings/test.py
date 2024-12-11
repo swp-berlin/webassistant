@@ -4,7 +4,7 @@ DEBUG = False  # this is the default for tests anyway, just here to make it clea
 
 SECRET_KEY = 'this-is-not-a-secret-key'
 
-TEST_DATA_DIR = BASE_DIR / 'test-data'
+TEST_DATA_DIR = BASE_DIR / 'swp' / 'test' / 'data'
 
 TEMPLATES[0]['DIRS'] = [
     # Add our test templates directory.
