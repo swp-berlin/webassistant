@@ -43,6 +43,7 @@ class PublicationTestCase(test.TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.now = now = timezone.localtime()
+        cls.today = today = timezone.localdate(now)
         cls.user = user = create_user('test@localhost')
 
         add_to_group(user, 'swp-researcher')
@@ -93,6 +94,7 @@ class PublicationTestCase(test.TestCase):
                 thinktank=cls.thinktanks[0],
                 title='Impact of COVID-19 lockdowns on individual mobility and the importance of socioeconomic factors',
                 publication_date='2020-11',
+                publication_date_clean=today,
                 url='https://piie.com/publications/policy-briefs/impact-covid-19-lockdowns-individual-mobility-and-importance',
                 pdf_url='https://www.piie.com/system/files/documents/pb20-14.pdf',
                 pdf_pages=22,
@@ -103,6 +105,7 @@ class PublicationTestCase(test.TestCase):
                 thinktank=cls.thinktanks[1],
                 title='Annual Report 2019',
                 publication_date='2019-04-17',
+                publication_date_clean=today,
                 url='http://en.cdi.org.cn/index.php?option=com_k2&view=item&layout=item&id=707',
                 pdf_url='http://en.cdi.org.cn/publications/annual-report/annual-report-2019/download',
                 pdf_pages=136,
@@ -113,6 +116,7 @@ class PublicationTestCase(test.TestCase):
                 thinktank=cls.thinktanks[1],
                 title='Annual Report 2018',
                 publication_date='2020-05-19',
+                publication_date_clean=today,
                 url='http://en.cdi.org.cn/index.php?option=com_k2&view=item&layout=item&id=529',
                 pdf_url='http://en.cdi.org.cn/publications/annual-report/annual-report-2018/download',
                 pdf_pages=148,

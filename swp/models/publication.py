@@ -4,15 +4,17 @@ from django.conf import settings
 from django.db import models
 from django.utils import timezone
 from django.utils.text import Truncator
+from django.utils.timezone import localdate
 from django.utils.translation import gettext_lazy as _, ngettext
 
 from swp.utils.text import when, spaced
 
+from .abstract import UpdateQuerySet, UpdateModel
 from .constants import MAX_AUTHOR_LENGTH, MAX_TAG_LENGTH, MAX_TITLE_LENGTH
 from .fields import CombinedISBNField, LongURLField, CharArrayField, DenseVectorField
 
 
-class PublicationQuerySet(models.QuerySet):
+class PublicationQuerySet(UpdateQuerySet):
 
     def active(self) -> PublicationQuerySet:
         return self.filter(thinktank__is_active=True)
@@ -21,7 +23,7 @@ class PublicationQuerySet(models.QuerySet):
         return self.filter(thinktank__is_active=False)
 
 
-class Publication(models.Model):
+class Publication(UpdateModel):
     """
     Single published article.
     """
@@ -52,6 +54,7 @@ class Publication(models.Model):
     abstract = models.TextField(_('abstract'), blank=True)  # [AB]
     authors = CharArrayField(max_length=MAX_AUTHOR_LENGTH, blank=True, null=True, verbose_name=_('authors'))  # [AU]
     publication_date = models.CharField(_('publication date'), max_length=255, blank=True, default='')  # [PY]
+    publication_date_clean = models.DateField(_('publication date (clean)'), blank=True)
     last_access = models.DateTimeField(_('last access'), default=timezone.now, editable=False)  # [Y2]
     url = LongURLField(_('URL'))  # [UR]
     pdf_url = LongURLField(_('PDF URL'), blank=True)  # [L1]
@@ -62,6 +65,9 @@ class Publication(models.Model):
     created = models.DateTimeField(_('created'), default=timezone.now, editable=False)
     hash = models.CharField(_('hash'), max_length=32, blank=True, null=True)
     embedding = DenseVectorField(_('embedding'), dims=settings.EMBEDDING_VECTOR_DIMS, null=True, editable=False)
+
+    last_pollux_fetch = models.DateTimeField(_('last pollux fetch'), null=True, editable=False)
+    last_pollux_update = models.DateTimeField(_('last pollux update'), null=True, editable=False)
 
     objects = PublicationQuerySet.as_manager()
 
@@ -99,6 +105,12 @@ class Publication(models.Model):
     @property
     def source(self):
         return self.url or self.pdf_url
+
+    def save(self, **kwargs):
+        if self.publication_date_clean is None:
+            self.publication_date_clean = localdate(self.created)
+
+        return super().save(**kwargs)
 
 
 def joined(values, delimiter, default='–'):

@@ -188,6 +188,10 @@ CELERY_BEAT_SCHEDULE = {
         'task': 'scraper.schedule',
         'schedule': crontab(hour='*', minute=0),
     },
+    'pollux.schedule': {
+        'task': 'pollux.schedule',
+        'schedule': crontab(hour='*', minute=45),
+    },
     'process-embeddings': {
         'task': 'call-command',
         'args': ('process-embeddings',),
@@ -206,6 +210,9 @@ CELERY_TASK_ROUTES = {
         'queue': 'scraper',
     },
 }
+
+if DISABLE_POLLUX := env('DISABLE_POLLUX', False):
+    CELERY_BEAT_SCHEDULE.pop('pollux.schedule')
 
 ELASTICSEARCH_DSL = {
     'default': elasticsearch(debug=DEBUG),

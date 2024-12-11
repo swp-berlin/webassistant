@@ -93,6 +93,7 @@ class PublicationDocument(FieldMixin, Document):
     })
     tags = fields.KeywordField(multi=True)
     categories = fields.KeywordField(multi=True)
+    publication_date = fields.DateField(attr='publication_date_clean')
 
     class Django:
         model = Publication
@@ -106,7 +107,6 @@ class PublicationDocument(FieldMixin, Document):
             'abstract',
             'ris_type',
             'authors',
-            'publication_date',
             'last_access',
             'url',
             'pdf_url',

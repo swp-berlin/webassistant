@@ -1,4 +1,12 @@
-from requests import Session, RequestException
+from requests import Session, RequestException, Response
+
+
+def get_content_type(response: Response):
+    if value := response.headers.get('Content-Type'):
+        if ';' in value:
+            value, params = value.split(';', 1)
+
+        return str.strip(value)
 
 
 class TimeOutSession(Session):

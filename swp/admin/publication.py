@@ -6,6 +6,14 @@ from swp.models import Publication
 @admin.register(Publication)
 class PublicationAdmin(admin.ModelAdmin):
     date_hierarchy = 'created'
+    pollux_fields = [
+        'last_pollux_fetch',
+        'last_pollux_update',
+    ]
+    readonly_fields = [
+        'last_access',
+        *pollux_fields,
+    ]
     fields = [
         'thinktank',
         'scrapers',
@@ -20,7 +28,7 @@ class PublicationAdmin(admin.ModelAdmin):
         'pdf_pages',
         'tags',
         'categories',
-        'last_access',
+        *readonly_fields,
     ]
     raw_id_fields = [
         'thinktank',
@@ -28,9 +36,6 @@ class PublicationAdmin(admin.ModelAdmin):
     ]
     autocomplete_fields = [
         'categories',
-    ]
-    readonly_fields = [
-        'last_access',
     ]
     list_display = [
         'title',
