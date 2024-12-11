@@ -1,0 +1,346 @@
+<searchRetrieveResponse xmlns:marc="https://www.loc.gov/MARC21/slim">
+    <version>2.0</version>
+    <numberOfRecords>24889</numberOfRecords>
+    <records>
+        <record>
+            <marc:datafield tag="001">swp-146562</marc:datafield>
+            <marc:datafield tag="100" ind1="1" ind2="">
+                <marc:subfield code="a">Adam C. Lenton</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="245" ind1="0" ind2="0">
+                <marc:subfield code="a">Do Autocrats Need a Foreign Enemy? Evidence from Fortress Russia</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="260" ind1="" ind2="">
+                <marc:subfield code="b">Belfer Center for Science and International Affairs</marc:subfield>
+                <marc:subfield code="c">20241210</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="653" ind1="" ind2="">
+                <marc:subfield code="a">Article</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="700" ind1="1" ind2="">
+                <marc:subfield code="a">Henry E. Hale</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="856" ind1="4" ind2="">
+                <marc:subfield code="u">https://www.belfercenter.org/research-analysis/do-autocrats-need-foreign-enemy-evidence-fortress-russia</marc:subfield>
+            </marc:datafield>
+        </record>
+        <record>
+            <marc:datafield tag="001">swp-146561</marc:datafield>
+            <marc:datafield tag="100" ind1="1" ind2="">
+                <marc:subfield code="a">Dominic Tierney</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="245" ind1="0" ind2="0">
+                <marc:subfield code="a">The Iron Dice: Fatalism and War</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="260" ind1="" ind2="">
+                <marc:subfield code="b">Belfer Center for Science and International Affairs</marc:subfield>
+                <marc:subfield code="c">20241210</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="653" ind1="" ind2="">
+                <marc:subfield code="a">Article</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="856" ind1="4" ind2="">
+                <marc:subfield code="u">https://www.belfercenter.org/research-analysis/iron-dice-fatalism-and-war</marc:subfield>
+            </marc:datafield>
+        </record>
+        <record>
+            <marc:datafield tag="001">swp-146564</marc:datafield>
+            <marc:datafield tag="100" ind1="1" ind2="">
+                <marc:subfield code="a">Reid Pauly</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="245" ind1="0" ind2="0">
+                <marc:subfield code="a">Damned If They Do, Damned If They Don't: The Assurance Dilemma in International Coercion</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="260" ind1="" ind2="">
+                <marc:subfield code="b">Belfer Center for Science and International Affairs</marc:subfield>
+                <marc:subfield code="c">20241210</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="653" ind1="" ind2="">
+                <marc:subfield code="a">Article</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="856" ind1="4" ind2="">
+                <marc:subfield code="u">https://www.belfercenter.org/research-analysis/damned-if-they-do-damned-if-they-dont-assurance-dilemma-international-coercion</marc:subfield>
+            </marc:datafield>
+        </record>
+        <record>
+            <marc:datafield tag="001">swp-146565</marc:datafield>
+            <marc:datafield tag="100" ind1="1" ind2="">
+                <marc:subfield code="a">Bryan Popoola</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="245" ind1="0" ind2="0">
+                <marc:subfield code="a">Stabilizing Civil Wars without Peacekeeping: Evidence from South Asia</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="260" ind1="" ind2="">
+                <marc:subfield code="b">Belfer Center for Science and International Affairs</marc:subfield>
+                <marc:subfield code="c">20241210</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="653" ind1="" ind2="">
+                <marc:subfield code="a">Article</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="700" ind1="1" ind2="">
+                <marc:subfield code="a">Paul Staniland</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="700" ind1="1" ind2="">
+                <marc:subfield code="a">Basil Bastaki</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="856" ind1="4" ind2="">
+                <marc:subfield code="u">https://www.belfercenter.org/research-analysis/stabilizing-civil-wars-without-peacekeeping-evidence-south-asia</marc:subfield>
+            </marc:datafield>
+        </record>
+        <record>
+            <marc:datafield tag="001">swp-154657</marc:datafield>
+            <marc:datafield tag="100" ind1="1" ind2="">
+                <marc:subfield code="a">Eric Van Nostrand (US Treasury)</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="245" ind1="0" ind2="0">
+                <marc:subfield code="a">Doing business in America and the global economic outlook with US Treasury's Van Nostrand</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="260" ind1="" ind2="">
+                <marc:subfield code="b">Peterson Institute for International Economics</marc:subfield>
+                <marc:subfield code="c">20241113</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="653" ind1="" ind2="">
+                <marc:subfield code="a">Event</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="653" ind1="" ind2="">
+                <marc:subfield code="a">Klima</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="856" ind1="4" ind2="">
+                <marc:subfield code="u">https://www.piie.com/events/2024/doing-business-america-and-global-economic-outlook-us-treasurys-van-nostrand</marc:subfield>
+            </marc:datafield>
+        </record>
+        <record>
+            <marc:datafield tag="001">swp-154865</marc:datafield>
+            <marc:datafield tag="245" ind1="0" ind2="0">
+                <marc:subfield code="a">Beyond the buzzword: Collaboration for transformed education systems</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="260" ind1="" ind2="">
+                <marc:subfield code="b">Brookings Institution</marc:subfield>
+                <marc:subfield code="c">20241113</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="653" ind1="" ind2="">
+                <marc:subfield code="a">Upcoming Event</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="653" ind1="" ind2="">
+                <marc:subfield code="a">Klima</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="856" ind1="4" ind2="">
+                <marc:subfield code="u">https://www.brookings.edu/events/beyond-the-buzzword/</marc:subfield>
+            </marc:datafield>
+        </record>
+        <record>
+            <marc:datafield tag="001">swp-156184</marc:datafield>
+            <marc:datafield tag="100" ind1="1" ind2="">
+                <marc:subfield code="a">Timo Smit</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="245" ind1="0" ind2="0">
+                <marc:subfield code="a">Towards a More Strategic Civilian CSDP: Strengthening EU Civilian Crisis Management in a New Era of Geopolitics and Risk</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="260" ind1="" ind2="">
+                <marc:subfield code="b">Stockholm International Peace Research Institute (SIPRI)</marc:subfield>
+                <marc:subfield code="c">20241110</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="520" ind1="" ind2="">
+                <marc:subfield code="a">In the wake of Russia's full-scale invasion of Ukraine, European Union (EU) member states have taken decisions that have shifted the focus of civilian Common Security and Defence Policy (CSDP) more firmly to its Eastern Neighbourhood. This shift has raised the geopolitical profile and relevance of civilian CSDP, but it has also increased the stakes. Although civilian CSDP has become more geopolitical, it has not necessarily become more strategic, as decision making and action remain ad hoc and reactive. This raises questions about the EU's capacity to use civilian CSDP more strategically and beyond current levels.<br />This paper identifies three strategic priorities for civilian CSDP missions: equipping missions to deliver on mandates; where possible, supporting EU candidate countries in the accession process; and enhancing the ability of missions to react and adapt to evolving needs or emerging crises.<br />The EU and its member states have taken steps to enhance their ability to act and strengthen civilian CSDP under the Civilian CSDP Compact. However, these efforts have mainly focused on building capabilities, which are essential but not enough on their own. A more strategic civilian CSDP requires stronger political control and strategic direction from EU member states and that all key enablers—capabilities, decision making and budget—are addressed to increase its preparedness and strategic potential.</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="653" ind1="" ind2="">
+                <marc:subfield code="a">Policy reports</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="856" ind1="4" ind2="">
+                <marc:subfield code="u">https://www.sipri.org/publications/2024/policy-reports/towards-more-strategic-civilian-csdp-strengthening-eu-civilian-crisis-management-new-era-geopolitics</marc:subfield>
+            </marc:datafield>
+        </record>
+        <record>
+            <marc:datafield tag="001">swp-156287</marc:datafield>
+            <marc:datafield tag="100" ind1="1" ind2="">
+                <marc:subfield code="a">Simon Hankinson</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="245" ind1="0" ind2="0">
+                <marc:subfield code="a">Is the State Department Using "DEIA" to Discriminate Against Men?</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="260" ind1="" ind2="">
+                <marc:subfield code="b">Heritage Foundation</marc:subfield>
+                <marc:subfield code="c">20241112</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="653" ind1="" ind2="">
+                <marc:subfield code="a">Report</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="856" ind1="4" ind2="">
+                <marc:subfield code="u">https://www.heritage.org/gender/report/the-state-department-using-deia-discriminate-against-men</marc:subfield>
+            </marc:datafield>
+        </record>
+        <record>
+            <marc:datafield tag="001">swp-156286</marc:datafield>
+            <marc:datafield tag="100" ind1="1" ind2="">
+                <marc:subfield code="a">Press and information team of the Delegation to the Argentina</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="245" ind1="0" ind2="0">
+                <marc:subfield code="a">Concurso de cortos para jóvenes de Argentina: ¡Felicitaciones a los cortos ganadores!</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="260" ind1="" ind2="">
+                <marc:subfield code="b">EU External Action Service | Press Releases</marc:subfield>
+                <marc:subfield code="c">20241112</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="653" ind1="" ind2="">
+                <marc:subfield code="a">Mena</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="653" ind1="" ind2="">
+                <marc:subfield code="a">Afrika</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="653" ind1="" ind2="">
+                <marc:subfield code="a">LA</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="856" ind1="4" ind2="">
+                <marc:subfield code="u">https://www.eeas.europa.eu/delegations/argentina/concurso-de-cortos-para-j%C3%B3venes-de-argentina-%C2%A1felicitaciones-los-cortos-ganadores_und_en</marc:subfield>
+            </marc:datafield>
+        </record>
+        <record>
+            <marc:datafield tag="001">swp-156248</marc:datafield>
+            <marc:datafield tag="100" ind1="1" ind2="">
+                <marc:subfield code="a">Danielle Resnick</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="245" ind1="0" ind2="0">
+                <marc:subfield code="a">Democratic resilience in Africa: Lessons from 2024 elections</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="260" ind1="" ind2="">
+                <marc:subfield code="b">Brookings Institution</marc:subfield>
+                <marc:subfield code="c">20241112</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="653" ind1="" ind2="">
+                <marc:subfield code="a">Commentary</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="653" ind1="" ind2="">
+                <marc:subfield code="a">Klima</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="700" ind1="1" ind2="">
+                <marc:subfield code="a">Landry Signé</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="856" ind1="4" ind2="">
+                <marc:subfield code="u">https://www.brookings.edu/articles/democratic-resilience-in-africa-lessons-from-2024-elections/</marc:subfield>
+            </marc:datafield>
+        </record>
+        <record>
+            <marc:datafield tag="001">swp-156226</marc:datafield>
+            <marc:datafield tag="100" ind1="1" ind2="">
+                <marc:subfield code="a">Federico Steinberg</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="245" ind1="0" ind2="0">
+                <marc:subfield code="a">Qué esperar de la segunda presidencia de Trump</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="260" ind1="" ind2="">
+                <marc:subfield code="b">Real Instituto Elcano</marc:subfield>
+                <marc:subfield code="c">20241112</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="653" ind1="" ind2="">
+                <marc:subfield code="a">Comentario</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="856" ind1="4" ind2="">
+                <marc:subfield code="u">https://www.realinstitutoelcano.org/comentarios/que-esperar-de-la-segunda-presidencia-de-trump/</marc:subfield>
+            </marc:datafield>
+        </record>
+        <record>
+            <marc:datafield tag="001">swp-156165</marc:datafield>
+            <marc:datafield tag="100" ind1="1" ind2="">
+                <marc:subfield code="a">This updates a previous edition</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="245" ind1="0" ind2="0">
+                <marc:subfield code="a">Reinforcing Europe's defence industry</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="260" ind1="" ind2="">
+                <marc:subfield code="b">European Parliamentary Research Service</marc:subfield>
+                <marc:subfield code="c">20241112</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="520" ind1="" ind2="">
+                <marc:subfield code="a">The European defence industry comprises a number of large multinational companies, mid-caps and a large number of small and medium-sized enterprises (SMEs).</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="653" ind1="" ind2="">
+                <marc:subfield code="a">Asien</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="700" ind1="1" ind2="">
+                <marc:subfield code="a">published in 2023</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="700" ind1="1" ind2="">
+                <marc:subfield code="a">Sebastian Clapp</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="856" ind1="4" ind2="">
+                <marc:subfield code="u">https://epthinktank.eu/2024/11/12/reinforcing-europes-defence-industry/</marc:subfield>
+            </marc:datafield>
+        </record>
+        <record>
+            <marc:datafield tag="001">swp-154672</marc:datafield>
+            <marc:datafield tag="245" ind1="0" ind2="0">
+                <marc:subfield code="a">What happened on Nov 5: A deep dive into the results of the presidential and congressional races</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="260" ind1="" ind2="">
+                <marc:subfield code="b">Brookings Institution</marc:subfield>
+                <marc:subfield code="c">20241112</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="653" ind1="" ind2="">
+                <marc:subfield code="a">Upcoming Event</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="653" ind1="" ind2="">
+                <marc:subfield code="a">Klima</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="856" ind1="4" ind2="">
+                <marc:subfield code="u">https://www.brookings.edu/events/what-happened-on-nov-5-a-deep-dive-into-the-results-of-the-presidential-and-congressional-races/</marc:subfield>
+            </marc:datafield>
+        </record>
+        <record>
+            <marc:datafield tag="001">swp-156129</marc:datafield>
+            <marc:datafield tag="100" ind1="1" ind2="">
+                <marc:subfield code="a">Press and information team of the Delegation to INDIA and BHUTAN</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="245" ind1="0" ind2="0">
+                <marc:subfield code="a">EU-India jointly discuss Assessment and Monitoring tools for marine plastic litter under the EU-India Trade and Technology Council</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="260" ind1="" ind2="">
+                <marc:subfield code="b">EU External Action Service | Press Releases</marc:subfield>
+                <marc:subfield code="c">20241112</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="653" ind1="" ind2="">
+                <marc:subfield code="a">Mena</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="653" ind1="" ind2="">
+                <marc:subfield code="a">Afrika</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="653" ind1="" ind2="">
+                <marc:subfield code="a">LA</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="856" ind1="4" ind2="">
+                <marc:subfield code="u">https://www.eeas.europa.eu/delegations/india/eu-india-jointly-discuss-assessment-and-monitoring-tools-marine-plastic-litter-under-eu-india-trade_en</marc:subfield>
+            </marc:datafield>
+        </record>
+        <record>
+            <marc:datafield tag="001">swp-156146</marc:datafield>
+            <marc:datafield tag="100" ind1="1" ind2="">
+                <marc:subfield code="a">Matthew Savill</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="245" ind1="0" ind2="0">
+                <marc:subfield code="a">Starmer's New National Security Adviser: A Consequential Choice</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="260" ind1="" ind2="">
+                <marc:subfield code="b">Royal United Services Institute</marc:subfield>
+                <marc:subfield code="c">20241112</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="653" ind1="" ind2="">
+                <marc:subfield code="a">NA</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="653" ind1="" ind2="">
+                <marc:subfield code="a">Asien</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="653" ind1="" ind2="">
+                <marc:subfield code="a">Mena</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="653" ind1="" ind2="">
+                <marc:subfield code="a">CATS</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="653" ind1="" ind2="">
+                <marc:subfield code="a">STAND</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="856" ind1="4" ind2="">
+                <marc:subfield code="u">https://rusi.org/explore-our-research/publications/commentary/starmers-new-national-security-adviser-consequential-choice</marc:subfield>
+            </marc:datafield>
+        </record>
+    </records>
+    <nextRecordPosition>16</nextRecordPosition>
+</searchRetrieveResponse>
