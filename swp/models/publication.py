@@ -65,6 +65,9 @@ class Publication(models.Model):
     hash = models.CharField(_('hash'), max_length=32, blank=True, null=True)
     embedding = DenseVectorField(_('embedding'), dims=settings.EMBEDDING_VECTOR_DIMS, null=True, editable=False)
 
+    last_pollux_fetch = models.DateTimeField(_('last pollux fetch'), null=True, editable=False)
+    last_pollux_update = models.DateTimeField(_('last pollux update'), null=True, editable=False)
+
     objects = PublicationQuerySet.as_manager()
 
     class Meta:
