@@ -43,7 +43,7 @@ class PublicationTestCase(test.TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.now = now = timezone.localtime()
-        cls.now = today = timezone.localdate(now)
+        cls.today = today = timezone.localdate(now)
         cls.user = user = create_user('test@localhost')
 
         add_to_group(user, 'swp-researcher')
