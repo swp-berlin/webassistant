@@ -9,11 +9,12 @@ from django.utils.translation import gettext_lazy as _, ngettext
 
 from swp.utils.text import when, spaced
 
+from .abstract import UpdateQuerySet, UpdateModel
 from .constants import MAX_AUTHOR_LENGTH, MAX_TAG_LENGTH, MAX_TITLE_LENGTH
 from .fields import CombinedISBNField, LongURLField, CharArrayField, DenseVectorField
 
 
-class PublicationQuerySet(models.QuerySet):
+class PublicationQuerySet(UpdateQuerySet):
 
     def active(self) -> PublicationQuerySet:
         return self.filter(thinktank__is_active=True)
@@ -22,7 +23,7 @@ class PublicationQuerySet(models.QuerySet):
         return self.filter(thinktank__is_active=False)
 
 
-class Publication(models.Model):
+class Publication(UpdateModel):
     """
     Single published article.
     """
