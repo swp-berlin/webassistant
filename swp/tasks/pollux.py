@@ -70,10 +70,14 @@ def update(record: Record, publication_id: int = None, *, using: str = None, now
     if authors := get_authors(record):
         updates['authors'] = authors
 
-    if Publication.objects.using(using).filter(id=publication_id).update(**updates):
-        return f'Updated publication {publication_id}.'
-    else:
+    try:
+        publication = Publication.objects.using(using).get(id=publication_id)
+    except Publication.DoesNotExist:
         return f'Publication with id {publication_id} does not exist.'
+
+    publication.update(**updates)
+
+    return f'Updated publication {publication_id}.'
 
 
 @app.task(name='pollux.update-all', rate_limit='1/s')
