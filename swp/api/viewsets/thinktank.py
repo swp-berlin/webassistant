@@ -1,3 +1,4 @@
+from django.contrib.postgres.aggregates import StringAgg
 from django.db.models import Prefetch
 
 from rest_framework.decorators import action
@@ -32,7 +33,9 @@ class ThinktankViewSet(ModelViewSet):
 
         if self.action == 'retrieve':
             queryset = queryset.prefetch_related(
-                Prefetch('scrapers', Scraper.objects.annotate_error_count()),
+                Prefetch('scrapers', Scraper.objects.annotate_error_count().annotate(
+                    categories_list=StringAgg('categories__name', ', ', distinct=True),
+                )),
             )
 
         return queryset
