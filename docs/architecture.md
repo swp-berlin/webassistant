@@ -13,6 +13,8 @@ The system delivers results to customers via mail and direct Zotero export.
 
 Data is enriched by polling updates from Pollux.
 
+A separate [machine learning service](https://github.com/swp-berlin/mls) is used to create embeddings for full text.
+
 ```mermaid
 flowchart LR
     U([Users])
@@ -26,6 +28,7 @@ flowchart LR
     Z([Zotero])
     P([Pollux])
     Rc([Customers])
+    Mls([Machine Learning Service])
     Dj -- Rest API --> R <-- GUI --> U
     Dj <--> Pg
     Dj <--> E
@@ -35,6 +38,7 @@ flowchart LR
     Dj -- Mails --> Rc
     Dj -- 3rd party API --> Z
     P -- 3rd party API --> Dj
+    Dj <--> Mls
 
     subgraph Internet
         W
@@ -53,6 +57,10 @@ flowchart LR
             Rd
             E
         end
+    end
+    
+    subgraph Services 
+        Mls
     end
 ```
 
