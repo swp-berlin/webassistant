@@ -122,11 +122,20 @@ msgstr ""
 msgid "Publication Lists"
 msgstr ""
 
+msgid "Filter by Tag:"
+msgstr ""
+
+msgid "Filter by Category:"
+msgstr ""
+
 msgid "No publications found"
 msgstr ""
 
-msgid "Filter by Tag:"
-msgstr ""
+#, javascript-format
+msgid "%s Publication by relevance"
+msgid_plural "%s Publications by relevance"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "Activate"
 msgstr ""
@@ -374,10 +383,10 @@ msgstr ""
 msgid "Attribute"
 msgstr ""
 
-msgid "Selector"
+msgid "Document"
 msgstr ""
 
-msgid "Document"
+msgid "Full-text"
 msgstr ""
 
 msgid "Field"
@@ -387,6 +396,9 @@ msgid "Type"
 msgstr ""
 
 msgid "Link"
+msgstr ""
+
+msgid "Selector"
 msgstr ""
 
 msgid "List"
@@ -438,6 +450,9 @@ msgid "Start URL"
 msgstr ""
 
 msgid "Scraper Type"
+msgstr ""
+
+msgid "Categories"
 msgstr ""
 
 msgid "Config"

@@ -35,7 +35,7 @@ class ResolverType(models.TextChoices):
     STATIC = 'Static', _('Static')
 
     DOCUMENT = 'Document', _('Document')
-    EMBEDDINGS = 'Embeddings', _('Embeddings')
+    EMBEDDINGS = 'Embeddings', _('Full-text')
     DOI = 'DOI', _('DOI')
     ISBN = 'ISBN', _('ISBN/ISSN')
 
