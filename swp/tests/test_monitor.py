@@ -60,6 +60,7 @@ class MonitorTestCase(test.TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.now = now = timezone.localtime()
+        cls.today = today = timezone.localdate(now)
 
         cls.monitor = create_monitor(
             name='PIIE Monitor',
@@ -97,6 +98,7 @@ class MonitorTestCase(test.TestCase):
                 title='Impact of COVID-19 lockdowns on individual mobility and the importance of socioeconomic factors',
                 authors=['A. L. Phabet', 'Dr. Dyslexia'],
                 publication_date='2020-11',
+                publication_date_clean=today,
                 url='https://piie.com/publications/policy-briefs/impact-covid-19-lockdowns-individual-mobility-and-importance',
                 pdf_url='https://www.piie.com/system/files/documents/pb20-14.pdf',
                 pdf_pages=22,
@@ -107,6 +109,7 @@ class MonitorTestCase(test.TestCase):
                 thinktank=thinktank,
                 title='Already accessed publication',
                 publication_date='2021',
+                publication_date_clean=today,
                 url='https://example.org',
                 isbn='978-3-16-148410-0',
                 doi='10.1000/182',

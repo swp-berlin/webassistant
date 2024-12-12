@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<searchRetrieveResponse xmlns:marc="https://www.loc.gov/MARC21/slim">
+    <version>2.0</version>
+    <numberOfRecords>1</numberOfRecords>
+    <records>
+        <record>
+            <marc:datafield tag="001">swp-%(id-1)s</marc:datafield>
+            <marc:datafield tag="100" ind1="1" ind2="">
+                <marc:subfield code="a">Adam C. Lenton</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="245" ind1="0" ind2="0">
+                <marc:subfield code="a">Do Autocrats Need a Foreign Enemy? Evidence from Fortress Russia</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="260" ind1="" ind2="">
+                <marc:subfield code="b">Belfer Center for Science and International Affairs</marc:subfield>
+                <marc:subfield code="c">20241210</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="653" ind1="" ind2="">
+                <marc:subfield code="a">Article</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="700" ind1="1" ind2="">
+                <marc:subfield code="a">Henry E. Hale</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="856" ind1="4" ind2="">
+                <marc:subfield code="u">
+                    https://www.belfercenter.org/research-analysis/do-autocrats-need-foreign-enemy-evidence-fortress-russia
+                </marc:subfield>
+            </marc:datafield>
+        </record>
+    </records>
+</searchRetrieveResponse>

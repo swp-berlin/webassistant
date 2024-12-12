@@ -16,8 +16,21 @@ class UpdateQuerySet(models.QuerySet):
     QuerySet for locking row during update.
     """
 
-    def get_for_update(self, *, nowait: bool = False, **kwargs):
-        return self.select_for_update(nowait=nowait).get(**kwargs)
+    def get_for_update(self, *, nowait=False, skip_locked=False, of=(), **kwargs):
+        return self.select_for_update(nowait=nowait, skip_locked=skip_locked, of=of).get(**kwargs)
+
+
+class UpdateModel(models.Model):
+    objects = UpdateQuerySet.as_manager()
+
+    class Meta:
+        abstract = True
+
+    def update(self, *, using=None, **values):
+        for field, value in values.items():
+            setattr(self, field, value)
+
+        return self.save(update_fields=[*values], using=using)
 
 
 class ActivatableQuerySet(UpdateQuerySet):
@@ -74,6 +87,7 @@ class ActivatableModel(models.Model, metaclass=ActivatableModelBase):
     """
     Mixin for (de)activatable models.
     """
+
     is_active = models.BooleanField(_('active'), default=False)
 
     objects = ActivatableManager()
@@ -119,17 +133,9 @@ class ActivatableModel(models.Model, metaclass=ActivatableModelBase):
         self.set_active(False)
 
 
-class UpdateQuerySet(models.QuerySet):
-
-    def get_for_update(self, *, nowait=False, **kwargs):
-        return self.select_for_update(nowait=nowait).get(**kwargs)
-
-
-class LastModified(models.Model):
+class LastModified(UpdateModel):
     created = models.DateTimeField(_('created'), default=timezone.now, editable=False)
     last_modified = models.DateTimeField(_('last modified'), auto_now=True)
-
-    objects = UpdateQuerySet.as_manager()
 
     class Meta:
         abstract = True

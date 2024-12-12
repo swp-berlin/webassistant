@@ -34,6 +34,7 @@ class ThinktankTestCase(test.TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.now = now = timezone.localtime()
+        cls.today = today = timezone.localtime(now)
         cls.user = User.objects.get_by_natural_key('admin@localhost')
 
         cls.thinktanks = [
@@ -95,6 +96,7 @@ class ThinktankTestCase(test.TestCase):
                 thinktank=cls.thinktanks[1],
                 title='Annual Report 2019',
                 publication_date='2019-04-17',
+                publication_date_clean=today,
                 url='http://en.cdi.org.cn/index.php?option=com_k2&view=item&layout=item&id=707',
                 pdf_url='http://en.cdi.org.cn/publications/annual-report/annual-report-2019/download',
                 pdf_pages=136,
@@ -103,6 +105,7 @@ class ThinktankTestCase(test.TestCase):
                 thinktank=cls.thinktanks[1],
                 title='Annual Report 2018',
                 publication_date='2020-05-19',
+                publication_date_clean=today,
                 url='http://en.cdi.org.cn/index.php?option=com_k2&view=item&layout=item&id=529',
                 pdf_url='http://en.cdi.org.cn/publications/annual-report/annual-report-2018/download',
                 pdf_pages=148,

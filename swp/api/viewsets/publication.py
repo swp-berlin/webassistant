@@ -147,15 +147,15 @@ class ResearchFilter(filters.FilterSet):
         query = QueryString(query=query, fields=fields, default_operator='AND')
 
         if start_date or end_date:
-            created = {'time_zone': settings.TIME_ZONE}
+            publication_date = {'time_zone': settings.TIME_ZONE}
 
             if start_date:
-                created['gte'] = start_date
+                publication_date['gte'] = start_date
 
             if end_date:
-                created['lte'] = end_date
+                publication_date['lte'] = end_date
 
-            query &= Range(created=created)
+            query &= Range(publication_date=publication_date)
 
         if pools := pool:
             query &= reduce(operator.or_, [Match(thinktank__pool=pool.id) for pool in pools])
