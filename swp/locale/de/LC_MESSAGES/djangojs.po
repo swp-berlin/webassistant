@@ -122,11 +122,20 @@ msgstr "Hilfe"
 msgid "Publication Lists"
 msgstr "Publikationslisten"
 
+msgid "Filter by Tag:"
+msgstr "Nach Tag filtern:"
+
+msgid "Filter by Category:"
+msgstr "Nach Kategorie filtern:"
+
 msgid "No publications found"
 msgstr "Keine Publikationen gefunden"
 
-msgid "Filter by Tag:"
-msgstr "Nach Tag filtern:"
+#, javascript-format
+msgid "%s Publication by relevance"
+msgid_plural "%s Publications by relevance"
+msgstr[0] "%s Publikation nach Relevanz"
+msgstr[1] "%s Publikationen nach Relevanz"
 
 msgid "Activate"
 msgstr "Aktivieren"
@@ -374,11 +383,11 @@ msgstr "Resolver-Typ %(type)s wird nicht unterstützt"
 msgid "Attribute"
 msgstr "Attribut"
 
-msgid "Selector"
-msgstr "Selektor"
-
 msgid "Document"
 msgstr "Dokument"
+
+msgid "Full-text"
+msgstr "Volltext"
 
 msgid "Field"
 msgstr "Feld"
@@ -388,6 +397,9 @@ msgstr "Typ"
 
 msgid "Link"
 msgstr "Link"
+
+msgid "Selector"
+msgstr "Selektor"
 
 msgid "List"
 msgstr "Liste"
@@ -439,6 +451,9 @@ msgstr "Start-URL"
 
 msgid "Scraper Type"
 msgstr "Scraper-Typ"
+
+msgid "Categories"
+msgstr ""
 
 msgid "Config"
 msgstr "Konfiguration"

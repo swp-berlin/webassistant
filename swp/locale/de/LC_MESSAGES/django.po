@@ -48,6 +48,9 @@ msgstr "Zuletzt Geändert"
 msgid "pool"
 msgstr "Pool"
 
+msgid "start URL"
+msgstr "Start-URL"
+
 #, python-format
 msgid "%(count)s scraper could not be activated because its start url is not a subdomain of its thinktank's domain."
 msgid_plural "%(count)s scrapers could not be activated because their start url is not a subdomain of their thinktank's domain."
@@ -87,6 +90,12 @@ msgstr "Berechtigungen"
 msgid "Important dates"
 msgstr "Wichtige Daten"
 
+msgid "The query provided is invalid. Please check your input."
+msgstr "Der eingegebene Suchbegriff ist ungültig. Bitte überprüfen Sie Ihre Eingabe."
+
+msgid "The full text search is currently unavailable. Please try again later."
+msgstr ""
+
 msgid "Internal Error"
 msgstr "Interner Fehler"
 
@@ -125,9 +134,6 @@ msgstr "Suchbegriff"
 msgid "Pool"
 msgstr "Pool"
 
-msgid "The query provided is invalid. Please check your input."
-msgstr "Der eingegebene Suchbegriff ist ungültig. Bitte überprüfen Sie Ihre Eingabe."
-
 msgid "title"
 msgstr "Titel"
 
@@ -136,6 +142,12 @@ msgstr "Untertitel"
 
 msgid "authors"
 msgstr "Autoren"
+
+msgid "PDF path"
+msgstr ""
+
+msgid "Text Content"
+msgstr ""
 
 #, python-format
 msgid "Missing %s permission"
@@ -152,6 +164,15 @@ msgstr "erzeugt am"
 
 msgid "last modified"
 msgstr "zuletzt geändert"
+
+msgid "name"
+msgstr "Name"
+
+msgid "category"
+msgstr ""
+
+msgid "categories"
+msgstr ""
 
 msgid "twice daily"
 msgstr "zweimal täglich"
@@ -182,6 +203,9 @@ msgstr "Statisch"
 
 msgid "Document"
 msgstr "Dokument"
+
+msgid "Full-text"
+msgstr "Volltext"
 
 msgid "DOI"
 msgstr "DOI"
@@ -236,9 +260,6 @@ msgstr "Text"
 
 msgid "Flexible ISBN or ISSN identifier"
 msgstr "Flexibler ISBN- oder ISSN-Bezeichner"
-
-msgid "name"
-msgstr "Name"
 
 msgid "description"
 msgstr "Beschreibung"
@@ -297,6 +318,9 @@ msgstr "Tags"
 msgid "hash"
 msgstr "Hash"
 
+msgid "embedding"
+msgstr ""
+
 msgid "publication"
 msgstr "Publikation"
 
@@ -341,9 +365,6 @@ msgstr "Typ"
 
 msgid "data"
 msgstr "Daten"
-
-msgid "start URL"
-msgstr "Start-URL"
 
 msgid "checksum"
 msgstr "Checksumme"

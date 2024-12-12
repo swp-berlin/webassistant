@@ -8,7 +8,7 @@ from swp.utils.translation import GetTextCommandMixin
 
 
 class Command(GetTextCommandMixin, BaseCommand):
-    requires_system_checks = False
+    requires_system_checks = []
 
     APPLICATION = 'swp'
 
