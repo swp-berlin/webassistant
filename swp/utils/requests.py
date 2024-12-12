@@ -1,12 +1,13 @@
+from django.utils.http import parse_header_parameters
+
 from requests import Session, RequestException, Response
 
 
 def get_content_type(response: Response):
     if value := response.headers.get('Content-Type'):
-        if ';' in value:
-            value, params = value.split(';', 1)
+        value, params = parse_header_parameters(value)
 
-        return str.strip(value)
+        return value
 
 
 class TimeOutSession(Session):
