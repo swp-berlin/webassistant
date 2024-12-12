@@ -58,7 +58,7 @@ These commands are used to manage the scraping process in the application.
 - **Description**: Initiates the scraping process for a specific item.
 - **Usage**: `python manage.py scrape <pk>`
 - **Arguments**:
-    - `pk`: The primary key of the item to scrape.
+    - `pk`: The ID of the scraper to run.
 
 
 ### sync-zotero-items
