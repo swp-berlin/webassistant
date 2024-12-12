@@ -2,7 +2,7 @@ import datetime
 
 from celery import group
 
-from django.db.models import Q
+from django.db.models import Q, F
 from django.utils.timezone import localtime
 
 from swp.celery import app
@@ -34,6 +34,7 @@ def get_schedule_queryset(using: str = None, now: datetime.datetime = None):
         last_pollux_update=None,
         created__lt=initial,
     ).order_by(
+        F('last_pollux_fetch').asc(nulls_first=True),
         'created',
     )
 
