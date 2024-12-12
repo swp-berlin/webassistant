@@ -108,6 +108,10 @@ class Scraper(ActivatableModel, LastModified):
         return _('%s Scraper') % self.thinktank.name
 
     @cached_property
+    def categories_list(self):
+        return ', '.join(self.categories.values_list('name', flat=True))
+
+    @cached_property
     def next_run(self):
         last_run = timezone.localtime(self.last_run)
 
