@@ -124,4 +124,6 @@ class Command(GetTextCommandMixin, BaseCommand):
 
     @classmethod
     def set_header(cls, pofile, language, domain):
-        pass  # hook to set the header of the pofile
+        language = pofile.metadata.get('Language', language)
+        domain = 'frontend' if 'js' in domain else 'backend'
+        pofile.header = f'{language} translations for {domain} code'

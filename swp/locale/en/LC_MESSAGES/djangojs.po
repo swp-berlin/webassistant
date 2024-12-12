@@ -1,3 +1,4 @@
+# en translations for frontend code
 #, fuzzy
 msgid ""
 msgstr ""

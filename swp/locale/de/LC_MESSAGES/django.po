@@ -1,3 +1,4 @@
+# de translations for backend code
 #, fuzzy
 msgid ""
 msgstr ""
@@ -93,8 +94,8 @@ msgstr "Wichtige Daten"
 msgid "The query provided is invalid. Please check your input."
 msgstr "Der eingegebene Suchbegriff ist ungültig. Bitte überprüfen Sie Ihre Eingabe."
 
-msgid "The full text search is currently unavailable. Please try again later."
-msgstr ""
+msgid "The full-text search is currently unavailable. Please try again later."
+msgstr "Die Volltextsuche ist aktuell nicht verfügbar. Bitte versuchen Sie es später erneut."
 
 msgid "Internal Error"
 msgstr "Interner Fehler"
@@ -117,7 +118,7 @@ msgid "Invalid Selector"
 msgstr "Ungültiger Selektor"
 
 msgid "can manage"
-msgstr ""
+msgstr "kann verwalten"
 
 msgid "Monitor"
 msgstr "Monitor"
@@ -144,10 +145,10 @@ msgid "authors"
 msgstr "Autoren"
 
 msgid "PDF path"
-msgstr ""
+msgstr "PDF-Pfad"
 
 msgid "Text Content"
-msgstr ""
+msgstr "Text-Inhalt"
 
 #, python-format
 msgid "Missing %s permission"
@@ -169,10 +170,10 @@ msgid "name"
 msgstr "Name"
 
 msgid "category"
-msgstr ""
+msgstr "Kategorie"
 
 msgid "categories"
-msgstr ""
+msgstr "Kategorien"
 
 msgid "twice daily"
 msgstr "zweimal täglich"
@@ -306,6 +307,9 @@ msgstr "Abstract"
 msgid "publication date"
 msgstr "Veröffentlichungsdatum"
 
+msgid "publication date (clean)"
+msgstr "Veröffentlichungsdatum (bereinigt)"
+
 msgid "last access"
 msgstr "letzer Zugriff"
 
@@ -319,7 +323,13 @@ msgid "hash"
 msgstr "Hash"
 
 msgid "embedding"
-msgstr ""
+msgstr "Embedding"
+
+msgid "last pollux fetch"
+msgstr "letzter Pollux-Abruf"
+
+msgid "last pollux update"
+msgstr "letzte Pollux-Aktualisierung"
 
 msgid "publication"
 msgstr "Publikation"
@@ -450,25 +460,25 @@ msgid "is error recipient"
 msgstr "erhält Fehlermeldungen"
 
 msgid "api key"
-msgstr ""
+msgstr "API-Schlüssel"
 
 msgid "path"
-msgstr "pfad"
+msgstr "Pfad"
 
 msgid "key"
-msgstr ""
+msgstr "Schlüssel"
 
 msgid "attachment key"
-msgstr ""
+msgstr "Anhang-Schlüssel"
 
 msgid "collection keys"
 msgstr "collection keys"
 
 msgid "version"
-msgstr "version"
+msgstr "Version"
 
 msgid "updated"
-msgstr "geändert"
+msgstr "aktualisiert"
 
 msgid "transferred"
 msgstr "übertragen"
