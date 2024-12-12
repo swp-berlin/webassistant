@@ -1,3 +1,4 @@
+# de translations for frontend code
 #, fuzzy
 msgid ""
 msgstr ""
@@ -453,7 +454,7 @@ msgid "Scraper Type"
 msgstr "Scraper-Typ"
 
 msgid "Categories"
-msgstr ""
+msgstr "Kategorien"
 
 msgid "Config"
 msgstr "Konfiguration"

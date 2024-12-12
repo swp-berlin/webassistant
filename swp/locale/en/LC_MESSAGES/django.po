@@ -1,3 +1,4 @@
+# en translations for backend code
 #, fuzzy
 msgid ""
 msgstr ""
@@ -93,7 +94,7 @@ msgstr ""
 msgid "The query provided is invalid. Please check your input."
 msgstr ""
 
-msgid "The full text search is currently unavailable. Please try again later."
+msgid "The full-text search is currently unavailable. Please try again later."
 msgstr ""
 
 msgid "Internal Error"
@@ -306,6 +307,9 @@ msgstr ""
 msgid "publication date"
 msgstr ""
 
+msgid "publication date (clean)"
+msgstr ""
+
 msgid "last access"
 msgstr ""
 
@@ -319,6 +323,12 @@ msgid "hash"
 msgstr ""
 
 msgid "embedding"
+msgstr ""
+
+msgid "last pollux fetch"
+msgstr ""
+
+msgid "last pollux update"
 msgstr ""
 
 msgid "publication"

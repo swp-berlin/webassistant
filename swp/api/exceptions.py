@@ -15,7 +15,7 @@ class InvalidQueryError(APIException):
 class FullTextSearchError(APIException):
     status_code = HTTP_503_SERVICE_UNAVAILABLE
     default_code = 'service-unavailable'
-    default_detail = _('The full text search is currently unavailable. Please try again later.')
+    default_detail = _('The full-text search is currently unavailable. Please try again later.')
     wait = 60
 
 
