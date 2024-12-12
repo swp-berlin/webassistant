@@ -7,6 +7,7 @@ import ScraperRow from './ScraperRow';
 
 const URLLabel = _('URL');
 const TypeLabel = _('Type');
+const CatgoriesLabel = _('Categories');
 const LastRunLabel = _('Last Run');
 const ErrorsLabel = _('Errors');
 
@@ -17,6 +18,7 @@ const ScraperRows = ({items, canManage}) => items.map(item => (
         thinktankID={item.thinktank_id}
         url={item.start_url}
         type={item.type}
+        categories={item.categories}
         lastRun={item.last_run}
         errorCount={item.error_count}
         isActive={item.is_active}
@@ -30,12 +32,13 @@ const ScraperTable = ({items, endpoint, canManage, ...props}) => (
             <tr className="bg-gray-300">
                 <th className="w-1/2">{URLLabel}</th>
                 <th>{TypeLabel}</th>
+                <th>{CatgoriesLabel}</th>
                 <th>{LastRunLabel}</th>
                 <th className="text-right">{ErrorsLabel}</th>
             </tr>
         </thead>
         <tbody>
-            {items.length ? <ScraperRows items={items} canManage={canManage} /> : <EmptyRow colSpan={4} />}
+            {items.length ? <ScraperRows items={items} canManage={canManage} /> : <EmptyRow colSpan={5} />}
         </tbody>
     </HTMLTable>
 );

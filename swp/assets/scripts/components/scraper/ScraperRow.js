@@ -14,7 +14,7 @@ const ScraperLink = ({id, thinktankID, children, ...props}) => (
 
 const ExternalLink = ({url}) => <a href={url} target="_blank" rel="noreferrer">{url}</a>;
 
-const ScraperRow = ({id, thinktankID, url, type, lastRun, errorCount, isActive, canManage}) => (
+const ScraperRow = ({id, thinktankID, url, type, categories, lastRun, errorCount, isActive, canManage}) => (
     <tr className={isActive ? null : 'disabled'} data-id={id}>
         <td>
             {canManage
@@ -22,6 +22,7 @@ const ScraperRow = ({id, thinktankID, url, type, lastRun, errorCount, isActive, 
                 : <ExternalLink url={url} />}
         </td>
         <td>{type}</td>
+        <td>{categories}</td>
         <td>{isActive ? <DateTime value={lastRun} /> : DisabledLabel}</td>
         <td className="text-right">{errorCount}</td>
     </tr>
