@@ -1,9 +1,9 @@
 libqpdf-dev
-libpython3.8-dev
+libpython3-dev
 libdrm2
 libgbm1
 libxshmfence1
-postgresql-server-dev-13
+postgresql-server-dev-all
 python3-venv
 npm
 gettext

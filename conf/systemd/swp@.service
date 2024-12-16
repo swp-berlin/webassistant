@@ -1,0 +1,21 @@
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+Environment='PLAYWRIGHT_BROWSERS_PATH=/var/www/%i/browsers' 'DJANGO_SETTINGS_MODULE=%p.settings.%i'
+ExecStart=/var/www/%i/env/bin/uwsgi --ini /var/www/%i/conf/uwsgi/%i.ini
+Group=www-data
+KillSignal=SIGQUIT
+LogsDirectory=uwsgi
+NotifyAccess=all
+Restart=on-failure
+RuntimeDirectory=%p-%i
+RuntimeDirectoryMode=0755
+StandardError=syslog
+Type=notify
+UMask=0002
+User=www-data
+
+[Unit]
+After=postgresql.service
+Description=SWP %i
