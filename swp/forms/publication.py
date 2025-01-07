@@ -21,6 +21,8 @@ class ScrapedPublicationForm(forms.ModelForm):
     title = forms.CharField(label=_('title'))
     subtitle = forms.CharField(label=_('subtitle'), required=False)
     authors = SimpleArrayField(forms.CharField(required=False), label=_('authors'), required=False)
+    pdf_path = forms.CharField(label=_('PDF path'), required=False)
+    text_content = forms.CharField(label=_('Text Content'), required=False)
 
     class Meta:
         model = Publication
@@ -79,5 +81,8 @@ class ScrapedPublicationForm(forms.ModelForm):
             self.instance.thinktank = thinktank
 
         self.instance.created = self.instance.last_access = timezone.localtime(now)
+
+        for embedding_field in ['pdf_path', 'text_content']:
+            setattr(self.instance, embedding_field, self.cleaned_data.get(embedding_field))
 
         return super().save(commit=commit)

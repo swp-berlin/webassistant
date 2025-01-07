@@ -1,9 +1,12 @@
 from functools import wraps
 
 from django.contrib import admin, messages
+from django.db.models import Prefetch
+from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _, ngettext
 
-from swp.models import Scraper, ScraperError
+from swp.models import Publication, Scraper, ScraperError
+from swp.utils.admin import DEFAULT_LINK_TEMPLATE
 from swp.utils.domain import is_subdomain
 
 from .abstract import ActivatableModelAdmin
@@ -21,6 +24,11 @@ class ScraperErrorInline(admin.StackedInline):
         'code',
     ]
 
+    def get_queryset(self, request):
+        return super().get_queryset(request).prefetch_related(
+            Prefetch('publication', Publication.objects.only('title')),
+        )
+
 
 @admin.register(Scraper)
 class ScraperAdmin(CanManagePermissionMixin, ActivatableModelAdmin):
@@ -28,22 +36,33 @@ class ScraperAdmin(CanManagePermissionMixin, ActivatableModelAdmin):
     fields = [
         'thinktank',
         'type',
+        'categories',
         'data',
         'start_url',
         'checksum',
         'interval',
-        'last_run',
-        'is_running',
         'is_active',
+        'is_running',
+        'last_run',
         'created',
     ]
-    readonly_fields = ['created', 'last_run', 'is_running']
+    raw_id_fields = [
+        'thinktank',
+    ]
+    autocomplete_fields = [
+        'categories',
+    ]
+    readonly_fields = [
+        'created',
+        'last_run',
+        'is_running',
+    ]
     list_select_related = []
     list_display = [
         'thinktank',
         'pool_display',
         'type',
-        'start_url',
+        'start_url_display',
         'checksum',
         'last_run',
         'is_active',
@@ -71,6 +90,10 @@ class ScraperAdmin(CanManagePermissionMixin, ActivatableModelAdmin):
     @admin.display(description=_('pool'), ordering='thinktank__pool')
     def pool_display(self, obj: Scraper):
         return obj.thinktank.pool
+
+    @admin.display(description=_('start URL'), ordering='start_url')
+    def start_url_display(self, obj: Scraper):
+        return format_html(DEFAULT_LINK_TEMPLATE, url=obj.start_url, label=obj.start_url)
 
     def can_manage_pool(self, request, obj: Scraper):
         return request.user.can_manage_pool(obj.thinktank.pool)

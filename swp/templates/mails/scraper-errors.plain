@@ -1,6 +1,10 @@
 {% load i18n %} {% now 'SHORT_DATE_FORMAT' as date %}
 {% blocktranslate %}Scraper Error Report for {{ date }}{% endblocktranslate %}
 
+{% translate 'Table of Contents' %}
+{% for pool in pools.keys %}
+- {{ pool }} ({{ pool.error_count }}){% endfor %}
+
 {% for pool, thinktanks in pools.items %}
 {{ pool }}
 {% for thinktank, scrapers in thinktanks.items %}

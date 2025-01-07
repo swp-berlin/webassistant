@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<searchRetrieveResponse xmlns:marc="https://www.loc.gov/MARC21/slim">
+    <version>2.0</version>
+    <numberOfRecords>3</numberOfRecords>
+    <records>
+        <record>
+            <marc:datafield tag="001">swp-%(id-1)s</marc:datafield>
+            <marc:datafield tag="245" ind1="0" ind2="0">
+                <marc:subfield code="a">Beyond the buzzword: Collaboration for transformed education systems
+                </marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="260" ind1="" ind2="">
+                <marc:subfield code="b">Brookings Institution</marc:subfield>
+                <marc:subfield code="c">20241113</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="653" ind1="" ind2="">
+                <marc:subfield code="a">Upcoming Event</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="653" ind1="" ind2="">
+                <marc:subfield code="a">Klima</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="856" ind1="4" ind2="">
+                <marc:subfield code="u">https://www.brookings.edu/events/beyond-the-buzzword/</marc:subfield>
+            </marc:datafield>
+        </record>
+        <record>
+            <marc:datafield tag="001">swp-%(id-2)s</marc:datafield>
+            <marc:datafield tag="100" ind1="1" ind2="">
+                <marc:subfield code="a">Simon Hankinson</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="245" ind1="0" ind2="0">
+                <marc:subfield code="a">Is the State Department Using "DEIA" to Discriminate Against Men?
+                </marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="260" ind1="" ind2="">
+                <marc:subfield code="b">Heritage Foundation</marc:subfield>
+                <marc:subfield code="c">20241112</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="653" ind1="" ind2="">
+                <marc:subfield code="a">Report</marc:subfield>
+            </marc:datafield>
+            <marc:datafield tag="856" ind1="4" ind2="">
+                <marc:subfield code="u">
+                    https://www.heritage.org/gender/report/the-state-department-using-deia-discriminate-against-men
+                </marc:subfield>
+            </marc:datafield>
+        </record>
+    </records>
+    <nextRecordPosition>3</nextRecordPosition>
+</searchRetrieveResponse>

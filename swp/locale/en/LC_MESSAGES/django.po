@@ -1,3 +1,4 @@
+# en translations for backend code
 #, fuzzy
 msgid ""
 msgstr ""
@@ -48,6 +49,9 @@ msgstr ""
 msgid "pool"
 msgstr ""
 
+msgid "start URL"
+msgstr ""
+
 #, python-format
 msgid "%(count)s scraper could not be activated because its start url is not a subdomain of its thinktank's domain."
 msgid_plural "%(count)s scrapers could not be activated because their start url is not a subdomain of their thinktank's domain."
@@ -85,6 +89,12 @@ msgid "Permissions"
 msgstr ""
 
 msgid "Important dates"
+msgstr ""
+
+msgid "The query provided is invalid. Please check your input."
+msgstr ""
+
+msgid "The full-text search is currently unavailable. Please try again later."
 msgstr ""
 
 msgid "Internal Error"
@@ -125,9 +135,6 @@ msgstr ""
 msgid "Pool"
 msgstr ""
 
-msgid "The query provided is invalid. Please check your input."
-msgstr ""
-
 msgid "title"
 msgstr ""
 
@@ -135,6 +142,12 @@ msgid "subtitle"
 msgstr ""
 
 msgid "authors"
+msgstr ""
+
+msgid "PDF path"
+msgstr ""
+
+msgid "Text Content"
 msgstr ""
 
 #, python-format
@@ -151,6 +164,15 @@ msgid "created"
 msgstr ""
 
 msgid "last modified"
+msgstr ""
+
+msgid "name"
+msgstr ""
+
+msgid "category"
+msgstr ""
+
+msgid "categories"
 msgstr ""
 
 msgid "twice daily"
@@ -181,6 +203,9 @@ msgid "Static"
 msgstr ""
 
 msgid "Document"
+msgstr ""
+
+msgid "Full-text"
 msgstr ""
 
 msgid "DOI"
@@ -237,9 +262,6 @@ msgstr ""
 msgid "Flexible ISBN or ISSN identifier"
 msgstr ""
 
-msgid "name"
-msgstr ""
-
 msgid "description"
 msgstr ""
 
@@ -285,6 +307,9 @@ msgstr ""
 msgid "publication date"
 msgstr ""
 
+msgid "publication date (clean)"
+msgstr ""
+
 msgid "last access"
 msgstr ""
 
@@ -295,6 +320,15 @@ msgid "tags"
 msgstr ""
 
 msgid "hash"
+msgstr ""
+
+msgid "embedding"
+msgstr ""
+
+msgid "last pollux fetch"
+msgstr ""
+
+msgid "last pollux update"
 msgstr ""
 
 msgid "publication"
@@ -340,9 +374,6 @@ msgid "type"
 msgstr ""
 
 msgid "data"
-msgstr ""
-
-msgid "start URL"
 msgstr ""
 
 msgid "checksum"

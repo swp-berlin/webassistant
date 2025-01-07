@@ -11,9 +11,12 @@ from swp.utils.scraping.resolvers.data import DataResolver
 
 class DocumentResolver(DataResolver):
 
-    def __init__(self, *args, required: bool = False, **kwargs):
-        safe_key = kwargs.pop('key', '') or 'document'
-        super().__init__(*args, key=safe_key, required=required, multiple=True, **kwargs)
+    def __init__(self, *args, key: str = None, required: bool = False, **kwargs):
+        kwargs['key'] = key or 'document'
+        kwargs['multiple'] = True
+        kwargs['required'] = required
+
+        super().__init__(*args, **kwargs)
 
     async def _resolve(self, node: Union[Page, ElementHandle], fields: dict, errors: dict):
         page: Page = node if isinstance(node, Page) else self.context.page
@@ -43,6 +46,7 @@ class DocumentResolver(DataResolver):
 
         fields['pdf_url'] = download.url
         fields['pdf_pages'] = pdf_pages
+        fields['pdf_path'] = file_path
 
     async def get_element(self, node: ElementHandle) -> Optional[ElementHandle]:
         elements = await super().get_element(node)

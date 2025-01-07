@@ -1,3 +1,4 @@
+# de translations for backend code
 #, fuzzy
 msgid ""
 msgstr ""
@@ -48,6 +49,9 @@ msgstr "Zuletzt Geändert"
 msgid "pool"
 msgstr "Pool"
 
+msgid "start URL"
+msgstr "Start-URL"
+
 #, python-format
 msgid "%(count)s scraper could not be activated because its start url is not a subdomain of its thinktank's domain."
 msgid_plural "%(count)s scrapers could not be activated because their start url is not a subdomain of their thinktank's domain."
@@ -87,6 +91,12 @@ msgstr "Berechtigungen"
 msgid "Important dates"
 msgstr "Wichtige Daten"
 
+msgid "The query provided is invalid. Please check your input."
+msgstr "Der eingegebene Suchbegriff ist ungültig. Bitte überprüfen Sie Ihre Eingabe."
+
+msgid "The full-text search is currently unavailable. Please try again later."
+msgstr "Die Volltextsuche ist aktuell nicht verfügbar. Bitte versuchen Sie es später erneut."
+
 msgid "Internal Error"
 msgstr "Interner Fehler"
 
@@ -108,7 +118,7 @@ msgid "Invalid Selector"
 msgstr "Ungültiger Selektor"
 
 msgid "can manage"
-msgstr ""
+msgstr "kann verwalten"
 
 msgid "Monitor"
 msgstr "Monitor"
@@ -125,9 +135,6 @@ msgstr "Suchbegriff"
 msgid "Pool"
 msgstr "Pool"
 
-msgid "The query provided is invalid. Please check your input."
-msgstr "Der eingegebene Suchbegriff ist ungültig. Bitte überprüfen Sie Ihre Eingabe."
-
 msgid "title"
 msgstr "Titel"
 
@@ -136,6 +143,12 @@ msgstr "Untertitel"
 
 msgid "authors"
 msgstr "Autoren"
+
+msgid "PDF path"
+msgstr "PDF-Pfad"
+
+msgid "Text Content"
+msgstr "Text-Inhalt"
 
 #, python-format
 msgid "Missing %s permission"
@@ -152,6 +165,15 @@ msgstr "erzeugt am"
 
 msgid "last modified"
 msgstr "zuletzt geändert"
+
+msgid "name"
+msgstr "Name"
+
+msgid "category"
+msgstr "Kategorie"
+
+msgid "categories"
+msgstr "Kategorien"
 
 msgid "twice daily"
 msgstr "zweimal täglich"
@@ -182,6 +204,9 @@ msgstr "Statisch"
 
 msgid "Document"
 msgstr "Dokument"
+
+msgid "Full-text"
+msgstr "Volltext"
 
 msgid "DOI"
 msgstr "DOI"
@@ -237,9 +262,6 @@ msgstr "Text"
 msgid "Flexible ISBN or ISSN identifier"
 msgstr "Flexibler ISBN- oder ISSN-Bezeichner"
 
-msgid "name"
-msgstr "Name"
-
 msgid "description"
 msgstr "Beschreibung"
 
@@ -285,6 +307,9 @@ msgstr "Abstract"
 msgid "publication date"
 msgstr "Veröffentlichungsdatum"
 
+msgid "publication date (clean)"
+msgstr "Veröffentlichungsdatum (bereinigt)"
+
 msgid "last access"
 msgstr "letzer Zugriff"
 
@@ -296,6 +321,15 @@ msgstr "Tags"
 
 msgid "hash"
 msgstr "Hash"
+
+msgid "embedding"
+msgstr "Embedding"
+
+msgid "last pollux fetch"
+msgstr "letzter Pollux-Abruf"
+
+msgid "last pollux update"
+msgstr "letzte Pollux-Aktualisierung"
 
 msgid "publication"
 msgstr "Publikation"
@@ -341,9 +375,6 @@ msgstr "Typ"
 
 msgid "data"
 msgstr "Daten"
-
-msgid "start URL"
-msgstr "Start-URL"
 
 msgid "checksum"
 msgstr "Checksumme"
@@ -429,25 +460,25 @@ msgid "is error recipient"
 msgstr "erhält Fehlermeldungen"
 
 msgid "api key"
-msgstr ""
+msgstr "API-Schlüssel"
 
 msgid "path"
-msgstr "pfad"
+msgstr "Pfad"
 
 msgid "key"
-msgstr ""
+msgstr "Schlüssel"
 
 msgid "attachment key"
-msgstr ""
+msgstr "Anhang-Schlüssel"
 
 msgid "collection keys"
 msgstr "collection keys"
 
 msgid "version"
-msgstr "version"
+msgstr "Version"
 
 msgid "updated"
-msgstr "geändert"
+msgstr "aktualisiert"
 
 msgid "transferred"
 msgstr "übertragen"

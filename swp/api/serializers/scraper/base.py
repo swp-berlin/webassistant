@@ -1,5 +1,6 @@
 from django.utils.translation import gettext_lazy as _
 
+from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from rest_framework.fields import CharField, ChoiceField, IntegerField
 from rest_framework.serializers import ModelSerializer, Serializer
@@ -75,6 +76,12 @@ class DocumentResolverSerializer(Serializer):
     selector = CSSSelectorField()
 
 
+@ResolverConfigSerializer.register(ResolverType.EMBEDDINGS)
+class EmbeddingsResolverDraftSerializer(Serializer):
+    key = CharField(default='text_content')
+    selector = CSSSelectorField()
+
+
 @ResolverConfigSerializer.register(*ResolverTypeField)
 class FieldResolverSerializer(Serializer):
     resolver = ResolverConfigSerializer()
@@ -129,6 +136,7 @@ class ScraperSerializer(BaseScraperSerializer):
             'interval',
             'is_active',
             'errors',
+            'categories',
         ]
 
     def validate(self, attrs):
@@ -174,6 +182,8 @@ class ScraperListSerializer(ModelSerializer):
     Light serializer for nested scraper lists.
     """
 
+    categories = serializers.CharField(source='categories_list')
+
     class Meta:
         model = Scraper
         read_only_fields = ['error_count', 'thinktank_id']
@@ -181,6 +191,7 @@ class ScraperListSerializer(ModelSerializer):
             'id',
             'thinktank_id',
             'type',
+            'categories',
             'start_url',
             'last_run',
             'interval',

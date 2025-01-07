@@ -4,7 +4,7 @@ DEBUG = False  # this is the default for tests anyway, just here to make it clea
 
 SECRET_KEY = 'this-is-not-a-secret-key'
 
-TEST_DATA_DIR = BASE_DIR / 'test-data'
+TEST_DATA_DIR = BASE_DIR / 'swp' / 'test' / 'data'
 
 TEMPLATES[0]['DIRS'] = [
     # Add our test templates directory.
@@ -40,3 +40,8 @@ SILENCED_SYSTEM_CHECKS = [
 # We set the redis port to an unassigned port so we
 # detect asynchronous task calls that aren't mocked.
 CELERY_BROKER_URL = CELERY_RESULT_BACKEND = redis(port=1234)
+
+# Use with care, the corresponding test will rebuild the search index deleting an existing one.
+TEST_REBUILD_SEARCH_INDEX = env('TEST_REBUILD_SEARCH_INDEX', False)
+
+EMBEDDING_API_HOST = 'http://localhost:1234'

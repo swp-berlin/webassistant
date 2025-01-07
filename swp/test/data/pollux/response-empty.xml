@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<searchRetrieveResponse xmlns:marc="https://www.loc.gov/MARC21/slim">
+    <version>2.0</version>
+    <numberOfRecords>0</numberOfRecords>
+    <records />
+</searchRetrieveResponse>

@@ -5,12 +5,24 @@ from unittest.mock import patch
 from urllib.parse import urlencode
 
 from django import test
+from django.conf import settings
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
 
+from swp.api.viewsets.publication import get_query_vector
 from swp.models import Publication, Monitor
-from swp.utils.testing import login, request, create_user, create_monitor, create_thinktank, add_to_group
+from swp.utils.requests import TimeOutSession
+from swp.utils.testing import (
+    login,
+    request,
+    clear_cache,
+    create_user,
+    add_to_group,
+    create_monitor,
+    create_thinktank,
+    get_random_embedding_vector,
+)
 
 ONE_HOUR = datetime.timedelta(hours=1)
 
@@ -31,6 +43,7 @@ class PublicationTestCase(test.TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.now = now = timezone.localtime()
+        cls.today = today = timezone.localdate(now)
         cls.user = user = create_user('test@localhost')
 
         add_to_group(user, 'swp-researcher')
@@ -81,6 +94,7 @@ class PublicationTestCase(test.TestCase):
                 thinktank=cls.thinktanks[0],
                 title='Impact of COVID-19 lockdowns on individual mobility and the importance of socioeconomic factors',
                 publication_date='2020-11',
+                publication_date_clean=today,
                 url='https://piie.com/publications/policy-briefs/impact-covid-19-lockdowns-individual-mobility-and-importance',
                 pdf_url='https://www.piie.com/system/files/documents/pb20-14.pdf',
                 pdf_pages=22,
@@ -91,6 +105,7 @@ class PublicationTestCase(test.TestCase):
                 thinktank=cls.thinktanks[1],
                 title='Annual Report 2019',
                 publication_date='2019-04-17',
+                publication_date_clean=today,
                 url='http://en.cdi.org.cn/index.php?option=com_k2&view=item&layout=item&id=707',
                 pdf_url='http://en.cdi.org.cn/publications/annual-report/annual-report-2019/download',
                 pdf_pages=136,
@@ -101,6 +116,7 @@ class PublicationTestCase(test.TestCase):
                 thinktank=cls.thinktanks[1],
                 title='Annual Report 2018',
                 publication_date='2020-05-19',
+                publication_date_clean=today,
                 url='http://en.cdi.org.cn/index.php?option=com_k2&view=item&layout=item&id=529',
                 pdf_url='http://en.cdi.org.cn/publications/annual-report/annual-report-2018/download',
                 pdf_pages=148,
@@ -202,6 +218,28 @@ class PublicationTestCase(test.TestCase):
         params = urlencode({'query': 'thinktank.id:'})
 
         request(self, f'{url}?{params}', status_code=400)
+
+    @clear_cache(get_query_vector)
+    def helper_research_full_text(self, success, result, status_code):
+        url = reverse('1:publication-research')
+        params = urlencode({'query': '<COVID-19>'})
+        return_value = success, result
+
+        with patch.object(TimeOutSession, 'json', return_value=return_value) as json:
+            request(self, f'{url}?{params}', status_code=status_code)
+
+        self.assertTrue(json.called)
+
+    def test_research_full_text_success(self):
+        vector = get_random_embedding_vector(settings.EMBEDDING_VECTOR_DIMS)
+
+        self.helper_research_full_text(True, vector, 200)
+
+    def test_research_full_text_unavailable(self):
+        self.helper_research_full_text(None, Exception('unavailable'), 503)
+
+    def test_research_full_text_invalid(self):
+        self.helper_research_full_text(False, 'invalid', 400)
 
     def test_ris(self):
         url = reverse('1:publication-ris')

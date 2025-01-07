@@ -14,12 +14,14 @@ import ResolverForm from './ResolverForm/ResolverForm';
 import ResolverFormProvider from './ResolverForm/ResolverFormContext';
 import {
     DocumentResolverForm,
+    EmbeddingsResolverForm,
     LinkResolverForm,
     ListResolverForm,
     FieldResolverForm,
 } from './ResolverForm/forms';
 import {Preview, PreviewButton} from './preview';
 import BackendScraperErrors from './BackendScraperErrors';
+import CategorySelect from './CategorySelect';
 import ScraperTypeSelect from './ScraperTypeSelect';
 import ScraperFormErrors from './ScraperFormErrors';
 import ScraperTypeDescription from './ScraperTypeDescription';
@@ -29,6 +31,7 @@ import {ScraperActivationPortal} from './ScraperActivationContainer';
 const StartURLLabel = _('Start URL');
 const TypeLabel = _('Scraper Type');
 const IntervalLabel = _('Interval');
+const CategoriesLabel = _('Categories');
 const ConfigLabel = _('Config');
 const SubmitButtonLabel = _('Save');
 const DisabledTitle = _('You have to deactivate the scraper in order to edit it.');
@@ -43,6 +46,7 @@ const Forms = {
     Static: FieldResolverForm,
 
     Document: DocumentResolverForm,
+    Embeddings: EmbeddingsResolverForm,
 
     Title: FieldResolverForm,
     Subtitle: FieldResolverForm,
@@ -121,6 +125,15 @@ const ScraperForm = ({endpoint, data, method, redirectURL}) => {
                     required
                     disabled={isActive}
                     title={disabledTitle}
+                />
+                <CategorySelect
+                    control={control}
+                    name="categories"
+                    label={CategoriesLabel}
+                    errors={errors}
+                    disabled={isActive}
+                    title={disabledTitle}
+                    fill
                 />
             </div>
 

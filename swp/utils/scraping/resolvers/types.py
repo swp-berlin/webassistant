@@ -3,6 +3,7 @@ from enum import Enum
 from .attribute import AttributeResolver
 from .data import DataResolver
 from .document import DocumentResolver
+from .embeddings import EmbeddingsResolver
 from .link import LinkResolver
 from .list import ListResolver
 from .static import StaticResolver
@@ -25,6 +26,7 @@ class ResolverType(Enum):
     Data = DataResolver
     Attribute = AttributeResolver
     Document = DocumentResolver
+    Embeddings = EmbeddingsResolver
     Static = StaticResolver
 
     Title = TitleResolver

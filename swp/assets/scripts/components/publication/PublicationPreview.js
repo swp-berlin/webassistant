@@ -26,6 +26,7 @@ const PublicationPreview = ({
     noTitle,
     className,
     downloadURL,
+    categories,
     tags,
     onSelectTag,
     ...props

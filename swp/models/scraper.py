@@ -8,8 +8,9 @@ from typing import Any, Iterable, Mapping, Optional, TYPE_CHECKING
 from urllib.parse import urlsplit
 
 from asgiref.sync import async_to_sync, sync_to_async
+from django.conf import settings
 from django.core.exceptions import NON_FIELD_ERRORS
-from django.db import models, transaction, IntegrityError
+from django.db import models, IntegrityError
 from django.db.models.aggregates import Count
 from django.shortcuts import resolve_url
 from django.utils import timezone
@@ -19,6 +20,7 @@ from django.utils.translation import gettext_lazy as _
 from swp.utils.domain import is_subdomain
 from swp.utils.scraping import Scraper as _Scraper
 from swp.utils.validation import get_field_validation_error
+from swp.utils.spooling import spool_file, spool_content
 from swp.scraper.types import ScraperType
 
 from .abstract import ActivatableModel, ActivatableQuerySet, UpdateQuerySet, LastModified
@@ -59,6 +61,8 @@ class Scraper(ActivatableModel, LastModified):
     type = ChoiceField(_('type'), choices=ScraperType.choices)
 
     data = models.JSONField(_('data'))
+
+    categories = models.ManyToManyField('swp.Category', 'scrapers', verbose_name=_('categories'), blank=True)
 
     start_url = LongURLField(_('start URL'))
     checksum = models.CharField(_('checksum'), max_length=64, unique=True, blank=True, null=True)
@@ -102,6 +106,10 @@ class Scraper(ActivatableModel, LastModified):
     @cached_property
     def name(self) -> str:
         return _('%s Scraper') % self.thinktank.name
+
+    @cached_property
+    def categories_list(self):
+        return ', '.join(self.categories.values_list('name', flat=True))
 
     @cached_property
     def next_run(self):
@@ -280,14 +288,16 @@ class Scraper(ActivatableModel, LastModified):
             return False
 
         publication.save(force_insert=True)
+        publication.categories.add(*self.categories.all())
         self.scraped_publications.add(publication)
 
-        return True
+        if settings.ENABLE_EMBEDDINGS:
+            if publication.pdf_path:
+                spool_file(publication, publication.pdf_path, 'pdf')
+            elif publication.text_content:
+                spool_content(publication, publication.text_content, 'txt')
 
-    @transaction.atomic
-    def save_publications(self, publications):
-        Publication.objects.bulk_create(publications)
-        self.scraped_publications.add(*publications)
+        return True
 
     @sync_to_async
     def save_error(self, error: ScraperError):

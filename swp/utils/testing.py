@@ -1,21 +1,26 @@
+import posixpath
 import random
 import string
 
-from typing import Union
+from contextlib import contextmanager
+from typing import Union, Protocol
+from unittest.mock import patch
+from urllib.parse import urlsplit, urlunsplit
+
+from celery import group as celery_group
 
 from django.apps import apps
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.base_user import AbstractBaseUser as User
 from django.contrib.auth.models import Group
-
 from django.core.management import call_command as django_call_command
 from django.test import SimpleTestCase
 from django.urls import reverse
 from django.utils.crypto import get_random_string
 from django.utils.text import slugify
 
-from swp.models import Monitor, Pool, Thinktank, Scraper, ScraperError
+from swp.models import Monitor, Pool, Thinktank, Scraper, ScraperError, Publication
 from swp.utils.domain import get_canonical_domain
 
 Args = Union[tuple, list]
@@ -123,6 +128,37 @@ def request(test_case: SimpleTestCase, url: str, status_code: int = None, expect
     return response
 
 
+def celery_group_delay_side_effect(self: celery_group, *args, **kwargs):
+    self.tasks = list(self.tasks)
+    self.delayed = args, kwargs
+
+    return self
+
+
+patched_group_delay = patch.object(celery_group, 'delay', autospec=True, side_effect=celery_group_delay_side_effect)
+
+
+@contextmanager
+def override_dns_name(new_dns_name: str, *, attr='_fqdn'):
+    """
+    This context manager can be used to prefill the DNS name cache to avoid long timeouts on local machines.
+    """
+
+    from django.core.mail import DNS_NAME
+
+    old_dns_name = getattr(DNS_NAME, attr, None)
+
+    setattr(DNS_NAME, attr, new_dns_name)
+
+    try:
+        yield old_dns_name
+    finally:
+        if old_dns_name:
+            setattr(DNS_NAME, attr, old_dns_name)
+        else:
+            delattr(DNS_NAME, attr)
+
+
 def create_monitor(**kwargs) -> Monitor:
     defaults = {
         'pool': Pool(id=0),
@@ -201,3 +237,51 @@ def create_scraper_error(scraper, *, code: str = None, field: str = None, **kwar
     defaults.update(kwargs)
 
     return ScraperError.objects.create(**defaults)
+
+
+def create_publication(thinktank: Thinktank, title: str = None, url: str = None, **kwargs) -> Publication:
+    if title is None:
+        title = 'Publication %s' % get_random_string(6, string.ascii_letters)
+
+    if url is None:
+        slug = slugify(title)
+        scheme, netloc, path, query, fragment = urlsplit(thinktank.url)
+        components = scheme, netloc, posixpath.join(path, slug), '', ''
+        url = urlunsplit(components)
+
+    defaults = {
+        'thinktank': thinktank,
+        'title': title,
+        'url': url,
+    }
+
+    defaults.update(kwargs)
+
+    return Publication.objects.create(**defaults)
+
+
+def get_random_embedding_vector(dims: int, *, signs=(+1, -1)):
+    return [random.random() * random.choice(signs) for _ in range(dims)]
+
+
+class Cache(Protocol):
+
+    def cache_clear(self): ...
+
+
+@contextmanager
+def clear_cache(cache: Cache):
+    try:
+        yield cache
+    finally:
+        cache.cache_clear()
+
+
+def get_pollux_response(name: str, context: dict = None):
+    with open(settings.TEST_DATA_DIR / 'pollux' / f'response-{name}.xml') as fp:
+        content = fp.read()
+
+    if context:
+        return content % context
+
+    return content
