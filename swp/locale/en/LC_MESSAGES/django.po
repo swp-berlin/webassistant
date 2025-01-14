@@ -331,6 +331,9 @@ msgstr ""
 msgid "last pollux update"
 msgstr ""
 
+msgid "last pollux schedule"
+msgstr ""
+
 msgid "publication"
 msgstr ""
 

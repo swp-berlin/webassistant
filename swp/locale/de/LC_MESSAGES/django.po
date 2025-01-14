@@ -331,6 +331,9 @@ msgstr "letzter Pollux-Abruf"
 msgid "last pollux update"
 msgstr "letzte Pollux-Aktualisierung"
 
+msgid "last pollux schedule"
+msgstr "letzte Pollux-Planung"
+
 msgid "publication"
 msgstr "Publikation"
 

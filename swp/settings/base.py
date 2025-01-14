@@ -160,6 +160,7 @@ LOGGING = {
 CELERY_BROKER_URL = CELERY_RESULT_BACKEND = redis(db=SITE_ID)
 
 CELERY_SCRAPER_MONITORING_FILEPATH = BASE_DIR / 'celery-scraper.check'
+CELERY_POLLUX_MONITORING_FILEPATH = BASE_DIR / 'celery-pollux.check'
 
 CELERY_BEAT_SCHEDULE = {
     'monitoring.default': {
@@ -174,6 +175,16 @@ CELERY_BEAT_SCHEDULE = {
         },
         'kwargs': {
             'filepath': f'{CELERY_SCRAPER_MONITORING_FILEPATH}',
+        },
+    },
+    'monitoring.pollux': {
+        'task': 'monitoring',
+        'schedule': crontab(hour='*', minute=0),
+        'options': {
+            'queue': 'pollux',
+        },
+        'kwargs': {
+            'filepath': f'{CELERY_POLLUX_MONITORING_FILEPATH}',
         },
     },
     'monitor.schedule': {
@@ -209,10 +220,15 @@ CELERY_TASK_ROUTES = {
     'scraper.run': {
         'queue': 'scraper',
     },
+    'pollux.fetch': {
+        'queue': 'pollux',
+    },
 }
 
 if DISABLE_POLLUX := env('DISABLE_POLLUX', False):
+    CELERY_TASK_ROUTES.pop('pollux.fetch')
     CELERY_BEAT_SCHEDULE.pop('pollux.schedule')
+    CELERY_BEAT_SCHEDULE.pop('monitoring.pollux')
 
 ELASTICSEARCH_DSL = {
     'default': elasticsearch(debug=DEBUG),
