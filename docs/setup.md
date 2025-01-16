@@ -70,6 +70,7 @@ python manage.py collectstatic --no-input
 cp /var/www/production/conf/nginx/swp-production /etc/nginx/sites-enabled/swp-production
 cp /var/www/production/conf/systemd/swp@.service /etc/systemd/system/
 cp /var/www/production/conf/systemd/celery@.service /etc/systemd/system/
+cp /var/www/production/conf/systemd/pollux@.service /etc/systemd/system/
 cp /var/www/production/conf/systemd/scraper@.service /etc/systemd/system/
 cp /var/www/production/conf/.env.example /var/www/production/.env
 
@@ -77,9 +78,11 @@ systemctl daemon-reload
 
 systemctl enable swp@production.service
 systemctl enable celery@production.service
+systemctl enable pollux@production.service
 systemctl enable scraper@production.service
 
 systemctl start swp@production.service
 systemctl start celery@production.service
+systemctl start pollux@production.service
 systemctl start scraper@production.service
 ```
