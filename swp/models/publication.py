@@ -66,8 +66,15 @@ class Publication(UpdateModel):
     hash = models.CharField(_('hash'), max_length=32, blank=True, null=True)
     embedding = DenseVectorField(_('embedding'), dims=settings.EMBEDDING_VECTOR_DIMS, null=True, editable=False)
 
-    last_pollux_fetch = models.DateTimeField(_('last pollux fetch'), null=True, editable=False)
-    last_pollux_update = models.DateTimeField(_('last pollux update'), null=True, editable=False)
+    last_pollux_fetch = models.DateTimeField(_('last pollux fetch'), null=True, editable=False, db_index=True)
+    last_pollux_update = models.DateTimeField(_('last pollux update'), null=True, editable=False, db_index=True)
+    last_pollux_schedule = models.DateTimeField(_('last pollux schedule'), null=True, editable=False, db_index=True)
+
+    POLLUX_FIELDS = [
+        'last_pollux_fetch',
+        'last_pollux_update',
+        'last_pollux_schedule',
+    ]
 
     objects = PublicationQuerySet.as_manager()
 

@@ -17,9 +17,12 @@ INITIAL_DELAY = datetime.timedelta(hours=24)
 
 @app.task(name='pollux.schedule')
 def schedule(*, using: str = None, now: datetime.datetime = None):
+    now = localtime(now)
     queryset = get_schedule_queryset(using, now)
-    publications = queryset.values_list('id', flat=True)[:SCHEDULE_LIMIT]
-    tasks = group(fetch.s(publication_id) for publication_id in publications).delay(using=using)
+    publication_ids = list(queryset.values_list('id', flat=True)[:SCHEDULE_LIMIT])
+    tasks = group(fetch.s(publication_id) for publication_id in publication_ids).delay(using=using)
+
+    queryset.filter(id__in=publication_ids).update(last_pollux_schedule=now)
 
     return len(tasks)
 
@@ -34,6 +37,7 @@ def get_schedule_queryset(using: str = None, now: datetime.datetime = None):
         last_pollux_update=None,
         created__lt=initial,
     ).order_by(
+        F('last_pollux_schedule').asc(nulls_first=True),
         F('last_pollux_fetch').asc(nulls_first=True),
         'created',
     )
