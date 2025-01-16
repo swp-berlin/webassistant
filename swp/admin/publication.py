@@ -6,10 +6,7 @@ from swp.models import Publication
 @admin.register(Publication)
 class PublicationAdmin(admin.ModelAdmin):
     date_hierarchy = 'created'
-    pollux_fields = [
-        'last_pollux_fetch',
-        'last_pollux_update',
-    ]
+    pollux_fields = Publication.POLLUX_FIELDS
     readonly_fields = [
         'last_access',
         *pollux_fields,
