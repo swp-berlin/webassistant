@@ -47,12 +47,20 @@ async def scrape(scraper: Scraper, config: dict) -> dict:
     max_per_page = config['paginator']['max_per_page']
     is_multipage = len(publications) > max_per_page
 
+    clean_publications(publications)
+
     return {
         'success': True,
         'publications': publications,
         'max_per_page': max_per_page,
         'is_multipage': is_multipage,
     }
+
+def clean_publications(publications):
+    for publication in publications:
+        if fields := publication.get('fields'):
+            for embedding_field in ['pdf_path', 'text_content']:
+                fields.pop(embedding_field, None)
 
 
 @app.task(name='preview.scraper')
