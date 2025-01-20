@@ -78,8 +78,8 @@ const PublicationItem = ({publication, className, onAddFilter, children, ...prop
     } = publication;
 
     const tagItems = [
-        ...categories.map(({id, name}) => ({key: `cat-${id}`, text: name, field: 'categories'})),
-        ...tags.map((tag, index) => ({key: `tag-${index}`, text: tag, field: 'tags'})),
+        ...(categories || []).map(({id, name}) => ({key: `cat-${id}`, text: name, field: 'categories'})),
+        ...(tags || []).map((tag, index) => ({key: `tag-${index}`, text: tag, field: 'tags'})),
     ];
 
     return (
