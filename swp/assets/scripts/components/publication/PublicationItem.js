@@ -58,6 +58,8 @@ const Filterable = ({field, text, value, onFilter, className, ...props}) => {
     );
 };
 
+const ensureArray = value => Array.isArray(value) ? value : [];
+
 const PublicationItem = ({publication, className, onAddFilter, children, ...props}) => {
     const {
         id,
@@ -65,8 +67,8 @@ const PublicationItem = ({publication, className, onAddFilter, children, ...prop
         thinktank_name: thinktankName,
         title,
         subtitle,
-        categories = [],
-        tags = [],
+        categories,
+        tags,
         authors,
         abstract,
         publication_date: publicationDate,
@@ -78,8 +80,8 @@ const PublicationItem = ({publication, className, onAddFilter, children, ...prop
     } = publication;
 
     const tagItems = [
-        ...categories.map(({id, name}) => ({key: `cat-${id}`, text: name, field: 'categories'})),
-        ...tags.map((tag, index) => ({key: `tag-${index}`, text: tag, field: 'tags'})),
+        ...ensureArray(categories).map(({id, name}) => ({key: `cat-${id}`, text: name, field: 'categories'})),
+        ...ensureArray(tags).map((tag, index) => ({key: `tag-${index}`, text: tag, field: 'tags'})),
     ];
 
     return (

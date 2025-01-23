@@ -7,7 +7,7 @@ const MonitorQueryResult = ({results, count = 0, page: currentPage, next: nextPa
 
     return (
         <div className="publication-preview my-4">
-            <SearchResultHeader count={count} />
+            <SearchResultHeader count={count} query="" />
             {count > 0 && (
                 <PublicationResults
                     currentPage={currentPage || 1}
