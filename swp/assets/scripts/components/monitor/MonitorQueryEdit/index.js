@@ -5,11 +5,11 @@ import _ from 'utils/i18n';
 import {useQuery} from 'hooks/query';
 
 import {Result} from 'components/Fetch';
-import Page from 'components/Page';
 
 import {useMonitorsBreadcrumb} from '../MonitorList';
 import {useMonitorBreadcrumb} from '../MonitorDetail';
 
+import MonitorEditPage from '../MonitorEditPage';
 import MonitorQueryEditForm from './MonitorQueryEditForm';
 
 const Title = _('Edit Query');
@@ -25,9 +25,9 @@ const MonitorQueryEdit = () => {
     return (
         <Result result={result}>
             {monitor => (
-                <Page title={Title}>
+                <MonitorEditPage pool={monitor.pool} title={Title}>
                     <MonitorQueryEditForm endpoint={endpoint} monitor={monitor} />
-                </Page>
+                </MonitorEditPage>
             )}
         </Result>
     );

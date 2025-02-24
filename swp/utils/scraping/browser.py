@@ -20,7 +20,7 @@ DEFAULT_USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKi
 
 
 @contextmanager
-def tempoary_user_dir():
+def temporary_user_dir():
     with maketempdir() as temp_dir:
         pref_file_path = temp_dir / 'Default' / 'Preferences'
 
@@ -42,7 +42,7 @@ async def open_browser(*args, **kwargs) -> ContextManager[Browser]:
         kwargs.setdefault('devtools', True)
 
     async with async_playwright() as playwright:
-        with tempoary_user_dir() as user_dir:
+        with temporary_user_dir() as user_dir:
             browser = await playwright.chromium.launch_persistent_context(
                 user_dir,
                 *args,
