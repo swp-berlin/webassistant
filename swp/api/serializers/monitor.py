@@ -11,7 +11,7 @@ from .pool import PoolSerializer
 class PoolField(PrimaryKeyRelatedField):
 
     def get_queryset(self):
-        return Pool.objects.can_manage(self.context.get('request').user)
+        return Pool.objects.annotate_can_manage(self.context.get('request').user)
 
     def use_pk_only_optimization(self):
         return False
