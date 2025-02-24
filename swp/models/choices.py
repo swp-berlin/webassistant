@@ -47,21 +47,25 @@ class ResolverType(models.TextChoices):
     AUTHORS = 'Authors', _('Authors')
     TAGS = 'Tags', _('Tags')
 
+    @property
+    def choice(self):
+        return self.value, self.label
+
 
 class ListResolverType(models.TextChoices):
-    LINK = ResolverType.LINK
+    LINK = ResolverType.LINK.choice
 
-    TITLE = ResolverType.TITLE
-    SUBTITLE = ResolverType.SUBTITLE
-    ABSTRACT = ResolverType.ABSTRACT
-    PUBLICATION_DATE = ResolverType.PUBLICATION_DATE
-    URL = ResolverType.URL
-    AUTHORS = ResolverType.AUTHORS
-    TAGS = ResolverType.TAGS
-    DOCUMENT = ResolverType.DOCUMENT
-    EMBEDDINGS = ResolverType.EMBEDDINGS
-    DOI = ResolverType.DOI
-    ISBN = ResolverType.ISBN
+    TITLE = ResolverType.TITLE.choice
+    SUBTITLE = ResolverType.SUBTITLE.choice
+    ABSTRACT = ResolverType.ABSTRACT.choice
+    PUBLICATION_DATE = ResolverType.PUBLICATION_DATE.choice
+    URL = ResolverType.URL.choice
+    AUTHORS = ResolverType.AUTHORS.choice
+    TAGS = ResolverType.TAGS.choice
+    DOCUMENT = ResolverType.DOCUMENT.choice
+    EMBEDDINGS = ResolverType.EMBEDDINGS.choice
+    DOI = ResolverType.DOI.choice
+    ISBN = ResolverType.ISBN.choice
 
 
 class DataResolverKey(models.TextChoices):
