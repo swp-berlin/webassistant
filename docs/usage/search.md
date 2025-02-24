@@ -6,26 +6,26 @@ The search interface uses the ElasticSearch index to search through all publicat
 
 The following fields are indexed:
 
-| Field             | Type            |
-|-------------------|-----------------|
-| id                | Integer         |
-| thinktank_id      | Integer         |
-| title             | String          |
-| subtitle          | String          |
-| ris_type          | String          |
-| authors           | List[String]    |
-| abstract          | String          |
-| publication_date  | Date            |
-| last_access       | String/Datetime |
-| url               | String          |
-| pdf_url           | String          |
-| pdf_pages         | Integer         |
-| doi               | String          |
-| isbn              | String          |
-| tags              | List[String]    |
-| categories        | List[String]    |
-| created           | String/Datetime |
-| thinktank.name    | String          |
+| Field            | Type            |
+|------------------|-----------------|
+| id               | Integer         |
+| thinktank.id     | Integer         |
+| title            | String          |
+| subtitle         | String          |
+| ris_type         | String          |
+| authors          | List[String]    |
+| abstract         | String          |
+| publication_date | Date            |
+| last_access      | String/Datetime |
+| url              | String          |
+| pdf_url          | String          |
+| pdf_pages        | Integer         |
+| doi              | String          |
+| isbn             | String          |
+| tags             | List[String]    |
+| categories       | List[String]    |
+| created          | String/Datetime |
+| thinktank.name   | String          |
 
 Any word without a field qualifier is searched in the fields 'title', 'subtitle', 'abstract', 'authors', 'isbn' and 'tags'.
 

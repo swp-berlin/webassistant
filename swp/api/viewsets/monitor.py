@@ -43,7 +43,7 @@ class MonitorViewSet(ModelViewSet):
 
     def get_queryset(self):
         return ModelViewSet.get_queryset(self).prefetch_related(
-            Prefetch('pool', Pool.objects.can_manage(self.request.user)),
+            Prefetch('pool', Pool.objects.annotate_can_manage(self.request.user)),
         )
 
     def get_serializer_class(self):

@@ -4,12 +4,13 @@ import _ from 'utils/i18n';
 
 import {useQuery} from 'hooks/query';
 
-import Page from 'components/Page';
 import {Result} from 'components/Fetch';
 
-import MonitorForm from './MonitorForm';
 import {useMonitorsBreadcrumb} from './MonitorList';
 import {useMonitorBreadcrumb} from './MonitorDetail';
+
+import MonitorEditPage from './MonitorEditPage';
+import MonitorForm from './MonitorForm';
 
 const Title = _('Edit Monitor');
 const SubmitLabel = _('Save');
@@ -26,7 +27,7 @@ const MonitorEdit = props => {
     return (
         <Result result={result}>
             {monitor => (
-                <Page title={Title}>
+                <MonitorEditPage pool={monitor.pool} title={Title}>
                     <MonitorForm
                         endpoint={endpoint}
                         method="PATCH"
@@ -36,7 +37,7 @@ const MonitorEdit = props => {
                         data={monitor}
                         {...props}
                     />
-                </Page>
+                </MonitorEditPage>
             )}
         </Result>
     );
