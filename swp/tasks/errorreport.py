@@ -45,8 +45,10 @@ def collect_scraper_errors(using: str = None):
         level=ErrorLevel.ERROR,
         sent=None,
     ).order_by(
-        'scraper__thinktank__pool',
-        'scraper__thinktank',
+        'scraper__thinktank__pool__name',
+        'scraper__thinktank__pool_id',
+        'scraper__thinktank__name',
+        'scraper__thinktank_id',
         'scraper',
     )
 
