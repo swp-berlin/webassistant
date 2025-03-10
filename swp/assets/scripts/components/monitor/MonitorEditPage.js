@@ -1,9 +1,9 @@
 import {ClientError} from 'components/Fetch';
 import Page from 'components/Page';
 
-const MonitorEditPage = ({pool: {can_edit: canEdit}, children, ...props}) => (
+const MonitorEditPage = ({pool: {can_manage: canManage}, children, ...props}) => (
     <Page {...props}>
-        {canEdit ? children : <ClientError status={403} />}
+        {canManage ? children : <ClientError status={403} />}
     </Page>
 );
 
