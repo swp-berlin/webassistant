@@ -31,7 +31,7 @@ class Command(BaseCommand):
             os.makedirs(destination, exist_ok=True)
 
             for filepath in filepaths:
-                shutil.move(filepath, destination)
+                shutil.move(f'{filepath}', f'{destination}')
 
             with suppress(OSError):
                 os.rmdir(directory / 'error' / date)
