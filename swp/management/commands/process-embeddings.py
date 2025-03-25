@@ -1,3 +1,4 @@
+import logging
 import os
 import time
 
@@ -12,6 +13,8 @@ from swp.models import Publication
 from swp.utils.spooling import State, iter_files
 from swp.utils.embedding import embed
 from swp.utils.timing import timed, format_duration
+
+logger = logging.getLogger(__name__)
 
 
 class Command(BaseCommand):
@@ -66,13 +69,13 @@ class Command(BaseCommand):
         filename = filepath.relative_to(self.directory)
 
         if publication is None:
-            return self.error(filepath, 'lost', f'Publication for {filename} does not exist.')
+            return self.error(filepath, 'lost', 'Publication for %s does not exist.', filename)
 
         if page_limit and publication.pdf_pages > page_limit and not force:
-            return self.error(filepath, 'error', f'{filename} exceeds page limit.')
+            return self.error(filepath, 'error', '%s exceeds page limit.', filename)
 
         if publication.embedding and not force:
-            return self.error(filepath, 'done', f'{filename} is already embedded.')
+            return self.error(filepath, 'done', '%s is already embedded.', filename)
 
         self.stdout.write(f'Fetching embedding for {filename}…')
 
@@ -86,20 +89,24 @@ class Command(BaseCommand):
                 self.stdout.write(f'Fetched embedding for {filename} in {timer.duration:.2f}s.')
                 self.move(filepath, 'done')
             else:
-                self.error(filepath, 'error', f'{filename} has no content.')
+                self.error(filepath, 'error', '%s has no content.', filename)
 
         elif success is None:
-            self.stderr.write(f'Failed to fetch embedding for {filename}: {response}')
+            self.log_error('Failed to fetch embedding for %s: %s', filename, response)
 
         else:
-            self.stderr.write(f'Failed to fetch embedding for {filename}: [{response.status_code}] {response.text}')
+            self.log_error('Failed to fetch embedding for %s: [%s] %s', filename, response.status_code, response.text)
 
             if 400 <= response.status_code < 500:
                 self.move(filepath, 'error')
 
-    def error(self, filepath: Path, state: State, msg: str):
-        self.stderr.write(msg)
+    def error(self, filepath: Path, state: State, msg: str, *args):
+        self.log_error(msg, *args)
         self.move(filepath, state)
+
+    def log_error(self, msg: str, *args):
+        self.stderr.write(msg % args)
+        logger.error(msg, *args)
 
     def fetch(self, filepath: Path, filename: Path, *, retry=0, max_retries=5):
         success, response = embed(filepath, filename=f'{filename}')
