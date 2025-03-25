@@ -8,6 +8,7 @@ from unittest.mock import patch
 from urllib.parse import urlsplit, urlunsplit
 
 from celery import group as celery_group
+from requests import Response
 
 from django.apps import apps
 from django.conf import settings
@@ -24,6 +25,15 @@ from swp.models import Monitor, Pool, Thinktank, Scraper, ScraperError, Publicat
 from swp.utils.domain import get_canonical_domain
 
 Args = Union[tuple, list]
+
+
+class FakeResponse(Response):
+
+    def __init__(self, status_code: int):
+        Response.__init__(self)
+
+        self.status_code = status_code
+
 
 
 def call_command(*args, **kwargs):
