@@ -54,4 +54,4 @@ class ManagementCommandTestCase(TestCase):
 
             with patch.object(TimeOutSession, 'json', side_effect=results()):
                 with patch('time.sleep'):
-                    call_command('process-embeddings', directory=tempdir, keep_done=False)
+                    call_command('process-embeddings', directory=tempdir, skip_embedded=True, keep_done=False)

@@ -28,13 +28,13 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument('--directory', type=Path, default=settings.EMBEDDING_SPOOLING_DIR)
         parser.add_argument('--state', choices=['todo', *self.keep_files], default='todo')
-        parser.add_argument('--force', action='store_true', default=False)
+        parser.add_argument('--skip-embedded', action='store_true', default=False)
         parser.add_argument('--max-retries', type=int, default=5)
 
         for state, default in self.keep_files.items():
             parser.add_argument(f'--keep-{state}', action='store_true', default=default)
 
-    def handle(self, *, state: State, force: bool, max_retries: int, **options):
+    def handle(self, *, state: State, skip_embedded: bool, max_retries: int, **options):
         self.directory = options.pop('directory', settings.EMBEDDING_SPOOLING_DIR)
         self.keep_files = {
             state: options.pop(f'keep_{state}', default)
@@ -52,7 +52,7 @@ class Command(BaseCommand):
         self.stdout.write(f'Processing {count} files…')
 
         with timed() as timer:
-            self.process(files, force=force, max_retries=max_retries)
+            self.process(files, skip_embedded=skip_embedded, max_retries=max_retries)
 
         duration = format_duration(timer.duration)
 
@@ -64,13 +64,13 @@ class Command(BaseCommand):
         for publication, filepath in files.items():
             self.embed(publications.get(publication), filepath, **options)
 
-    def embed(self, publication: Optional[Publication], filepath: Path, *, force=False, **options):
+    def embed(self, publication: Optional[Publication], filepath: Path, *, skip_embedded=False, **options):
         filename = filepath.relative_to(self.directory)
 
         if publication is None:
             return self.error(filepath, 'lost', 'Publication for %s does not exist.', filename)
 
-        if publication.embedding and not force:
+        if skip_embedded and publication.embedding:
             return self.error(filepath, 'done', '%s is already embedded.', filename)
 
         self.stdout.write(f'Fetching embedding for {filename}…')
