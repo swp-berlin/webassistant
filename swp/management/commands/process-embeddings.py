@@ -28,14 +28,13 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument('--directory', type=Path, default=settings.EMBEDDING_SPOOLING_DIR)
         parser.add_argument('--state', choices=['todo', *self.keep_files], default='todo')
-        parser.add_argument('--page-limit', type=int, default=200)
         parser.add_argument('--force', action='store_true', default=False)
         parser.add_argument('--max-retries', type=int, default=5)
 
         for state, default in self.keep_files.items():
             parser.add_argument(f'--keep-{state}', action='store_true', default=default)
 
-    def handle(self, *, state: State, force: bool, page_limit: int, max_retries: int, **options):
+    def handle(self, *, state: State, force: bool, max_retries: int, **options):
         self.directory = options.pop('directory', settings.EMBEDDING_SPOOLING_DIR)
         self.keep_files = {
             state: options.pop(f'keep_{state}', default)
@@ -53,26 +52,23 @@ class Command(BaseCommand):
         self.stdout.write(f'Processing {count} files…')
 
         with timed() as timer:
-            self.process(files, page_limit=page_limit, force=force, max_retries=max_retries)
+            self.process(files, force=force, max_retries=max_retries)
 
         duration = format_duration(timer.duration)
 
         self.stdout.write(f'Processed {count} files in {duration}.')
 
     def process(self, files: Dict[int, Path], **options):
-        publications = Publication.objects.only('pdf_pages', 'embedding').in_bulk(files)
+        publications = Publication.objects.only('embedding').in_bulk(files)
 
         for publication, filepath in files.items():
             self.embed(publications.get(publication), filepath, **options)
 
-    def embed(self, publication: Optional[Publication], filepath: Path, *, page_limit=200, force=False, **options):
+    def embed(self, publication: Optional[Publication], filepath: Path, *, force=False, **options):
         filename = filepath.relative_to(self.directory)
 
         if publication is None:
             return self.error(filepath, 'lost', 'Publication for %s does not exist.', filename)
-
-        if page_limit and publication.pdf_pages > page_limit and not force:
-            return self.error(filepath, 'error', '%s exceeds page limit.', filename)
 
         if publication.embedding and not force:
             return self.error(filepath, 'done', '%s is already embedded.', filename)

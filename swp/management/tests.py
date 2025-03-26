@@ -36,7 +36,6 @@ class ManagementCommandTestCase(TestCase):
             # Fill spooling dir…
             spool_content(self.publication, 'Test', 'txt', tempdir)
             spool_content(Publication(id=self.publication.id - 1), 'Does not Exist', 'txt', tempdir)
-            spool_content(create_publication(self.thinktank, pdf_pages=500), 'Too Many Pages', 'txt', tempdir)
             spool_content(create_publication(self.thinktank, embedding=embedding), 'Already Embedded', 'txt', tempdir)
             spool_content(create_publication(self.thinktank), 'No Content', 'txt', tempdir)
             spool_content(create_publication(self.thinktank), 'Bad Request', 'txt', tempdir)
