@@ -1,12 +1,14 @@
 from django.conf import settings
 from django.contrib import admin
-from django.urls import include, path
+from django.urls import include, path, register_converter
 
-from swp.views import *
 from swp.api import default_router as v1
+from swp.converters import DateConverter
+from swp.views import *
+
+register_converter(DateConverter, 'date')
 
 react = SWPView.as_view()
-
 
 urlpatterns = [
     path('', react, name='index'),
