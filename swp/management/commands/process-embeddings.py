@@ -16,6 +16,12 @@ from swp.utils.timing import timed, format_duration
 
 logger = logging.getLogger(__name__)
 
+UNRECOVERABLE_ERROR_STATUS_CODES = {
+    400,  # pdf file could not be extracted
+    413,  # file size is too big
+    504,  # time limit reached
+}
+
 
 class Command(BaseCommand):
     directory = settings.EMBEDDING_SPOOLING_DIR
@@ -93,7 +99,7 @@ class Command(BaseCommand):
         else:
             self.log_error('Failed to fetch embedding for %s: [%s] %s', filename, response.status_code, response.text)
 
-            if 400 <= response.status_code < 500:
+            if response.status_code in UNRECOVERABLE_ERROR_STATUS_CODES:
                 self.move(filepath, 'error')
 
     def error(self, filepath: Path, state: State, msg: str, *args):
