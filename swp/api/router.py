@@ -40,4 +40,4 @@ class Router(DefaultRouter):
             )
 
 
-default_router = Router()
+default_router = Router(version='internal-api')

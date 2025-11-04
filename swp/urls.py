@@ -2,7 +2,7 @@ from django.conf import settings
 from django.contrib import admin
 from django.urls import include, path, register_converter
 
-from swp.api import default_router as v1
+from swp.api import default_router as internal
 from swp.converters import DateConverter
 from swp.views import *
 
@@ -24,7 +24,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     # api
-    path('api/', v1.urls),
+    path('api/', internal.urls),
 
     # app
     path('monitor/', include(([

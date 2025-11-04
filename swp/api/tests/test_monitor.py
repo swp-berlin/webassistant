@@ -43,7 +43,7 @@ class MonitorViewSetTestCase(test.TestCase):
 
     def test_detail(self):
         with mock.patch('swp.tasks.update_publication_count.delay') as delay:
-            response = request(self, '1:monitor-detail', args=[self.monitor.pk])
+            response = request(self, 'internal-api:monitor-detail', args=[self.monitor.pk])
 
         self.assertTrue(delay.called)
         self.assertEqual(response.data['name'], self.monitor.name)
@@ -59,7 +59,7 @@ class MonitorViewSetTestCase(test.TestCase):
 
     def test_list(self):
         with mock.patch('celery.canvas.group.delay') as delay:
-            response = request(self, '1:monitor-list')
+            response = request(self, 'internal-api:monitor-list')
 
         self.assertTrue(delay.called)
         self.assertEqual(len(response.data), len(self.monitors))
