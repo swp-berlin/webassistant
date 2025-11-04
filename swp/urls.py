@@ -3,6 +3,7 @@ from django.contrib import admin
 from django.urls import include, path, register_converter
 
 from swp.api import default_router as internal
+from swp.api.v1 import default_router as v1
 from swp.converters import DateConverter
 from swp.views import *
 
@@ -24,6 +25,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     # api
+    path('api/v1/', v1.urls),
     path('api/', internal.urls),
 
     # app
