@@ -56,6 +56,7 @@ async def scrape(scraper: Scraper, config: dict) -> dict:
         'is_multipage': is_multipage,
     }
 
+
 def clean_publications(publications):
     for publication in publications:
         if fields := publication.get('fields'):
