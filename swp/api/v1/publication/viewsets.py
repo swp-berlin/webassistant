@@ -11,6 +11,11 @@ from .serializers import PublicationSerializer
 class PublicationViewSet(SWPViewSet):
     serializer_class = PublicationSerializer
     filterset_class = PublicationFilterSet
+    ordering_fields = [
+        'id',
+        'title',
+        'created',
+    ]
     queryset = Publication.objects.prefetch_related(
         Prefetch('scrapers', Scraper.objects.only('id')),
         Prefetch('categories', Category.objects.only('id')),
