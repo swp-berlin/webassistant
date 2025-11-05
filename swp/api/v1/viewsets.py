@@ -1,8 +1,11 @@
+from django.db.models import ProtectedError
+
 from rest_framework.permissions import DjangoModelPermissions
 from rest_framework.viewsets import ModelViewSet
 
 from swp.api.authentication import SessionAuthentication, TokenAuthentication
 
+from .exceptions import ProtectedErrorException
 from .filters import SWPFilterSet
 from .pagination import SWPagination
 from .router import default_router
@@ -30,3 +33,9 @@ class SWPViewSet(ModelViewSet):
 
     def get_queryset(self):
         return self.queryset.all()
+
+    def handle_exception(self, exc):
+        if isinstance(exc, ProtectedError):
+            exc = ProtectedErrorException(exc)
+
+        return ModelViewSet.handle_exception(self, exc)
