@@ -1,21 +1,21 @@
 from django.db.models import ProtectedError
 
 from rest_framework.decorators import action
-from rest_framework.permissions import DjangoModelPermissions
 from rest_framework.viewsets import ModelViewSet
 
 from swp.api.authentication import SessionAuthentication, TokenAuthentication
-from swp.models import ActivatableModel
+from swp.models import ActivatableModel, Monitor, Pool, Scraper, Thinktank
 
 from .exceptions import ActiveObjException, ProtectedErrorException
 from .filters import SWPFilterSet
 from .pagination import SWPagination
+from .permissions import SWPModelPermissions, ActivatePermission, DeactivatePermission
 from .router import default_router
 
 
 class SWPViewSet(ModelViewSet):
     pagination_class = SWPagination
-    permission_classes = [DjangoModelPermissions]
+    permission_classes = [SWPModelPermissions]
     authentication_classes = [
         TokenAuthentication,
         SessionAuthentication,
@@ -42,6 +42,19 @@ class SWPViewSet(ModelViewSet):
 
         return super().handle_exception(exc)
 
+    @staticmethod
+    def can_manage_pool(user, obj):
+        if isinstance(obj, Pool):
+            return user.can_manage_pool(obj)
+
+        if isinstance(obj, (Thinktank, Monitor)):
+            return user.can_manage_pool(obj.pool)
+
+        if isinstance(obj, Scraper):
+            return user.can_manage_pool(obj.thinktank.pool)
+
+        return True
+
 
 class ActivatableViewSet(SWPViewSet):
 
@@ -51,11 +64,11 @@ class ActivatableViewSet(SWPViewSet):
 
         return super().get_serializer(*args, **kwargs)
 
-    @action(['POST'], detail=True)
+    @action(['POST'], detail=True, permission_classes=[ActivatePermission])
     def activate(self, request, *args, **kwargs):
         return self.partial_update(request, *args, **kwargs)
 
-    @action(['POST'], detail=True)
+    @action(['POST'], detail=True, permission_classes=[DeactivatePermission])
     def deactivate(self, request, *args, **kwargs):
         return self.partial_update(request, *args, **kwargs)
 
