@@ -1,5 +1,6 @@
 from .lookups import *
 from .abstract import ActivatableModel
+from .auth import AuthToken
 from .category import Category
 from .choices import ErrorLevel, Interval
 from .monitor import Monitor
@@ -15,6 +16,7 @@ from .zotero import ZoteroTransfer
 
 __all__ = [
     'ActivatableModel',
+    'AuthToken',
     'Category',
     'ErrorLevel',
     'Interval',

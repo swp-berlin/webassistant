@@ -1,8 +1,7 @@
-from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import DjangoModelPermissions
 from rest_framework.viewsets import ModelViewSet
 
-from swp.api.authentication import SessionAuthentication
+from swp.api.authentication import SessionAuthentication, TokenAuthentication
 
 from .filters import SWPFilterSet
 from .pagination import SWPagination
