@@ -1,10 +1,10 @@
 from rest_framework import serializers
-from rest_framework.serializers import ModelSerializer
 
+from swp.api.v1.serializers import ActivatableSerializer
 from swp.models import Monitor
 
 
-class MonitorSerializer(ModelSerializer):
+class MonitorSerializer(ActivatableSerializer):
 
     class Meta:
         model = Monitor

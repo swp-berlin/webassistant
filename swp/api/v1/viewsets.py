@@ -1,5 +1,6 @@
 from django.db.models import ProtectedError
 
+from rest_framework.decorators import action
 from rest_framework.permissions import DjangoModelPermissions
 from rest_framework.viewsets import ModelViewSet
 
@@ -35,14 +36,31 @@ class SWPViewSet(ModelViewSet):
     def get_queryset(self):
         return self.queryset.all()
 
-    def perform_destroy(self, instance):
-        if isinstance(instance, ActivatableModel) and instance.is_active:
-            raise ActiveObjException(instance)
-
-        return super().perform_destroy(instance)
-
     def handle_exception(self, exc):
         if isinstance(exc, ProtectedError):
             exc = ProtectedErrorException(exc)
 
         return super().handle_exception(exc)
+
+
+class ActivatableViewSet(SWPViewSet):
+
+    def get_serializer(self, *args, **kwargs):
+        if self.action in {'activate', 'deactivate'}:
+            kwargs['activate'] = self.action == 'activate'
+
+        return super().get_serializer(*args, **kwargs)
+
+    @action(['POST'], detail=True)
+    def activate(self, request, *args, **kwargs):
+        return self.partial_update(request, *args, **kwargs)
+
+    @action(['POST'], detail=True)
+    def deactivate(self, request, *args, **kwargs):
+        return self.partial_update(request, *args, **kwargs)
+
+    def perform_destroy(self, instance: ActivatableModel):
+        if instance.is_active:
+            raise ActiveObjException(instance)
+
+        return super().perform_destroy(instance)
