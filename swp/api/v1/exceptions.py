@@ -4,9 +4,22 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework import status
 from rest_framework.exceptions import APIException
 
+from swp.models import ActivatableModel
 
-class ProtectedErrorException(APIException):
+
+class BadRequestException(APIException):
     status_code = status.HTTP_400_BAD_REQUEST
+
+
+class ActiveObjException(BadRequestException):
+    default_detail = _('%(obj)s cannot be deleted because it is still active.')
+    default_code = 'active'
+
+    def __init__(self, obj: ActivatableModel):
+        super().__init__(self.default_detail % {'obj': obj})
+
+
+class ProtectedErrorException(BadRequestException):
     default_detail = _('Object cannot be deleted because it is still referenced.')
     default_code = 'referenced'
 
