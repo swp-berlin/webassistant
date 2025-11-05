@@ -1,8 +1,10 @@
+from django.db.models import Prefetch
+
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from swp.api.v1.viewsets import ActivatableViewSet
-from swp.models import Scraper
+from swp.models import Category, Scraper
 from swp.tasks import preview_scraper
 
 from .exceptions import ScraperActiveException
@@ -14,7 +16,9 @@ from .serializers import ScraperSerializer, ScraperPreviewSerializer
 class ScraperViewSet(ActivatableViewSet):
     serializer_class = ScraperSerializer
     filterset_class = ScraperFilterSet
-    queryset = Scraper.objects
+    queryset = Scraper.objects.prefetch_related(
+        Prefetch('categories', Category.objects.only('id')),
+    )
 
     def check_object_permissions(self, request, obj: Scraper):
         super().check_object_permissions(request, obj)
