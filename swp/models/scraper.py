@@ -52,10 +52,10 @@ class Scraper(ActivatableModel, LastModified):
     """
 
     thinktank = models.ForeignKey(
-        'swp.Thinktank',
-        on_delete=models.CASCADE,
-        related_name='scrapers',
         verbose_name=_('think tank'),
+        to='swp.Thinktank',
+        on_delete=models.PROTECT,
+        related_name='scrapers',
     )
 
     type = ChoiceField(_('type'), choices=ScraperType.choices)
@@ -74,10 +74,12 @@ class Scraper(ActivatableModel, LastModified):
     objects = ScraperQuerySet.as_manager()
 
     class Meta(ActivatableModel.Meta):
-        get_latest_by = 'last_run'
-        indexes = [models.Index(fields=['-last_run'])]
         verbose_name = _('scraper')
         verbose_name_plural = _('scrapers')
+        get_latest_by = 'last_run'
+        indexes = [
+            models.Index(fields=['-last_run']),
+        ]
 
     def __str__(self) -> str:
         return f'{self.name} {self.pk}'
