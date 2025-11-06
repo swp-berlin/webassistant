@@ -1,7 +1,13 @@
+from rest_framework.decorators import action
+
 from swp.api.v1.viewsets import SWPViewSet
 from swp.models import PublicationList
 
-from .serializers import PublicationListSerializer
+from .serializers import (
+    PublicationListSerializer,
+    PublicationListAddSerializer,
+    PublicationListRemoveSerializer,
+)
 
 
 @SWPViewSet.register('publication-list', basename='publication-list')
@@ -11,3 +17,11 @@ class PublicationListViewSet(SWPViewSet):
 
     def get_queryset(self):
         return self.queryset.filter(user=self.request.user)
+
+    @action(['POST'], detail=True, serializer_class=PublicationListAddSerializer)
+    def add(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    @action(['POST'], detail=True, serializer_class=PublicationListRemoveSerializer)
+    def remove(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
