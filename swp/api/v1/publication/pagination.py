@@ -4,8 +4,8 @@ from django_elasticsearch_dsl.search import Search
 from elasticsearch.exceptions import BadRequestError
 
 from rest_framework.exceptions import APIException
-from rest_framework.pagination import LimitOffsetPagination
 
+from swp.api.v1.pagination import SWPagination
 from swp.documents import PublicationDocument
 
 
@@ -21,7 +21,7 @@ class ElasticSearchException(APIException):
         APIException.__init__(self, error)
 
 
-class ElasticSearchPagination(LimitOffsetPagination):
+class ElasticSearchPagination(SWPagination):
 
     def paginate_queryset(self, queryset, request, view=None, *, using=None, keep_search_order=True):
         search = PublicationDocument.search(using=using).update_from_dict(request.data).source(False)
