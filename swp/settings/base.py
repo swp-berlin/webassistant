@@ -268,6 +268,7 @@ REST_FRAMEWORK = {
         'rest_framework.filters.OrderingFilter',
     ],
     'EXCEPTION_HANDLER': 'swp.api.exceptions.exception_handler',
+    'TEST_REQUEST_DEFAULT_FORMAT': 'json',
 }
 
 # </editor-fold>

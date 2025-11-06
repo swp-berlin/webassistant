@@ -8,7 +8,8 @@ from unittest.mock import patch
 from urllib.parse import urlsplit, urlunsplit
 
 from celery import group as celery_group
-from requests import Response
+
+from requests import Response as RequestsResponse
 
 from django.apps import apps
 from django.conf import settings
@@ -16,24 +17,28 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.base_user import AbstractBaseUser as User
 from django.contrib.auth.models import Group
 from django.core.management import call_command as django_call_command
-from django.test import SimpleTestCase
-from django.urls import reverse
+from django.http.request import HttpRequest
+from django.http.response import HttpResponse, HttpResponseRedirectBase, StreamingHttpResponse
+from django.shortcuts import resolve_url
+from django.template import Context
+from django.template.response import TemplateResponse
+from django.test import SimpleTestCase, Client
+from django.urls import reverse, ResolverMatch
 from django.utils.crypto import get_random_string
 from django.utils.text import slugify
+
+from rest_framework.response import Response as RestFrameworkResponse
 
 from swp.models import Monitor, Pool, Thinktank, Scraper, ScraperError, Publication
 from swp.utils.domain import get_canonical_domain
 
-Args = Union[tuple, list]
 
-
-class FakeResponse(Response):
+class FakeResponse(RequestsResponse):
 
     def __init__(self, status_code: int):
-        Response.__init__(self)
+        RequestsResponse.__init__(self)
 
         self.status_code = status_code
-
 
 
 def call_command(*args, **kwargs):
@@ -72,15 +77,28 @@ def add_to_group(user, name: str):
     return user.groups.add(group)
 
 
-def get_url(url: str, args: Args = None, kwargs: dict = None) -> str:
+class ObjectWithGetAbsoluteURLMethod(Protocol):
+
+    def get_absolute_url(self) -> str: ...
+
+
+URL = Union[str, ObjectWithGetAbsoluteURLMethod]
+URLArgs = Union[tuple, list]
+URLKwargs = dict
+
+
+def get_url(url: URL, args: URLArgs = None, kwargs: URLKwargs = None) -> str:
     """
     Helper to reverse the given url name.
     """
 
-    return url if url.startswith('/') else reverse(url, args=args, kwargs=kwargs)
+    if args or kwargs:
+        return reverse(url, args=args, kwargs=kwargs)
+
+    return resolve_url(url)
 
 
-def get_handler(test_case: SimpleTestCase, method: str = None, **data):
+def get_handler(test_case: SimpleTestCase, method: str = None, data=None):
     if data:
         method = str.lower(method or 'POST')
     else:
@@ -104,8 +122,45 @@ def login(test_case: SimpleTestCase, user=None, password: str = None) -> bool:
     return test_case.client.login(username=user.username, password=password)
 
 
-def request(test_case: SimpleTestCase, url: str, status_code: int = None, expected_url: str = None,
-            args: Args = None, kwargs: dict = None, headers: dict = None, msg: str = None, **data):
+FormData = dict
+JSONDict = dict
+JSONList = list
+RequestData = Union[FormData, JSONDict, JSONList]
+
+
+class TestClientResponse:
+    client: Client
+    request: HttpRequest
+    templates: list
+    context: Context
+    resolver_match: ResolverMatch
+
+    def json(self) -> Union[list, dict]: ...
+
+
+Response = Union[
+    HttpResponse,
+    HttpResponseRedirectBase,
+    StreamingHttpResponse,
+    TemplateResponse,
+    TestClientResponse,
+    RestFrameworkResponse,
+]
+
+
+def request(
+    test_case: SimpleTestCase,
+    url: URL,
+    status_code: int = None,
+    expected_url: URL = None,
+    args: URLArgs = None,
+    kwargs: URLKwargs = None,
+    headers: dict = None,
+    msg: str = None,
+    method: str = None,
+    data: RequestData = None,
+    **options,
+) -> Response:
     """
     A helper to make a request with the test case's http client.
 
@@ -117,13 +172,12 @@ def request(test_case: SimpleTestCase, url: str, status_code: int = None, expect
     When posting without parameters just pass post=True.
     """
 
-    handler = get_handler(test_case, **data)
+    data = (options or None) if data is None else data
+    handler = get_handler(test_case, method, data)
     url = get_url(url, args, kwargs)
     headers = headers or {}
-
-    response = handler(url, data=data or None, **headers)
-
     status_code = status_code or 200
+    response = handler(url, data=data, **headers)
     msg = msg or getattr(response, 'content', None)
 
     if expected_url:

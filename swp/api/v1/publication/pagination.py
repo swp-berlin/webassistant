@@ -15,7 +15,7 @@ class ElasticSearchException(APIException):
         self.status_code = error.status_code
         self.default_code = error.message
 
-        if isinstance(error.body, dict):
+        if isinstance(error.body, dict):  # pragma: no branch
             error = error.body.get('error', error.body)
 
         APIException.__init__(self, error)
