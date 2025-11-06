@@ -19,6 +19,8 @@ class AdminTestCase(TestCase):
     def setUpModels(cls, now):
         user = create_user('simple-user')
 
+        AuthToken.objects.create(user=user)
+
         create_monitor(name='Test-Monitor', recipients=[user.email])
 
         category = Category.objects.create(name='Test')
