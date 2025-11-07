@@ -1,5 +1,6 @@
 from django.db.models import Prefetch
 
+from drf_spectacular.utils import extend_schema
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
@@ -26,10 +27,12 @@ class ScraperViewSet(ActivatableViewSet):
         if self.action in {'update', 'partial_update'} and obj.is_active:
             raise ScraperActiveException
 
-    @action(['POST'], detail=True, serializer_class=ScraperPreviewSerializer)
+    @extend_schema(operation_id='scraper_preview_start')
+    @action(['PATCH'], detail=True, serializer_class=ScraperPreviewSerializer)
     def preview(self, request, *args, **kwargs):
         return self.partial_update(request, *args, **kwargs)
 
+    @extend_schema(operation_id='scraper_preview_status')
     @action(detail=False, url_path=r'preview/(?P<task_id>[a-z0-9-]+)', serializer_class=ScraperPreviewSerializer)
     def preview_status(self, request, *, task_id: str, **kwargs):
         result = preview_scraper.AsyncResult(task_id)

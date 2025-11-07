@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema
 from rest_framework.decorators import action
 
 from swp.api.v1.viewsets import SWPViewSet
@@ -18,10 +19,12 @@ class PublicationListViewSet(SWPViewSet):
     def get_queryset(self):
         return self.queryset.filter(user=self.request.user)
 
+    @extend_schema(operation_id='publication_list_add_publication')
     @action(['POST'], detail=True, serializer_class=PublicationListAddSerializer)
     def add(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)
 
+    @extend_schema(operation_id='publication_list_remove_publication')
     @action(['POST'], detail=True, serializer_class=PublicationListRemoveSerializer)
     def remove(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)

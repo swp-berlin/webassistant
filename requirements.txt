@@ -5,6 +5,7 @@ Django==4.1.13
 django-elasticsearch-dsl==8.0
 django-filter==2.4.0
 djangorestframework==3.12.2
+drf-spectacular==0.29.0
 elasticsearch<9
 pikepdf==5.6.1
 playwright==1.27

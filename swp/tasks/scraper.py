@@ -1,3 +1,5 @@
+from typing import List, TypedDict, Union
+
 from asgiref.sync import async_to_sync
 
 from swp.celery import app
@@ -7,6 +9,21 @@ from swp.utils.scraping.exceptions import ScraperError
 
 PUBLICATION_PREVIEW_COUNT = 3
 PUBLICATION_PREVIEW_PAGES = 2
+
+
+class SuccessResult(TypedDict):
+    success: bool
+    publications: List[dict]
+    max_per_page: int
+    is_multipage: bool
+
+
+class ErrorResult(TypedDict):
+    success: bool
+    error: str
+
+
+PreviewResult = Union[SuccessResult, ErrorResult]
 
 
 def configure_preview_pagination(config: dict) -> int:
@@ -21,7 +38,7 @@ def configure_preview_pagination(config: dict) -> int:
     return max_pages * max_per_page
 
 
-async def scrape(scraper: Scraper, config: dict) -> dict:
+async def scrape(scraper: Scraper, config: dict) -> PreviewResult:
     publications = []
 
     max_len = configure_preview_pagination(config)
@@ -57,7 +74,7 @@ async def scrape(scraper: Scraper, config: dict) -> dict:
     }
 
 
-def clean_publications(publications):
+def clean_publications(publications: List[dict]):
     for publication in publications:
         if fields := publication.get('fields'):
             for embedding_field in ['pdf_path', 'text_content']:
@@ -65,7 +82,7 @@ def clean_publications(publications):
 
 
 @app.task(name='preview.scraper')
-def preview_scraper(start_url, config):
+def preview_scraper(start_url, config) -> PreviewResult:
     scraper = Scraper(start_url)
 
     result = async_to_sync(scrape)(scraper, config)

@@ -1,4 +1,5 @@
 from contextlib import suppress
+from typing import Optional
 
 from django.utils.translation import gettext_lazy as _
 
@@ -12,6 +13,7 @@ from rest_framework.serializers import ModelSerializer
 from swp.api.v1.serializers import ActivatableSerializer
 from swp.models import Scraper
 from swp.tasks import preview_scraper
+from swp.tasks.scraper import PreviewResult
 
 STATES = [
     PENDING,
@@ -61,6 +63,6 @@ class ScraperPreviewSerializer(ModelSerializer):
         return preview_scraper.delay(start_url, data)
 
     @staticmethod
-    def get_result(instance: AsyncResult):
+    def get_result(instance: AsyncResult) -> Optional[PreviewResult]:
         with suppress(TimeoutError):
             return instance.get(timeout=0.1, propagate=False)
