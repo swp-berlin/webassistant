@@ -44,7 +44,7 @@ class ScraperTestCase(APITestCase):
 
     def test_scraper_preview(self):
         with patch.object(preview_scraper, 'delay', return_value=FakeResult):
-            request(self, '1:scraper-preview', args=[self.scraper.id], method='POST', data={})
+            request(self, '1:scraper-preview', args=[self.scraper.id], method='PATCH', data={})
 
     def test_scraper_preview_status(self):
         with patch.object(preview_scraper, 'AsyncResult', return_value=FakeResult):
