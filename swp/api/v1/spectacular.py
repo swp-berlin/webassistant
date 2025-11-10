@@ -1,8 +1,12 @@
 from typing import List
 
+from drf_spectacular.authentication import SessionScheme, TokenScheme
 from drf_spectacular.openapi import AutoSchema
 
 from .viewsets import SWPViewSet
+
+
+SessionScheme.match_subclasses = TokenScheme.match_subclasses = True
 
 
 class SWPSchema(AutoSchema):
