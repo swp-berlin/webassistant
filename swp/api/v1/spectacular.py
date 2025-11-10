@@ -29,3 +29,6 @@ class SWPSchema(AutoSchema):
                 return operation_id.removesuffix(f'_{action}')
 
         return operation_id
+
+    def get_summary(self) -> str:
+        return self.path
