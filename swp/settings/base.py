@@ -277,6 +277,9 @@ REST_FRAMEWORK = {
 
 SPECTACULAR_SETTINGS = {
     'TITLE': 'WebMonitor',
+    'POSTPROCESSING_HOOKS': [
+        'swp.api.v1.spectacular.add_root_tags',
+    ],
 }
 
 # <editor-fold desc="Zotero">
