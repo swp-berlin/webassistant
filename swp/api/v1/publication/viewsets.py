@@ -7,6 +7,7 @@ from rest_framework.parsers import JSONParser
 
 from swp.api.v1.viewsets import SWPViewSet
 from swp.models import Category, Publication, Scraper
+from swp.utils.text import paragraph
 
 from .filters import PublicationFilterSet
 from .pagination import ElasticSearchPagination
@@ -29,6 +30,12 @@ class PublicationViewSet(SWPViewSet):
 
     @extend_schema(
         responses=PublicationSerializer(many=True),
+        description=paragraph(
+            'This endpoint expects a ElasticSearch Query object.',
+            'It is passed through to the underlying ElasticSearch engine.',
+            'Refer to the ElasticSearch docs on the available fields to query.'
+        ),
+        external_docs='https://www.elastic.co/docs/explore-analyze/query-filter/languages/querydsl',
     )
     @action(
         detail=False,
