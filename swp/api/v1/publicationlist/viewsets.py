@@ -19,12 +19,18 @@ class PublicationListViewSet(SWPViewSet):
     def get_queryset(self):
         return self.queryset.filter(user=self.request.user)
 
-    @extend_schema(operation_id='publication_list_add_publication')
+    @extend_schema(
+        operation_id='publication_list_add_publication',
+        description='Endpoint to add a publication to a list.',
+    )
     @action(['POST'], detail=True, serializer_class=PublicationListAddSerializer)
     def add(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)
 
-    @extend_schema(operation_id='publication_list_remove_publication')
+    @extend_schema(
+        operation_id='publication_list_remove_publication',
+        description='Endpoint to remove a publication from a list.',
+    )
     @action(['POST'], detail=True, serializer_class=PublicationListRemoveSerializer)
     def remove(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)
