@@ -264,7 +264,7 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ],
     'DEFAULT_RENDERER_CLASSES': REST_FRAMEWORK_DEFAULT_RENDERER_CLASSES,
-    'DEFAULT_SCHEMA_CLASS': 'swp.api.v1.spectacular.SWPSchema',
+    'DEFAULT_SCHEMA_CLASS': 'swp.api.v1.schema.SWPSchema',
     'DEFAULT_FILTER_BACKENDS': [
         'django_filters.rest_framework.DjangoFilterBackend',
         'rest_framework.filters.OrderingFilter',
