@@ -1,5 +1,7 @@
 from django.db.models import Prefetch
 
+from drf_spectacular.utils import extend_schema
+
 from rest_framework.decorators import action
 from rest_framework.parsers import JSONParser
 
@@ -25,6 +27,9 @@ class PublicationViewSet(SWPViewSet):
         Prefetch('categories', Category.objects.only('id')),
     )
 
+    @extend_schema(
+        responses=PublicationSerializer(many=True),
+    )
     @action(
         detail=False,
         methods=['POST'],

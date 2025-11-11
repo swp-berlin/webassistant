@@ -1,6 +1,19 @@
+from typing import Dict
+
+from rest_framework.fields import Field
 from rest_framework.serializers import ModelSerializer
 
 from swp.models import ActivatableModel
+
+
+class ReadOnlyMixin:
+    fields: Dict[str, Field]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for field in self.fields.values():
+            field.read_only = True
 
 
 class ActivatableSerializer(ModelSerializer):

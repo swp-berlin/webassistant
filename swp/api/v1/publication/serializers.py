@@ -3,6 +3,7 @@ from django.db.models import Prefetch
 from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
 
+from swp.api.v1.serializers import ReadOnlyMixin
 from swp.models import Publication, Scraper, Thinktank
 
 SCRAPERS = Scraper.objects.prefetch_related(
@@ -22,13 +23,7 @@ class PublicationSerializer(ModelSerializer):
         }
 
 
-class PublicationSearchSerializer(PublicationSerializer):
+class PublicationSearchSerializer(ReadOnlyMixin, PublicationSerializer):
     """
-    Special serializer for search that does not prefill the search browser's content field.
+    Special serializer for search that does not prefill the browsable api's content field.
     """
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        if self.instance is None:
-            self.fields.clear()
