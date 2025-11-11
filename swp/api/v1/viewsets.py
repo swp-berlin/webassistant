@@ -1,5 +1,7 @@
 from django.db.models import ProtectedError
 
+from drf_spectacular.utils import extend_schema
+
 from rest_framework.decorators import action
 from rest_framework.viewsets import ModelViewSet
 
@@ -64,10 +66,12 @@ class ActivatableViewSet(SWPViewSet):
 
         return super().get_serializer(*args, **kwargs)
 
+    @extend_schema(request=None)
     @action(['POST'], detail=True, permission_classes=[ActivatePermission])
     def activate(self, request, *args, **kwargs):
         return self.partial_update(request, *args, **kwargs)
 
+    @extend_schema(request=None)
     @action(['POST'], detail=True, permission_classes=[DeactivatePermission])
     def deactivate(self, request, *args, **kwargs):
         return self.partial_update(request, *args, **kwargs)
