@@ -6,4 +6,5 @@ from .pool import *
 from .publication import *
 from .publicationlist import *
 from .scraper import *
+from .spectacular import *
 from .thinktank import *
