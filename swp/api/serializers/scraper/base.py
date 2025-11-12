@@ -20,18 +20,27 @@ class ResolverConfigSerializer(BaseResolverConfigSerializer):
     def to_representation(self, instance):
         serializer = self.get_serializer(instance['type'], instance)
 
-        return {**super().to_representation(instance), **serializer.to_representation(instance)}
+        return {
+            **super().to_representation(instance),
+            **serializer.to_representation(instance),
+        }
 
     def to_internal_value(self, data):
         internal_data = super().to_internal_value(data)
         serializer = self.get_serializer(internal_data['type'], data=data)
 
-        return {**internal_data, **serializer.to_internal_value(data)}
+        return {
+            **internal_data,
+            **serializer.to_internal_value(data),
+        }
 
     def validate(self, data):
         serializer = self.get_serializer(data['type'], data=data)
 
-        return {**super().validate(data), **serializer.validate(data)}
+        return {
+            **super().validate(data),
+            **serializer.validate(data),
+        }
 
 
 class PaginatorSerializer(Serializer):
