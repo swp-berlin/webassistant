@@ -91,6 +91,13 @@ msgstr ""
 msgid "Important dates"
 msgstr ""
 
+msgid "Token is expired."
+msgstr ""
+
+#, python-format
+msgid "Invalid token header: %(error)s"
+msgstr ""
+
 msgid "The query provided is invalid. Please check your input."
 msgstr ""
 
@@ -117,6 +124,54 @@ msgstr ""
 msgid "Invalid Selector"
 msgstr ""
 
+#, python-format
+msgid "%(obj)s cannot be deleted because it is still active."
+msgstr ""
+
+msgid "Object cannot be deleted because it is still referenced."
+msgstr ""
+
+msgid "name"
+msgstr ""
+
+msgid "title"
+msgstr ""
+
+msgid "scraper"
+msgstr ""
+
+msgid "category"
+msgstr ""
+
+msgid "entries"
+msgstr ""
+
+msgid "last updated"
+msgstr ""
+
+msgid "publication"
+msgstr ""
+
+#, python-brace-format
+msgid "Publication „{publication}“ is already an entry of list „{list}“."
+msgstr ""
+
+#, python-brace-format
+msgid "Publication „{publication}“ is not an entry of list „{list}“."
+msgstr ""
+
+msgid "Scraper is active and cannot be changed."
+msgstr ""
+
+msgid "ID"
+msgstr ""
+
+msgid "status"
+msgstr ""
+
+msgid "result"
+msgstr ""
+
 msgid "can manage"
 msgstr ""
 
@@ -133,9 +188,6 @@ msgid "Query"
 msgstr ""
 
 msgid "Pool"
-msgstr ""
-
-msgid "title"
 msgstr ""
 
 msgid "subtitle"
@@ -166,10 +218,16 @@ msgstr ""
 msgid "last modified"
 msgstr ""
 
-msgid "name"
+msgid "key"
 msgstr ""
 
-msgid "category"
+msgid "expires"
+msgstr ""
+
+msgid "auth token"
+msgstr ""
+
+msgid "auth tokens"
 msgstr ""
 
 msgid "categories"
@@ -334,9 +392,6 @@ msgstr ""
 msgid "last pollux schedule"
 msgstr ""
 
-msgid "publication"
-msgstr ""
-
 msgid "publications"
 msgstr ""
 
@@ -379,6 +434,9 @@ msgstr ""
 msgid "data"
 msgstr ""
 
+msgid "The domain part must match or be a subdomain of its think tank's domain."
+msgstr ""
+
 msgid "checksum"
 msgstr ""
 
@@ -386,9 +444,6 @@ msgid "last run"
 msgstr ""
 
 msgid "is running"
-msgstr ""
-
-msgid "scraper"
 msgstr ""
 
 msgid "Please enter a valid start url."
@@ -466,9 +521,6 @@ msgid "api key"
 msgstr ""
 
 msgid "path"
-msgstr ""
-
-msgid "key"
 msgstr ""
 
 msgid "attachment key"

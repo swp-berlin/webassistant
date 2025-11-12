@@ -64,7 +64,7 @@ class Scraper(ActivatableModel, LastModified):
 
     categories = models.ManyToManyField('swp.Category', 'scrapers', verbose_name=_('categories'), blank=True)
 
-    start_url = LongURLField(_('start URL'))
+    start_url = LongURLField(_('start URL'), help_text=_("Must match or be a subdomain of its think tank's domain."))
     checksum = models.CharField(_('checksum'), max_length=64, unique=True, blank=True, null=True)
 
     interval = models.PositiveIntegerField(_('interval'), choices=Interval.choices, default=Interval.DAILY)

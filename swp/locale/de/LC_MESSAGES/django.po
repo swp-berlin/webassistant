@@ -91,6 +91,13 @@ msgstr "Berechtigungen"
 msgid "Important dates"
 msgstr "Wichtige Daten"
 
+msgid "Token is expired."
+msgstr "Token ist abgelaufen."
+
+#, python-format
+msgid "Invalid token header: %(error)s"
+msgstr "Ungültiger Token Header: %(error)s"
+
 msgid "The query provided is invalid. Please check your input."
 msgstr "Der eingegebene Suchbegriff ist ungültig. Bitte überprüfen Sie Ihre Eingabe."
 
@@ -117,6 +124,54 @@ msgstr "Sie sind nicht berechtigt Thinktanks zu Pool %(pool)s hinzuzufügen."
 msgid "Invalid Selector"
 msgstr "Ungültiger Selektor"
 
+#, python-format
+msgid "%(obj)s cannot be deleted because it is still active."
+msgstr "%(obj)s kann nicht gelöscht werden, da es noch aktiv ist."
+
+msgid "Object cannot be deleted because it is still referenced."
+msgstr "Objekt kann nicht gelöscht werden, da es noch referenziert wird."
+
+msgid "name"
+msgstr "Name"
+
+msgid "title"
+msgstr "Titel"
+
+msgid "scraper"
+msgstr "Scraper"
+
+msgid "category"
+msgstr "Kategorie"
+
+msgid "entries"
+msgstr "Einträge"
+
+msgid "last updated"
+msgstr "zuletzt aktualisiert"
+
+msgid "publication"
+msgstr "Publikation"
+
+#, python-brace-format
+msgid "Publication „{publication}“ is already an entry of list „{list}“."
+msgstr "Die Publikation „{publication}“ ist bereits Teil der Liste „{list}“."
+
+#, python-brace-format
+msgid "Publication „{publication}“ is not an entry of list „{list}“."
+msgstr "Die Publikation „{publication}“ ist kein Teil der Liste „{list}“."
+
+msgid "Scraper is active and cannot be changed."
+msgstr "Der Scraper ist aktiv und kann nicht geändert werden."
+
+msgid "ID"
+msgstr "ID"
+
+msgid "status"
+msgstr "Status"
+
+msgid "result"
+msgstr "Ergebnis"
+
 msgid "can manage"
 msgstr "kann verwalten"
 
@@ -134,9 +189,6 @@ msgstr "Suchbegriff"
 
 msgid "Pool"
 msgstr "Pool"
-
-msgid "title"
-msgstr "Titel"
 
 msgid "subtitle"
 msgstr "Untertitel"
@@ -166,11 +218,17 @@ msgstr "erzeugt am"
 msgid "last modified"
 msgstr "zuletzt geändert"
 
-msgid "name"
-msgstr "Name"
+msgid "key"
+msgstr "Schlüssel"
 
-msgid "category"
-msgstr "Kategorie"
+msgid "expires"
+msgstr "läuft ab"
+
+msgid "auth token"
+msgstr "Auth-Token"
+
+msgid "auth tokens"
+msgstr "Auth-Tokens"
 
 msgid "categories"
 msgstr "Kategorien"
@@ -334,9 +392,6 @@ msgstr "letzte Pollux-Aktualisierung"
 msgid "last pollux schedule"
 msgstr "letzte Pollux-Planung"
 
-msgid "publication"
-msgstr "Publikation"
-
 msgid "publications"
 msgstr "Publikationen"
 
@@ -379,6 +434,9 @@ msgstr "Typ"
 msgid "data"
 msgstr "Daten"
 
+msgid "Must match or be a subdomain of its think tank's domain."
+msgstr "Muss mit der Domain des zugehörigen Thinktanks übereinstimmen oder eine Subdomain davon sein."
+
 msgid "checksum"
 msgstr "Checksumme"
 
@@ -387,9 +445,6 @@ msgstr "letzter Durchlauf"
 
 msgid "is running"
 msgstr "läuft"
-
-msgid "scraper"
-msgstr "Scraper"
 
 msgid "Please enter a valid start url."
 msgstr "Bitte geben Sie eine gültige Start-URL ein."
@@ -467,9 +522,6 @@ msgstr "API-Schlüssel"
 
 msgid "path"
 msgstr "Pfad"
-
-msgid "key"
-msgstr "Schlüssel"
 
 msgid "attachment key"
 msgstr "Anhang-Schlüssel"
@@ -685,7 +737,3 @@ msgstr "Bitte geben Sie eine valide Domain ein."
 #, python-format
 msgid "The entered domain is not a canonical domain. The canonical domain to the entered domain is: %(domain)s"
 msgstr "Die eingegebene Domain ist keine kanonische Domain. Die kanonische Domain zur eingegebenen Domain ist: %(domain)s"
-
-#, python-format
-#~ msgid "Attached you will find all publications for %(monitor)s in RIS format."
-#~ msgstr "Im Anhang finden Sie alle Publikationen für %(monitor)s im RIS-Format."
