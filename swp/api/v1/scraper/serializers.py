@@ -8,6 +8,7 @@ from celery.result import AsyncResult
 from celery.states import *
 
 from rest_framework import serializers
+from rest_framework.serializers import ModelSerializer
 
 from swp.api.v1.serializers import ActivatableSerializer
 from swp.models import Scraper
@@ -25,11 +26,7 @@ STATES = [
 ]
 
 
-class ScraperSerializer(ActivatableSerializer):
-
-    class Meta:
-        model = Scraper
-        fields = serializers.ALL_FIELDS
+class BaseScraperSerializer(ModelSerializer):
 
     def validate(self, attrs):
         self.validate_start_url_domain(attrs)
@@ -50,12 +47,20 @@ class ScraperSerializer(ActivatableSerializer):
         Scraper.validate_start_url(start_url, thinktank.domain)
 
 
-class ScraperPreviewSerializer(ScraperSerializer):
+class ScraperSerializer(ActivatableSerializer, BaseScraperSerializer):
+
+    class Meta:
+        model = Scraper
+        fields = serializers.ALL_FIELDS
+
+
+class ScraperPreviewSerializer(BaseScraperSerializer):
     id = serializers.CharField(label=_('ID'), read_only=True)
     status = serializers.ChoiceField(label=_('status'), choices=STATES, read_only=True)
     result = serializers.SerializerMethodField(label=_('result'), read_only=True)
 
-    class Meta(ScraperSerializer.Meta):
+    class Meta:
+        model = Scraper
         fields = [
             'id',
             'status',
