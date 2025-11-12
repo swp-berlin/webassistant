@@ -6,7 +6,7 @@ from django.utils.text import get_text_list
 from drf_spectacular.authentication import SessionScheme, TokenScheme
 from drf_spectacular.openapi import AutoSchema
 
-from swp.models import Scraper
+from swp.models import Scraper, ActivatableModel
 from swp.utils.text import paragraph
 
 from .viewsets import SWPViewSet
@@ -57,25 +57,34 @@ class SWPSchema(AutoSchema):
         action: str = self.view.action
         description = ACTION_DESCRIPTIONS.get(action, action)
         model: ModelType = self.view.queryset.model
+        opts = model._meta
 
         if self._is_list_view(None):
-            description = f'Endpoint to {description} {model._meta.verbose_name_plural}.'
+            description = f'Endpoint to {description} {opts.verbose_name_plural}.'
         else:
-            description = f'Endpoint to {description} a {model._meta.verbose_name}.'
+            description = f'Endpoint to {description} a {opts.verbose_name}.'
 
         def add(*sentences):
             return paragraph(description, *sentences)
 
-        if action == 'destroy':
+        if action == 'create':
+            if issubclass(model, ActivatableModel):
+                description = add(
+                    f'Newly created {opts.verbose_name_plural} are inactive by default.',
+                    f'Refer to `/api/v1/{opts.model_name}/{{id}}/activate/` to activate a {opts.verbose_name}.',
+                )
+
+        elif action == 'destroy':
             if relations := self.get_protected_relations(model):
-                verbose_name_plural = str.capitalize(f'{model._meta.verbose_name_plural}')
+                verbose_name_plural = str.capitalize(f'{opts.verbose_name_plural}')
                 description = add(f'{verbose_name_plural} that are still referenced by {relations} cannot be deleted.')
 
-        elif action.endswith('update') and model is Scraper:
-            description = add(
-                'Only deactivated scrapers may be updated, an error will be thrown otherwise.',
-                'Refer to `/api/v1/scraper/{id}/deactivate/` to deactivate a scraper before updating.',
-            )
+        elif action.endswith('update'):
+            if model is Scraper:
+                description = add(
+                    f'Only deactivated {opts.verbose_name_plural} may be updated, an error will be thrown otherwise.',
+                    f'Refer to `/api/v1/{opts.model_name}/{{id}}/deactivate/` to deactivate a {opts.verbose_name} before updating.',
+                )
 
         return description
 
