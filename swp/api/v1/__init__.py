@@ -1,4 +1,11 @@
+from rest_framework.serializers import ModelSerializer
+
+from swp.models.fields import DomainField as ModelDomainField
+
+from .fields import DomainField as SerializerDomainField
 from .router import default_router
+
+ModelSerializer.serializer_field_mapping[ModelDomainField] = SerializerDomainField
 
 from .category import *
 from .monitor import *
