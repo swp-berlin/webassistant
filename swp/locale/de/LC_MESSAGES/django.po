@@ -437,9 +437,6 @@ msgstr "Daten"
 msgid "Must match or be a subdomain of its think tank's domain."
 msgstr "Muss mit der Domain des zugehörigen Thinktanks übereinstimmen oder eine Subdomain davon sein."
 
-msgid "checksum"
-msgstr "Checksumme"
-
 msgid "last run"
 msgstr "letzter Durchlauf"
 

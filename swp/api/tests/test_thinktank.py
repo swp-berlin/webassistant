@@ -63,7 +63,6 @@ class ThinktankTestCase(test.TestCase):
                 thinktank=cls.thinktank,
                 data={'scraped': True},
                 start_url='https://www.piie.com/research/publications/policy-briefs',
-                checksum='de9474fa85634623fd9ae9838f949a02c9365ede3499a26c9be52363a8b7f214',
                 created=now,
                 last_run=now,
                 is_active=True,
@@ -73,7 +72,6 @@ class ThinktankTestCase(test.TestCase):
                 thinktank=cls.deactivated_thinktank,
                 data={'reported': True},
                 start_url='https://en.cdi.org.cn/publications/annual-report',
-                checksum='EN-CDI-ORG-CN',
                 is_active=True,
                 created=now,
             ),
@@ -82,7 +80,6 @@ class ThinktankTestCase(test.TestCase):
                 thinktank=cls.deactivated_thinktank,
                 data={'staffed': True},
                 start_url='https://en.cdi.org.cn/chief-of-staff',
-                checksum='EN-CDI-ORG-CN-STAFF',
                 created=now,
             ),
         ])

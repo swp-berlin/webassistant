@@ -434,10 +434,7 @@ msgstr ""
 msgid "data"
 msgstr ""
 
-msgid "The domain part must match or be a subdomain of its think tank's domain."
-msgstr ""
-
-msgid "checksum"
+msgid "Must match or be a subdomain of its think tank's domain."
 msgstr ""
 
 msgid "last run"
