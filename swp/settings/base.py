@@ -276,6 +276,7 @@ REST_FRAMEWORK = {
 # </editor-fold>
 
 SPECTACULAR_SETTINGS = {
+    'VERSION': 'v1',
     'TITLE': 'WebMonitor',
     'POSTPROCESSING_HOOKS': [
         'swp.api.v1.spectacular.add_root_tags',
