@@ -36,7 +36,7 @@ class Router(DefaultRouter):
             super().register(prefix=prefix, viewset=viewset, basename=basename)
         else:
             self.urlpatterns.append(
-                path(f'{prefix}{self.trailing_slash}', viewset.as_view(), name=basename)
+                path(f'{prefix}{self.trailing_slash}', viewset.as_view(), name=basename or prefix)
             )
 
 

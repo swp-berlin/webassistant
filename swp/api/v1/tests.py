@@ -33,3 +33,9 @@ class AuthenticationTestCase(APITestCase):
         request(self, '1:pool-list', status_code=401, headers={
             'HTTP_AUTHORIZATION': f'Bearer {self.token}',
         })
+
+
+class SchemaTestCase(APITestCase):
+
+    def test_schema(self):
+        request(self, '1:schema')
