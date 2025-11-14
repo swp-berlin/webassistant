@@ -8,6 +8,7 @@ from drf_spectacular.openapi import AutoSchema
 from drf_spectacular.plumbing import get_doc
 
 from swp.models import *
+from swp.utils.compat import removesuffix
 from swp.utils.text import paragraph
 
 from .viewsets import SWPViewSet
@@ -75,7 +76,7 @@ class SWPSchema(AutoSchema):
             if self.view.action not in self.method_mapping.values():
                 action = self.method_mapping[self.method.lower()]
 
-                return operation_id.removesuffix(f'_{action}')
+                return removesuffix(operation_id, f'_{action}')
 
         return operation_id
 
