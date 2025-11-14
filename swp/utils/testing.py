@@ -30,6 +30,7 @@ from django.utils.text import slugify
 from rest_framework.response import Response as RestFrameworkResponse
 
 from swp.models import Monitor, Pool, Thinktank, Scraper, ScraperError, Publication
+from swp.models.choices import ResolverType, PaginatorType
 from swp.utils.domain import get_canonical_domain
 
 
@@ -264,7 +265,17 @@ def create_scraper(thinktank: Thinktank, **kwargs) -> Scraper:
     defaults = {
         'thinktank': thinktank,
         'start_url': thinktank.url,
-        'data': {},
+        'data': {
+            'type': ResolverType.LIST.value,
+            'selector': 'ul',
+            'resolvers': [],
+            'paginator': {
+                'type': PaginatorType.PAGE.value,
+                'list_selector': 'ul',
+                'button_selector': 'button',
+                'max_pages': 1,
+            },
+        },
     }
 
     defaults.update(kwargs)

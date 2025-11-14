@@ -15,6 +15,8 @@ from swp.models import Scraper
 from swp.tasks import preview_scraper
 from swp.tasks.scraper import PreviewResult
 
+from .fields import ResolverConfigSerializer
+
 STATES = [
     PENDING,
     RECEIVED,
@@ -48,6 +50,7 @@ class BaseScraperSerializer(ModelSerializer):
 
 
 class ScraperSerializer(ActivatableSerializer, BaseScraperSerializer):
+    data = ResolverConfigSerializer(label=_('data'))
 
     class Meta:
         model = Scraper
@@ -55,6 +58,8 @@ class ScraperSerializer(ActivatableSerializer, BaseScraperSerializer):
 
 
 class ScraperPreviewSerializer(BaseScraperSerializer):
+    data = ResolverConfigSerializer(label=_('data'), write_only=True)
+
     id = serializers.CharField(label=_('ID'), read_only=True)
     status = serializers.ChoiceField(label=_('status'), choices=STATES, read_only=True)
     result = serializers.SerializerMethodField(label=_('result'), read_only=True)

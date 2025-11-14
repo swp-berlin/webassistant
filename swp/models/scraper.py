@@ -49,6 +49,10 @@ class ScraperQuerySet(ActivatableQuerySet, UpdateQuerySet):
 class Scraper(ActivatableModel, LastModified):
     """
     Extractor of publication data.
+
+    The scraper config (`data`) is a nested JSON structure of resolvers which can pull data from a website by using a
+    combination of css selectors and attribute names. It is advised to use the config of an existing scraper as a
+    starting point for newly created scrapers.
     """
 
     thinktank = models.ForeignKey(
