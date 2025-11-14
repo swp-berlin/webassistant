@@ -163,6 +163,9 @@ msgstr "Die Publikation „{publication}“ ist kein Teil der Liste „{list}“
 msgid "Scraper is active and cannot be changed."
 msgstr "Der Scraper ist aktiv und kann nicht geändert werden."
 
+msgid "data"
+msgstr "Daten"
+
 msgid "ID"
 msgstr "ID"
 
@@ -431,9 +434,6 @@ msgstr "Publikationslisteneinträge"
 msgid "type"
 msgstr "Typ"
 
-msgid "data"
-msgstr "Daten"
-
 msgid "Must match or be a subdomain of its think tank's domain."
 msgstr "Muss mit der Domain des zugehörigen Thinktanks übereinstimmen oder eine Subdomain davon sein."
 
@@ -503,6 +503,9 @@ msgstr "Domain"
 
 msgid "unique fields"
 msgstr "eindeutige Felder"
+
+msgid "Defines which fields are used to uniquely identify a publication. This should generally always be `url`. However, if the think tank's publications are from a list without detail pages, then `title` may be appropriate in this exceptional case."
+msgstr "Definiert, welche Felder genutzt werden, um eine Publikation eindeutig zu identifizieren. Sollte in der Regel immer `url` sein. Sollten die Publikationen des Thinktanks aus einer Liste ohne Detail-Seiten stammen, so kann in diesem Ausnahmefall `title` sinnvoll sein."
 
 msgid "think tanks"
 msgstr "Thinktanks"

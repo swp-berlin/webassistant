@@ -163,6 +163,9 @@ msgstr ""
 msgid "Scraper is active and cannot be changed."
 msgstr ""
 
+msgid "data"
+msgstr ""
+
 msgid "ID"
 msgstr ""
 
@@ -431,9 +434,6 @@ msgstr ""
 msgid "type"
 msgstr ""
 
-msgid "data"
-msgstr ""
-
 msgid "Must match or be a subdomain of its think tank's domain."
 msgstr ""
 
@@ -502,6 +502,9 @@ msgid "domain"
 msgstr ""
 
 msgid "unique fields"
+msgstr ""
+
+msgid "Defines which fields are used to uniquely identify a publication. This should generally always be `url`. However, if the think tank's publications are from a list without detail pages, then `title` may be appropriate in this exceptional case."
 msgstr ""
 
 msgid "think tanks"
