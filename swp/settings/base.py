@@ -279,7 +279,7 @@ SPECTACULAR_SETTINGS = {
     'VERSION': 'v1',
     'TITLE': 'WebMonitor',
     'POSTPROCESSING_HOOKS': [
-        'swp.api.v1.spectacular.add_root_tags',
+        'swp.api.v1.schema.add_root_tags',
     ],
 }
 

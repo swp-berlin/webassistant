@@ -5,8 +5,9 @@ from django.utils.text import get_text_list
 
 from drf_spectacular.authentication import SessionScheme, TokenScheme
 from drf_spectacular.openapi import AutoSchema
+from drf_spectacular.plumbing import get_doc
 
-from swp.models import Scraper, ActivatableModel
+from swp.models import *
 from swp.utils.text import paragraph
 
 from .viewsets import SWPViewSet
@@ -20,6 +21,37 @@ ACTION_DESCRIPTIONS = {
     'partial_update': 'partially update',
     'destroy': 'delete',
 }
+
+MODELS = [
+    Category,
+    Monitor,
+    Pool,
+    Publication,
+    (PublicationList, 'publication-list'),
+    Scraper,
+    Thinktank,
+]
+
+
+def get_tag(model):
+    if isinstance(model, tuple):
+        model, name = model
+    else:
+        name = cast(ModelType, model)._meta.model_name
+
+    return {
+        'name': name,
+        'description': get_doc(model),
+    }
+
+
+TAGS = [get_tag(model) for model in MODELS]
+
+
+def add_root_tags(result, **kwargs):
+    result['tags'] = TAGS
+
+    return result
 
 
 class SWPSchema(AutoSchema):
