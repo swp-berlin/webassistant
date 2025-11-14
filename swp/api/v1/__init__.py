@@ -8,6 +8,7 @@ from .router import default_router
 ModelSerializer.serializer_field_mapping[ModelDomainField] = SerializerDomainField
 
 from .category import *
+from .explorer import *
 from .monitor import *
 from .pool import *
 from .publication import *
