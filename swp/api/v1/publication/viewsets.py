@@ -1,4 +1,6 @@
+from django.contrib.staticfiles.storage import staticfiles_storage
 from django.db.models import Prefetch
+from django.utils.functional import lazy
 
 from drf_spectacular.utils import extend_schema
 
@@ -8,6 +10,7 @@ from rest_framework.parsers import JSONParser
 from swp.api.v1.viewsets import SWPViewSet
 from swp.models import Category, Publication, Scraper
 from swp.utils.text import paragraph
+from swp.utils.url import get_absolute_url
 
 from .filters import PublicationFilterSet
 from .pagination import ElasticSearchPagination
@@ -31,11 +34,14 @@ class PublicationViewSet(SWPViewSet):
     @extend_schema(
         responses=PublicationSerializer(many=True),
         description=paragraph(
-            'This endpoint expects a ElasticSearch Query object.',
+            'This endpoint expects a [ElasticSearch Query object](https://www.elastic.co/docs/explore-analyze/query-filter/languages/querydsl).',
             'It is passed through to the underlying ElasticSearch engine.',
-            'Refer to the ElasticSearch docs on the available fields to query.'
+            'Refer to the docs on the available fields to query.'
         ),
-        external_docs='https://www.elastic.co/docs/explore-analyze/query-filter/languages/querydsl',
+        external_docs={
+            'url': lazy(get_absolute_url, str)(None, staticfiles_storage.url('documents/helptext.pdf')),
+            'description': 'Docs (HelpText.pdf)',
+        },
     )
     @action(
         detail=False,
