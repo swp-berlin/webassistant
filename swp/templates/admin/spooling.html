@@ -1,0 +1,21 @@
+{% extends 'admin/base_site.html' %}
+
+{% block content %}
+	{% for state, dates in files.items %}
+		{% if dates %}
+            <h3>{{ state }}</h3>
+            <ul>
+                {% for date, files in dates.items %}
+                    <h4>{{ date }}</h4>
+                    <ul>
+                        {% for publication_url, download_url, filename in files %}
+                            <li>
+                                <a href="{{ download_url }}">{{ filename }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endfor %}
+            </ul>
+		{% endif %}
+	{% endfor %}
+{% endblock %}

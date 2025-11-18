@@ -102,6 +102,11 @@ class Thinktank(ActivatableModel):
         verbose_name=_('unique fields'),
         base_field=ChoiceField(choices=UniqueKey.choices),
         default=get_default_unique_fields,
+        help_text=_(
+            "Defines which fields are used to uniquely identify a publication. This should generally always be `url`. "
+            "However, if the think tank's publications are from a list without detail pages, then `title` may be "
+            "appropriate in this exceptional case."
+        ),
     )
     created = models.DateTimeField(_('created'), default=timezone.now, editable=False)
 

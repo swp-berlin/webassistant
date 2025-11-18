@@ -17,6 +17,6 @@ class CategoryViewSetTestCase(TestCase):
         login(self)
 
     def test_choices(self):
-        response = request(self, '1:category-choices')
+        response = request(self, 'internal-api:category-choices')
 
         self.assertEqual(len(self.categories), len(response.data))

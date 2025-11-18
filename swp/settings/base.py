@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     # Extensions
     'django_elasticsearch_dsl',
     'django_filters',
+    'drf_spectacular',
     'rest_framework',
 
     # Admin
@@ -263,14 +264,24 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ],
     'DEFAULT_RENDERER_CLASSES': REST_FRAMEWORK_DEFAULT_RENDERER_CLASSES,
+    'DEFAULT_SCHEMA_CLASS': 'swp.api.v1.schema.SWPSchema',
     'DEFAULT_FILTER_BACKENDS': [
         'django_filters.rest_framework.DjangoFilterBackend',
         'rest_framework.filters.OrderingFilter',
     ],
     'EXCEPTION_HANDLER': 'swp.api.exceptions.exception_handler',
+    'TEST_REQUEST_DEFAULT_FORMAT': 'json',
 }
 
 # </editor-fold>
+
+SPECTACULAR_SETTINGS = {
+    'VERSION': 'v1',
+    'TITLE': 'WebMonitor',
+    'POSTPROCESSING_HOOKS': [
+        'swp.api.v1.schema.add_root_tags',
+    ],
+}
 
 # <editor-fold desc="Zotero">
 

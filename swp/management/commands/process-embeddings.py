@@ -1,3 +1,4 @@
+import logging
 import os
 import time
 
@@ -13,6 +14,14 @@ from swp.utils.spooling import State, iter_files
 from swp.utils.embedding import embed
 from swp.utils.timing import timed, format_duration
 
+logger = logging.getLogger(__name__)
+
+UNRECOVERABLE_ERROR_STATUS_CODES = {
+    400,  # pdf file could not be extracted
+    413,  # file size is too big
+    504,  # time limit reached
+}
+
 
 class Command(BaseCommand):
     directory = settings.EMBEDDING_SPOOLING_DIR
@@ -25,14 +34,13 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument('--directory', type=Path, default=settings.EMBEDDING_SPOOLING_DIR)
         parser.add_argument('--state', choices=['todo', *self.keep_files], default='todo')
-        parser.add_argument('--page-limit', type=int, default=200)
-        parser.add_argument('--force', action='store_true', default=False)
+        parser.add_argument('--skip-embedded', action='store_true', default=False)
         parser.add_argument('--max-retries', type=int, default=5)
 
         for state, default in self.keep_files.items():
             parser.add_argument(f'--keep-{state}', action='store_true', default=default)
 
-    def handle(self, *, state: State, force: bool, page_limit: int, max_retries: int, **options):
+    def handle(self, *, state: State, skip_embedded: bool, max_retries: int, **options):
         self.directory = options.pop('directory', settings.EMBEDDING_SPOOLING_DIR)
         self.keep_files = {
             state: options.pop(f'keep_{state}', default)
@@ -50,29 +58,26 @@ class Command(BaseCommand):
         self.stdout.write(f'Processing {count} files…')
 
         with timed() as timer:
-            self.process(files, page_limit=page_limit, force=force, max_retries=max_retries)
+            self.process(files, skip_embedded=skip_embedded, max_retries=max_retries)
 
         duration = format_duration(timer.duration)
 
         self.stdout.write(f'Processed {count} files in {duration}.')
 
     def process(self, files: Dict[int, Path], **options):
-        publications = Publication.objects.only('pdf_pages', 'embedding').in_bulk(files)
+        publications = Publication.objects.only('embedding').in_bulk(files)
 
         for publication, filepath in files.items():
             self.embed(publications.get(publication), filepath, **options)
 
-    def embed(self, publication: Optional[Publication], filepath: Path, *, page_limit=200, force=False, **options):
+    def embed(self, publication: Optional[Publication], filepath: Path, *, skip_embedded=False, **options):
         filename = filepath.relative_to(self.directory)
 
         if publication is None:
-            return self.error(filepath, 'lost', f'Publication for {filename} does not exist.')
+            return self.error(filepath, 'lost', 'Publication for %s does not exist.', filename)
 
-        if page_limit and publication.pdf_pages > page_limit and not force:
-            return self.error(filepath, 'error', f'{filename} exceeds page limit.')
-
-        if publication.embedding and not force:
-            return self.error(filepath, 'done', f'{filename} is already embedded.')
+        if skip_embedded and publication.embedding:
+            return self.error(filepath, 'done', '%s is already embedded.', filename)
 
         self.stdout.write(f'Fetching embedding for {filename}…')
 
@@ -86,20 +91,24 @@ class Command(BaseCommand):
                 self.stdout.write(f'Fetched embedding for {filename} in {timer.duration:.2f}s.')
                 self.move(filepath, 'done')
             else:
-                self.error(filepath, 'error', f'{filename} has no content.')
+                self.error(filepath, 'error', '%s has no content.', filename)
 
         elif success is None:
-            self.stderr.write(f'Failed to fetch embedding for {filename}: {response}')
+            self.log_error('Failed to fetch embedding for %s: %s', filename, response)
 
         else:
-            self.stderr.write(f'Failed to fetch embedding for {filename}: [{response.status_code}] {response.text}')
+            self.log_error('Failed to fetch embedding for %s: [%s] %s', filename, response.status_code, response.text)
 
-            if 400 <= response.status_code < 500:
+            if response.status_code in UNRECOVERABLE_ERROR_STATUS_CODES:
                 self.move(filepath, 'error')
 
-    def error(self, filepath: Path, state: State, msg: str):
-        self.stderr.write(msg)
+    def error(self, filepath: Path, state: State, msg: str, *args):
+        self.log_error(msg, *args)
         self.move(filepath, state)
+
+    def log_error(self, msg: str, *args):
+        self.stderr.write(msg % args)
+        logger.error(msg, *args)
 
     def fetch(self, filepath: Path, filename: Path, *, retry=0, max_retries=5):
         success, response = embed(filepath, filename=f'{filename}')

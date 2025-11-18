@@ -49,13 +49,17 @@ class ScraperQuerySet(ActivatableQuerySet, UpdateQuerySet):
 class Scraper(ActivatableModel, LastModified):
     """
     Extractor of publication data.
+
+    The scraper config (`data`) is a nested JSON structure of resolvers which can pull data from a website by using a
+    combination of css selectors and attribute names. It is advised to use the config of an existing scraper as a
+    starting point for newly created scrapers.
     """
 
     thinktank = models.ForeignKey(
-        'swp.Thinktank',
-        on_delete=models.CASCADE,
-        related_name='scrapers',
         verbose_name=_('think tank'),
+        to='swp.Thinktank',
+        on_delete=models.PROTECT,
+        related_name='scrapers',
     )
 
     type = ChoiceField(_('type'), choices=ScraperType.choices)
@@ -64,8 +68,7 @@ class Scraper(ActivatableModel, LastModified):
 
     categories = models.ManyToManyField('swp.Category', 'scrapers', verbose_name=_('categories'), blank=True)
 
-    start_url = LongURLField(_('start URL'))
-    checksum = models.CharField(_('checksum'), max_length=64, unique=True, blank=True, null=True)
+    start_url = LongURLField(_('start URL'), help_text=_("Must match or be a subdomain of its think tank's domain."))
 
     interval = models.PositiveIntegerField(_('interval'), choices=Interval.choices, default=Interval.DAILY)
     last_run = models.DateTimeField(_('last run'), blank=True, null=True)
@@ -74,10 +77,12 @@ class Scraper(ActivatableModel, LastModified):
     objects = ScraperQuerySet.as_manager()
 
     class Meta(ActivatableModel.Meta):
-        get_latest_by = 'last_run'
-        indexes = [models.Index(fields=['-last_run'])]
         verbose_name = _('scraper')
         verbose_name_plural = _('scrapers')
+        get_latest_by = 'last_run'
+        indexes = [
+            models.Index(fields=['-last_run']),
+        ]
 
     def __str__(self) -> str:
         return f'{self.name} {self.pk}'

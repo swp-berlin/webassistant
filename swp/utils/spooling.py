@@ -26,9 +26,13 @@ SUPPORTED_EXTENSIONS = {
 }
 
 
+def get_date(value: datetime.date):
+    return value.strftime(DATE_FMT)
+
+
 def get_filepath(directory: Path, state: State, publication: Publication, extension: Extension = 'pdf'):
     created = localtime(publication.created)
-    date = created.strftime(DATE_FMT)
+    date = get_date(created)
     timestamp = get_timestamp(created)
 
     return directory / state / date / f'{timestamp}-{publication.id}.{extension}'

@@ -39,7 +39,6 @@ class ScraperAdmin(CanManagePermissionMixin, ActivatableModelAdmin):
         'categories',
         'data',
         'start_url',
-        'checksum',
         'interval',
         'is_active',
         'is_running',
@@ -63,7 +62,6 @@ class ScraperAdmin(CanManagePermissionMixin, ActivatableModelAdmin):
         'pool_display',
         'type',
         'start_url_display',
-        'checksum',
         'last_run',
         'is_active',
         'is_running',
@@ -76,7 +74,6 @@ class ScraperAdmin(CanManagePermissionMixin, ActivatableModelAdmin):
         'is_running',
     ]
     search_fields = [
-        'checksum',
         'thinktank__name',
     ]
 
