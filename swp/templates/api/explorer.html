@@ -4,8 +4,17 @@
         <meta charset="UTF-8">
         <title>OpenAPI Explorer</title>
         <script type="module" src="https://unpkg.com/openapi-explorer@0/dist/browser/openapi-explorer.min.js"></script>
+        <style>
+            body {
+                font-family: sans-serif;
+            }
+        </style>
     </head>
     <body>
-        <openapi-explorer spec-url="{% url '1:schema' %}"></openapi-explorer>
+        <openapi-explorer
+            spec-url="{% url '1:schema' %}"
+            hide-server-selection="true"
+            use-path-in-nav-bar="true"
+        />
     </body>
 </html>
