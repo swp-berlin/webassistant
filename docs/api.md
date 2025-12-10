@@ -1,10 +1,31 @@
+# Public API
+
+The Application provides a RESTful API for accessing and managing its resources. The API documentation is available as
+OpenAPI/Swagger specification and its interactive documentation can be accessed at:
+
+```
+http://<your-domain>/api/v1/explorer
+```
+
+## Managing API Access
+
+API access is managed via API keys. To create and manage API keys, log into the admin backend and navigate to the
+"Auth-Token" section. Here you can create new API keys and manage existing ones.
+
+When making API requests, include the API key in the `Authorization` header as follows:
+
+```
+Authorization: Bearer <your-api-key>
+```
+
+
 # Internal API Documentation
 
-This document provides a rough overview of the API endpoints available in the SWP application.
+This following provides a rough overview of the internal API endpoints available in the SWP application. It is meant
+to be consumed by the application's [frontend](frontend.md) only and not by external clients. Use the public API as
+mentioned above for external integrations.
 
-Please note that this is an internal API and meant to be consumed by the application's [frontend](frontend.md) only and
-not by external clients. It is subject to change and should not be considered stable. Refer to the source code
-in `swp/api/` for more details.
+It is subject to change and should not be considered stable. Refer to the source code in `swp/api/` for more details.
 
 ## Endpoints
 
