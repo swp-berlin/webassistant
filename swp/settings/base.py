@@ -267,7 +267,7 @@ REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'swp.api.v1.schema.SWPSchema',
     'DEFAULT_FILTER_BACKENDS': [
         'django_filters.rest_framework.DjangoFilterBackend',
-        'rest_framework.filters.OrderingFilter',
+        'swp.api.filters.SWPOrderingFilter',
     ],
     'EXCEPTION_HANDLER': 'swp.api.exceptions.exception_handler',
     'TEST_REQUEST_DEFAULT_FORMAT': 'json',
