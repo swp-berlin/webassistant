@@ -10,3 +10,4 @@ class ThinktankViewSet(ActivatableViewSet):
     serializer_class = ThinktankSerializer
     filterset_class = ThinktankFilterSet
     queryset = Thinktank.objects
+    ordering_fields = ActivatableViewSet.ordering_fields[:-1]
