@@ -6,7 +6,9 @@ from drf_spectacular.utils import extend_schema
 
 from rest_framework.decorators import action
 from rest_framework.parsers import JSONParser
+from rest_framework.permissions import IsAuthenticated
 
+from swp.api.permissions import CanResearch
 from swp.api.v1.viewsets import SWPViewSet
 from swp.models import Category, Publication, Scraper
 from swp.utils.text import paragraph
@@ -50,6 +52,7 @@ class PublicationViewSet(SWPViewSet):
         parser_classes=[JSONParser],
         pagination_class=ElasticSearchPagination,
         serializer_class=PublicationSearchSerializer,
+        permission_classes=[IsAuthenticated & CanResearch],
     )
     def search(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)

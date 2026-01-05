@@ -39,3 +39,9 @@ class CanManagePool(BaseSafeViewPermission):
 
     def has_object_permission(self, request, view, obj: Union[Thinktank, Monitor]):
         return self.is_safe(request, view) or request.user.can_manage_pool(obj.pool)
+
+
+class CanResearch(BasePermission):
+
+    def has_permission(self, request, view):
+        return request.user.can_research
