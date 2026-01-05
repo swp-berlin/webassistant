@@ -1,3 +1,4 @@
+from django.db import models
 from django.db.models import Prefetch
 
 from drf_spectacular.utils import extend_schema
@@ -17,7 +18,9 @@ from .serializers import ScraperSerializer, ScraperPreviewSerializer
 class ScraperViewSet(ActivatableViewSet):
     serializer_class = ScraperSerializer
     filterset_class = ScraperFilterSet
-    queryset = Scraper.objects.prefetch_related(
+    queryset = Scraper.objects.alias(
+        name=models.F('thinktank__name'),
+    ).prefetch_related(
         Prefetch('categories', Category.objects.only('id')),
     )
 
