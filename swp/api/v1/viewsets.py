@@ -1,4 +1,5 @@
 from django.db.models import ProtectedError
+from django.utils.translation import gettext_lazy as _
 
 from drf_spectacular.utils import extend_schema
 
@@ -25,10 +26,10 @@ class SWPViewSet(ModelViewSet):
     filterset_class = SWPFilterSet
     ordering = ['id']
     ordering_fields = [
-        'id',
-        'name',
-        'created',
-        'last_modified',
+        ('id', _('ID')),
+        ('name', _('name')),
+        ('created', _('created')),
+        ('last_modified', _('last modified')),
     ]
 
     @classmethod
