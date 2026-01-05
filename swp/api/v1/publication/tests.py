@@ -16,6 +16,9 @@ class PublicationTestCase(APITestCase):
     def setUp(self):
         login(self)
 
+    def test_delete(self):
+        request(self, '1:publication-detail', args=[self.publication.id], method='DELETE', status_code=204)
+
     def test_search(self):
         request(self, '1:publication-search', method='POST', data={})
 
