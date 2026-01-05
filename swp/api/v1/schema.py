@@ -30,6 +30,7 @@ MODELS = [
     Publication,
     (PublicationList, 'publication-list'),
     Scraper,
+    (ScraperError, 'scraper-error'),
     Thinktank,
 ]
 
