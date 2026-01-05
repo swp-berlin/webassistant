@@ -16,13 +16,20 @@ from .permissions import SWPModelPermissions, ActivatePermission, DeactivatePerm
 from .router import default_router
 
 
-class SWPViewSet(ModelViewSet):
+class SWPViewSetMixin:
     pagination_class = SWPagination
     permission_classes = [SWPModelPermissions]
     authentication_classes = [
         TokenAuthentication,
         SessionAuthentication,
     ]
+
+    @classmethod
+    def register(cls, prefix, basename=None):
+        return default_router.register(prefix, basename=basename)
+
+
+class SWPViewSet(SWPViewSetMixin, ModelViewSet):
     filterset_class = SWPFilterSet
     ordering = ['id']
     ordering_fields = [
@@ -31,10 +38,6 @@ class SWPViewSet(ModelViewSet):
         ('created', _('created')),
         ('last_modified', _('last modified')),
     ]
-
-    @classmethod
-    def register(cls, prefix, basename=None):
-        return default_router.register(prefix, basename=basename)
 
     def get_queryset(self):
         return self.queryset.all()

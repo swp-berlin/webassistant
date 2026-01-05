@@ -11,7 +11,7 @@ from swp.models import *
 from swp.utils.compat import removesuffix
 from swp.utils.text import paragraph
 
-from .viewsets import SWPViewSet
+from .viewsets import SWPViewSetMixin
 
 SessionScheme.match_subclasses = TokenScheme.match_subclasses = True
 
@@ -72,7 +72,7 @@ class SWPSchema(AutoSchema):
     def get_operation_id(self) -> str:
         operation_id = AutoSchema.get_operation_id(self)
 
-        if isinstance(self.view, SWPViewSet):
+        if isinstance(self.view, SWPViewSetMixin):
             if self.view.action not in self.method_mapping.values():
                 action = self.method_mapping[self.method.lower()]
 

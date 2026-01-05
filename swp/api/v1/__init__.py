@@ -14,5 +14,6 @@ from .pool import *
 from .publication import *
 from .publicationlist import *
 from .scraper import *
+from .scrapererror import *
 from .spectacular import *
 from .thinktank import *
