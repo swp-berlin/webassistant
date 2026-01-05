@@ -3,7 +3,7 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
 
-from swp.models import PublicationList, PublicationListEntry, Publication
+from swp.models import Publication, PublicationList, PublicationListEntry
 
 
 class PublicationListEntrySerializer(ModelSerializer):
@@ -14,7 +14,7 @@ class PublicationListEntrySerializer(ModelSerializer):
 
 
 class PublicationListSerializer(ModelSerializer):
-    entries = PublicationListEntrySerializer(label=_('entries'), many=True)
+    entries = PublicationListEntrySerializer(label=_('entries'), many=True, read_only=True)
     last_updated = serializers.DateTimeField(label=_('last updated'), read_only=True)
 
     class Meta:
