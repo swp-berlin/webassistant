@@ -1,6 +1,8 @@
+from django.utils.crypto import get_random_string
+
 from rest_framework.test import APITestCase
 
-from swp.models import PublicationList, PublicationListEntry, Publication
+from swp.models import PublicationList, PublicationListEntry
 from swp.utils.testing import create_user, create_thinktank, create_publication, login, request
 
 
@@ -28,6 +30,13 @@ class PublicationListTestCase(APITestCase):
         response = request(self, '1:publication-list-list')
 
         self.assertEqual(response.data.get('count'), 1)
+
+    def test_create(self):
+        name = 'Test %s' % get_random_string(4)
+
+        request(self, '1:publication-list-list', status_code=201, data={'name': name})
+
+        self.assertTrue(self.user.publication_lists.filter(name=name).exists())
 
     def test_add(self):
         publication = create_publication(self.thinktank, 'Test 2')

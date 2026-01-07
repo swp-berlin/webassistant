@@ -29,6 +29,9 @@ class PublicationListViewSet(SWPViewSet):
     def get_queryset(self):
         return self.queryset.filter(user=self.request.user)
 
+    def perform_create(self, serializer):
+        return serializer.save(user=self.request.user)
+
     @extend_schema(
         operation_id='publication_list_with_objects',
         description='Endpoint to retrieve a list of publication lists with publications as objects.',
