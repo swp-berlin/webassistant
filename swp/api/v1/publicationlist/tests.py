@@ -38,6 +38,9 @@ class PublicationListTestCase(APITestCase):
 
         self.assertTrue(self.user.publication_lists.filter(name=name).exists())
 
+    def test_duplicate_name(self):
+        request(self, '1:publication-list-list', status_code=400, data={'name': self.publication_list.name})
+
     def test_add(self):
         publication = create_publication(self.thinktank, 'Test 2')
 
