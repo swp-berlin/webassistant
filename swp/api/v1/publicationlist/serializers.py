@@ -2,6 +2,7 @@ from django.utils.translation import gettext_lazy as _
 
 from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
+from rest_framework.validators import UniqueValidator
 
 from swp.api.v1.publication import PublicationSerializer
 from swp.models import Publication, PublicationList, PublicationListEntry
@@ -25,6 +26,19 @@ class PublicationListSerializer(ModelSerializer):
     class Meta:
         model = PublicationList
         exclude = ['user', 'publications']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        if user := self.context['request'].user:
+            self.add_unique_name_validator(user)
+
+    def add_unique_name_validator(self, user):
+        field = self.fields['name']
+        queryset = PublicationList.objects.filter(user=user)
+        message = _('You already have a publication list with this name.')
+        validator = UniqueValidator(queryset, message)
+        field.validators = [*field.validators, validator]
 
 
 class PublicationListWithObjectsSerializer(PublicationListSerializer):
