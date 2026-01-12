@@ -10,7 +10,7 @@ from .filters import ScraperErrorFilterSet
 from .serializers import ScraperErrorSerializer
 
 
-@SWPViewSetMixin.register('scraper-error')
+@SWPViewSetMixin.register('scraper-error', basename='scraper-error')
 class ScraperErrorViewSet(SWPViewSetMixin, DestroyModelMixin, ReadOnlyModelViewSet):
     serializer_class = ScraperErrorSerializer
     queryset = ScraperError.objects

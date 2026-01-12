@@ -7,7 +7,7 @@ from rest_framework.decorators import action
 from rest_framework.viewsets import ModelViewSet
 
 from swp.api.authentication import SessionAuthentication, TokenAuthentication
-from swp.models import ActivatableModel, Monitor, Pool, Scraper, Thinktank
+from swp.models import ActivatableModel, Monitor, Pool, Scraper, ScraperError, Thinktank
 
 from .exceptions import ActiveObjException, ProtectedErrorException
 from .filters import SWPFilterSet
@@ -23,13 +23,6 @@ class SWPViewSetMixin:
         TokenAuthentication,
         SessionAuthentication,
     ]
-
-    @classmethod
-    def register(cls, prefix, basename=None):
-        return default_router.register(prefix, basename=basename)
-
-
-class SWPViewSet(SWPViewSetMixin, ModelViewSet):
     filterset_class = SWPFilterSet
     ordering = ['id']
     ordering_fields = [
@@ -38,6 +31,10 @@ class SWPViewSet(SWPViewSetMixin, ModelViewSet):
         ('created', _('created')),
         ('last_modified', _('last modified')),
     ]
+
+    @classmethod
+    def register(cls, prefix, basename=None):
+        return default_router.register(prefix, basename=basename)
 
     def get_queryset(self):
         return self.queryset.all()
@@ -59,7 +56,14 @@ class SWPViewSet(SWPViewSetMixin, ModelViewSet):
         if isinstance(obj, Scraper):
             return user.can_manage_pool(obj.thinktank.pool)
 
+        if isinstance(obj, ScraperError):
+            return user.can_manage_pool(obj.scraper.thinktank.pool)
+
         return True
+
+
+class SWPViewSet(SWPViewSetMixin, ModelViewSet):
+    pass
 
 
 class ActivatableViewSet(SWPViewSet):
