@@ -1,3 +1,5 @@
+from cgitb import reset
+
 from django.utils.crypto import get_random_string
 
 from rest_framework.test import APITestCase
@@ -30,6 +32,13 @@ class PublicationListTestCase(APITestCase):
         response = request(self, '1:publication-list-list')
 
         self.assertEqual(response.data.get('count'), 1)
+
+    def test_with_objects(self):
+        response = request(self, '1:publication-list-with-objects')
+
+        for obj in response.data['results']:
+            for entry in obj['entries']:
+                self.assertIsInstance(entry['publication'], dict)
 
     def test_create(self):
         name = 'Test %s' % get_random_string(4)
