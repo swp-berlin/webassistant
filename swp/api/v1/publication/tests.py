@@ -1,6 +1,6 @@
 from rest_framework.test import APITestCase
 
-from swp.utils.testing import create_publication, create_thinktank, create_user, login, request
+from swp.utils.testing import create_publication, create_thinktank, create_user, login, request, add_to_group
 
 from .serializers import PublicationSearchSerializer
 
@@ -20,6 +20,13 @@ class PublicationTestCase(APITestCase):
         request(self, '1:publication-detail', args=[self.publication.id], method='DELETE', status_code=204)
 
     def test_search(self):
+        request(self, '1:publication-search', method='POST', data={})
+
+    def test_search_as_researcher(self):
+        researcher = create_user('researcher')
+
+        add_to_group(researcher, 'swp-researcher')
+        login(self, researcher)
         request(self, '1:publication-search', method='POST', data={})
 
     def test_search_serializer(self):
