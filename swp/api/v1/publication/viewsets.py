@@ -5,7 +5,6 @@ from django.utils.functional import lazy
 from drf_spectacular.utils import extend_schema
 
 from rest_framework.decorators import action
-from rest_framework.parsers import JSONParser
 from rest_framework.permissions import IsAuthenticated
 
 from swp.api.permissions import CanResearch
@@ -16,6 +15,7 @@ from swp.utils.url import get_absolute_url
 
 from .filters import PublicationFilterSet
 from .pagination import ElasticSearchPagination
+from .parsers import ElasticSearchQueryParser
 from .serializers import PublicationSerializer, PublicationSearchSerializer
 
 
@@ -49,7 +49,7 @@ class PublicationViewSet(SWPViewSet):
         detail=False,
         methods=['POST'],
         filter_backends=[],
-        parser_classes=[JSONParser],
+        parser_classes=[ElasticSearchQueryParser],
         pagination_class=ElasticSearchPagination,
         serializer_class=PublicationSearchSerializer,
         permission_classes=[IsAuthenticated & CanResearch],
