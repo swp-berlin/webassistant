@@ -17,6 +17,10 @@ class PublicationSerializer(ModelSerializer):
         model = Publication
         fields = serializers.ALL_FIELDS
         extra_kwargs = {
+            'embedding': {
+                'read_only': False,
+                'allow_null': True,
+            },
             'scrapers': {
                 'queryset': SCRAPERS,
             },
