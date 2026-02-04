@@ -1,6 +1,15 @@
+from django.conf import settings
 from rest_framework.test import APITestCase
 
-from swp.utils.testing import create_publication, create_thinktank, create_user, login, request, add_to_group
+from swp.utils.testing import (
+    add_to_group,
+    create_publication,
+    create_thinktank,
+    create_user,
+    get_random_embedding_vector,
+    login,
+    request,
+)
 
 from .serializers import PublicationSearchSerializer
 
@@ -18,6 +27,17 @@ class PublicationTestCase(APITestCase):
 
     def test_delete(self):
         request(self, '1:publication-detail', args=[self.publication.id], method='DELETE', status_code=204)
+
+    def test_patch_embeddings(self):
+        embedding = get_random_embedding_vector(settings.EMBEDDING_VECTOR_DIMS)
+
+        request(self, '1:publication-detail', args=[self.publication.id], method='PATCH', data={
+            'embedding': embedding,
+        })
+
+        self.publication.refresh_from_db(fields=['embedding'])
+
+        self.assertEqual(self.publication.embedding, embedding)
 
     def test_search(self):
         request(self, '1:publication-search', method='POST', data={})
