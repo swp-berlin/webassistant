@@ -28,6 +28,10 @@ class PoolQuerySet(CanManageQuerySet):
 
 
 class Pool(LastModified):
+    """
+    A pool groups thinktanks.
+    """
+
     name = CICharField(_('name'), max_length=50, unique=True)
 
     objects = PoolQuerySet.as_manager()

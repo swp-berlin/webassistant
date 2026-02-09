@@ -25,7 +25,7 @@ class PublicationQuerySet(UpdateQuerySet):
 
 class Publication(UpdateModel):
     """
-    Single published article.
+    Publications are single articles/documents discovered by scrapers on websites.
     """
 
     thinktank = models.ForeignKey(

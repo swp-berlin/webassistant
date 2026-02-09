@@ -126,13 +126,13 @@ class PublicationTestCase(test.TestCase):
         ])
         cls.publication = cls.publications[1]
 
-        cls.list_url = reverse('1:publication-list')
+        cls.list_url = reverse('internal-api:publication-list')
 
     def setUp(self):
         login(self)
 
     def test_list(self):
-        response = request(self, '1:publication-list')
+        response = request(self, 'internal-api:publication-list')
         self.assertEqual(response.data['count'], 3)
         self.assertIsNone(response.data['next'])
         self.assertIsNone(response.data['previous'])
@@ -143,7 +143,7 @@ class PublicationTestCase(test.TestCase):
         self.assertEqual(response.data['count'], 2)
 
     def test_detail(self):
-        response = request(self, '1:publication-detail', args=[self.publication.pk])
+        response = request(self, 'internal-api:publication-detail', args=[self.publication.pk])
         self.assertEqual(response.data['title'], self.publication.title)
         self.assertEqual(response.data['authors'], self.publication.authors)
         self.assertEqual(response.data['publication_date'], self.publication.publication_date)
@@ -204,7 +204,7 @@ class PublicationTestCase(test.TestCase):
         self.assertEqual(response.data['count'], 0)
 
     def test_research(self):
-        url = reverse('1:publication-research')
+        url = reverse('internal-api:publication-research')
         params = urlencode({'query': 'COVID-19'})
 
         request(self, f'{url}?{params}')
@@ -214,14 +214,14 @@ class PublicationTestCase(test.TestCase):
         PublicationTestCase.test_research(self)
 
     def test_research_invalid_query(self):
-        url = reverse('1:publication-research')
+        url = reverse('internal-api:publication-research')
         params = urlencode({'query': 'thinktank.id:'})
 
         request(self, f'{url}?{params}', status_code=400)
 
     @clear_cache(get_query_vector)
     def helper_research_full_text(self, success, result, status_code):
-        url = reverse('1:publication-research')
+        url = reverse('internal-api:publication-research')
         params = urlencode({'query': '<COVID-19>'})
         return_value = success, result
 
@@ -242,7 +242,7 @@ class PublicationTestCase(test.TestCase):
         self.helper_research_full_text(False, 'invalid', 400)
 
     def test_ris(self):
-        url = reverse('1:publication-ris')
+        url = reverse('internal-api:publication-ris')
         params = urlencode({
             'query': 'COVID-19',
             'pool': 0,

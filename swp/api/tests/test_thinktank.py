@@ -63,7 +63,6 @@ class ThinktankTestCase(test.TestCase):
                 thinktank=cls.thinktank,
                 data={'scraped': True},
                 start_url='https://www.piie.com/research/publications/policy-briefs',
-                checksum='de9474fa85634623fd9ae9838f949a02c9365ede3499a26c9be52363a8b7f214',
                 created=now,
                 last_run=now,
                 is_active=True,
@@ -73,7 +72,6 @@ class ThinktankTestCase(test.TestCase):
                 thinktank=cls.deactivated_thinktank,
                 data={'reported': True},
                 start_url='https://en.cdi.org.cn/publications/annual-report',
-                checksum='EN-CDI-ORG-CN',
                 is_active=True,
                 created=now,
             ),
@@ -82,7 +80,6 @@ class ThinktankTestCase(test.TestCase):
                 thinktank=cls.deactivated_thinktank,
                 data={'staffed': True},
                 start_url='https://en.cdi.org.cn/chief-of-staff',
-                checksum='EN-CDI-ORG-CN-STAFF',
                 created=now,
             ),
         ])
@@ -115,7 +112,7 @@ class ThinktankTestCase(test.TestCase):
         cls.publications[0].scrapers.set([cls.scrapers[1]])
         cls.publications[1].scrapers.set([cls.scrapers[1]])
 
-        cls.list_url = reverse('1:thinktank-list')
+        cls.list_url = reverse('internal-api:thinktank-list')
 
     def setUp(self):
         login(self)
@@ -124,7 +121,7 @@ class ThinktankTestCase(test.TestCase):
         return data[find_by_id(data, id or self.thinktank.pk)]
 
     def test_list(self):
-        response = request(self, '1:thinktank-list')
+        response = request(self, 'internal-api:thinktank-list')
         self.assertEqual(len(response.data), 2)
 
         item: Mapping = self.get_result(response.data)
@@ -142,7 +139,7 @@ class ThinktankTestCase(test.TestCase):
         self.assertEqual(response.data[0]['id'], self.deactivated_thinktank.pk)
 
     def test_publication_count(self):
-        response = request(self, '1:thinktank-list')
+        response = request(self, 'internal-api:thinktank-list')
 
         item: Mapping = self.get_result(response.data, self.thinktank.pk)
         self.assertEqual(item['publication_count'], 0)
@@ -153,7 +150,7 @@ class ThinktankTestCase(test.TestCase):
         self.assertEqual(self.deactivated_thinktank.publication_count, 2)
 
     def test_scraper_count(self):
-        response = request(self, '1:thinktank-list')
+        response = request(self, 'internal-api:thinktank-list')
 
         item: Mapping = self.get_result(response.data, self.thinktank.pk)
         self.assertEqual(item['scraper_count'], 1)
@@ -164,7 +161,7 @@ class ThinktankTestCase(test.TestCase):
         self.assertEqual(self.deactivated_thinktank.scraper_count, 2)
 
     def test_active_scraper_count(self):
-        response = request(self, '1:thinktank-list')
+        response = request(self, 'internal-api:thinktank-list')
 
         item: Mapping = self.get_result(response.data, self.thinktanks[1].pk)
         self.assertEqual(item['scraper_count'], 2)
@@ -173,7 +170,7 @@ class ThinktankTestCase(test.TestCase):
         self.assertEqual(self.thinktanks[1].active_scraper_count, 1)
 
     def test_last_error_count(self):
-        response = request(self, '1:thinktank-list')
+        response = request(self, 'internal-api:thinktank-list')
 
         item = self.get_result(response.data, self.thinktank.pk)
         self.assertEqual(item['last_error_count'], 1)
@@ -201,7 +198,7 @@ class ThinktankTestCase(test.TestCase):
             'pool': self.thinktank.pool.id,
         }
 
-        url = reverse('1:thinktank-detail', args=[self.thinktank.pk])
+        url = reverse('internal-api:thinktank-detail', args=[self.thinktank.pk])
         response = self.client.put(url, data, 'application/json', follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data['name'], 'EDITED')
@@ -214,7 +211,7 @@ class ThinktankTestCase(test.TestCase):
             'is_active': False,
         }
 
-        url = reverse('1:thinktank-detail', args=[self.thinktank.pk])
+        url = reverse('internal-api:thinktank-detail', args=[self.thinktank.pk])
         response = self.client.patch(url, data, 'application/json', follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data['is_active'], False)
@@ -223,7 +220,7 @@ class ThinktankTestCase(test.TestCase):
         self.assertEqual(result.is_active, False)
 
     def test_detail(self):
-        response = request(self, '1:thinktank-detail', args=[self.thinktank.pk])
+        response = request(self, 'internal-api:thinktank-detail', args=[self.thinktank.pk])
 
         for field in FIELDS:
             self.assertEqual(response.data[field], getattr(self.thinktank, field), f'Field {field} mismatch')

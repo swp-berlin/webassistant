@@ -26,3 +26,7 @@ def when(values: Iterable[str]) -> Iterator[str]:
 
 def spaced(value: str) -> str:
     return ' '.join(when(str.split(value)))
+
+
+def paragraph(*sentences):
+    return ' '.join(sentences)

@@ -2,7 +2,7 @@ from django.utils.translation import gettext_lazy as _
 
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
-from rest_framework.fields import CharField, ChoiceField, IntegerField
+from rest_framework.fields import CharField, ChoiceField, IntegerField, SkipField
 from rest_framework.serializers import ModelSerializer, Serializer
 
 from swp.models import Scraper, Thinktank
@@ -14,28 +14,50 @@ from ..fields import ThinktankField, CSSSelectorField
 from ..scrapererror import ScraperErrorSerializer
 
 
+class TypeField(ChoiceField):
+
+    def validate_empty_values(self, data):
+        """
+        This field is always required, even on partial updates.
+        """
+
+        try:
+            return super().validate_empty_values(data)
+        except SkipField:
+            return self.fail('required')
+
+
 class ResolverConfigSerializer(BaseResolverConfigSerializer):
-    type = ChoiceField(choices=ResolverType.choices)
+    type = TypeField(choices=ResolverType.choices)
 
     def to_representation(self, instance):
         serializer = self.get_serializer(instance['type'], instance)
 
-        return {**super().to_representation(instance), **serializer.to_representation(instance)}
+        return {
+            **super().to_representation(instance),
+            **serializer.to_representation(instance),
+        }
 
     def to_internal_value(self, data):
         internal_data = super().to_internal_value(data)
         serializer = self.get_serializer(internal_data['type'], data=data)
 
-        return {**internal_data, **serializer.to_internal_value(data)}
+        return {
+            **internal_data,
+            **serializer.to_internal_value(data),
+        }
 
     def validate(self, data):
         serializer = self.get_serializer(data['type'], data=data)
 
-        return {**super().validate(data), **serializer.validate(data)}
+        return {
+            **super().validate(data),
+            **serializer.validate(data),
+        }
 
 
 class PaginatorSerializer(Serializer):
-    type = ChoiceField(choices=PaginatorType.choices)
+    type = TypeField(choices=PaginatorType.choices)
     list_selector = CSSSelectorField()
     button_selector = CSSSelectorField(allow_blank=True)
     max_pages = IntegerField(min_value=1)

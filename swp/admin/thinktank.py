@@ -40,6 +40,12 @@ class ThinktankAdmin(CanManagePermissionMixin, ActivatableModelAdmin):
         'pool',
         'created',
     ]
+    search_fields = [
+        'name',
+        'description',
+        'domain',
+        'url',
+    ]
 
     def get_queryset(self, request):
         return ActivatableModelAdmin.get_queryset(self, request).prefetch_related('pool')
