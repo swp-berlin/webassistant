@@ -19,6 +19,8 @@ class AdminTestCase(TestCase):
     def setUpModels(cls, now):
         user = create_user('simple-user')
 
+        AuthToken.objects.create(user=user)
+
         create_monitor(name='Test-Monitor', recipients=[user.email])
 
         category = Category.objects.create(name='Test')
@@ -34,7 +36,6 @@ class AdminTestCase(TestCase):
             type=ScraperType.LIST_WITH_LINK_AND_DOC.value,
             data={'hue?': 'hue!'},
             start_url='https://www.piie.com/research/publications/policy-briefs',
-            checksum='de9474fa85634623fd9ae9838f949a02c9365ede3499a26c9be52363a8b7f214',
         )
         scraper.errors.create(code='error', message="You're a test case, Harry!")
         scraper.categories.add(category)

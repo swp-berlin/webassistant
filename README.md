@@ -52,6 +52,7 @@ More commands are listed when running manage.py without arguments:
 
     docker-compose exec swp python manage.py
 
+See [Management Commands](docs/management.md) for more information on available commands.
 
 ## IDE Configuration
 
@@ -84,3 +85,16 @@ JavaScript > Code Quality Tools > ESLint to automatic`.
 
  - To activate Stylelint go to `Preferences > Languages & Frameworks > Style Sheets > Stylelint`
 and set it enabled.
+
+## Additional Docs
+
+* [API Documentation](docs/api.md)
+* [Architecture Overview](docs/architecture.md)
+* [Configuration Options](docs/configuration.md)
+* [Frontend Overview](docs/frontend.md)
+* [Management Commands](docs/management.md)
+* [Pollux Integration](docs/pollux.md)
+* [Live Deployment](docs/setup.md)
+* [Testing](docs/testing.md)
+* Usage Guides
+  * [Searching Publications](docs/usage/search.md) 

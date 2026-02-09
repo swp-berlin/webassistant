@@ -18,9 +18,10 @@ from elasticsearch_dsl.query import Match, QueryString, Range, Knn
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.permissions import BasePermission, IsAuthenticated
+from rest_framework.permissions import IsAuthenticated
 
 from swp.api.exceptions import InvalidQueryError, FullTextSearchError
+from swp.api.permissions import CanResearch
 from swp.api.router import default_router
 from swp.api.serializers import PublicationSerializer, ResearchSerializer, BucketSerializer
 from swp.documents import PublicationDocument
@@ -33,12 +34,6 @@ BUCKETS = [
     'tags',
     'categories',
 ]
-
-
-class CanResearch(BasePermission):
-
-    def has_permission(self, request, view):
-        return request.user.can_research
 
 
 class PublicationPagination(PageNumberPagination):

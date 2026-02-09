@@ -11,6 +11,10 @@ from .abstract import LastModified
 
 
 class PublicationList(LastModified):
+    """
+    A user defined list of publications.
+    """
+
     user = models.ForeignKey(
         verbose_name=trans('user'),
         to=settings.AUTH_USER_MODEL,
