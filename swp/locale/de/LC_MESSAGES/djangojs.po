@@ -435,6 +435,9 @@ msgstr "Scraper erfolgreich aktiviert."
 msgid "Scraper has been deactivated."
 msgstr "Scraper erfolgreich deaktiviert."
 
+-msgid "Scraper has been started."
+-msgstr "Scraper erfolgreich gestartet."
+
 msgid "Add Scraper"
 msgstr "Scraper hinzufügen"
 
