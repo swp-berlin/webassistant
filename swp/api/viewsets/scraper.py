@@ -5,6 +5,7 @@ from rest_framework.permissions import BasePermission
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
+from swp.api import serializers
 from swp.api.permissions import HasActivatablePermission
 from swp.api.router import default_router
 from swp.api.serializers import ScraperSerializer, ScraperDraftSerializer
@@ -40,5 +41,15 @@ class ScraperViewSet(RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin, Ge
 
         serializer.is_valid(raise_exception=True)
         serializer.save()
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=['post'])
+    def clone(self, request, pk):
+        scraper = self.get_object()
+        thinktank = scraper.thinktank
+        serializer = self.get_serializer(data=serializers.ScraperSerializer(scraper).data, thinktank=thinktank)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(thinktank=thinktank)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
