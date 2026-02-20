@@ -9,6 +9,7 @@ from swp.api.permissions import HasActivatablePermission
 from swp.api.router import default_router
 from swp.api.serializers import ScraperSerializer, ScraperDraftSerializer
 from swp.models import Scraper
+from swp.tasks import run_scraper
 
 
 class HasScraperPermission(HasActivatablePermission):
@@ -45,10 +46,13 @@ class ScraperViewSet(RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin, Ge
 
     @action(detail=True, methods=['post'], serializer_class=ScraperSerializer)
     def scrape(self, request, pk):
-        scraper = self.get_object()
         try:
-            response = scraper.scrape()
-        except Exception as e:
-            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+            run_scraper.delay(pk, force=True)
+        except Exception as error:
+            return Response({'error': str(error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return Response({'msg': 'Scraper was started'}, status=status.HTTP_200_OK)
 
-        return Response(response, status=status.HTTP_200_OK)
+    @action(detail=True, methods=['get'], serializer_class=ScraperSerializer)
+    def is_running(self, request, pk):
+        scraper = self.get_object()
+        return Response({'isRunning': scraper.is_running}, status=status.HTTP_200_OK)

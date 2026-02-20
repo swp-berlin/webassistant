@@ -31,14 +31,14 @@ const ScraperRows = ({items, canManage}) => items.map(item => (
 const ScraperTable = ({items, endpoint, canManage, ...props}) => (
     <HTMLTable className="w-full table-fixed my-4" bordered {...props}>
         <thead>
-        <tr className="bg-gray-300">
-            <th>{StartRun}</th>
-            <th className="w-1/2">{URLLabel}</th>
-            <th>{TypeLabel}</th>
-            <th>{CatgoriesLabel}</th>
-            <th>{LastRunLabel}</th>
-            <th className="text-right">{ErrorsLabel}</th>
-        </tr>
+            <tr className="bg-gray-300">
+                <th>{StartRun}</th>
+                <th className="w-1/2">{URLLabel}</th>
+                <th>{TypeLabel}</th>
+                <th>{CatgoriesLabel}</th>
+                <th>{LastRunLabel}</th>
+                <th className="text-right">{ErrorsLabel}</th>
+            </tr>
         </thead>
         <tbody>
             {items.length ? <ScraperRows items={items} canManage={canManage} /> : <EmptyRow colSpan={5} />}
