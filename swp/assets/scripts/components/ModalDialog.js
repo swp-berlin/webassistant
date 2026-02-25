@@ -53,14 +53,10 @@ export function MultiStepDialog({open, children, onClose, onFinalize, id}) {
     }
 
     const renderSteps = () => {
-        switch (step) {
-            case 1:
-                return children[0];
-            case 2:
-                return children[1];
-            default:
-                return null;
-        }
+        if (step > 0 && step <= totalSteps)
+            return children[step-1];
+        else
+            return null;
     }
 
     if (open) return (
