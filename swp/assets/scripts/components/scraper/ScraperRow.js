@@ -3,7 +3,7 @@ import {Link} from 'react-router-dom';
 import DateTime from 'components/DateTime';
 import _ from 'utils/i18n';
 
-import ScraperCloneButton from "components/scraper/ScraperCloneButton";
+import OpenCloneScraperPopupButton from './ScraperOpenClonePopupButton';
 
 
 const DisabledLabel = _('disabled');
@@ -18,7 +18,7 @@ const ExternalLink = ({url}) => <a href={url} target="_blank" rel="noreferrer">{
 
 const ScraperRow = ({id, thinktankID, url, type, categories, lastRun, errorCount, isActive, canManage}) => (
     <tr className={isActive ? null : 'disabled'} data-id={id}>
-        <td><ScraperCloneButton id={id}/></td>
+        <td><OpenCloneScraperPopupButton scraperID={id} thinktankID={thinktankID} /></td>
         <td>
             {canManage
                 ? <ScraperLink id={id} thinktankID={thinktankID}>{url}</ScraperLink>
