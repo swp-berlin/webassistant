@@ -1,46 +1,37 @@
-import {Button} from '@blueprintjs/core';
-
 import {useState} from 'react';
+
+import {Button, Intent} from '@blueprintjs/core';
+
 import Portal from 'components/Portal';
+
+import _ from 'utils/i18n';
+
+const Done = _('Done');
+const Next = _('Next');
+const Back = _('Back');
 
 const MODAL_STYLE = {
     position: 'absolute',
-    background: '#eeed',
+    background: '#fff',
+    boxShadow: '0px 8px 25px 15px #d1d5dbfd',
     left: '50%',
     top: '50%',
     transform: 'translate(-50%, -50%)',
-}
-
-const CLOSE_BTN_STYLE = {
-    margin: 0,
-    top: '0px',
-    right: '0px',
-    border: 'none',
-    background: 0,
-    boxShadow: 'none',
-    position: 'absolute',
-}
-
-const HEADER_STYLE = {
-    margin: '1rem',
-    top: '0',
+    zIndex: '1000',
 }
 
 const CONTENT_STYLE = {
-    margin: '1rem',
+    margin: '2rem',
+    overflow: 'scroll',
+    minHeight: 'fit-content',
+    maxHeight: '66vh',
 }
 
-const FOOTER_STYLE = {
-    margin: '1rem',
-    bottom: '0',
-    right: '0',
-}
 
-export function MultiStepDialog({open, children, onClose, onFinalize, id}) {
+export const MultiStepDialog = ({open, children, onClose, onFinalize, totalSteps, style}) => {
     if (!open) return null;
 
     const [step, setSteps] = useState(1);
-    const totalSteps = 2;
 
     function handlePrev() {
         if (step > 1)
@@ -61,27 +52,25 @@ export function MultiStepDialog({open, children, onClose, onFinalize, id}) {
 
     if (open) return (
         <Portal>
-            <div style={MODAL_STYLE}>
-                <Button onClick={onClose} style={CLOSE_BTN_STYLE}> X </Button>
-                <div className="header"  style={HEADER_STYLE}>
-                    Header
-                </div>
+            <div style={{...MODAL_STYLE, ...style}}>
+                <Button small minimal onClick={onClose} icon="cross"
+                        className="absolute top-5 right-5"
+                />
                 <div className="content" style={CONTENT_STYLE}>
                     {renderSteps()}
                 </div>
-                <div className="footer" style={FOOTER_STYLE}>
-                    {step > 1 ?
-                        <Button onClick={handlePrev}>
-                            Zurück
-                        </Button> : null
-                    }
+                <div className="footer flex justify-center my-2">
+                    <Button onClick={handlePrev} disabled={step <= 1}>
+                        {Back}
+                    </Button>
                     {step !== totalSteps ?
                         <Button onClick={handleNext}>
-                            Weiter
+                            {Next}
                         </Button> :
-                        <Button onClick={onFinalize}>
-                            Hinzufügen
-                        </Button>
+                        onFinalize &&
+                            <Button onClick={onFinalize} intent={Intent.PRIMARY}>
+                                {Done}
+                            </Button>
                     }
                 </div>
             </div>
