@@ -93,11 +93,12 @@ const ScraperForm = ({endpoint, data, method, redirectURL}) => {
 
     return (
         <form className="mt-8 scraper-form grid grid-cols-1 lg:grid-cols-2 gap-8" onSubmit={handleSubmit}>
-            {id && (
+            {id ?
                 <ScraperActivationPortal>
-                    <ScraperActivationButton id={id} isActive={isActive} form={form} onToggle={setIsActive} />
+                    <ScraperActivationButton id={id} isActive={isActive} form={form} onToggle={setIsActive}/>
                 </ScraperActivationPortal>
-            )}
+                : null
+            }
             <div>
                 <TextInput
                     register={register({required: true})}
