@@ -6,7 +6,7 @@ import Portal from 'components/Portal';
 
 import _ from 'utils/i18n';
 
-const Done = _('Done');
+const SubmitButtonLabel = _('Save');
 const Next = _('Next');
 const Back = _('Back');
 
@@ -26,7 +26,6 @@ const CONTENT_STYLE = {
     minHeight: 'fit-content',
     maxHeight: '66vh',
 }
-
 
 export const MultiStepDialog = ({open, children, onClose, onFinalize, totalSteps, style}) => {
     if (!open) return null;
@@ -54,8 +53,7 @@ export const MultiStepDialog = ({open, children, onClose, onFinalize, totalSteps
         <Portal>
             <div style={{...MODAL_STYLE, ...style}}>
                 <Button small minimal onClick={onClose} icon="cross"
-                        className="absolute top-5 right-5"
-                />
+                        className="absolute top-5 right-5"/>
                 <div className="content" style={CONTENT_STYLE}>
                     {renderSteps()}
                 </div>
@@ -64,14 +62,11 @@ export const MultiStepDialog = ({open, children, onClose, onFinalize, totalSteps
                         {Back}
                     </Button>
                     {step !== totalSteps ?
-                        <Button onClick={handleNext}>
-                            {Next}
-                        </Button> :
-                        onFinalize &&
-                            <Button onClick={onFinalize} intent={Intent.PRIMARY}>
-                                {Done}
-                            </Button>
-                    }
+                        <Button onClick={handleNext} text={Next} />
+                    : onFinalize ?
+                        <Button text={SubmitButtonLabel} type="submit"
+                                form="scraperform" intent={Intent.PRIMARY}/>
+                    : null}
                 </div>
             </div>
         </Portal>

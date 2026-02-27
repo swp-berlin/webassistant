@@ -4,11 +4,14 @@ import {useParams} from 'react-router-dom';
 
 import {Button} from '@blueprintjs/core';
 
+import _ from 'utils/i18n';
+
 import {MultiStepDialog} from 'components/ModalDialog';
 import Query from 'components/Query';
 
 import ScraperClone from './ScraperClone';
 
+const ChooseThinktank = _("Wähle einen Thinktank für den neuen Scraper.")
 const SELECT_STYLE = {
     padding: '.75rem 1.5rem',
     fontSize: 'large',
@@ -24,7 +27,7 @@ const CLONEFORM_STYLE = {
 const SelectThinktank = ({thinktankID, onChange}) => {
     return(
         <Fragment>
-            <h4>Wähle einen Thinktank für den neuen Scraper.</h4>
+            <h4>{ChooseThinktank}</h4>
             <div className='flex justify-center my-5'>
                 <Query queryKey={['thinktank',]}>
                     {thinktanks =>
@@ -60,8 +63,9 @@ function OpenCloneScraperPopupButton({scraperID}) {
                                  onChange={e => setSelectedThinktankID(e.target.value)}
                 />
                 <ScraperClone endpoint={endpoint}
-                                  thinktankID={selectedThinktankID}
-                                  scraperID={scraperID}
+                              thinktankID={selectedThinktankID}
+                              scraperID={scraperID}
+                              onSuccess={() => setIsOpen(false)}
                 />
             </MultiStepDialog>
         </Fragment>

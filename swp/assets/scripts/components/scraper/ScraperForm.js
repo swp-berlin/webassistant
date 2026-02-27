@@ -1,4 +1,5 @@
 import {useCallback, useState} from 'react';
+
 import {Button} from '@blueprintjs/core';
 
 import _ from 'utils/i18n';
@@ -65,8 +66,10 @@ const DEFAULT_VALUES = {
     data: ScraperTypes[0].defaults,
 };
 
-const ScraperForm = ({endpoint, data, method, redirectURL}) => {
-    const id = data?.id;
+export const ScraperBaseForm = (
+    {id, endpoint, data, method, redirectURL, onSuccess, isDisabled, children, onActivationToggle}
+) => {
+    const scraperID = data?.id;
 
     const [preview, setPreview] = useState(null);
     const handlePreview = useCallback(preview => setPreview(preview.id), []);
@@ -78,24 +81,30 @@ const ScraperForm = ({endpoint, data, method, redirectURL}) => {
     );
     const {control, register, errors} = form;
 
-    const [isActive, setIsActive] = useState(!!data?.is_active);
-
     const handleSubmit = useCallback(async event => {
         event.preventDefault();
         form.clearErrors();
         const valid = await form.trigger('start_url');
 
-        if (valid) await mutate(form.getValues(), id ? 'PATCH' : 'POST');
-    }, [form, id, mutate]);
+        if (valid) {
+            const {success} = await mutate(form.getValues(), scraperID ? 'PATCH' : 'POST');
+            if (success && onSuccess) onSuccess();
+        }
+    }, [form, scraperID, mutate]);
 
-    const disabledTitle = isActive ? DisabledTitle : null;
+    const disabledTitle = isDisabled ? DisabledTitle : null;
     const scraperErrors = data?.errors;
 
     return (
-        <form className="mt-8 scraper-form grid grid-cols-1 lg:grid-cols-2 gap-8" onSubmit={handleSubmit}>
-            {id ?
+        <form className="mt-8 scraper-form grid grid-cols-1 lg:grid-cols-2 gap-8"
+              id={id}
+              onSubmit={handleSubmit}>
+            {scraperID ?
                 <ScraperActivationPortal>
-                    <ScraperActivationButton id={id} isActive={isActive} form={form} onToggle={setIsActive}/>
+                    <ScraperActivationButton id={data?.id}
+                                             isActive={isDisabled}
+                                             form={form}
+                                             onToggle={onActivationToggle}/>
                 </ScraperActivationPortal>
                 : null
             }
@@ -105,7 +114,7 @@ const ScraperForm = ({endpoint, data, method, redirectURL}) => {
                     name="start_url"
                     label={StartURLLabel}
                     errors={errors}
-                    readOnly={isActive}
+                    readOnly={isDisabled}
                     title={disabledTitle}
                 />
                 <ScraperTypeSelect
@@ -114,7 +123,7 @@ const ScraperForm = ({endpoint, data, method, redirectURL}) => {
                     label={TypeLabel}
                     errors={errors}
                     choices={ScraperTypes}
-                    disabled={isActive}
+                    disabled={isDisabled}
                     title={disabledTitle}
                 />
                 <Select
@@ -124,7 +133,7 @@ const ScraperForm = ({endpoint, data, method, redirectURL}) => {
                     errors={errors}
                     choices={Intervals}
                     required
-                    disabled={isActive}
+                    disabled={isDisabled}
                     title={disabledTitle}
                 />
                 <CategorySelect
@@ -132,7 +141,7 @@ const ScraperForm = ({endpoint, data, method, redirectURL}) => {
                     name="categories"
                     label={CategoriesLabel}
                     errors={errors}
-                    disabled={isActive}
+                    disabled={isDisabled}
                     title={disabledTitle}
                     fill
                 />
@@ -146,14 +155,14 @@ const ScraperForm = ({endpoint, data, method, redirectURL}) => {
             <div>
                 <Field label={ConfigLabel}>
                     <ResolverFormProvider value={Forms}>
-                        <ResolverForm form={form} prefix="data" readOnly={isActive} />
+                        <ResolverForm form={form} prefix="data" readOnly={isDisabled} />
                     </ResolverFormProvider>
                 </Field>
 
                 <ScraperFormErrors form={form} />
 
                 <div className="flex justify-end space-x-2">
-                    <Button type="submit" intent="primary" text={SubmitButtonLabel} disabled={isActive} />
+                    {children}
                 </div>
             </div>
 
@@ -163,6 +172,20 @@ const ScraperForm = ({endpoint, data, method, redirectURL}) => {
         </form>
     );
 };
+
+ScraperBaseForm.defaultProps = {
+    method: 'POST',
+};
+
+const ScraperForm = ({data, ...props}) => {
+    const [isActive, setIsActive] = useState(!!data?.is_active);
+
+    return (
+        <ScraperBaseForm id='scraperform' data={data} isDisabled={isActive} onActivationToggle={setIsActive} {...props}>
+            <Button type="submit" intent="primary" text={SubmitButtonLabel} form='scraperform'/>
+        </ScraperBaseForm>
+    );
+}
 
 ScraperForm.defaultProps = {
     method: 'POST',
