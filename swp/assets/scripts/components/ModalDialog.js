@@ -27,7 +27,7 @@ const CONTENT_STYLE = {
     maxHeight: '66vh',
 }
 
-export const MultiStepDialog = ({open, children, onClose, onFinalize, totalSteps, style, submitformID}) => {
+export const MultiStepDialog = ({open, children, onClose, totalSteps, style, submitformID}) => {
     if (!open) return null;
 
     const [step, setSteps] = useState(1);
