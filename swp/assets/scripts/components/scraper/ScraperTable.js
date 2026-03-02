@@ -10,7 +10,7 @@ const TypeLabel = _('Type');
 const CatgoriesLabel = _('Categories');
 const LastRunLabel = _('Last Run');
 const ErrorsLabel = _('Errors');
-const StartRun = 'Start';
+const Run = _('Run');
 
 
 const ScraperRows = ({items, canManage}) => items.map(item => (
@@ -32,7 +32,7 @@ const ScraperTable = ({items, endpoint, canManage, ...props}) => (
     <HTMLTable className="w-full table-fixed my-4" bordered {...props}>
         <thead>
             <tr className="bg-gray-300">
-                <th>{StartRun}</th>
+                <th>{Run}</th>
                 <th className="w-1/2">{URLLabel}</th>
                 <th>{TypeLabel}</th>
                 <th>{CatgoriesLabel}</th>

@@ -8,6 +8,7 @@ import {useMutationResult} from 'components/Fetch';
 import {useQuery} from 'hooks/query';
 
 const StartedMessage = _('Scraper has been started.');
+const Run = _('Run');
 
 const handleSuccess = () => ({
     intent: 'success',
@@ -27,7 +28,7 @@ const ScraperStartButton = ({id, refetchInterval}) => {
     const handleClick = useCallback(() => mutate({...data}), [mutate, data]);
     const {result: {data: qdata}} = useQuery(isRunningEndpoint, {refetchInterval});
 
-    return <Button disabled={qdata?.isRunning} loading={loading} onClick={handleClick} text="Start Scrape" />;
+    return <Button disabled={qdata?.isRunning} loading={loading} onClick={handleClick} text={Run} />;
 };
 
 export default ScraperStartButton;
