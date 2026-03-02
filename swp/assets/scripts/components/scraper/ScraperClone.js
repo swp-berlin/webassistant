@@ -10,6 +10,8 @@ import {ScraperBaseForm} from './ScraperForm';
 
 const Title = _('Clone Scraper');
 
+const ScraperFormID = 'scrapercloneform';
+
 const ScraperClone = ({endpoint, scraperID, thinktankID, onSuccess}) => {
     const query = useQuery(`/scraper/${scraperID}/`);
     const {loading, success, result: {data: scraper}} = query;
@@ -22,11 +24,13 @@ const ScraperClone = ({endpoint, scraperID, thinktankID, onSuccess}) => {
         success ?
             <Page title={Title}>
                 <ScraperBaseForm
+                    id={ScraperFormID}
                     data={scraper}
                     redirectURL={endpoint}
                     onSuccess={onSuccess}
                     endpoint={`/thinktank/${thinktankID}/add-scraper/`}
-                    isDisabled={isActive} onActivateToggle={setIsActive}
+                    isDisabled={isActive}
+                    onActivateToggle={setIsActive}
                 />
             </Page>
         : loading ?

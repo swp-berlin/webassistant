@@ -27,7 +27,7 @@ const CONTENT_STYLE = {
     maxHeight: '66vh',
 }
 
-export const MultiStepDialog = ({open, children, onClose, onFinalize, totalSteps, style}) => {
+export const MultiStepDialog = ({open, children, onClose, onFinalize, totalSteps, style, submitformID}) => {
     if (!open) return null;
 
     const [step, setSteps] = useState(1);
@@ -63,10 +63,7 @@ export const MultiStepDialog = ({open, children, onClose, onFinalize, totalSteps
                     </Button>
                     {step !== totalSteps ?
                         <Button onClick={handleNext} text={Next} />
-                    : onFinalize ?
-                        <Button text={SubmitButtonLabel} type="submit"
-                                form="scraperform" intent={Intent.PRIMARY}/>
-                    : null}
+                    :   <Button text={SubmitButtonLabel} type="submit" form={submitformID} intent={Intent.PRIMARY}/>}
                 </div>
             </div>
         </Portal>

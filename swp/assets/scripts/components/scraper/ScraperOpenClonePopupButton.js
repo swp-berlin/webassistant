@@ -58,6 +58,7 @@ function OpenCloneScraperPopupButton({scraperID}) {
                              onFinalize={() => setIsOpen(false)}
                              totalSteps={2}
                              style={CLONEFORM_STYLE}
+                             submitformID="scrapercloneform"
             >
                 <SelectThinktank thinktankID={selectedThinktankID}
                                  onChange={e => setSelectedThinktankID(e.target.value)}
