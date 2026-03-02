@@ -11,7 +11,7 @@ import Query from 'components/Query';
 
 import ScraperClone from './ScraperClone';
 
-const ChooseThinktank = _("Wähle einen Thinktank für den neuen Scraper.")
+const ChooseThinktank = _('Select a thinktank for the new scraper.')
 const SELECT_STYLE = {
     padding: '.75rem 1.5rem',
     fontSize: 'large',
@@ -38,7 +38,6 @@ const SelectThinktank = ({thinktankID, onChange}) => {
                         </select>
                     }
                 </Query>
-
             </div>
         </Fragment>
     )
