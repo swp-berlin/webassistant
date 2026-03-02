@@ -1,5 +1,5 @@
-import PageHeading from './PageHeading';
 import {Fragment} from 'react';
+import PageHeading from './PageHeading';
 
 const Page = ({children, className, ...props}) => (
     <Fragment>

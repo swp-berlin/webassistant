@@ -18,42 +18,43 @@ const MODAL_STYLE = {
     top: '50%',
     transform: 'translate(-50%, -50%)',
     zIndex: '1000',
-}
+};
 
 const CONTENT_STYLE = {
     margin: '2rem',
     overflow: 'scroll',
     minHeight: 'fit-content',
     maxHeight: '66vh',
-}
+};
 
 export const MultiStepDialog = ({open, children, onClose, totalSteps, style, submitformID}) => {
-    if (!open) return null;
-
     const [step, setSteps] = useState(1);
 
+    if (!open) return null;
+
     function handlePrev() {
-        if (step > 1)
-            setSteps((step) => step - 1);
+        if (step > 1) {
+            setSteps(step => step - 1);
+        }
     }
 
     function handleNext() {
-        if (step < totalSteps)
-            setSteps((step) => step + 1);
+        if (step < totalSteps) {
+            setSteps(step => step + 1);
+        }
     }
 
     const renderSteps = () => {
-        if (step > 0 && step <= totalSteps)
-            return children[step-1];
-        else
-            return null;
-    }
+        if (step > 0 && step <= totalSteps) {
+            return children[step - 1];
+        }
+        return null;
+    };
 
-    if (open) return (
+    return (
         <Portal>
             <div style={{...MODAL_STYLE, ...style}}>
-                <Button small minimal onClick={onClose} icon="cross"
-                        className="absolute top-5 right-5"/>
+                <Button small minimal onClick={onClose} icon="cross" className="absolute top-5 right-5" />
                 <div className="content" style={CONTENT_STYLE}>
                     {renderSteps()}
                 </div>
@@ -61,11 +62,12 @@ export const MultiStepDialog = ({open, children, onClose, totalSteps, style, sub
                     <Button onClick={handlePrev} disabled={step <= 1}>
                         {Back}
                     </Button>
-                    {step !== totalSteps ?
-                        <Button onClick={handleNext} text={Next} />
-                    :   <Button text={SubmitButtonLabel} type="submit" form={submitformID} intent={Intent.PRIMARY}/>}
+                    {step !== totalSteps
+                        ? <Button onClick={handleNext} text={Next} />
+                        : <Button text={SubmitButtonLabel} type="submit" form={submitformID} intent={Intent.PRIMARY} />
+                    }
                 </div>
             </div>
         </Portal>
     );
-}
+};

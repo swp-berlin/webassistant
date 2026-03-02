@@ -9,6 +9,7 @@ import Page from 'components/Page';
 import {ScraperBaseForm} from './ScraperForm';
 
 const Title = _('Clone Scraper');
+const Loading = _('loading...');
 
 const ScraperFormID = 'scrapercloneform';
 
@@ -17,11 +18,10 @@ const ScraperClone = ({endpoint, scraperID, thinktankID, onSuccess}) => {
     const {loading, success, result: {data: scraper}} = query;
     const [isActive, setIsActive] = useState(!!scraper?.is_active);
 
-    if (success)
+    if (success) {
         scraper.id = 0;
 
-    return (
-        success ?
+        return (
             <Page title={Title}>
                 <ScraperBaseForm
                     id={ScraperFormID}
@@ -33,10 +33,18 @@ const ScraperClone = ({endpoint, scraperID, thinktankID, onSuccess}) => {
                     onActivateToggle={setIsActive}
                 />
             </Page>
-        : loading ?
-            <Page title={Title}> loading... </Page>
-        : null
-    )
-}
+        );
+    }
+
+    if (loading) {
+        return (
+            <Page title={Title}>
+                {Loading}
+            </Page>
+        );
+    }
+
+    return null;
+};
 
 export default ScraperClone;

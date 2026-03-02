@@ -66,9 +66,9 @@ const DEFAULT_VALUES = {
     data: ScraperTypes[0].defaults,
 };
 
-export const ScraperBaseForm = (
-    {id, endpoint, data, method, redirectURL, onSuccess, isDisabled, children, onActivationToggle}
-) => {
+export const ScraperBaseForm = ({
+    id, endpoint, data, method, redirectURL, onSuccess, isDisabled, children, onActivationToggle,
+}) => {
     const scraperID = data?.id;
 
     const [preview, setPreview] = useState(null);
@@ -90,24 +90,27 @@ export const ScraperBaseForm = (
             const {success} = await mutate(form.getValues(), scraperID ? 'PATCH' : 'POST');
             if (success && onSuccess) onSuccess();
         }
-    }, [form, scraperID, mutate]);
+    }, [form, onSuccess, mutate, scraperID]);
 
     const disabledTitle = isDisabled ? DisabledTitle : null;
     const scraperErrors = data?.errors;
 
     return (
-        <form className="mt-8 scraper-form grid grid-cols-1 lg:grid-cols-2 gap-8"
-              id={id}
-              onSubmit={handleSubmit}>
-            {scraperID ?
+        <form
+            className="mt-8 scraper-form grid grid-cols-1 lg:grid-cols-2 gap-8"
+            id={id}
+            onSubmit={handleSubmit}
+        >
+            { scraperID ? (
                 <ScraperActivationPortal>
-                    <ScraperActivationButton id={data?.id}
-                                             isActive={isDisabled}
-                                             form={form}
-                                             onToggle={onActivationToggle}/>
+                    <ScraperActivationButton
+                        id={data?.id}
+                        isActive={isDisabled}
+                        form={form}
+                        onToggle={onActivationToggle}
+                    />
                 </ScraperActivationPortal>
-                : null
-            }
+            ) : null}
             <div>
                 <TextInput
                     register={register({required: true})}
@@ -181,11 +184,11 @@ const ScraperForm = ({data, ...props}) => {
     const [isActive, setIsActive] = useState(!!data?.is_active);
 
     return (
-        <ScraperBaseForm id='scraperform' data={data} isDisabled={isActive} onActivationToggle={setIsActive} {...props}>
-            <Button type="submit" intent="primary" text={SubmitButtonLabel} form='scraperform'/>
+        <ScraperBaseForm id="scraperform" data={data} isDisabled={isActive} onActivationToggle={setIsActive} {...props}>
+            <Button type="submit" intent="primary" text={SubmitButtonLabel} form="scraperform" />
         </ScraperBaseForm>
     );
-}
+};
 
 ScraperForm.defaultProps = {
     method: 'POST',
