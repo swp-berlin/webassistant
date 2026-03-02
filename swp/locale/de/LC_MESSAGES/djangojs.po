@@ -447,6 +447,9 @@ msgstr "Thinktanks"
 msgid "New Scraper"
 msgstr "Neuer Scraper"
 
+msgid "Clone Scraper"
+msgstr "Scraper duplizieren"
+
 msgid "Scraper"
 msgstr "Scraper"
 
