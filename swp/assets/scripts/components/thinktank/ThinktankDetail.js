@@ -12,7 +12,7 @@ import TableActions from 'components/tables/TableActions';
 
 import ThinktankActivationButton from './ThinktankActivationButton';
 import {useThinktanksBreadcrumb} from './ThinktankList';
-import {getThinktankLabel} from './helper';
+import {getPoolID, getThinktankLabel} from './helper';
 
 const EditLabel = _('Edit');
 const NewScraperLabel = _('New scraper');
@@ -78,6 +78,7 @@ const ThinktankDetail = props => {
 
                 return (
                     <Page title={label} subtitle={subtitle} actions={actions}>
+                        <h6>Pool: {getPoolID()}</h6>
                         <Link to={`/thinktank/${id}/publications/`}>
                             {getPublicationsLabel(publicationCount)}
                         </Link>

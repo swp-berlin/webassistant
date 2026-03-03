@@ -1,4 +1,4 @@
-import {useCallback, useState} from 'react';
+import {Fragment, useCallback, useState} from 'react';
 import {Button} from '@blueprintjs/core';
 
 import _ from 'utils/i18n';
@@ -7,6 +7,7 @@ import {getChoices} from 'utils/choices';
 import {useMutationForm} from 'components/Fetch';
 import {Select, TextInput} from 'components/forms';
 import Field from 'components/forms/Field';
+import {getPoolID} from 'components/thinktank/helper';
 
 import ScraperTypes from 'schemes/scraperTypes.json';
 
@@ -92,74 +93,77 @@ const ScraperForm = ({endpoint, data, method, redirectURL}) => {
     const scraperErrors = data?.errors;
 
     return (
-        <form className="mt-8 scraper-form grid grid-cols-1 lg:grid-cols-2 gap-8" onSubmit={handleSubmit}>
-            {id && (
-                <ScraperActivationPortal>
-                    <ScraperActivationButton id={id} isActive={isActive} form={form} onToggle={setIsActive} />
-                </ScraperActivationPortal>
-            )}
-            <div>
-                <TextInput
-                    register={register({required: true})}
-                    name="start_url"
-                    label={StartURLLabel}
-                    errors={errors}
-                    readOnly={isActive}
-                    title={disabledTitle}
-                />
-                <ScraperTypeSelect
-                    form={form}
-                    name="type"
-                    label={TypeLabel}
-                    errors={errors}
-                    choices={ScraperTypes}
-                    disabled={isActive}
-                    title={disabledTitle}
-                />
-                <Select
-                    control={control}
-                    name="interval"
-                    label={IntervalLabel}
-                    errors={errors}
-                    choices={Intervals}
-                    required
-                    disabled={isActive}
-                    title={disabledTitle}
-                />
-                <CategorySelect
-                    control={control}
-                    name="categories"
-                    label={CategoriesLabel}
-                    errors={errors}
-                    disabled={isActive}
-                    title={disabledTitle}
-                    fill
-                />
-            </div>
-
-            <div>
-                <ScraperTypeDescription form={form} />
-                <PreviewButton form={form} onPreview={handlePreview} />
-            </div>
-
-            <div>
-                <Field label={ConfigLabel}>
-                    <ResolverFormProvider value={Forms}>
-                        <ResolverForm form={form} prefix="data" readOnly={isActive} />
-                    </ResolverFormProvider>
-                </Field>
-
-                <ScraperFormErrors form={form} />
-
-                <div className="flex justify-end space-x-2">
-                    <Button type="submit" intent="primary" text={SubmitButtonLabel} disabled={isActive} />
+        <Fragment>
+            <h6 id='poolID'>Pool: {getPoolID()} </h6>
+            <form className="mt-8 scraper-form grid grid-cols-1 lg:grid-cols-2 gap-8" onSubmit={handleSubmit}>
+                {id && (
+                    <ScraperActivationPortal>
+                        <ScraperActivationButton id={id} isActive={isActive} form={form} onToggle={setIsActive} />
+                    </ScraperActivationPortal>
+                )}
+                <div>
+                    <TextInput
+                        register={register({required: true})}
+                        name="start_url"
+                        label={StartURLLabel}
+                        errors={errors}
+                        readOnly={isActive}
+                        title={disabledTitle}
+                    />
+                    <ScraperTypeSelect
+                        form={form}
+                        name="type"
+                        label={TypeLabel}
+                        errors={errors}
+                        choices={ScraperTypes}
+                        disabled={isActive}
+                        title={disabledTitle}
+                    />
+                    <Select
+                        control={control}
+                        name="interval"
+                        label={IntervalLabel}
+                        errors={errors}
+                        choices={Intervals}
+                        required
+                        disabled={isActive}
+                        title={disabledTitle}
+                    />
+                    <CategorySelect
+                        control={control}
+                        name="categories"
+                        label={CategoriesLabel}
+                        errors={errors}
+                        disabled={isActive}
+                        title={disabledTitle}
+                        fill
+                    />
                 </div>
-            </div>
 
-            <div>
-                {preview ? <Preview id={preview} /> : <BackendScraperErrors errors={scraperErrors} />}
-            </div>
-        </form>
+                <div>
+                    <ScraperTypeDescription form={form} />
+                    <PreviewButton form={form} onPreview={handlePreview} />
+                </div>
+
+                <div>
+                    <Field label={ConfigLabel}>
+                        <ResolverFormProvider value={Forms}>
+                            <ResolverForm form={form} prefix="data" readOnly={isActive} />
+                        </ResolverFormProvider>
+                    </Field>
+
+                    <ScraperFormErrors form={form} />
+
+                    <div className="flex justify-end space-x-2">
+                        <Button type="submit" intent="primary" text={SubmitButtonLabel} disabled={isActive} />
+                    </div>
+                </div>
+
+                <div>
+                    {preview ? <Preview id={preview} /> : <BackendScraperErrors errors={scraperErrors} />}
+                </div>
+            </form>
+        </Fragment>
     );
 };
 

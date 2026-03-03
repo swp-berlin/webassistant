@@ -9,7 +9,7 @@ import _ from 'utils/i18n';
 
 import ThinktankEditForm from './ThinktankEditForm';
 import {useThinktanksBreadcrumb} from './ThinktankList';
-import {getThinktankLabel} from './helper';
+import {getPoolID, getThinktankLabel} from './helper';
 
 
 const Title = _('Edit Thinktank');
@@ -24,6 +24,7 @@ const ThinktankEdit = props => {
 
     return (
         <Page title={Title}>
+            <h6>Pool: {getPoolID()}</h6>
             <Result result={result}>
                 {thinktank => (
                     <ThinktankEditForm
