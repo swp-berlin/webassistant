@@ -11,11 +11,11 @@ export const getThinktankLabel = (id, {result: {data}, loading}) => (
     loading || !data ? interpolate(ThinktankLabel, [id], false) : data.name
 );
 
-export const getPoolID = () => {
+export const PoolID = () => {
     const {id, thinktankID} = useParams();
     const {success, result} = useQuery(`thinktank/${thinktankID || id}`, {fields: ['pool']});
     if (success) {
-        return result.data.pool;
+        return <h6> Pool: {result.data.pool} </h6>;
     }
     return null;
 }
