@@ -2,14 +2,16 @@ import {useParams} from 'react-router-dom';
 
 import {useBreadcrumb} from 'components/Navigation';
 import Page from 'components/Page';
-
 import {Result} from 'components/Fetch';
+import {PoolID} from 'components/pool';
+
 import {useQuery} from 'hooks/query';
+
 import _ from 'utils/i18n';
 
 import ThinktankEditForm from './ThinktankEditForm';
 import {useThinktanksBreadcrumb} from './ThinktankList';
-import {PoolID, getThinktankLabel} from './helper';
+import {getThinktankLabel} from './helper';
 
 
 const Title = _('Edit Thinktank');

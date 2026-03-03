@@ -7,7 +7,7 @@ import {getChoices} from 'utils/choices';
 import {useMutationForm} from 'components/Fetch';
 import {Select, TextInput} from 'components/forms';
 import Field from 'components/forms/Field';
-import {PoolID} from 'components/thinktank/helper';
+import {PoolID} from 'components/pool';
 
 import ScraperTypes from 'schemes/scraperTypes.json';
 

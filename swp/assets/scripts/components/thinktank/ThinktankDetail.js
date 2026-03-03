@@ -9,10 +9,11 @@ import Page from 'components/Page';
 import ScraperTable from 'components/scraper/ScraperTable';
 import {getPublicationsLabel} from 'components/publication/helper';
 import TableActions from 'components/tables/TableActions';
+import {PoolID} from 'components/pool';
 
 import ThinktankActivationButton from './ThinktankActivationButton';
 import {useThinktanksBreadcrumb} from './ThinktankList';
-import {PoolID, getThinktankLabel} from './helper';
+import {getThinktankLabel} from './helper';
 
 const EditLabel = _('Edit');
 const NewScraperLabel = _('New scraper');
