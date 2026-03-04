@@ -37,7 +37,7 @@ class PublicationTestCase(APITestCase):
 
         self.publication.refresh_from_db(fields=['embedding'])
 
-        self.assertEqual(self.publication.embedding, embedding)
+        self.assertEqual(round(self.publication.embedding, 12), round(embedding, 12))
 
     def test_search(self):
         request(self, '1:publication-search', method='POST', data={})

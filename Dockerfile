@@ -14,7 +14,7 @@ RUN --mount=type=cache,target=/var/cache/apt apt-get update && apt-get install -
     libxdamage1 libxfixes3 libxrandr2 libgbm1 libdrm2 libxkbcommon0 libasound2 libwayland-client0
 
 COPY requirements.txt /app
-RUN --mount=type=cache,target=/root/.cache pip install --upgrade pip && pip install -r requirements.txt
+RUN --mount=type=cache,target=/root/.cache pip install pip==24 && pip install -r requirements.txt
 
 RUN playwright install chromium
 
