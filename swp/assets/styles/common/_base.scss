@@ -30,4 +30,10 @@
   ul {
     @apply mb-2 pl-4 list-disc;
   }
+
+  *,
+  ::before,
+  ::after {
+    overflow-x: scroll;
+  }
 }
