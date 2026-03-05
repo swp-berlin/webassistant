@@ -31,7 +31,9 @@
     @apply mb-2 pl-4 list-disc;
   }
 
-  *, ::before, ::after {
+  *,
+  ::before,
+  ::after {
     overflow-x: scroll;
   }
 }
