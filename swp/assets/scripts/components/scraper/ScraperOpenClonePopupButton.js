@@ -1,4 +1,4 @@
-import {Fragment, useState} from 'react';
+import {useState} from 'react';
 
 import {useParams} from 'react-router-dom';
 
@@ -25,7 +25,7 @@ const CLONEFORM_STYLE = {
 };
 
 const SelectThinktank = ({thinktankID, onChange}) => (
-    <Fragment>
+    <>
         <h4>{ChooseThinktank}</h4>
         <div className="flex justify-center my-5">
             <Query queryKey={['thinktank']}>
@@ -38,7 +38,7 @@ const SelectThinktank = ({thinktankID, onChange}) => (
                 )}
             </Query>
         </div>
-    </Fragment>
+    </>
 );
 
 function OpenCloneScraperPopupButton({scraperID}) {
@@ -48,7 +48,7 @@ function OpenCloneScraperPopupButton({scraperID}) {
     const endpoint = `/thinktank/${id}/`;
 
     return (
-        <Fragment>
+        <>
             <Button onClick={() => { setIsOpen(true); setSelectedThinktankID(id); }}>⧉</Button>
             <MultiStepDialog
                 open={isOpen}
@@ -69,7 +69,7 @@ function OpenCloneScraperPopupButton({scraperID}) {
                     onSuccess={() => setIsOpen(false)}
                 />
             </MultiStepDialog>
-        </Fragment>
+        </>
     );
 }
 

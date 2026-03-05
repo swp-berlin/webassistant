@@ -62,9 +62,10 @@ export const MultiStepDialog = ({open, children, onClose, totalSteps, style, sub
                     <Button onClick={handlePrev} disabled={step <= 1}>
                         {Back}
                     </Button>
-                    {step !== totalSteps
-                        ? <Button onClick={handleNext} text={Next} />
-                        : <Button text={SubmitButtonLabel} type="submit" form={submitformID} intent={Intent.PRIMARY} />
+                    {
+                        step !== totalSteps
+                            ? <Button onClick={handleNext} text={Next} />
+                            : <Button text={SubmitButtonLabel} type="submit" form={submitformID} intent={Intent.PRIMARY} />
                     }
                 </div>
             </div>
