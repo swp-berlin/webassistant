@@ -21,7 +21,7 @@ Portal.propTypes = {
 };
 
 Portal.defaultProps = {
-    id: 'body',
+    id: 'portal',
 };
 
 export default Portal;
