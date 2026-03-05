@@ -175,6 +175,15 @@ msgstr "Status"
 msgid "result"
 msgstr "Ergebnis"
 
+msgid "timestamp"
+msgstr "Timestamp"
+
+msgid "created"
+msgstr "erzeugt am"
+
+msgid "last modified"
+msgstr "zuletzt geändert"
+
 msgid "can manage"
 msgstr "kann verwalten"
 
@@ -214,12 +223,6 @@ msgstr "Aktivierung nicht erlaubt"
 
 msgid "Deactivation denied"
 msgstr "Deaktivierung nicht erlaubt"
-
-msgid "created"
-msgstr "erzeugt am"
-
-msgid "last modified"
-msgstr "zuletzt geändert"
 
 msgid "key"
 msgstr "Schlüssel"
@@ -482,9 +485,6 @@ msgstr "Fehlercode"
 
 msgid "message"
 msgstr "Nachricht"
-
-msgid "timestamp"
-msgstr "Timestamp"
 
 msgid "sent"
 msgstr "gesendet"
