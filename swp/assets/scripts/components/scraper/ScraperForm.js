@@ -1,4 +1,4 @@
-import {Fragment, useCallback, useState} from 'react';
+import {useCallback, useState} from 'react';
 import {Button} from '@blueprintjs/core';
 
 import _ from 'utils/i18n';
@@ -93,7 +93,7 @@ const ScraperForm = ({endpoint, data, method, redirectURL}) => {
     const scraperErrors = data?.errors;
 
     return (
-        <Fragment>
+        <>
             <PoolID />
             <form className="mt-8 scraper-form grid grid-cols-1 lg:grid-cols-2 gap-8" onSubmit={handleSubmit}>
                 {id && (
@@ -163,7 +163,7 @@ const ScraperForm = ({endpoint, data, method, redirectURL}) => {
                     {preview ? <Preview id={preview} /> : <BackendScraperErrors errors={scraperErrors} />}
                 </div>
             </form>
-        </Fragment>
+        </>
     );
 };
 
