@@ -71,7 +71,7 @@ const PublicationItem = ({publication, className, onAddFilter, children, ...prop
         tags,
         authors,
         abstract,
-        publication_date: publicationDate,
+        publicationDate,
         doi,
         isbn,
         url,
