@@ -75,7 +75,7 @@ const PublicationItem = ({publication, className, onAddFilter, children, ...prop
         doi,
         isbn,
         url,
-        pdf_url: pdfURL,
+        pdfURL,
         pdf_pages: pdfPages,
     } = publication;
 
