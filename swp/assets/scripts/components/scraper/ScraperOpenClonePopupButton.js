@@ -12,17 +12,7 @@ import Query from 'components/Query';
 import ScraperClone from './ScraperClone';
 
 const ChooseThinktank = _('Select a thinktank for the new scraper.');
-const SELECT_STYLE = {
-    padding: '.75rem 1.5rem',
-    fontSize: 'large',
-    border: '1px solid gray',
-    borderRadius: '2px',
-    background: 'transparent',
-};
 
-const CLONEFORM_STYLE = {
-    width: 'min(100%, 1200px)',
-};
 
 const SelectThinktank = ({thinktankID, onChange}) => (
     <>
@@ -30,7 +20,11 @@ const SelectThinktank = ({thinktankID, onChange}) => (
         <div className="flex justify-center my-5">
             <Query queryKey={['thinktank']}>
                 { thinktanks => (
-                    <select defaultValue={thinktankID} onChange={onChange} style={SELECT_STYLE}>
+                    <select
+                        className="px-8 py-4 text-lg rounded-sm border-gray-500 bg-transparent"
+                        defaultValue={thinktankID}
+                        onChange={onChange}
+                    >
                         {thinktanks.map(thinktank => (
                             <option key={thinktank.id} value={thinktank.id}>{thinktank.name}</option>
                         ))}
@@ -53,9 +47,7 @@ function OpenCloneScraperPopupButton({scraperID}) {
             <MultiStepDialog
                 open={isOpen}
                 onClose={() => setIsOpen(false)}
-                onFinalize={() => setIsOpen(false)}
                 totalSteps={2}
-                style={CLONEFORM_STYLE}
                 submitformID="scrapercloneform"
             >
                 <SelectThinktank

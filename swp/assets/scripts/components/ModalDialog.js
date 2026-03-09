@@ -10,16 +10,6 @@ const SubmitButtonLabel = _('Save');
 const Next = _('Next');
 const Back = _('Back');
 
-const MODAL_STYLE = {
-    position: 'absolute',
-    background: '#fff',
-    boxShadow: '0px 8px 25px 15px #d1d5dbfd',
-    left: '50%',
-    top: '50%',
-    transform: 'translate(-50%, -50%)',
-    zIndex: '1000',
-};
-
 const CONTENT_STYLE = {
     margin: '2rem',
     overflow: 'scroll',
@@ -27,7 +17,7 @@ const CONTENT_STYLE = {
     maxHeight: '66vh',
 };
 
-export const MultiStepDialog = ({open, children, onClose, totalSteps, style, submitformID}) => {
+export const MultiStepDialog = ({open, children, onClose, totalSteps, submitformID, ...props}) => {
     const [step, setSteps] = useState(1);
 
     if (!open) return null;
@@ -53,7 +43,7 @@ export const MultiStepDialog = ({open, children, onClose, totalSteps, style, sub
 
     return (
         <Portal>
-            <div style={{...MODAL_STYLE, ...style}}>
+            <div className={'multistepdialog'} {...props}>
                 <Button small minimal onClick={onClose} icon="cross" className="absolute top-5 right-5" />
                 <div className="content" style={CONTENT_STYLE}>
                     {renderSteps()}

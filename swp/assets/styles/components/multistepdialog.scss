@@ -1,0 +1,10 @@
+.multistepdialog {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
+  z-index: 1000;
+  width: calc(min(100%, 1200px));
+  background: white;
+  box-shadow: 0px 8px 25px 15px rgba(180,190,220,0.5);
+}
