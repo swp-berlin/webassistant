@@ -52,4 +52,4 @@ class ScraperViewSet(RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin, Ge
         serializer.is_valid(raise_exception=True)
         serializer.save(thinktank=thinktank)
 
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
