@@ -8,6 +8,8 @@ from rest_framework.viewsets import GenericViewSet
 from swp.api.permissions import HasActivatablePermission
 from swp.api.router import default_router
 from swp.api.serializers import ScraperSerializer, ScraperDraftSerializer
+from swp.api.serializers.scraper.base import ScraperMetaSerializer
+from swp.api.v1.scraper.serializers import ScraperRunSerializer
 from swp.models import Scraper
 from swp.tasks import run_scraper
 
@@ -46,13 +48,12 @@ class ScraperViewSet(RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin, Ge
 
     @action(detail=True, methods=['post'], serializer_class=ScraperSerializer)
     def scrape(self, request, pk):
-        try:
-            run_scraper.delay(pk, force=True)
-        except Exception as error:
-            return Response({'error': str(error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        return Response({'msg': 'Scraper was started'}, status=status.HTTP_200_OK)
+        run_scraper.delay(pk, force=True)
+        result = run_scraper.AsyncResult(pk)
+        serializer = ScraperRunSerializer(instance=result)
 
-    @action(detail=True, methods=['get'], serializer_class=ScraperSerializer)
-    def is_running(self, request, pk):
-        scraper = self.get_object()
-        return Response({'isRunning': scraper.is_running}, status=status.HTTP_200_OK)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=['get'], serializer_class=ScraperMetaSerializer)
+    def info(self, request, pk, **kwargs):
+        return self.retrieve(request, pk, **kwargs)
