@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useState} from 'react';
+import {useCallback, useState} from 'react';
 
 import {Button} from '@blueprintjs/core';
 
@@ -29,16 +29,16 @@ const ScraperStartButton = ({id, refetchInterval, ...options}) => {
     const handleClick = useCallback(() => {
         mutate({...data});
         setCurrentRefetchInterval(refetchInterval);
-    },[setCurrentRefetchInterval, currentRefetchInterval, refetchInterval, mutate, data]);
+    }, [setCurrentRefetchInterval, refetchInterval, mutate, data]);
 
-    const onSuccess = useCallback(({is_running}) => {
-        setCurrentRefetchInterval(() => (is_running || loading) ? refetchInterval : null);
-    });
+    const onSuccess = useCallback(({isRunning}) => {
+        setCurrentRefetchInterval(() => (isRunning || loading) ? refetchInterval : null);
+    }, [setCurrentRefetchInterval, loading, refetchInterval]);
 
     return (
         <Query queryKey={infoEndpoint} refetchInterval={currentRefetchInterval} onSuccess={onSuccess}>
-            {({is_running}) => {
-                return <Button disabled={is_running} loading={loading} onClick={handleClick} text={Run} {...options} />;
+            {({isRunning}) => {
+                return <Button disabled={isRunning} loading={loading} onClick={handleClick} text={Run} {...options} />;
             }}
         </Query>
     );
