@@ -20,11 +20,19 @@
     <ul>
         {% for thinktank, scrapers in thinktanks.items %}
             <li>
-                <h3>{{ thinktank }}</h3>
+                <h3>
+                    <a href="{{ absolute_url }}/thinktank/{{ thinktank.id }}">
+                        {{ thinktank }}
+                    </a>
+                </h3>
                 <ul>
                     {% for scraper, codes in scrapers.items %}
                         <li>
-                            <h4>{{ scraper }}</h4>
+                            <h4>
+                                <a href="{{ absolute_url }}/thinktank/{{ thinktank.id }}/scraper/{{ scraper.id }}">
+                                    {{ scraper }}
+                                </a>
+                            </h4>
                             <ul>
                                 {% for code, errors in codes.items %}
                                     <li>
