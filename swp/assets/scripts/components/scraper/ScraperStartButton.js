@@ -37,9 +37,9 @@ const ScraperStartButton = ({id, refetchInterval, ...options}) => {
 
     return (
         <Query queryKey={infoEndpoint} refetchInterval={currentRefetchInterval} onSuccess={onSuccess}>
-            {({isRunning}) => {
-                return <Button disabled={isRunning} loading={loading} onClick={handleClick} text={Run} {...options} />;
-            }}
+            {({isRunning}) => (
+                <Button disabled={isRunning} loading={loading} onClick={handleClick} text={Run} {...options} />
+            )}
         </Query>
     );
 };
