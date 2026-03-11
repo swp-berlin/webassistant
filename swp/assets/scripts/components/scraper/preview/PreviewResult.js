@@ -22,11 +22,11 @@ const getValues = (fields, errors) => ({
     tags: errors.tags || fields.tags,
     authors: errors.authors || fields.authors,
     abstract: errors.abstract || fields.abstract,
-    publicationDate: errors.publication_date || fields.publication_date,
+    publication_date: errors.publication_date || fields.publication_date,
     doi: errors.doi || fields.doi,
     isbn: errors.isbn || fields.isbn,
     url: errors.url || fields.url,
-    pdfURL: errors.pdf_url || fields.pdf_url,
+    pdf_url: errors.pdf_url || fields.pdf_url,
     pdfPages: fields.pdf_pages,
 });
 
