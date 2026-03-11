@@ -43,7 +43,7 @@ export const MultiStepDialog = ({open, children, onClose, totalSteps, submitform
 
     return (
         <Portal>
-            <div className={'multistepdialog'} {...props}>
+            <div className='multistepdialog' {...props}>
                 <Button small minimal onClick={onClose} icon="cross" className="absolute top-5 right-5" />
                 <div className="content" style={CONTENT_STYLE}>
                     {renderSteps()}
