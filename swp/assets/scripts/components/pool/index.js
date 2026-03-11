@@ -1,3 +1,3 @@
 import PoolID from './PoolID';
 
-export {PoolID};
+export default PoolID;

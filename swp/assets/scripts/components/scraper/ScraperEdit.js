@@ -53,6 +53,7 @@ const ScraperEdit = () => {
                         data={scraper}
                         method="PATCH"
                         backURL={`/thinktank/${thinktankID}/`}
+                        pool={scraper.thinktank.pool}
                     />
                 </Page>
             )}

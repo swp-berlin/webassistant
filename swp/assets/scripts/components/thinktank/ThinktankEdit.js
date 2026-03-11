@@ -3,7 +3,7 @@ import {useParams} from 'react-router-dom';
 import {useBreadcrumb} from 'components/Navigation';
 import Page from 'components/Page';
 import {Result} from 'components/Fetch';
-import {PoolID} from 'components/pool';
+import PoolID from 'components/pool';
 
 import {useQuery} from 'hooks/query';
 
@@ -26,15 +26,17 @@ const ThinktankEdit = props => {
 
     return (
         <Page title={Title}>
-            <PoolID />
             <Result result={result}>
                 {thinktank => (
-                    <ThinktankEditForm
-                        endpoint={endpoint}
-                        data={thinktank}
-                        backURL={endpoint}
-                        {...props}
-                    />
+                    <>
+                        <PoolID pool={thinktank.pool} />
+                        <ThinktankEditForm
+                            endpoint={endpoint}
+                            data={thinktank}
+                            backURL={endpoint}
+                            {...props}
+                        />
+                    </>
                 )}
             </Result>
         </Page>

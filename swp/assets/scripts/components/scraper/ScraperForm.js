@@ -7,7 +7,7 @@ import {getChoices} from 'utils/choices';
 import {useMutationForm} from 'components/Fetch';
 import {Select, TextInput} from 'components/forms';
 import Field from 'components/forms/Field';
-import {PoolID} from 'components/pool';
+import PoolID from 'components/pool';
 
 import ScraperTypes from 'schemes/scraperTypes.json';
 
@@ -66,7 +66,7 @@ const DEFAULT_VALUES = {
     data: ScraperTypes[0].defaults,
 };
 
-const ScraperForm = ({endpoint, data, method, redirectURL}) => {
+const ScraperForm = ({endpoint, data, method, redirectURL, pool}) => {
     const id = data?.id;
 
     const [preview, setPreview] = useState(null);
@@ -94,7 +94,7 @@ const ScraperForm = ({endpoint, data, method, redirectURL}) => {
 
     return (
         <>
-            <PoolID />
+            <PoolID pool={pool} />
             <form className="mt-8 scraper-form grid grid-cols-1 lg:grid-cols-2 gap-8" onSubmit={handleSubmit}>
                 {id && (
                     <ScraperActivationPortal>

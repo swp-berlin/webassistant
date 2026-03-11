@@ -10,7 +10,7 @@ class ThinktankField(serializers.ModelSerializer):
 
     class Meta:
         model = Thinktank
-        fields = ['id', 'name']
+        fields = ['id', 'name', 'pool']
         read_only_fields = ['id']
 
 
