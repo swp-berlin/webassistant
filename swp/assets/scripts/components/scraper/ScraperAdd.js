@@ -17,6 +17,7 @@ const ScraperAdd = () => {
     const endpoint = `/thinktank/${thinktankID}/`;
     const result = useQuery(endpoint);
     const thinktankLabel = getThinktankLabel(thinktankID, result);
+    const pool = result?.result?.data?.pool;
 
     useBreadcrumb('/thinktank/', Thinktanks);
     useBreadcrumb(`/thinktank/${thinktankID}/`, thinktankLabel);
@@ -26,7 +27,11 @@ const ScraperAdd = () => {
         <Result result={result}>
             {() => (
                 <Page title={Title}>
-                    <ScraperForm endpoint={`/thinktank/${thinktankID}/add-scraper/`} redirectURL={endpoint} />
+                    <ScraperForm
+                        endpoint={`/thinktank/${thinktankID}/add-scraper/`}
+                        redirectURL={endpoint}
+                        pool={pool}
+                    />
                 </Page>
             )}
         </Result>
