@@ -71,11 +71,11 @@ const PublicationItem = ({publication, className, onAddFilter, children, ...prop
         tags,
         authors,
         abstract,
-        publication_date,
+        publication_date: publicationDate,
         doi,
         isbn,
         url,
-        pdf_url,
+        pdf_url: pdfURL,
         pdf_pages: pdfPages,
     } = publication;
 
@@ -106,8 +106,8 @@ const PublicationItem = ({publication, className, onAddFilter, children, ...prop
                     <PublicationField name="author" value={authors}>
                         <Authors authors={authors} onFilter={onAddFilter} />
                     </PublicationField>
-                    <PublicationField name="publication_date" value={publication_date}>
-                        <time className="ml-4">{publication_date}</time>
+                    <PublicationField name="publication_date" value={publicationDate}>
+                        <time className="ml-4">{publicationDate}</time>
                     </PublicationField>
                     {doi && (
                         <PublicationField name="doi" value={doi}>
@@ -130,8 +130,8 @@ const PublicationItem = ({publication, className, onAddFilter, children, ...prop
                 <PublicationField name="tags" value={tags}>
                     <TagItems items={tagItems} onFilter={onAddFilter} />
                 </PublicationField>
-                {pdf_url ? (
-                    <PublicationField name="pdf_url" value={pdf_url}><ExternalLink to={pdf_url} /></PublicationField>
+                {pdfURL ? (
+                    <PublicationField name="pdf_url" value={pdfURL}><ExternalLink to={pdfURL} /></PublicationField>
                 ) : <PDFNotFound />}
                 {pdfPages > 0 && (
                     <span className="ml-2 text-gray-500">{interpolate(PagesLabel, [pdfPages], false)}</span>
