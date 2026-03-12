@@ -8,7 +8,10 @@ from rest_framework.viewsets import GenericViewSet
 from swp.api.permissions import HasActivatablePermission
 from swp.api.router import default_router
 from swp.api.serializers import ScraperSerializer, ScraperDraftSerializer
+from swp.api.serializers.scraper.base import ScraperMetaSerializer
+from swp.api.v1.scraper.serializers import ScraperRunSerializer
 from swp.models import Scraper
+from swp.tasks import run_scraper
 
 
 class HasScraperPermission(HasActivatablePermission):
@@ -42,3 +45,15 @@ class ScraperViewSet(RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin, Ge
         serializer.save()
 
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=['post'], serializer_class=ScraperSerializer, url_path='scrape(?:/(?P<force_update>[0,1]{1}))?')
+    def scrape(self, request, pk, force_update=False):
+        run_scraper.delay(pk, force=True, force_update=force_update)
+        result = run_scraper.AsyncResult(pk)
+        serializer = ScraperRunSerializer(instance=result)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=['get'], serializer_class=ScraperMetaSerializer)
+    def info(self, request, pk, **kwargs):
+        return self.retrieve(request, pk, **kwargs)
