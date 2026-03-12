@@ -43,18 +43,19 @@ const updateScraperData = (queryClient, scraperData) => {
     }));
 };
 
-const ScraperStartButton = ({id, thinktankID, isRunning}) => {
+const ScraperStartButton = ({id, thinktankID, isRunning, forceUpdate}) => {
     const queryClient = useQueryClient();
     const mutationEndpoint = buildURL('scraper', id, 'scrape');
     const [mutate, {loading}] = useMutationResult(mutationEndpoint, MutationOptions, []);
+    const icon = forceUpdate ? 'refresh' : 'play';
     const handleClick = useCallback(
         () => {
             const data = getData(id, thinktankID, true);
 
-            mutate(data);
+            mutate({...data, force_update: forceUpdate});
             updateScraperData(queryClient, data);
         },
-        [id, thinktankID, mutate, queryClient],
+        [id, thinktankID, forceUpdate, mutate, queryClient],
     );
     const queryOptions = {
         queryKey: ['scraper', id, 'info'],
@@ -69,7 +70,7 @@ const ScraperStartButton = ({id, thinktankID, isRunning}) => {
     return (
         <Query {...queryOptions}>
             {({is_running: isRunning}) => (
-                <Button text={Run} loading={loading} disabled={isRunning} onClick={handleClick} />
+                <Button text={Run} icon={icon} loading={loading} disabled={isRunning} onClick={handleClick} />
             )}
         </Query>
     );

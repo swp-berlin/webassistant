@@ -29,6 +29,7 @@ const ScraperRow = ({id, thinktankID, url, type, categories, lastRun, errorCount
         <td className="text-right">{errorCount}</td>
         <td>
             <ScraperStartButton id={id} thinktankID={thinktankID} isRunning={isRunning} />
+            <ScraperStartButton id={id} thinktankID={thinktankID} isRunning={isRunning} forceUpdate />
         </td>
     </tr>
 );
