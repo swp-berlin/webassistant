@@ -140,10 +140,10 @@ class Scraper(ActivatableModel, LastModified):
 
         return self.last_modified > self.last_run
 
-    def scrape(self):
+    def scrape(self, force_update=False):
         scraper = _Scraper(self.start_url, full_scan=self.full_scan)
 
-        self.async_scrape(scraper, self.data, self.thinktank)
+        self.async_scrape(scraper, self.data, self.thinktank, force_update)
 
     @async_to_sync
     async def async_scrape(
@@ -151,6 +151,7 @@ class Scraper(ActivatableModel, LastModified):
         scraper: _Scraper,
         config: Mapping[str, Any],
         thinktank: Thinktank,
+        force_update: bool,
     ):
         results = scraper.scrape(config)
 
@@ -169,7 +170,7 @@ class Scraper(ActivatableModel, LastModified):
                     continue
 
                 try:
-                    await self.save_publication(publication)
+                    await self.save_publication(publication, force_update=force_update)
                 except IntegrityError as exc:
                     publication_error = ScraperError(
                         scraper=self,
@@ -286,15 +287,21 @@ class Scraper(ActivatableModel, LastModified):
         return False
 
     @sync_to_async
-    def save_publication(self, publication) -> bool:
+    def save_publication(self, publication, force_update=False) -> bool:
         publication.hash = get_hash({field: getattr(publication, field, '') for field in self.unique_fields})
+        force_insert = not force_update
 
-        if self.scraped_publications.filter(hash=publication.hash).exists():
-            return False
+        if not force_update:
+            if self.scraped_publications.filter(hash=publication.hash).exists():
+                return False
 
-        publication.save(force_insert=True)
+        publication.save(force_insert=force_insert)
         publication.categories.add(*self.categories.all())
-        self.scraped_publications.add(publication)
+
+        if force_update:
+            self.scraped_publications.update(publication)
+        else:
+            self.scraped_publications.add(publication)
 
         if settings.ENABLE_EMBEDDINGS:
             if publication.pdf_path:
