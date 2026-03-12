@@ -46,9 +46,9 @@ class ScraperViewSet(RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin, Ge
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    @action(detail=True, methods=['post'], serializer_class=ScraperSerializer)
-    def scrape(self, request, pk):
-        run_scraper.delay(pk, force=True)
+    @action(detail=True, methods=['post'], serializer_class=ScraperSerializer, url_path='scrape(?:/(?P<force_update>[0,1]{1}))?')
+    def scrape(self, request, pk, force_update=False):
+        run_scraper.delay(pk, force=True, force_update=force_update)
         result = run_scraper.AsyncResult(pk)
         serializer = ScraperRunSerializer(instance=result)
 

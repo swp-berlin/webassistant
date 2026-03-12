@@ -47,7 +47,9 @@ def schedule_scrapers(now=None):
 
 
 @app.task(name='scraper.run', time_limit=HARD_TIME_LIMIT, soft_time_limit=SOFT_TIME_LIMIT)
-def run_scraper(scraper, *, now: datetime.datetime = None, using: str = None, force: bool = False):
+def run_scraper(
+    scraper, *, now: datetime.datetime = None, using: str = None, force: bool = False, force_update = False
+):
     queryset = Scraper.objects.using(using).select_related('thinktank')
 
     with transaction.atomic(using=using):
@@ -63,7 +65,7 @@ def run_scraper(scraper, *, now: datetime.datetime = None, using: str = None, fo
         scraper.update(is_running=True)
 
     try:
-        return scraper.scrape()
+        return scraper.scrape(force_update=force_update)
     except Exception as error:
         scraper.errors.create(message=f'{error}')
 
