@@ -16,10 +16,11 @@ const handleSuccess = () => ({
 });
 
 
-const ScraperStartButton = ({id, refetchInterval, ...options}) => {
-    const endpoint = `/scraper/${id}/scrape/`;
+const ScraperStartButton = ({id, refetchInterval, force_update, ...options}) => {
+    const endpoint = `/scraper/${id}/scrape/${force_update ? 1 : 0}`;
     const infoEndpoint = `/api/scraper/${id}/info`;
     const [currentRefetchInterval, setCurrentRefetchInterval] = useState(null);
+    const icon = force_update ? "refresh" : "play"
     const mutationOptions = {
         method: 'POST',
         handleSuccess,
@@ -38,7 +39,7 @@ const ScraperStartButton = ({id, refetchInterval, ...options}) => {
     return (
         <Query queryKey={infoEndpoint} refetchInterval={currentRefetchInterval} onSuccess={onSuccess}>
             {({is_running:isRunning}) => (
-                <Button disabled={isRunning} loading={loading} onClick={handleClick} text={Run} {...options} />
+                <Button disabled={isRunning} loading={loading} onClick={handleClick} icon={icon} {...options} />
             )}
         </Query>
     );
