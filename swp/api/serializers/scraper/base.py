@@ -198,6 +198,21 @@ class ScraperSerializer(BaseScraperSerializer):
 
         return keys
 
+class ScraperMetaSerializer(BaseScraperSerializer):
+    """
+    Light serializer for scraper meta data.
+    """
+    is_running = serializers.BooleanField(read_only=True)
+    class Meta:
+        model = Scraper
+        read_only_fields = ['error_count', 'thinktank_id', 'is_running']
+        fields = [
+            'id',
+            'last_run',
+            'interval',
+            'is_active',
+            *read_only_fields,
+        ]
 
 class ScraperListSerializer(ModelSerializer):
     """

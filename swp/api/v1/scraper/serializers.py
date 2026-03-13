@@ -92,3 +92,7 @@ class ScraperPreviewSerializer(BaseScraperSerializer):
     def get_result(instance: AsyncResult) -> Optional[PreviewResult]:
         with suppress(TimeoutError):
             return instance.get(timeout=0.1, propagate=False)
+
+
+class ScraperRunSerializer(ScraperPreviewSerializer):
+    pass

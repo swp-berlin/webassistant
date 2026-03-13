@@ -462,6 +462,12 @@ msgstr "Konfiguration"
 msgid "You have to deactivate the scraper in order to edit it."
 msgstr "Sie müssen den Scraper deaktivieren, bevor Sie ihn bearbeiten können."
 
+msgid "Scraper has been started."
+msgstr "Scraper erfolgreich gestartet."
+
+msgid "Run"
+msgstr "Start"
+
 msgid "URL"
 msgstr "URL"
 

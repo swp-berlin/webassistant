@@ -2,6 +2,7 @@ import {Link} from 'react-router-dom';
 
 import DateTime from 'components/DateTime';
 import _ from 'utils/i18n';
+import ScraperStartButton from 'components/scraper/ScraperStartButton';
 
 
 const DisabledLabel = _('disabled');
@@ -16,6 +17,7 @@ const ExternalLink = ({url}) => <a href={url} target="_blank" rel="noreferrer">{
 
 const ScraperRow = ({id, thinktankID, url, type, categories, lastRun, errorCount, isActive, canManage}) => (
     <tr className={isActive ? null : 'disabled'} data-id={id}>
+        <td><ScraperStartButton id={id} refetchInterval={500} /></td>
         <td>
             {canManage
                 ? <ScraperLink id={id} thinktankID={thinktankID}>{url}</ScraperLink>
