@@ -57,8 +57,10 @@ async def wait_for_nodes(page: Page, list_element: ElementHandle, item_selector:
     yield asyncio.create_task(get_nodes_from_result(page))
 
 
-def is_cloudflare_protected_page(title: str) -> bool:
-    return 'cloudflare' in title.lower()
+async def is_cloudflare_protected_page(page) -> bool:
+    title = await page.title()
+    container = page.get_by_test_id('cf-box-container')
+    return 'cloudflare' in title.lower() or container
 
 
 class Paginator:
@@ -75,26 +77,32 @@ class Paginator:
         self.max_pages = max_pages
         self.max_per_page = max_per_page
         self.timeout = timeout
-
+        self.status = None
     async def query_list_items(self, page=None) -> Iterable[ElementHandle]:
+        def handle_response(response):
+            self.status = response.status
+
         page = page or self.context.page
+        page.on('response', handle_response)
 
         try:
             # [SWP-144] Precautionary measure against dynamically loaded nodes
             await page.wait_for_selector(self.selector, state='attached', timeout=5000)
         except TimeoutError as exc:
-            if is_cloudflare_protected_page(await page.title()):
-                raise CloudflareError()
+            if await is_cloudflare_protected_page(page):
+                raise CloudflareError(status=self.status)
 
             raise ResolverError(
-                _('No elements matching %(selector)s found') % {'selector': self.selector}
+                _('No elements matching %(selector)s found') % {'selector': self.selector},
+                status = self.status
             ) from exc
 
         nodes = await page.query_selector_all(self.selector)
 
         if not nodes:
             raise ResolverError(
-                _('No elements matching %(selector)s found') % {'selector': self.selector}
+                _('No elements matching %(selector)s found') % {'selector': self.selector} ,
+                status=self.status
             )
 
         return nodes[:self.max_per_page] if self.max_per_page else nodes
@@ -110,7 +118,8 @@ class EndlessPaginator(Paginator):
 
         if not nodes:
             raise ResolverError(
-                _('No elements matching %(selector)s found') % {'selector': self.selector}
+                _('No elements matching %(selector)s found') % {'selector': self.selector},
+                status = self.status
             )
 
         yield nodes
@@ -132,7 +141,9 @@ class EndlessPaginator(Paginator):
                     raise ResolverError(
                         _('Endless Pagination on page %(page_number)s did not load any new items.') % {
                             'page_number': page_number
-                        })
+                        },
+                        status = self.status
+                    )
 
                 yield nodes
 
@@ -144,7 +155,8 @@ class PagePaginator(Paginator):
 
         if not nodes:
             raise ResolverError(
-                _('No elements matching %(selector)s found') % {'selector': self.selector}
+                _('No elements matching %(selector)s found') % {'selector': self.selector},
+                status = self.status
             )
 
         yield nodes
@@ -161,7 +173,8 @@ class PagePaginator(Paginator):
                 raise ResolverError(
                     _('Pagination Button matching %(selector)s has no attribute href') % {
                         'selector': self.button_selector
-                    }
+                    },
+                    status = self.status
                 )
 
             await self.nagigate_to_next_page(href, page_number)
@@ -177,7 +190,8 @@ class PagePaginator(Paginator):
                 _('Timeout while navigating to page %(page_number)s: %(href)s') % {
                     'page_number': page_number,
                     'href': href,
-                }
+                },
+                status = self.status
             )
 
 

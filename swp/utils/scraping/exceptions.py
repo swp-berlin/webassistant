@@ -15,12 +15,15 @@ class ScraperError(Exception):
 
 
 class ResolverError(ScraperError):
-    def __init__(self, message, level: ErrorLevel = None, **kwargs):
-        super().__init__(message, **kwargs)
+    def __init__(self, message, level: ErrorLevel = None, status: str = '', **kwargs):
+        msg = '%s\nStatus: %s' % (message, status)
+        super().__init__(msg, **kwargs)
         self.level = level
 
 
+
 class CloudflareError(ScraperError):
-    def __init__(self, message: str = '', **kwargs):
+    def __init__(self, message: str = '', status: str = '', **kwargs):
         message = message or _('Scraping protection prevents page access')
-        super().__init__(message, **kwargs)
+        msg = '%s\nStatus: %s' % (message, status)
+        super().__init__(msg, **kwargs)
