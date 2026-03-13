@@ -31,13 +31,13 @@ const ScraperStartButton = ({id, refetchInterval, ...options}) => {
         setCurrentRefetchInterval(refetchInterval);
     }, [setCurrentRefetchInterval, refetchInterval, mutate, data]);
 
-    const onSuccess = useCallback(({is_running:isRunning}) => {
+    const onSuccess = useCallback(({is_running: isRunning}) => {
         setCurrentRefetchInterval(() => (isRunning || loading) ? refetchInterval : null);
     }, [setCurrentRefetchInterval, loading, refetchInterval]);
 
     return (
         <Query queryKey={infoEndpoint} refetchInterval={currentRefetchInterval} onSuccess={onSuccess}>
-            {({is_running:isRunning}) => (
+            {({is_running: isRunning}) => (
                 <Button disabled={isRunning} loading={loading} onClick={handleClick} text={Run} {...options} />
             )}
         </Query>
