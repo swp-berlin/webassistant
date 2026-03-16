@@ -5,13 +5,15 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.fields import CharField, ChoiceField, IntegerField, SkipField
 from rest_framework.serializers import ModelSerializer, Serializer
 
+from swp.api.serializers.fields import ThinktankField, CSSSelectorField
+from swp.api.serializers.scrapererror import ScraperErrorSerializer
+from swp.api.serializers.task import BaseAsyncTaskResultSerializer
 from swp.models import Scraper, Thinktank
 from swp.models.choices import PaginatorType, ResolverType
+from swp.tasks import run_scraper
 from swp.utils.text import enumeration
 
 from .resolver import BaseResolverConfigSerializer, ResolverTypeField
-from ..fields import ThinktankField, CSSSelectorField
-from ..scrapererror import ScraperErrorSerializer
 
 
 class TypeField(ChoiceField):
@@ -147,6 +149,7 @@ class ScraperSerializer(BaseScraperSerializer):
         read_only_fields = [
             'name',
             'last_run',
+            'is_running',
         ]
         fields = [
             'id',
@@ -199,6 +202,33 @@ class ScraperSerializer(BaseScraperSerializer):
         return keys
 
 
+class ScraperRunSerializer(BaseAsyncTaskResultSerializer):
+
+    def update(self, instance: Scraper, validated_data):
+        instance.update(modified=False, is_running=True)
+
+        return run_scraper.delay(instance.id, force=True)
+
+
+class ScraperInfoSerializer(BaseScraperSerializer):
+    """
+    Light serializer for scraper meta data.
+    """
+
+    class Meta:
+        model = Scraper
+        read_only_fields = [
+            'error_count',
+            'last_run',
+            'is_running',
+        ]
+        fields = [
+            'id',
+            'thinktank_id',
+            *read_only_fields,
+        ]
+
+
 class ScraperListSerializer(ModelSerializer):
     """
     Light serializer for nested scraper lists.
@@ -208,7 +238,11 @@ class ScraperListSerializer(ModelSerializer):
 
     class Meta:
         model = Scraper
-        read_only_fields = ['error_count', 'thinktank_id']
+        read_only_fields = [
+            'error_count',
+            'thinktank_id',
+            'is_running',
+        ]
         fields = [
             'id',
             'thinktank_id',
