@@ -1,13 +1,12 @@
 import _ from 'utils/i18n';
+
 import {PublicationItem} from 'components/publication';
 
 import {Status} from './common';
 import PreviewError from './PreviewError';
 
-
 const InternalErrorText = _('Internal Error');
 const MultiPageLabel = _('Continued from page 2');
-
 
 const MultiPageMarker = () => (
     <div>
@@ -16,20 +15,29 @@ const MultiPageMarker = () => (
     </div>
 );
 
-const getValues = (fields, errors) => ({
-    title: errors.title || fields.title,
-    subtitle: errors.subtitle || fields.subtitle,
-    tags: errors.tags || fields.tags,
-    authors: errors.authors || fields.authors,
-    abstract: errors.abstract || fields.abstract,
-    publication_date: errors.publication_date || fields.publication_date,
-    doi: errors.doi || fields.doi,
-    isbn: errors.isbn || fields.isbn,
-    url: errors.url || fields.url,
-    pdf_url: errors.pdf_url || fields.pdf_url,
-    pdfPages: fields.pdf_pages,
-});
+const Fields = [
+    'title',
+    'subtitle',
+    'tags',
+    'authors',
+    'abstract',
+    'publication_date',
+    'doi',
+    'isbn',
+    'url',
+    'pdf_url',
+    'pdf_pages',
+];
 
+const getPublication = ({fields, errors}, index) => {
+    const publication = {id: index};
+
+    Fields.forEach(field => {
+        publication[field] = errors[field] || fields[field];
+    });
+
+    return publication;
+};
 
 // NOTE `result` refers to the response body, as the return value from `useQuery` gets shadowed.
 const PreviewResult = ({status, result, traceback}) => {
@@ -46,12 +54,10 @@ const PreviewResult = ({status, result, traceback}) => {
 
     return (
         <ul className="list-none pl-0 space-y-8">
-            {status === Status.Success && result.publications.map(({fields, errors}, idx) => (
+            {status === Status.Success && result.publications.map(getPublication).map((publication, idx) => (
                 <>
-                    <li key={idx /* eslint-disable-line react/no-array-index-key */}>
-                        <PublicationItem
-                            publication={{id: idx, ...getValues(fields, errors)}}
-                        />
+                    <li key={publication.id}>
+                        <PublicationItem publication={publication} />
                     </li>
                     {isMultipage && maxPerPage - 1 === idx && <MultiPageMarker />}
                 </>
