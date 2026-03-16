@@ -30,10 +30,7 @@ const ScraperAdd = () => {
         <Result result={result}>
             {() => (
                 <Page title={Title}>
-                    <ScraperForm
-                        endpoint={`/thinktank/${thinktankID}/add-scraper/`}
-                        redirectURL={endpoint}
-                    />
+                    <ScraperForm endpoint={`/thinktank/${thinktankID}/add-scraper/`} redirectURL={endpoint} />
                 </Page>
             )}
         </Result>

@@ -34,7 +34,6 @@ const ScraperEdit = () => {
     const endpoint = `/scraper/${id}/`;
     const query = useQuery(endpoint);
     const {loading, success, result: {data: scraper}} = query;
-
     const thinktankLabel = loading || !success ? getThinktankLabel(thinktankID, query) : scraper.thinktank.name;
 
     usePoolBreadcrumb(scraper);
@@ -44,21 +43,17 @@ const ScraperEdit = () => {
 
     return (
         <Result result={query}>
-            {scraper => (
-                <Page
-                    title={scraper.name}
-                    subtitle={scraper.last_run && <LastRun lastRun={scraper.last_run} />}
-                    actions={<ScraperActivationContainer />}
-                >
-                    <ScraperForm
-                        endpoint={endpoint}
-                        data={scraper}
-                        method="PATCH"
-                        backURL={`/thinktank/${thinktankID}/`}
-                        pool={scraper.thinktank.pool}
-                    />
-                </Page>
-            )}
+            {scraper => {
+                const {last_run: lastRun} = scraper;
+                const subtitle = lastRun && <LastRun lastRun={lastRun} />;
+                const actions = <ScraperActivationContainer />;
+
+                return (
+                    <Page title={scraper.name} subtitle={subtitle} actions={actions}>
+                        <ScraperForm endpoint={endpoint} data={scraper} />
+                    </Page>
+                );
+            }}
         </Result>
     );
 };
