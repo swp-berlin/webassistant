@@ -31,7 +31,7 @@ const GlobalErrors = ({errors}) => (
     <section className="global-errors mb-6">
         <ul className="list-none pl-0 space-y-2">
             {errors.map(({id, title, url, message, field, code, timestamp}) => (
-                <li className="scraper-error" data-id={id} data-field={field} data-code={code}>
+                <li key={id} className="scraper-error" data-id={id} data-field={field} data-code={code}>
                     <Callout
                         intent={Intent.DANGER}
                         title={url ? <ExternalLink to={url}>{title}</ExternalLink> : title}
@@ -71,7 +71,7 @@ const PublicationErrors = ({publicationID, errors}) => {
             </header>
             <ul className="mt-2">
                 {realErrors.map(({id, message, field, code}) => (
-                    <li className="scraper-error" data-id={id}>
+                    <li key={id} className="scraper-error" data-id={id}>
                         <div>
                             <ul className="list-none pl-0 mb-0">
                                 {field && (
@@ -103,7 +103,7 @@ const BackendScraperErrors = ({errors}) => {
         <div className="backend-errors mt-6 space-y-3">
             {globalErrors && <GlobalErrors errors={globalErrors} />}
             {entries.length > 0 && entries.map(
-                ([id, errors]) => <PublicationErrors publicationID={id} errors={errors} />,
+                ([id, errors]) => <PublicationErrors key={id} publicationID={id} errors={errors} />,
             )}
         </div>
     );

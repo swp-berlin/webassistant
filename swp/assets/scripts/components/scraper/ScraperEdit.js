@@ -13,6 +13,7 @@ import {useQuery} from 'hooks/query';
 import Page from 'components/Page';
 import {Result} from 'components/Fetch';
 import {useBreadcrumb} from 'components/Navigation';
+import {usePoolBreadcrumb} from 'components/PoolBreadcrumb';
 import {getThinktankLabel} from 'components/thinktank/helper';
 
 import ScraperForm from './ScraperForm';
@@ -33,29 +34,26 @@ const ScraperEdit = () => {
     const endpoint = `/scraper/${id}/`;
     const query = useQuery(endpoint);
     const {loading, success, result: {data: scraper}} = query;
-
     const thinktankLabel = loading || !success ? getThinktankLabel(thinktankID, query) : scraper.thinktank.name;
 
+    usePoolBreadcrumb(scraper);
     useBreadcrumb('/thinktank/', Thinktanks);
     useBreadcrumb(`/thinktank/${thinktankID}/`, thinktankLabel);
     useBreadcrumb(`/thinktank/${thinktankID}/scraper/${id}/`, ScraperLabel);
 
     return (
         <Result result={query}>
-            {scraper => (
-                <Page
-                    title={scraper.name}
-                    subtitle={scraper.last_run && <LastRun lastRun={scraper.last_run} />}
-                    actions={<ScraperActivationContainer />}
-                >
-                    <ScraperForm
-                        endpoint={endpoint}
-                        data={scraper}
-                        method="PATCH"
-                        backURL={`/thinktank/${thinktankID}/`}
-                    />
-                </Page>
-            )}
+            {scraper => {
+                const {last_run: lastRun} = scraper;
+                const subtitle = lastRun && <LastRun lastRun={lastRun} />;
+                const actions = <ScraperActivationContainer />;
+
+                return (
+                    <Page title={scraper.name} subtitle={subtitle} actions={actions}>
+                        <ScraperForm endpoint={endpoint} data={scraper} />
+                    </Page>
+                );
+            }}
         </Result>
     );
 };

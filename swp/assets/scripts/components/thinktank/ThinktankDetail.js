@@ -6,6 +6,7 @@ import _ from 'utils/i18n';
 import {QueryResult} from 'components/Query';
 import {useBreadcrumb} from 'components/Navigation';
 import Page from 'components/Page';
+import {usePoolBreadcrumb} from 'components/PoolBreadcrumb';
 import ScraperTable from 'components/scraper/ScraperTable';
 import {getPublicationsLabel} from 'components/publication/helper';
 import TableActions from 'components/tables/TableActions';
@@ -50,6 +51,7 @@ const ThinktankDetail = props => {
     const {data: thinktank, isLoading: loading} = query;
     const label = getThinktankLabel(id, {result: {data: thinktank}, loading});
 
+    usePoolBreadcrumb(thinktank);
     useThinktanksBreadcrumb();
     useBreadcrumb(endpoint, label);
 

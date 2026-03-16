@@ -65,8 +65,9 @@ const DEFAULT_VALUES = {
     data: ScraperTypes[0].defaults,
 };
 
-const ScraperForm = ({endpoint, data, method, redirectURL}) => {
+const ScraperForm = ({endpoint, data, redirectURL}) => {
     const id = data?.id;
+    const method = id ? 'PATCH' : 'POST';
 
     const [preview, setPreview] = useState(null);
     const handlePreview = useCallback(preview => setPreview(preview.id), []);
@@ -85,8 +86,8 @@ const ScraperForm = ({endpoint, data, method, redirectURL}) => {
         form.clearErrors();
         const valid = await form.trigger('start_url');
 
-        if (valid) await mutate(form.getValues(), id ? 'PATCH' : 'POST');
-    }, [form, id, mutate]);
+        if (valid) await mutate(form.getValues(), method);
+    }, [form, method, mutate]);
 
     const disabledTitle = isActive ? DisabledTitle : null;
     const scraperErrors = data?.errors;
