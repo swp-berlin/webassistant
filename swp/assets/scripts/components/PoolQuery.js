@@ -4,9 +4,9 @@ export const Endpoint = 'pool';
 
 export const getParams = canManage => canManage ? {can_manage: canManage} : null;
 
-const PoolQuery = ({canManage = false, children, ...props}) => {
+const PoolQuery = ({id, canManage = false, children, ...props}) => {
     const params = getParams(canManage);
-    const queryKey = [Endpoint, params];
+    const queryKey = [Endpoint, id, params];
 
     return (
         <Query queryKey={queryKey} {...props}>

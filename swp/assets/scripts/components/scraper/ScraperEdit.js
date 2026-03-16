@@ -13,6 +13,7 @@ import {useQuery} from 'hooks/query';
 import Page from 'components/Page';
 import {Result} from 'components/Fetch';
 import {useBreadcrumb} from 'components/Navigation';
+import {usePoolBreadcrumb} from 'components/PoolBreadcrumb';
 import {getThinktankLabel} from 'components/thinktank/helper';
 
 import ScraperForm from './ScraperForm';
@@ -36,6 +37,7 @@ const ScraperEdit = () => {
 
     const thinktankLabel = loading || !success ? getThinktankLabel(thinktankID, query) : scraper.thinktank.name;
 
+    usePoolBreadcrumb(scraper);
     useBreadcrumb('/thinktank/', Thinktanks);
     useBreadcrumb(`/thinktank/${thinktankID}/`, thinktankLabel);
     useBreadcrumb(`/thinktank/${thinktankID}/scraper/${id}/`, ScraperLabel);

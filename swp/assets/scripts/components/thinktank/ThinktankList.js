@@ -2,6 +2,7 @@ import {Button, Intent} from '@blueprintjs/core';
 import {Link} from 'react-router-dom';
 
 import {useBreadcrumb} from 'components/Navigation';
+import {usePoolBreadcrumb} from 'components/PoolBreadcrumb';
 import {usePoolSelect} from 'components/PoolSelect';
 import Page from 'components/Page';
 
@@ -28,8 +29,6 @@ const ThinktankAddButton = ({pool, ...props}) => (
 );
 
 const ThinktankList = () => {
-    useBreadcrumb('/thinktank/', ThinktanksLabel);
-
     const [pool, poolSelect] = usePoolSelect();
     const actions = (
         <>
@@ -37,6 +36,9 @@ const ThinktankList = () => {
             <ThinktankAddButton pool={pool} />
         </>
     );
+
+    usePoolBreadcrumb(pool === null ? 'all' : pool);
+    useBreadcrumb('/thinktank/', ThinktanksLabel);
 
     return (
         <Page title={ThinktanksLabel} actions={actions}>

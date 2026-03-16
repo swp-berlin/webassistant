@@ -1,18 +1,17 @@
 import {useParams} from 'react-router-dom';
 
+import _ from 'utils/i18n';
+
 import {useBreadcrumb} from 'components/Navigation';
 import Page from 'components/Page';
+import {usePoolBreadcrumb} from 'components/PoolBreadcrumb';
 import {Result} from 'components/Fetch';
-import PoolID from 'components/pool';
 
 import {useQuery} from 'hooks/query';
-
-import _ from 'utils/i18n';
 
 import ThinktankEditForm from './ThinktankEditForm';
 import {useThinktanksBreadcrumb} from './ThinktankList';
 import {getThinktankLabel} from './helper';
-
 
 const Title = _('Edit Thinktank');
 
@@ -21,6 +20,7 @@ const ThinktankEdit = props => {
     const endpoint = `/thinktank/${id}/`;
     const result = useQuery(endpoint);
 
+    usePoolBreadcrumb(result.result.data);
     useThinktanksBreadcrumb();
     useBreadcrumb(endpoint, getThinktankLabel(id, result));
 
@@ -28,15 +28,12 @@ const ThinktankEdit = props => {
         <Page title={Title}>
             <Result result={result}>
                 {thinktank => (
-                    <>
-                        <PoolID pool={thinktank.pool} />
-                        <ThinktankEditForm
-                            endpoint={endpoint}
-                            data={thinktank}
-                            backURL={endpoint}
-                            {...props}
-                        />
-                    </>
+                    <ThinktankEditForm
+                        endpoint={endpoint}
+                        data={thinktank}
+                        backURL={endpoint}
+                        {...props}
+                    />
                 )}
             </Result>
         </Page>
