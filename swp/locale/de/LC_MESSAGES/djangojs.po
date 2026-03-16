@@ -75,15 +75,6 @@ msgstr "Suche"
 msgid "Thinktanks & Scrapers"
 msgstr "Thinktanks & Scraper"
 
-msgid "Save"
-msgstr "Sichern"
-
-msgid "Next"
-msgstr "Weiter"
-
-msgid "Back"
-msgstr "Zurück"
-
 msgid "Log out"
 msgstr "Abmelden"
 
@@ -158,6 +149,9 @@ msgstr "Erfolgreich aktiviert"
 
 msgid "Successfully deactivated"
 msgstr "Erfolgreich deaktiviert"
+
+msgid "Back"
+msgstr "Zurück"
 
 msgid "Cancel"
 msgstr "Abbrechen"
@@ -243,6 +237,9 @@ msgstr "Monitor %s"
 
 msgid "Edit Monitor"
 msgstr "Monitor bearbeiten"
+
+msgid "Save"
+msgstr "Sichern"
 
 msgid "Successfully changed monitor"
 msgstr "Änderungen am Monitor erfolgreich gespeichert"
@@ -447,9 +444,6 @@ msgstr "Thinktanks"
 msgid "New Scraper"
 msgstr "Neuer Scraper"
 
-msgid "Clone Scraper"
-msgstr "Scraper duplizieren"
-
 msgid "Scraper"
 msgstr "Scraper"
 
@@ -468,8 +462,14 @@ msgstr "Konfiguration"
 msgid "You have to deactivate the scraper in order to edit it."
 msgstr "Sie müssen den Scraper deaktivieren, bevor Sie ihn bearbeiten können."
 
-msgid "Select a thinktank for the new scraper."
-msgstr "Wähle einen Thinktank für den neuen Scraper."
+msgid "Clone Scraper"
+msgstr "Scraper duplizieren"
+
+msgid "Select Thinktank"
+msgstr "Thinktank festlegen"
+
+msgid "Next"
+msgstr "Weiter"
 
 msgid "URL"
 msgstr "URL"
