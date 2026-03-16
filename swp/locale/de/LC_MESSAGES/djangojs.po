@@ -474,6 +474,9 @@ msgstr "URL"
 msgid "Errors"
 msgstr "Fehler"
 
+msgid "Action"
+msgstr "Aktion"
+
 msgid "Loading Preview"
 msgstr "Lade Vorschau …"
 

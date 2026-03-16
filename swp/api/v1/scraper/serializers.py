@@ -1,31 +1,19 @@
-from contextlib import suppress
 from typing import Optional
 
 from django.utils.translation import gettext_lazy as _
 
-from celery.exceptions import TimeoutError
 from celery.result import AsyncResult
-from celery.states import *
 
 from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
 
+from swp.api.serializers.task import BaseAsyncTaskResultSerializer
 from swp.api.v1.serializers import ActivatableSerializer
 from swp.models import Scraper
 from swp.tasks import preview_scraper
 from swp.tasks.scraper import PreviewResult
 
 from .fields import ResolverConfigSerializer
-
-STATES = [
-    PENDING,
-    RECEIVED,
-    STARTED,
-    SUCCESS,
-    FAILURE,
-    RETRY,
-    REVOKED,
-]
 
 
 class BaseScraperSerializer(ModelSerializer):
@@ -57,12 +45,8 @@ class ScraperSerializer(ActivatableSerializer, BaseScraperSerializer):
         fields = serializers.ALL_FIELDS
 
 
-class ScraperPreviewSerializer(BaseScraperSerializer):
+class ScraperPreviewSerializer(BaseScraperSerializer, BaseAsyncTaskResultSerializer):
     data = ResolverConfigSerializer(label=_('data'), write_only=True)
-
-    id = serializers.CharField(label=_('ID'), read_only=True)
-    status = serializers.ChoiceField(label=_('status'), choices=STATES, read_only=True)
-    result = serializers.SerializerMethodField(label=_('result'), read_only=True)
 
     class Meta:
         model = Scraper
@@ -90,9 +74,4 @@ class ScraperPreviewSerializer(BaseScraperSerializer):
 
     @staticmethod
     def get_result(instance: AsyncResult) -> Optional[PreviewResult]:
-        with suppress(TimeoutError):
-            return instance.get(timeout=0.1, propagate=False)
-
-
-class ScraperRunSerializer(ScraperPreviewSerializer):
-    pass
+        return BaseAsyncTaskResultSerializer.get_result(instance)

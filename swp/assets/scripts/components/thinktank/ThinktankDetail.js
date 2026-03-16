@@ -46,7 +46,7 @@ const UniqueFields = ({values}) => (
 const ThinktankDetail = props => {
     const {id} = useParams();
     const endpoint = `/thinktank/${id}/`;
-    const query = useQuery(['thinktank', id]);
+    const query = useQuery(['thinktank', +id]);
     const {data: thinktank, isLoading: loading} = query;
     const label = getThinktankLabel(id, {result: {data: thinktank}, loading});
 

@@ -462,10 +462,19 @@ msgstr ""
 msgid "You have to deactivate the scraper in order to edit it."
 msgstr ""
 
+msgid "Scraper has been started."
+msgstr ""
+
+msgid "Run"
+msgstr ""
+
 msgid "URL"
 msgstr ""
 
 msgid "Errors"
+msgstr ""
+
+msgid "Action"
 msgstr ""
 
 msgid "Loading Preview"
