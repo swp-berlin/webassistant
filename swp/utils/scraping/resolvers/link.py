@@ -7,6 +7,7 @@ from playwright.async_api import ElementHandle, Error as PlaywrightError
 from ..browser import open_page
 from ..exceptions import ErrorLevel, ResolverError
 from .base import IntermediateResolver, SelectorMixin, get_content
+from ..page import goto
 from ..utils import get_error
 
 
@@ -42,7 +43,7 @@ class LinkResolver(SelectorMixin, IntermediateResolver):
 
         try:
             async with open_page(self.context.browser) as detail_page:
-                await detail_page.goto(href)
+                await goto(detail_page, href)
 
                 for resolver in self.resolvers:
                     await resolver.resolve(detail_page, fields, errors)
