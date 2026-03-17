@@ -1,4 +1,5 @@
 import asyncio
+
 from contextlib import asynccontextmanager
 from enum import Enum
 from typing import Iterable, Iterator
@@ -9,6 +10,7 @@ from django.utils.translation import gettext_lazy as _
 
 from swp.utils.scraping.context import ScraperContext
 from swp.utils.scraping.exceptions import CloudflareError, ResolverError
+from swp.utils.scraping.page import goto, get_status
 from swp.utils.scraping.resolvers.base import get_content
 
 REGISTER_OBSERVER = """
@@ -77,32 +79,30 @@ class Paginator:
         self.max_pages = max_pages
         self.max_per_page = max_per_page
         self.timeout = timeout
-        self.status = None
-    async def query_list_items(self, page=None) -> Iterable[ElementHandle]:
-        def handle_response(response):
-            self.status = response.status
 
+    async def query_list_items(self, page: Page = None) -> Iterable[ElementHandle]:
         page = page or self.context.page
-        page.on('response', handle_response)
 
         try:
             # [SWP-144] Precautionary measure against dynamically loaded nodes
             await page.wait_for_selector(self.selector, state='attached', timeout=5000)
         except TimeoutError as exc:
+            status = get_status(page)
+
             if await is_cloudflare_protected_page(page):
-                raise CloudflareError(status=self.status)
+                raise CloudflareError(status=status)
 
             raise ResolverError(
                 _('No elements matching %(selector)s found') % {'selector': self.selector},
-                status = self.status
+                status=status,
             ) from exc
 
         nodes = await page.query_selector_all(self.selector)
 
         if not nodes:
             raise ResolverError(
-                _('No elements matching %(selector)s found') % {'selector': self.selector} ,
-                status=self.status
+                _('No elements matching %(selector)s found') % {'selector': self.selector},
+                status=get_status(page),
             )
 
         return nodes[:self.max_per_page] if self.max_per_page else nodes
@@ -119,7 +119,7 @@ class EndlessPaginator(Paginator):
         if not nodes:
             raise ResolverError(
                 _('No elements matching %(selector)s found') % {'selector': self.selector},
-                status = self.status
+                status=get_status(self.context.page),
             )
 
         yield nodes
@@ -142,7 +142,7 @@ class EndlessPaginator(Paginator):
                         _('Endless Pagination on page %(page_number)s did not load any new items.') % {
                             'page_number': page_number
                         },
-                        status = self.status
+                        status=get_status(self.context.page),
                     )
 
                 yield nodes
@@ -156,7 +156,7 @@ class PagePaginator(Paginator):
         if not nodes:
             raise ResolverError(
                 _('No elements matching %(selector)s found') % {'selector': self.selector},
-                status = self.status
+                status=get_status(self.context.page),
             )
 
         yield nodes
@@ -174,24 +174,22 @@ class PagePaginator(Paginator):
                     _('Pagination Button matching %(selector)s has no attribute href') % {
                         'selector': self.button_selector
                     },
-                    status = self.status
+                    status=get_status(self.context.page),
                 )
 
-            await self.nagigate_to_next_page(href, page_number)
+            await self.navigate_to_next_page(href, page_number)
 
-            nodes = await self.query_list_items()
-            yield nodes
+            yield await self.query_list_items()
 
-    async def nagigate_to_next_page(self, href, page_number):
+    async def navigate_to_next_page(self, href, page_number):
         try:
-            await self.context.page.goto(href)
+            await goto(self.context.page, href)
         except TimeoutError:
             raise ResolverError(
                 _('Timeout while navigating to page %(page_number)s: %(href)s') % {
                     'page_number': page_number,
                     'href': href,
                 },
-                status = self.status
             )
 
 
