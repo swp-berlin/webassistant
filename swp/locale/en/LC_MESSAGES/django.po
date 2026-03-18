@@ -175,6 +175,15 @@ msgstr ""
 msgid "result"
 msgstr ""
 
+msgid "timestamp"
+msgstr ""
+
+msgid "created"
+msgstr ""
+
+msgid "last modified"
+msgstr ""
+
 msgid "can manage"
 msgstr ""
 
@@ -213,12 +222,6 @@ msgid "Activation denied"
 msgstr ""
 
 msgid "Deactivation denied"
-msgstr ""
-
-msgid "created"
-msgstr ""
-
-msgid "last modified"
 msgstr ""
 
 msgid "key"
@@ -481,9 +484,6 @@ msgid "error code"
 msgstr ""
 
 msgid "message"
-msgstr ""
-
-msgid "timestamp"
 msgstr ""
 
 msgid "sent"

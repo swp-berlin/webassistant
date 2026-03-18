@@ -239,7 +239,7 @@ msgid "Edit Monitor"
 msgstr "Monitor bearbeiten"
 
 msgid "Save"
-msgstr "Speichern"
+msgstr "Sichern"
 
 msgid "Successfully changed monitor"
 msgstr "Änderungen am Monitor erfolgreich gespeichert"
@@ -468,6 +468,15 @@ msgstr "Scraper erfolgreich gestartet."
 msgid "Run"
 msgstr "Start"
 
+msgid "Clone Scraper"
+msgstr "Scraper duplizieren"
+
+msgid "Select Thinktank"
+msgstr "Thinktank festlegen"
+
+msgid "Next"
+msgstr "Weiter"
+
 msgid "URL"
 msgstr "URL"
 
@@ -476,6 +485,9 @@ msgstr "Fehler"
 
 msgid "Action"
 msgstr "Aktion"
+
+msgid "Clone"
+msgstr "Duplizieren"
 
 msgid "Loading Preview"
 msgstr "Lade Vorschau …"

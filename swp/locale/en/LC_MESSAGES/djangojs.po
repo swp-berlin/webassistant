@@ -468,6 +468,15 @@ msgstr ""
 msgid "Run"
 msgstr ""
 
+msgid "Clone Scraper"
+msgstr ""
+
+msgid "Select Thinktank"
+msgstr ""
+
+msgid "Next"
+msgstr ""
+
 msgid "URL"
 msgstr ""
 
@@ -475,6 +484,9 @@ msgid "Errors"
 msgstr ""
 
 msgid "Action"
+msgstr ""
+
+msgid "Clone"
 msgstr ""
 
 msgid "Loading Preview"

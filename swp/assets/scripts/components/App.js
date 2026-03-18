@@ -17,5 +17,6 @@ export default () => (
                 </Navigation>
             </Router>
         </div>
+        <div id="portal" />
     </QueryClientProvider>
 );

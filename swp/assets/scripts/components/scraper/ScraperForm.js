@@ -1,8 +1,10 @@
-import {useCallback, useState} from 'react';
+import {useCallback, useEffect, useState} from 'react';
+
 import {Button} from '@blueprintjs/core';
 
 import _ from 'utils/i18n';
 import {getChoices} from 'utils/choices';
+import {preventDefault} from 'utils/event';
 
 import {useMutationForm} from 'components/Fetch';
 import {Select, TextInput} from 'components/forms';
@@ -59,42 +61,61 @@ const Forms = {
     Tags: FieldResolverForm,
 };
 
-const DEFAULT_VALUES = {
+const DefaultValues = {
+    is_active: false,
     interval: Intervals[0].value,
     type: ScraperTypes[0].value,
     data: ScraperTypes[0].defaults,
 };
 
-const ScraperForm = ({endpoint, data, redirectURL}) => {
-    const id = data?.id;
-    const method = id ? 'PATCH' : 'POST';
-
+const ScraperForm = ({endpoint, data = DefaultValues, redirectURL, onSuccess, hideSubmitButton, ...props}) => {
+    const {id, is_active: initialActive} = data;
+    const isEdit = Boolean(id);
+    const method = isEdit ? 'PATCH' : 'POST';
     const [preview, setPreview] = useState(null);
     const handlePreview = useCallback(preview => setPreview(preview.id), []);
 
-    const [, form, , mutate] = useMutationForm(
+    const [, form, mutationResult, mutate] = useMutationForm(
         endpoint,
-        {defaultValues: data || DEFAULT_VALUES},
+        {defaultValues: data},
         {method, redirectURL},
+        [method, redirectURL],
     );
-    const {control, register, errors} = form;
+    const {control, register, errors, clearErrors, trigger, getValues} = form;
+    const {
+        success,
+        result: {
+            data: mutationData,
+        },
+    } = mutationResult;
 
-    const [isActive, setIsActive] = useState(!!data?.is_active);
+    const [isActive, setIsActive] = useState(initialActive);
 
-    const handleSubmit = useCallback(async event => {
-        event.preventDefault();
-        form.clearErrors();
-        const valid = await form.trigger('start_url');
+    const handleSubmit = useCallback(
+        async event => {
+            preventDefault(event);
+            clearErrors();
 
-        if (valid) await mutate(form.getValues(), method);
-    }, [form, method, mutate]);
+            const valid = await trigger('start_url');
+
+            if (valid) await mutate(getValues(), method);
+        },
+        [method, mutate, clearErrors, getValues, trigger],
+    );
+
+    useEffect(
+        () => {
+            if (onSuccess && success) onSuccess(mutationData);
+        },
+        [success, mutationData, onSuccess],
+    );
 
     const disabledTitle = isActive ? DisabledTitle : null;
-    const scraperErrors = data?.errors;
+    const scraperErrors = data.errors;
 
     return (
-        <form className="mt-8 scraper-form grid grid-cols-1 lg:grid-cols-2 gap-8" onSubmit={handleSubmit}>
-            {id && (
+        <form {...props} className="mt-8 scraper-form grid grid-cols-1 lg:grid-cols-2 gap-8" onSubmit={handleSubmit}>
+            {isEdit && (
                 <ScraperActivationPortal>
                     <ScraperActivationButton id={id} isActive={isActive} form={form} onToggle={setIsActive} />
                 </ScraperActivationPortal>
@@ -152,9 +173,11 @@ const ScraperForm = ({endpoint, data, redirectURL}) => {
 
                 <ScraperFormErrors form={form} />
 
-                <div className="flex justify-end space-x-2">
-                    <Button type="submit" intent="primary" text={SubmitButtonLabel} disabled={isActive} />
-                </div>
+                {hideSubmitButton || (
+                    <div className="flex justify-end space-x-2">
+                        <Button type="submit" intent="primary" text={SubmitButtonLabel} disabled={isActive} />
+                    </div>
+                )}
             </div>
 
             <div>
@@ -162,10 +185,6 @@ const ScraperForm = ({endpoint, data, redirectURL}) => {
             </div>
         </form>
     );
-};
-
-ScraperForm.defaultProps = {
-    method: 'POST',
 };
 
 export default ScraperForm;

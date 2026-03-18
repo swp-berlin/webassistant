@@ -1,0 +1,28 @@
+.scraper-clone-dialog {
+  width: calc(min(100%, 1200px)) !important;
+  display: flex;
+
+  #scraper-clone-form {
+    padding: 0.5rem;
+  }
+
+  .bp3-multistep-dialog-panels {
+    display: flex;
+    flex-direction: column;
+    width: auto;
+  }
+
+  .bp3-multistep-dialog-left-panel {
+    width: 100%;
+    flex: 0 0 auto;
+    border-right: none;
+    border-bottom: 1px solid #ccc;
+    display: flex;
+    flex-direction: row;
+  }
+
+  .bp3-dialog-step-container {
+    margin: auto;
+    width: 100%;
+  }
+}
