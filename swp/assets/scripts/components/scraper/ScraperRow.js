@@ -1,9 +1,12 @@
 import {Link} from 'react-router-dom';
 
+import {ButtonGroup} from '@blueprintjs/core';
+
 import _ from 'utils/i18n';
 
 import DateTime from 'components/DateTime';
 
+import ScraperType from './ScraperType';
 import ScraperStartButtons from './ScraperStartButtons';
 import ScraperCloneDialogButton from './ScraperCloneDialogButton';
 
@@ -24,13 +27,15 @@ const ScraperRow = ({id, thinktankID, url, type, categories, lastRun, errorCount
                 ? <ScraperLink id={id} thinktankID={thinktankID}>{url}</ScraperLink>
                 : <ExternalLink url={url} />}
         </td>
-        <td>{type}</td>
+        <td><ScraperType type={type} /></td>
         <td>{categories}</td>
         <td>{isActive ? <DateTime value={lastRun} /> : DisabledLabel}</td>
         <td className="text-right">{errorCount}</td>
         <td>
-            <ScraperStartButtons id={id} thinktankID={thinktankID} isRunning={isRunning} />
-            <ScraperCloneDialogButton thinktankID={thinktankID} scraperID={id} />
+            <ButtonGroup>
+                <ScraperStartButtons id={id} thinktankID={thinktankID} isActive={isActive} isRunning={isRunning} />
+                <ScraperCloneDialogButton thinktankID={thinktankID} scraperID={id} />
+            </ButtonGroup>
         </td>
     </tr>
 );

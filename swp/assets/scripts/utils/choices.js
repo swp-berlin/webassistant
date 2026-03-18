@@ -1,5 +1,9 @@
 import Choices from 'schemes/choices';
+import ScraperTypes from 'schemes/scraperTypes.json';
+
 import _ from 'utils/i18n';
+
+Choices.ScraperType = ScraperTypes;
 
 export const translated = name => Choices[name].map(({label, ...choice}) => ({
     ...choice,

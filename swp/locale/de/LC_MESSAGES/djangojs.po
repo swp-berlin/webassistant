@@ -455,10 +455,10 @@ msgid "New Scraper"
 msgstr "Neuer Scraper"
 
 msgid "Clone"
-msgstr "Duplizieren"
+msgstr "Klonen"
 
 msgid "Clone Scraper"
-msgstr "Scraper duplizieren"
+msgstr "Scraper klonen"
 
 msgid "Select Thinktank"
 msgstr "Thinktank festlegen"

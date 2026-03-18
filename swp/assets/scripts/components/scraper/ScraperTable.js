@@ -30,7 +30,7 @@ const ScraperRows = ({items, canManage}) => items.map(item => (
 ));
 
 const ScraperTable = ({items, endpoint, canManage, ...props}) => (
-    <HTMLTable className="w-full my-4" bordered {...props}>
+    <HTMLTable className="w-full my-4 whitespace-nowrap" bordered {...props}>
         <thead>
             <tr className="bg-gray-300">
                 <th className="w-1/2">{URLLabel}</th>
