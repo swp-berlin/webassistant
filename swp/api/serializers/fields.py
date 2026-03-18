@@ -1,20 +1,35 @@
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
-from swp.models import Monitor, Publication, Thinktank
+from swp.models import Monitor, Publication, Thinktank, Pool
 
+from .pool import PoolSerializer
 from .validators import css_selector
 
 
+class PoolField(serializers.PrimaryKeyRelatedField):
+
+    def get_queryset(self):
+        return Pool.objects.annotate_can_manage(self.context.get('request').user)
+
+    def use_pk_only_optimization(self):
+        return False
+
+    def to_representation(self, value):
+        return PoolSerializer(value).data
+
+
 class ThinktankField(serializers.ModelSerializer):
+    pool = PoolField(read_only=True)
 
     class Meta:
         model = Thinktank
-        fields = ['id', 'name']
-        read_only_fields = ['id']
+        read_only_fields = ['id', 'pool']
+        fields = ['name', *read_only_fields]
 
 
 class MonitorField(serializers.ModelSerializer):
+
     class Meta:
         model = Monitor
         fields = ['id', 'name']
@@ -22,6 +37,7 @@ class MonitorField(serializers.ModelSerializer):
 
 
 class PublicationField(serializers.ModelSerializer):
+
     class Meta:
         model = Publication
         fields = ['id', 'url', 'title']

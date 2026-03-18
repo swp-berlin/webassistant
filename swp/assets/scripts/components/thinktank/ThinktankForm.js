@@ -33,8 +33,20 @@ const getMutationOptions = (method, successMessage) => ({
     },
 });
 
+const getDefaultValues = data => {
+    if (!data) return DefaultValues;
+
+    const {pool} = data;
+
+    return {
+        ...data,
+        pool: pool.id,
+    };
+};
+
 const ThinktankForm = ({endpoint, method, backURL, successMessage, data, submitLabel, ...props}) => {
-    const formOptions = {defaultValues: data || DefaultValues};
+    const defaultValues = getDefaultValues(data);
+    const formOptions = {defaultValues};
     const mutationOptions = getMutationOptions(method, successMessage);
     const [onSubmit, {control, register, errors}] = useMutationForm(endpoint, formOptions, mutationOptions);
     const Register = useRegister(register, errors);

@@ -2,8 +2,8 @@ import uuid
 
 from unittest.mock import patch
 
+from celery.result import AsyncResult
 from celery.states import PENDING
-from celery.exceptions import TimeoutError
 
 from rest_framework.test import APITestCase
 
@@ -17,10 +17,11 @@ from .serializers import BaseScraperSerializer
 class FakeResult:
     id = uuid.uuid4()
     status = PENDING
+    TimeoutError = AsyncResult.TimeoutError
 
     @classmethod
     def get(cls, **kwargs):
-        raise TimeoutError(f'{kwargs}')
+        raise cls.TimeoutError(f'{kwargs}')
 
 
 class ScraperStartURLTestSerializer(BaseScraperSerializer):

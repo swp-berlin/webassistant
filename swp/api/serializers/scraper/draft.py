@@ -1,12 +1,12 @@
 from rest_framework.fields import CharField, ChoiceField, IntegerField
 from rest_framework.serializers import Serializer
 
+from swp.api.serializers.fields import CSSSelectorField, ThinktankField
 from swp.models import Scraper
 from swp.models.choices import PaginatorType, ResolverType
 
 from .base import BaseScraperSerializer, ResolverConfigSerializer
 from .resolver import ResolverTypeField
-from ..fields import CSSSelectorField
 
 
 class ResolverConfigDraftSerializer(ResolverConfigSerializer):
@@ -67,8 +67,9 @@ class FieldResolverDraftSerializer(Serializer):
 
 
 class ScraperDraftSerializer(BaseScraperSerializer):
+    thinktank = ThinktankField(read_only=True)
     data = ResolverConfigDraftSerializer()
 
     class Meta:
         model = Scraper
-        fields = ['start_url', 'type', 'interval', 'data', 'categories']
+        fields = ['thinktank', 'start_url', 'type', 'interval', 'data', 'categories']

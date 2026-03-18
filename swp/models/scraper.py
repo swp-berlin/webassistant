@@ -4,12 +4,13 @@ import datetime
 import hashlib
 import json
 
+from contextlib import suppress
 from typing import Any, Iterable, Mapping, Optional, TYPE_CHECKING
 from urllib.parse import urlsplit
 
 from asgiref.sync import async_to_sync, sync_to_async
 from django.conf import settings
-from django.core.exceptions import NON_FIELD_ERRORS
+from django.core.exceptions import NON_FIELD_ERRORS, ObjectDoesNotExist
 from django.db import models, IntegrityError
 from django.db.models.aggregates import Count
 from django.shortcuts import resolve_url
@@ -140,10 +141,10 @@ class Scraper(ActivatableModel, LastModified):
 
         return self.last_modified > self.last_run
 
-    def scrape(self):
+    def scrape(self, force_update=False):
         scraper = _Scraper(self.start_url, full_scan=self.full_scan)
 
-        self.async_scrape(scraper, self.data, self.thinktank)
+        self.async_scrape(scraper, self.data, self.thinktank, force_update)
 
     @async_to_sync
     async def async_scrape(
@@ -151,6 +152,7 @@ class Scraper(ActivatableModel, LastModified):
         scraper: _Scraper,
         config: Mapping[str, Any],
         thinktank: Thinktank,
+        force_update: bool,
     ):
         results = scraper.scrape(config)
 
@@ -169,7 +171,7 @@ class Scraper(ActivatableModel, LastModified):
                     continue
 
                 try:
-                    await self.save_publication(publication)
+                    await self.save_publication(publication, force_update=force_update)
                 except IntegrityError as exc:
                     publication_error = ScraperError(
                         scraper=self,
@@ -286,13 +288,16 @@ class Scraper(ActivatableModel, LastModified):
         return False
 
     @sync_to_async
-    def save_publication(self, publication) -> bool:
-        publication.hash = get_hash({field: getattr(publication, field, '') for field in self.unique_fields})
+    def save_publication(self, publication, *, force_update=False, using: str = None) -> bool:
+        publication.hash = self.get_hash(publication)
 
-        if self.scraped_publications.filter(hash=publication.hash).exists():
-            return False
+        if existing := self.get_existing_publication(publication):
+            if force_update:
+                publication.id = existing
+            else:
+                return False
 
-        publication.save(force_insert=True)
+        publication.save(using=using)
         publication.categories.add(*self.categories.all())
         self.scraped_publications.add(publication)
 
@@ -303,6 +308,21 @@ class Scraper(ActivatableModel, LastModified):
                 spool_content(publication, publication.text_content, 'txt')
 
         return True
+
+    def get_hash(self, publication: Publication):
+        return get_hash({field: getattr(publication, field) for field in self.unique_fields})
+
+    def get_existing_publication(self, publication: Publication):
+        """
+        Normally only one publication with the same hash should exist per scraper.
+        Since this is not enforced by db constraints there might be rare cases of
+        duplicate hashes. We choose the last created publication in this case.
+        """
+
+        queryset = self.scraped_publications.filter(hash=publication.hash).values_list('id', flat=True)
+
+        with suppress(ObjectDoesNotExist):
+            return queryset.latest('created')
 
     @sync_to_async
     def save_error(self, error: ScraperError):

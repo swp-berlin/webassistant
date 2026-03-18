@@ -2,6 +2,8 @@
 
 export const gettext = window.gettext || (msgid => msgid);
 
+const _ = gettext;
+
 export const pgettext = window.pgettext || ((context, msgid) => msgid);
 
 export const interpolate = (fmt, obj, named = true) => (window.interpolate || gettext)(fmt, obj, named);
@@ -12,4 +14,4 @@ export const ngettext = window.ngettext || ((singular, plural, count) => count =
 
 export const npgettext = window.npgettext || ((context, singular, plural, count) => count === 1 ? singular : plural);
 
-export default gettext;
+export default _;

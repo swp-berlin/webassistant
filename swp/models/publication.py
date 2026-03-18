@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+from pathlib import Path
+from typing import Optional
+
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
@@ -112,6 +115,22 @@ class Publication(UpdateModel):
     @property
     def source(self):
         return self.url or self.pdf_url
+
+    @property
+    def pdf_path(self) -> Optional[Path]:
+        return getattr(self, 'pdf-path', None)
+
+    @pdf_path.setter
+    def pdf_path(self, value: Path):
+        setattr(self, 'pdf-path', value)
+
+    @property
+    def text_content(self) -> Optional[str]:
+        return getattr(self, 'text-content', None)
+
+    @text_content.setter
+    def text_content(self, value: str):
+        setattr(self, 'text-content', value)
 
     def save(self, **kwargs):
         if self.publication_date_clean is None:
