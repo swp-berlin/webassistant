@@ -10,8 +10,6 @@ import {useMutationForm} from 'components/Fetch';
 import {Select, TextInput} from 'components/forms';
 import Field from 'components/forms/Field';
 
-import ScraperTypes from 'schemes/scraperTypes.json';
-
 import ResolverForm from './ResolverForm/ResolverForm';
 import ResolverFormProvider from './ResolverForm/ResolverFormContext';
 import {
@@ -26,6 +24,7 @@ import BackendScraperErrors from './BackendScraperErrors';
 import CategorySelect from './CategorySelect';
 import ScraperTypeSelect from './ScraperTypeSelect';
 import ScraperFormErrors from './ScraperFormErrors';
+import {ScraperTypes} from './ScraperType';
 import ScraperTypeDescription from './ScraperTypeDescription';
 import ScraperActivationButton from './ScraperActivationButton';
 import {ScraperActivationPortal} from './ScraperActivationContainer';

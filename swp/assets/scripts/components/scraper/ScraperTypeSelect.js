@@ -1,13 +1,11 @@
 import {forwardRef, useCallback, useEffect, useRef, useState} from 'react';
 import {Controller} from 'react-hook-form';
 
-import ScraperTypes from 'schemes/scraperTypes';
 import {Select} from 'components/forms';
 
 import ConfigResetWarning from './ConfigResetWarning';
 
-
-const ScraperTypeSelect = forwardRef(({form, value, onChange, ...props}, ref) => {
+const ScraperTypeSelect = forwardRef(({form, choices, value, onChange, ...props}, ref) => {
     const mounted = useRef(false);
     const [selected, setSelected] = useState(null);
 
@@ -25,17 +23,17 @@ const ScraperTypeSelect = forwardRef(({form, value, onChange, ...props}, ref) =>
 
     useEffect(() => {
         if (mounted.current) {
-            const scraperType = ScraperTypes.find(scraperType => scraperType.value === value);
+            const scraperType = choices.find(scraperType => scraperType.value === value);
             if (scraperType) reset({...getValues(), data: scraperType.defaults});
         } else {
             mounted.current = true;
         }
-    }, [getValues, reset, value]);
+    }, [getValues, reset, value, choices]);
 
     return (
         <>
             <ConfigResetWarning isOpen={!!selected} onConfirm={handleConfirm} onAbort={handleAbort} />
-            <Select value={value} inputRef={ref} onItemSelect={handleItemSelect} {...props} />
+            <Select value={value} inputRef={ref} onItemSelect={handleItemSelect} choices={choices} {...props} />
         </>
     );
 });
