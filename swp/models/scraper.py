@@ -4,12 +4,13 @@ import datetime
 import hashlib
 import json
 
+from contextlib import suppress
 from typing import Any, Iterable, Mapping, Optional, TYPE_CHECKING
 from urllib.parse import urlsplit
 
 from asgiref.sync import async_to_sync, sync_to_async
 from django.conf import settings
-from django.core.exceptions import NON_FIELD_ERRORS
+from django.core.exceptions import NON_FIELD_ERRORS, ObjectDoesNotExist
 from django.db import models, IntegrityError
 from django.db.models.aggregates import Count
 from django.shortcuts import resolve_url
@@ -287,21 +288,18 @@ class Scraper(ActivatableModel, LastModified):
         return False
 
     @sync_to_async
-    def save_publication(self, publication, force_update=False) -> bool:
-        publication.hash = get_hash({field: getattr(publication, field, '') for field in self.unique_fields})
-        force_insert = not force_update
+    def save_publication(self, publication, *, force_update=False, using: str = None) -> bool:
+        publication.hash = self.get_hash(publication)
 
-        if not force_update:
-            if self.scraped_publications.filter(hash=publication.hash).exists():
+        if existing := self.get_existing_publication(publication):
+            if force_update:
+                publication.id = existing
+            else:
                 return False
 
-        publication.save(force_insert=force_insert)
+        publication.save(using=using)
         publication.categories.add(*self.categories.all())
-
-        if force_update:
-            self.scraped_publications.update(publication)
-        else:
-            self.scraped_publications.add(publication)
+        self.scraped_publications.add(publication)
 
         if settings.ENABLE_EMBEDDINGS:
             if publication.pdf_path:
@@ -310,6 +308,21 @@ class Scraper(ActivatableModel, LastModified):
                 spool_content(publication, publication.text_content, 'txt')
 
         return True
+
+    def get_hash(self, publication: Publication):
+        return get_hash({field: getattr(publication, field) for field in self.unique_fields})
+
+    def get_existing_publication(self, publication: Publication):
+        """
+        Normally only one publication with the same hash should exist per scraper.
+        Since this is not enforced by db constraints there might be rare cases of
+        duplicate hashes. We choose the last created publication in this case.
+        """
+
+        queryset = self.scraped_publications.filter(hash=publication.hash).values_list('id', flat=True)
+
+        with suppress(ObjectDoesNotExist):
+            return queryset.latest('created')
 
     @sync_to_async
     def save_error(self, error: ScraperError):
