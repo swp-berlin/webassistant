@@ -1,7 +1,7 @@
-import {useCallback} from 'react';
+import {Fragment, useCallback} from 'react';
 import {useQueryClient} from 'react-query';
 
-import {Button, ButtonGroup} from '@blueprintjs/core';
+import {Button} from '@blueprintjs/core';
 
 import _ from 'utils/i18n';
 import {buildURL} from 'utils/url';
@@ -26,9 +26,10 @@ const MutationOptions = {
     },
 };
 
-const getData = (id, thinktankID, isRunning) => ({
+const getData = (id, thinktankID, isActive, isRunning) => ({
     id,
     thinktank_id: thinktankID,
+    is_active: isActive,
     is_running: isRunning,
 });
 
@@ -61,36 +62,41 @@ const ScraperStartButton = ({forceUpdate, onClick, ...props}) => {
     return <Button {...props} onClick={handleClick} />;
 };
 
-const ScraperStartButtons = ({id, thinktankID, isRunning}) => {
+const ScraperStartButtons = ({id, thinktankID, isActive, isRunning}) => {
     const queryClient = useQueryClient();
     const mutationEndpoint = buildURL('scraper', id, 'scrape');
     const [mutate, {loading}] = useMutationResult(mutationEndpoint, MutationOptions, []);
     const handleClick = useCallback(
         (forceUpdate = false) => {
-            const data = getData(id, thinktankID, true);
+            const data = getData(id, thinktankID, isActive, true);
 
-            mutate({...data, force_update: forceUpdate});
+            mutate({force_update: forceUpdate});
             updateScraperData(queryClient, data);
         },
-        [id, thinktankID, mutate, queryClient],
+        [id, thinktankID, isActive, mutate, queryClient],
     );
     const queryOptions = {
         queryKey: ['scraper', id, 'info'],
-        enabled: isRunning,
+        enabled: isActive && isRunning,
         refetchInterval: RefetchInterval,
-        initialData: getData(id, thinktankID, isRunning),
+        initialData: getData(id, thinktankID, isActive, isRunning),
         onSuccess(scraperData) {
             updateScraperData(queryClient, scraperData);
         },
     };
 
+    const buttonProps = {
+        loading,
+        onClick: handleClick,
+    };
+
     return (
         <Query {...queryOptions}>
-            {({is_running: isRunning}) => (
-                <ButtonGroup>
-                    <ScraperStartButton loading={loading} disabled={isRunning} onClick={handleClick} />
-                    <ScraperStartButton loading={loading} disabled={isRunning} onClick={handleClick} forceUpdate />
-                </ButtonGroup>
+            {({is_active: isActive, is_running: isRunning}) => (
+                <Fragment>
+                    <ScraperStartButton {...buttonProps} disabled={isActive ? isRunning : true} />
+                    <ScraperStartButton {...buttonProps} disabled={isActive ? isRunning : true} forceUpdate />
+                </Fragment>
             )}
         </Query>
     );

@@ -223,6 +223,7 @@ class ScraperInfoSerializer(BaseScraperSerializer):
         read_only_fields = [
             'error_count',
             'last_run',
+            'is_active',
             'is_running',
         ]
         fields = [
