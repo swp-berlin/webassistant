@@ -81,6 +81,19 @@ msgstr ""
 msgid "Home"
 msgstr ""
 
+msgid "Pool"
+msgstr ""
+
+msgid "All Pools"
+msgstr ""
+
+#, javascript-format
+msgid "Pool %s"
+msgstr ""
+
+msgid "Pool %(name)s (#%(id)s)"
+msgstr ""
+
 msgid "All"
 msgstr ""
 
@@ -226,9 +239,6 @@ msgid "Sync with Zotero"
 msgstr ""
 
 msgid "Transfer to Zotero started. This might take a couple of minutes."
-msgstr ""
-
-msgid "Pool"
 msgstr ""
 
 #, javascript-format
@@ -444,6 +454,18 @@ msgstr ""
 msgid "New Scraper"
 msgstr ""
 
+msgid "Clone"
+msgstr ""
+
+msgid "Clone Scraper"
+msgstr ""
+
+msgid "Select Thinktank"
+msgstr ""
+
+msgid "Next"
+msgstr ""
+
 msgid "Scraper"
 msgstr ""
 
@@ -468,13 +490,7 @@ msgstr ""
 msgid "Run"
 msgstr ""
 
-msgid "Clone Scraper"
-msgstr ""
-
-msgid "Select Thinktank"
-msgstr ""
-
-msgid "Next"
+msgid "Update"
 msgstr ""
 
 msgid "URL"
@@ -484,9 +500,6 @@ msgid "Errors"
 msgstr ""
 
 msgid "Action"
-msgstr ""
-
-msgid "Clone"
 msgstr ""
 
 msgid "Loading Preview"

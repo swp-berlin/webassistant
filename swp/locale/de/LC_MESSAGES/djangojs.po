@@ -7,7 +7,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgid "Default"
-msgstr ""
+msgstr "Standard"
 
 msgid "Client Error"
 msgstr "Browserfehler"
@@ -80,6 +80,19 @@ msgstr "Abmelden"
 
 msgid "Home"
 msgstr "Start"
+
+msgid "Pool"
+msgstr "Pool"
+
+msgid "All Pools"
+msgstr "Alle Pools"
+
+#, javascript-format
+msgid "Pool %s"
+msgstr "Pool %s"
+
+msgid "Pool %(name)s (#%(id)s)"
+msgstr "Pool %(name)s (#%(id)s)"
 
 msgid "All"
 msgstr "Alle"
@@ -227,9 +240,6 @@ msgstr "Mit Zotero synchronisieren"
 
 msgid "Transfer to Zotero started. This might take a couple of minutes."
 msgstr "Übertragung zu Zotero gestartet. Dies kann ein paar Minuten in Anspruch nehmen."
-
-msgid "Pool"
-msgstr "Pool"
 
 #, javascript-format
 msgid "Monitor %s"
@@ -444,6 +454,18 @@ msgstr "Thinktanks"
 msgid "New Scraper"
 msgstr "Neuer Scraper"
 
+msgid "Clone"
+msgstr "Duplizieren"
+
+msgid "Clone Scraper"
+msgstr "Scraper duplizieren"
+
+msgid "Select Thinktank"
+msgstr "Thinktank festlegen"
+
+msgid "Next"
+msgstr "Weiter"
+
 msgid "Scraper"
 msgstr "Scraper"
 
@@ -468,14 +490,8 @@ msgstr "Scraper erfolgreich gestartet."
 msgid "Run"
 msgstr "Start"
 
-msgid "Clone Scraper"
-msgstr "Scraper duplizieren"
-
-msgid "Select Thinktank"
-msgstr "Thinktank festlegen"
-
-msgid "Next"
-msgstr "Weiter"
+msgid "Update"
+msgstr ""
 
 msgid "URL"
 msgstr "URL"
@@ -485,9 +501,6 @@ msgstr "Fehler"
 
 msgid "Action"
 msgstr "Aktion"
-
-msgid "Clone"
-msgstr "Duplizieren"
 
 msgid "Loading Preview"
 msgstr "Lade Vorschau …"
