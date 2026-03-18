@@ -203,10 +203,10 @@ class ScraperSerializer(BaseScraperSerializer):
 
 
 class ScraperRunSerializer(BaseAsyncTaskResultSerializer):
-    force_update = serializers.BooleanField(write_only=True, required=False)
+    force_update = serializers.BooleanField(write_only=True)
 
     def update(self, instance: Scraper, validated_data):
-        force_update = validated_data.get('force_update', False)
+        force_update = validated_data['force_update']
 
         instance.update(modified=False, is_running=True)
 

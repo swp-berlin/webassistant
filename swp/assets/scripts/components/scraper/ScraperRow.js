@@ -4,7 +4,7 @@ import _ from 'utils/i18n';
 
 import DateTime from 'components/DateTime';
 
-import ScraperStartButton from './ScraperStartButton';
+import ScraperStartButtons from './ScraperStartButtons';
 
 const DisabledLabel = _('disabled');
 
@@ -28,8 +28,7 @@ const ScraperRow = ({id, thinktankID, url, type, categories, lastRun, errorCount
         <td>{isActive ? <DateTime value={lastRun} /> : DisabledLabel}</td>
         <td className="text-right">{errorCount}</td>
         <td>
-            <ScraperStartButton id={id} thinktankID={thinktankID} isRunning={isRunning} />
-            <ScraperStartButton id={id} thinktankID={thinktankID} isRunning={isRunning} forceUpdate />
+            <ScraperStartButtons id={id} thinktankID={thinktankID} isRunning={isRunning} />
         </td>
     </tr>
 );
