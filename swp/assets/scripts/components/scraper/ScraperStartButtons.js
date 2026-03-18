@@ -1,16 +1,18 @@
 import {useCallback} from 'react';
 import {useQueryClient} from 'react-query';
 
-import {Button} from '@blueprintjs/core';
+import {Button, ButtonGroup} from '@blueprintjs/core';
 
 import _ from 'utils/i18n';
 import {buildURL} from 'utils/url';
+import {preventDefault} from 'utils/event';
 
 import {useMutationResult} from 'components/Fetch';
 import Query from 'components/Query';
 
 const StartedMessage = _('Scraper has been started.');
 const Run = _('Run');
+const ForceUpdate = _('Update');
 
 const RefetchInterval = 1000;
 
@@ -43,15 +45,31 @@ const updateScraperData = (queryClient, scraperData) => {
     }));
 };
 
-const ScraperStartButton = ({id, thinktankID, isRunning}) => {
+const ScraperStartButton = ({forceUpdate, onClick, ...props}) => {
+    const handleClick = useCallback(
+        event => {
+            preventDefault(event);
+
+            return onClick(forceUpdate);
+        },
+        [forceUpdate, onClick],
+    );
+
+    props.text = forceUpdate ? ForceUpdate : Run;
+    props.icon = forceUpdate ? 'refresh' : 'play';
+
+    return <Button {...props} onClick={handleClick} />;
+};
+
+const ScraperStartButtons = ({id, thinktankID, isRunning}) => {
     const queryClient = useQueryClient();
     const mutationEndpoint = buildURL('scraper', id, 'scrape');
     const [mutate, {loading}] = useMutationResult(mutationEndpoint, MutationOptions, []);
     const handleClick = useCallback(
-        () => {
+        (forceUpdate = false) => {
             const data = getData(id, thinktankID, true);
 
-            mutate(data);
+            mutate({...data, force_update: forceUpdate});
             updateScraperData(queryClient, data);
         },
         [id, thinktankID, mutate, queryClient],
@@ -69,10 +87,13 @@ const ScraperStartButton = ({id, thinktankID, isRunning}) => {
     return (
         <Query {...queryOptions}>
             {({is_running: isRunning}) => (
-                <Button text={Run} loading={loading} disabled={isRunning} onClick={handleClick} />
+                <ButtonGroup>
+                    <ScraperStartButton loading={loading} disabled={isRunning} onClick={handleClick} />
+                    <ScraperStartButton loading={loading} disabled={isRunning} onClick={handleClick} forceUpdate />
+                </ButtonGroup>
             )}
         </Query>
     );
 };
 
-export default ScraperStartButton;
+export default ScraperStartButtons;
