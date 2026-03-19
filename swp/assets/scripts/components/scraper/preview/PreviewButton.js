@@ -24,7 +24,7 @@ const PreviewButton = ({form, onPreview}) => {
         if (success) onPreview(result.data);
     }, [onPreview, result.data, success]);
 
-    return <Button className="lg:float-right" type="button" text={Label} onClick={handleClick} />;
+    return <Button type="button" icon="eye-open" text={Label} onClick={handleClick} />;
 };
 
 export default PreviewButton;

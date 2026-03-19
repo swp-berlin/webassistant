@@ -162,6 +162,7 @@ class ScraperSerializer(BaseScraperSerializer):
             'is_active',
             'errors',
             'categories',
+            *read_only_fields,
         ]
 
     def validate(self, attrs):
@@ -220,16 +221,10 @@ class ScraperInfoSerializer(BaseScraperSerializer):
 
     class Meta:
         model = Scraper
-        read_only_fields = [
-            'error_count',
-            'last_run',
+        fields = read_only_fields = [
+            'id',
             'is_active',
             'is_running',
-        ]
-        fields = [
-            'id',
-            'thinktank_id',
-            *read_only_fields,
         ]
 
 

@@ -141,10 +141,10 @@ class Scraper(ActivatableModel, LastModified):
 
         return self.last_modified > self.last_run
 
-    def scrape(self, force_update=False):
+    def scrape(self, force_update=False) -> int:
         scraper = _Scraper(self.start_url, full_scan=self.full_scan)
 
-        self.async_scrape(scraper, self.data, self.thinktank, force_update)
+        return self.async_scrape(scraper, self.data, self.thinktank, force_update)
 
     @async_to_sync
     async def async_scrape(
@@ -154,6 +154,7 @@ class Scraper(ActivatableModel, LastModified):
         thinktank: Thinktank,
         force_update: bool,
     ):
+        count = 0
         results = scraper.scrape(config)
 
         try:
@@ -182,7 +183,9 @@ class Scraper(ActivatableModel, LastModified):
 
                     await self.save_error(publication_error)
 
-                if not publication.pk:
+                if publication.id:
+                    count += 1
+                else:
                     # the publication is a duplicate, stop scraping
                     scraper.stop()
 
@@ -201,6 +204,8 @@ class Scraper(ActivatableModel, LastModified):
                     await self.save_errors(scraper_errors)
         finally:
             await results.aclose()
+
+        return count
 
     async def build_publication(
         self,
