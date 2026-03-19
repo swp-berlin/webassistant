@@ -8,7 +8,7 @@ from celery.states import PENDING
 from rest_framework.test import APITestCase
 
 from swp.models import Scraper, Interval
-from swp.tasks import preview_scraper
+from swp.tasks import preview_scraper, run_scraper
 from swp.utils.testing import create_scraper, create_thinktank, create_user, login, request
 
 from .serializers import BaseScraperSerializer
@@ -64,6 +64,14 @@ class ScraperTestCase(APITestCase):
     def test_scraper_preview_status(self):
         with patch.object(preview_scraper, 'AsyncResult', return_value=FakeResult):
             request(self, '1:scraper-preview-status', args=[f'{FakeResult.id}'])
+
+    def test_scraper_run(self):
+        with patch.object(run_scraper, 'delay', return_value=FakeResult):
+            request(self, '1:scraper-run', args=[self.scraper.id], method='POST', data={})
+
+    def test_scraper_run_status(self):
+        with patch.object(run_scraper, 'AsyncResult', return_value=FakeResult):
+            request(self, '1:scraper-run-status', args=[f'{FakeResult.id}'])
 
     def test_scraper_start_url_validation(self):
         data = {
