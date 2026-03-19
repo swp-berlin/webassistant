@@ -1,6 +1,6 @@
 import {useCallback, useEffect, useState} from 'react';
 
-import {Button} from '@blueprintjs/core';
+import {Button, ButtonGroup} from '@blueprintjs/core';
 
 import _ from 'utils/i18n';
 import {getChoices} from 'utils/choices';
@@ -28,6 +28,7 @@ import {ScraperTypes} from './ScraperType';
 import ScraperTypeDescription from './ScraperTypeDescription';
 import ScraperActivationButton from './ScraperActivationButton';
 import {ScraperActivationPortal} from './ScraperActivationContainer';
+import ScraperStartButtons from './ScraperStartButtons';
 
 const StartURLLabel = _('Start URL');
 const TypeLabel = _('Scraper Type');
@@ -62,13 +63,14 @@ const Forms = {
 
 const DefaultValues = {
     is_active: false,
+    is_running: false,
     interval: Intervals[0].value,
     type: ScraperTypes[0].value,
     data: ScraperTypes[0].defaults,
 };
 
 const ScraperForm = ({endpoint, data = DefaultValues, redirectURL, onSuccess, hideSubmitButton, ...props}) => {
-    const {id, is_active: initialActive} = data;
+    const {id, is_running: isRunning, is_active: initialActive} = data;
     const isEdit = Boolean(id);
     const method = isEdit ? 'PATCH' : 'POST';
     const [preview, setPreview] = useState(null);
@@ -160,7 +162,10 @@ const ScraperForm = ({endpoint, data = DefaultValues, redirectURL, onSuccess, hi
 
             <div>
                 <ScraperTypeDescription form={form} />
-                <PreviewButton form={form} onPreview={handlePreview} />
+                <ButtonGroup className="lg:float-right">
+                    {isEdit && <ScraperStartButtons id={id} isActive={isActive} isRunning={isRunning} />}
+                    <PreviewButton form={form} onPreview={handlePreview} />
+                </ButtonGroup>
             </div>
 
             <div>

@@ -26,24 +26,18 @@ const MutationOptions = {
     },
 };
 
-const getData = (id, thinktankID, isActive, isRunning) => ({
+const getData = (id, isActive, isRunning) => ({
     id,
-    thinktank_id: thinktankID,
     is_active: isActive,
     is_running: isRunning,
 });
 
-const updateScraperData = (queryClient, scraperData) => {
-    const {id, thinktank_id: thinktankID, is_running: isRunning} = scraperData;
+const updateScraperData = (queryClient, data) => {
+    const {id, is_running: isRunning} = data;
 
     if (!isRunning) return;
 
-    queryClient.setQueryData(['thinktank', thinktankID], thinktankData => ({
-        ...thinktankData,
-        scrapers: thinktankData.scrapers.map(scraper => (
-            scraper.id === id ? {...scraper, ...scraperData} : scraper
-        )),
-    }));
+    queryClient.setQueryData(['scraper', id], scraper => ({...scraper, ...data}));
 };
 
 const ScraperStartButton = ({forceUpdate, onClick, ...props}) => {
@@ -62,26 +56,26 @@ const ScraperStartButton = ({forceUpdate, onClick, ...props}) => {
     return <Button {...props} onClick={handleClick} />;
 };
 
-const ScraperStartButtons = ({id, thinktankID, isActive, isRunning}) => {
+const ScraperStartButtons = ({id, isActive, isRunning}) => {
     const queryClient = useQueryClient();
     const mutationEndpoint = buildURL('scraper', id, 'scrape');
     const [mutate, {loading}] = useMutationResult(mutationEndpoint, MutationOptions, []);
     const handleClick = useCallback(
         (forceUpdate = false) => {
-            const data = getData(id, thinktankID, isActive, true);
+            const data = getData(id, isActive, true);
 
             mutate({force_update: forceUpdate});
             updateScraperData(queryClient, data);
         },
-        [id, thinktankID, isActive, mutate, queryClient],
+        [id, isActive, mutate, queryClient],
     );
     const queryOptions = {
         queryKey: ['scraper', id, 'info'],
         enabled: isActive && isRunning,
         refetchInterval: RefetchInterval,
-        initialData: getData(id, thinktankID, isActive, isRunning),
-        onSuccess(scraperData) {
-            updateScraperData(queryClient, scraperData);
+        initialData: getData(id, isActive, isRunning),
+        onSuccess(data) {
+            updateScraperData(queryClient, data);
         },
     };
 

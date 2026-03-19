@@ -1,13 +1,10 @@
 import {Link} from 'react-router-dom';
 
-import {ButtonGroup} from '@blueprintjs/core';
-
 import _ from 'utils/i18n';
 
 import DateTime from 'components/DateTime';
 
 import ScraperType from './ScraperType';
-import ScraperStartButtons from './ScraperStartButtons';
 import ScraperCloneDialogButton from './ScraperCloneDialogButton';
 
 const DisabledLabel = _('disabled');
@@ -20,7 +17,7 @@ const ScraperLink = ({id, thinktankID, children, ...props}) => (
 
 const ExternalLink = ({url}) => <a href={url} target="_blank" rel="noreferrer">{url}</a>;
 
-const ScraperRow = ({id, thinktankID, url, type, categories, lastRun, errorCount, isActive, isRunning, canManage}) => (
+const ScraperRow = ({id, thinktankID, url, type, categories, lastRun, errorCount, isActive, canManage}) => (
     <tr className={isActive ? null : 'disabled'} data-id={id}>
         <td>
             {canManage
@@ -32,10 +29,7 @@ const ScraperRow = ({id, thinktankID, url, type, categories, lastRun, errorCount
         <td>{isActive ? <DateTime value={lastRun} /> : DisabledLabel}</td>
         <td className="text-right">{errorCount}</td>
         <td>
-            <ButtonGroup>
-                <ScraperStartButtons id={id} thinktankID={thinktankID} isActive={isActive} isRunning={isRunning} />
-                <ScraperCloneDialogButton thinktankID={thinktankID} scraperID={id} />
-            </ButtonGroup>
+            <ScraperCloneDialogButton thinktankID={thinktankID} scraperID={id} />
         </td>
     </tr>
 );

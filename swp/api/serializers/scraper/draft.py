@@ -72,4 +72,16 @@ class ScraperDraftSerializer(BaseScraperSerializer):
 
     class Meta:
         model = Scraper
-        fields = ['thinktank', 'start_url', 'type', 'interval', 'data', 'categories']
+        read_only_fields = [
+            'thinktank',
+            'is_active',
+            'is_running',
+        ]
+        fields = [
+            'start_url',
+            'type',
+            'interval',
+            'data',
+            'categories',
+            *read_only_fields,
+        ]
