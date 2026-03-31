@@ -104,6 +104,10 @@ msgstr "Der eingegebene Suchbegriff ist ungültig. Bitte überprüfen Sie Ihre E
 msgid "The full-text search is currently unavailable. Please try again later."
 msgstr "Die Volltextsuche ist aktuell nicht verfügbar. Bitte versuchen Sie es später erneut."
 
+#, python-format
+msgid "The following fields are not supported for ordering: %s"
+msgstr "Die folgenden Felder werden für die Sortierung nicht unterstützt: %s"
+
 msgid "Internal Error"
 msgstr "Interner Fehler"
 
@@ -113,6 +117,15 @@ msgstr "Eine Publikationsliste mit diesem Namen existiert bereits."
 #, python-format
 msgid "There must be a resolver for the following fields: %(fields)s"
 msgstr "Es muss ein Resolver für die folgenden Felder vorhanden sein: %(fields)s"
+
+msgid "ID"
+msgstr "ID"
+
+msgid "status"
+msgstr "Status"
+
+msgid "result"
+msgstr "Ergebnis"
 
 msgid "active"
 msgstr "aktiv"
@@ -143,11 +156,17 @@ msgstr "Scraper"
 msgid "category"
 msgstr "Kategorie"
 
+msgid "Invalid elastic search query object."
+msgstr "Ungültiges Elasticsearch-Query-Objekt."
+
 msgid "entries"
 msgstr "Einträge"
 
 msgid "last updated"
 msgstr "zuletzt aktualisiert"
+
+msgid "You already have a publication list with this name."
+msgstr "Eine Publikationsliste mit diesem Namen existiert bereits."
 
 msgid "publication"
 msgstr "Publikation"
@@ -166,14 +185,14 @@ msgstr "Der Scraper ist aktiv und kann nicht geändert werden."
 msgid "data"
 msgstr "Daten"
 
-msgid "ID"
-msgstr "ID"
+msgid "timestamp"
+msgstr "Timestamp"
 
-msgid "status"
-msgstr "Status"
+msgid "created"
+msgstr "erzeugt am"
 
-msgid "result"
-msgstr "Ergebnis"
+msgid "last modified"
+msgstr "zuletzt geändert"
 
 msgid "can manage"
 msgstr "kann verwalten"
@@ -214,12 +233,6 @@ msgstr "Aktivierung nicht erlaubt"
 
 msgid "Deactivation denied"
 msgstr "Deaktivierung nicht erlaubt"
-
-msgid "created"
-msgstr "erzeugt am"
-
-msgid "last modified"
-msgstr "zuletzt geändert"
 
 msgid "key"
 msgstr "Schlüssel"
@@ -483,9 +496,6 @@ msgstr "Fehlercode"
 msgid "message"
 msgstr "Nachricht"
 
-msgid "timestamp"
-msgstr "Timestamp"
-
 msgid "sent"
 msgstr "gesendet"
 
@@ -668,8 +678,8 @@ msgstr "Passwort zurücksetzen"
 msgid "Scraper Error Report for %(date)s"
 msgstr "Scraper Fehlerreport für %(date)s"
 
-msgid "Scraping protection prevents page access"
-msgstr "Diese Seite sperrt Scraper und Bots aktiv aus und kann daher nicht automatisch abgerufen werden"
+msgid "Scraping protection prevents page access."
+msgstr "Diese Seite sperrt Scraper und Bots aktiv aus und kann daher nicht automatisch abgerufen werden."
 
 #, python-format
 msgid "No elements matching %(selector)s found"

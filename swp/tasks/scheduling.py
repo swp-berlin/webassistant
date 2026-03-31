@@ -10,7 +10,7 @@ from sentry_sdk import capture_exception
 from swp.celery import app
 from swp.db.expressions import MakeInterval
 from swp.models import Scraper
-from swp.utils.scraping.exceptions import ResolverError
+from swp.utils.scraping.exceptions import ResponseError
 
 SECOND = 1
 MINUTE = SECOND * 60
@@ -47,7 +47,8 @@ def schedule_scrapers(now=None):
 
 
 @app.task(name='scraper.run', time_limit=HARD_TIME_LIMIT, soft_time_limit=SOFT_TIME_LIMIT)
-def run_scraper(scraper, *, now: datetime.datetime = None, using: str = None, force: bool = False):
+def run_scraper(scraper, *, now: datetime.datetime = None, using: str = None,
+                force: bool = False, force_update: bool = False):
     queryset = Scraper.objects.using(using).select_related('thinktank')
 
     with transaction.atomic(using=using):
@@ -63,11 +64,11 @@ def run_scraper(scraper, *, now: datetime.datetime = None, using: str = None, fo
         scraper.update(is_running=True)
 
     try:
-        return scraper.scrape()
+        return scraper.scrape(force_update=force_update)
     except Exception as error:
         scraper.errors.create(message=f'{error}')
 
-        if not isinstance(error, ResolverError):
+        if not isinstance(error, ResponseError):
             capture_exception(error)
     finally:
         scraper.update(last_run=localtime(None), is_running=False, modified=False)

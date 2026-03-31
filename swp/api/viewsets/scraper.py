@@ -1,3 +1,5 @@
+from django.db import transaction
+
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.mixins import RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin
@@ -8,6 +10,7 @@ from rest_framework.viewsets import GenericViewSet
 from swp.api.permissions import HasActivatablePermission
 from swp.api.router import default_router
 from swp.api.serializers import ScraperSerializer, ScraperDraftSerializer
+from swp.api.serializers.scraper.base import ScraperInfoSerializer, ScraperRunSerializer
 from swp.models import Scraper
 
 
@@ -42,3 +45,12 @@ class ScraperViewSet(RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin, Ge
         serializer.save()
 
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=['post'], serializer_class=ScraperRunSerializer)
+    def scrape(self, request, *, using: str = None, **kwargs):
+        with transaction.atomic(using):
+            return self.update(request, **kwargs)
+
+    @action(detail=True, methods=['get'], serializer_class=ScraperInfoSerializer)
+    def info(self, request, pk, **kwargs):
+        return self.retrieve(request, pk, **kwargs)

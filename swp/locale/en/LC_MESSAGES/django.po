@@ -104,6 +104,10 @@ msgstr ""
 msgid "The full-text search is currently unavailable. Please try again later."
 msgstr ""
 
+#, python-format
+msgid "The following fields are not supported for ordering: %s"
+msgstr ""
+
 msgid "Internal Error"
 msgstr ""
 
@@ -112,6 +116,15 @@ msgstr ""
 
 #, python-format
 msgid "There must be a resolver for the following fields: %(fields)s"
+msgstr ""
+
+msgid "ID"
+msgstr ""
+
+msgid "status"
+msgstr ""
+
+msgid "result"
 msgstr ""
 
 msgid "active"
@@ -143,10 +156,16 @@ msgstr ""
 msgid "category"
 msgstr ""
 
+msgid "Invalid elastic search query object."
+msgstr ""
+
 msgid "entries"
 msgstr ""
 
 msgid "last updated"
+msgstr ""
+
+msgid "You already have a publication list with this name."
 msgstr ""
 
 msgid "publication"
@@ -166,13 +185,13 @@ msgstr ""
 msgid "data"
 msgstr ""
 
-msgid "ID"
+msgid "timestamp"
 msgstr ""
 
-msgid "status"
+msgid "created"
 msgstr ""
 
-msgid "result"
+msgid "last modified"
 msgstr ""
 
 msgid "can manage"
@@ -213,12 +232,6 @@ msgid "Activation denied"
 msgstr ""
 
 msgid "Deactivation denied"
-msgstr ""
-
-msgid "created"
-msgstr ""
-
-msgid "last modified"
 msgstr ""
 
 msgid "key"
@@ -483,9 +496,6 @@ msgstr ""
 msgid "message"
 msgstr ""
 
-msgid "timestamp"
-msgstr ""
-
 msgid "sent"
 msgstr ""
 
@@ -668,7 +678,7 @@ msgstr ""
 msgid "Scraper Error Report for %(date)s"
 msgstr ""
 
-msgid "Scraping protection prevents page access"
+msgid "Scraping protection prevents page access."
 msgstr ""
 
 #, python-format

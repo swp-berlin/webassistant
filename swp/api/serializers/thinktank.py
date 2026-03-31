@@ -7,6 +7,7 @@ from rest_framework.serializers import ModelSerializer
 
 from swp.models import Thinktank, Pool
 
+from .fields import PoolField
 from .scraper import ScraperListSerializer
 
 
@@ -15,6 +16,7 @@ class BaseThinktankSerializer(ModelSerializer):
     Base thinktank serializer.
     """
 
+    pool = PoolField()
     can_manage = BooleanField(read_only=True)
 
     class Meta:

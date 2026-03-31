@@ -1,4 +1,4 @@
-{% load i18n %} {% now 'SHORT_DATE_FORMAT' as date %}
+{% load i18n url %} {% now 'SHORT_DATE_FORMAT' as date %}
 
 <h1>{% blocktranslate %}Scraper Error Report for {{ date }}{% endblocktranslate %}</h1>
 
@@ -20,11 +20,19 @@
     <ul>
         {% for thinktank, scrapers in thinktanks.items %}
             <li>
-                <h3>{{ thinktank }}</h3>
+                <h3>
+                    <a href="{% absolute_url 'thinktank:detail' thinktank.id %}">
+                        {{ thinktank }}
+                    </a>
+                </h3>
                 <ul>
                     {% for scraper, codes in scrapers.items %}
                         <li>
-                            <h4>{{ scraper }}</h4>
+                            <h4>
+                                <a href="{% absolute_url 'thinktank:scraper:edit' thinktank.id scraper.id %}">
+                                    {{ scraper }}
+                                </a>
+                            </h4>
                             <ul>
                                 {% for code, errors in codes.items %}
                                     <li>

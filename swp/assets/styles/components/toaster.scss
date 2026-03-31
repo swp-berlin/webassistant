@@ -1,0 +1,13 @@
+/* overwrites for bp3 toaser component */
+
+body {
+  .bp3-toast-container {
+    &.bp3-toast-container-inline {
+      position: fixed; /* make them always appear on screen, even when scrolled */
+    }
+
+    &.bp3-toast-container-top {
+      top: 50px; /* make them appear below the navigation bar */
+    }
+  }
+}

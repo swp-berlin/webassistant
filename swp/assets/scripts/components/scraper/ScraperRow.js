@@ -1,8 +1,11 @@
 import {Link} from 'react-router-dom';
 
-import DateTime from 'components/DateTime';
 import _ from 'utils/i18n';
 
+import DateTime from 'components/DateTime';
+
+import ScraperType from './ScraperType';
+import ScraperCloneDialogButton from './ScraperCloneDialogButton';
 
 const DisabledLabel = _('disabled');
 
@@ -21,10 +24,13 @@ const ScraperRow = ({id, thinktankID, url, type, categories, lastRun, errorCount
                 ? <ScraperLink id={id} thinktankID={thinktankID}>{url}</ScraperLink>
                 : <ExternalLink url={url} />}
         </td>
-        <td>{type}</td>
+        <td><ScraperType type={type} /></td>
         <td>{categories}</td>
         <td>{isActive ? <DateTime value={lastRun} /> : DisabledLabel}</td>
         <td className="text-right">{errorCount}</td>
+        <td>
+            <ScraperCloneDialogButton thinktankID={thinktankID} scraperID={id} />
+        </td>
     </tr>
 );
 

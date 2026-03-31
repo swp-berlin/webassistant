@@ -35,14 +35,15 @@ module.exports = {
 
         /* react */
         'react/jsx-filename-extension': 0,  // we put JSX into .js files ...
+        'react/jsx-fragments': 'off',
         'react/jsx-indent': ['error', 4],  // indent JSX the same as normal code ...
         'react/jsx-indent-props': ['error', 4],  // ... as well as props
         'react/jsx-one-expression-per-line': ['error', {allow: 'single-child'}],
         'react/jsx-props-no-spreading': 0,  // Fuck it, spread it like it's hot!
+        'react/jsx-uses-react': 'off',
         'react/prop-types': 0,  // rule is to straining
         'react-hooks/rules-of-hooks': 'error',
         'react-hooks/exhaustive-deps': 'warn',
-        'react/jsx-uses-react': 'off',
         'react/react-in-jsx-scope': 'off',
 
         /* jsx-a11y */

@@ -6,6 +6,7 @@ import _ from 'utils/i18n';
 import {QueryResult} from 'components/Query';
 import {useBreadcrumb} from 'components/Navigation';
 import Page from 'components/Page';
+import {usePoolBreadcrumb} from 'components/PoolBreadcrumb';
 import ScraperTable from 'components/scraper/ScraperTable';
 import {getPublicationsLabel} from 'components/publication/helper';
 import TableActions from 'components/tables/TableActions';
@@ -46,10 +47,11 @@ const UniqueFields = ({values}) => (
 const ThinktankDetail = props => {
     const {id} = useParams();
     const endpoint = `/thinktank/${id}/`;
-    const query = useQuery(['thinktank', id]);
+    const query = useQuery(['thinktank', +id]);
     const {data: thinktank, isLoading: loading} = query;
     const label = getThinktankLabel(id, {result: {data: thinktank}, loading});
 
+    usePoolBreadcrumb(thinktank);
     useThinktanksBreadcrumb();
     useBreadcrumb(endpoint, label);
 

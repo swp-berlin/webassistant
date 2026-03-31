@@ -6,6 +6,7 @@ from sentry_sdk import capture_exception
 from .browser import open_browser, open_page
 from .context import ScraperContext
 from .exceptions import ScraperError
+from .page import goto
 from .resolvers.base import create_resolver
 
 
@@ -34,7 +35,7 @@ class Scraper:
         try:
             async with open_browser() as browser:
                 async with open_page(browser) as page:
-                    await page.goto(self.url)
+                    await goto(page, self.url)
 
                     self.context = ScraperContext(browser, page)
                     resolver = create_resolver(self.context, **resolver_config)
